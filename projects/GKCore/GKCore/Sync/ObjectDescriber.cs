@@ -31,7 +31,7 @@ namespace GKCore.Sync
             } else if (tag is GDMCustomEvent evt) {
                 result = GKUtils.GetEventStr(evt);
             } else if (tag is GDMNotes notes) {
-                result = GetNotesPtrStr(tree, notes);
+                result = GetPtrDescription(LangMan.LS(LSID.Note), tree, notes);
             } else if (tag is GDMMultimediaLink mediaLink) {
                 result = GetPtrDescription(LangMan.LS(LSID.RPMultimedia), tree, mediaLink);
             } else if (tag is GDMSourceCitation sourLink) {
@@ -54,8 +54,6 @@ namespace GKCore.Sync
                 result = GetPtrDescription(LangMan.LS(LSID.Member), tree, memberLink);
             } else if (tag is GDMGroupLink groupLink) {
                 result = GetPtrDescription(LangMan.LS(LSID.Group), tree, groupLink);
-            } else if (tag is GDMSourceCallNumber callNum) {
-                result = GetSourceCallNumberStr(tree, callNum);
             } else if (tag is GDMSourceData sourData) {
                 result = GetSourceDataStr(tree, sourData);
             } else if (tag is GDMMap map) {
@@ -106,8 +104,6 @@ namespace GKCore.Sync
                 ShowLocationNameSummary(tree, locName, summary);
             } else if (tag is GDMLocationLink locLink) {
                 ShowLocationLinkSummary(tree, locLink, summary);
-            } else if (tag is GDMSourceCallNumber callNum) {
-                ShowSourceCallNumberSummary(tree, callNum, summary);
             } else if (tag is GDMSourceData sourData) {
                 ShowSourceDataSummary(tree, sourData, summary);
             } else if (tag is GDMDNATest dnaTest) {
@@ -188,17 +184,11 @@ namespace GKCore.Sync
             return string.Format("{0}: {1}", tagName, valueTag.StringValue);
         }
 
-
-        private static string GetNotesPtrStr(GDMTree tree, GDMNotes notes)
-        {
-            return $"Notes Link: {notes.XRef}";
-        }
-
         private static void ShowNotesSummary(GDMTree tree, GDMNotes notes, StringList summary)
         {
-            summary.Add($"Notes Link: {notes.XRef}");
+            var noteRec = tree.GetPtrValue<GDMNoteRecord>(notes);
+            summary.Add(string.Format("{0}: [{1}] {2}", LangMan.LS(LSID.Note), notes.XRef, GKUtils.GetRecordName(tree, noteRec, false)));
         }
-
 
         private static string GetFileReferenceStr(GDMTree tree, GDMFileReferenceWithTitle fileRef)
         {
@@ -207,54 +197,46 @@ namespace GKCore.Sync
 
         private static void ShowFileReferenceSummary(GDMTree tree, GDMFileReferenceWithTitle fileRef, StringList summary)
         {
-            summary.Add($"File Reference: {fileRef.StringValue}");
-            //return $"File Reference: {fileRef.StringValue}";
+            summary.Add($"{LangMan.LS(LSID.Title)}: {fileRef.Title}");
+            summary.Add($"{LangMan.LS(LSID.File)}: {fileRef.StringValue}");
+            WriteCheckedLine(LangMan.LS(LSID.Type), LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]), summary, "");
         }
-
 
         private static string GetLocationNameStr(GDMTree tree, GDMLocationName locName)
         {
-            return $"Location Name: {locName.StringValue}";
+            return $"{LangMan.LS(LSID.GeneralName)}: {locName.StringValue}";
         }
 
         private static void ShowLocationNameSummary(GDMTree tree, GDMLocationName locName, StringList summary)
         {
-            summary.Add($"Location Name: {locName.StringValue}");
+            summary.Add($"{LangMan.LS(LSID.GeneralName)}: {locName.StringValue}");
+            WriteCheckedLine(LangMan.LS(LSID.ShortTitle), locName.Abbreviation, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.Date), GKUtils.GetDateDisplayString(locName.Date), summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.Language), GEDCOMUtils.GetLanguageStr(locName.Language), summary, "  ");
         }
-
 
         private static string GetLocationLinkStr(GDMTree tree, GDMLocationLink locLink)
         {
-            return $"Location Link: {locLink.XRef}";
+            var locRec = tree.GetPtrValue<GDMLocationRecord>(locLink);
+            return string.Format("{0}: [{1}] {2}", LangMan.LS(LSID.Location), locLink.XRef, GKUtils.GetRecordName(tree, locRec, false));
         }
 
         private static void ShowLocationLinkSummary(GDMTree tree, GDMLocationLink locLink, StringList summary)
         {
-            summary.Add($"Location Link: {locLink.XRef}");
+            var locRec = tree.GetPtrValue<GDMLocationRecord>(locLink);
+            summary.Add(string.Format("{0}: [{1}] {2}", LangMan.LS(LSID.Location), locLink.XRef, GKUtils.GetRecordName(tree, locRec, false)));
+            WriteCheckedLine(LangMan.LS(LSID.Date), GKUtils.GetDateDisplayString(locLink.Date), summary, "  ");
         }
-
-
-        private static string GetSourceCallNumberStr(GDMTree tree, GDMSourceCallNumber callNum)
-        {
-            return $"Call Number: {callNum.StringValue}";
-        }
-
-        private static void ShowSourceCallNumberSummary(GDMTree tree, GDMSourceCallNumber callNum, StringList summary)
-        {
-            summary.Add($"Call Number: {callNum.StringValue}");
-        }
-
 
         private static string GetSourceDataStr(GDMTree tree, GDMSourceData sourData)
         {
-            return $"Source Data: {sourData.StringValue}";
+            return LangMan.LS(LSID.Data);
         }
 
         private static void ShowSourceDataSummary(GDMTree tree, GDMSourceData sourData, StringList summary)
         {
-            summary.Add($"Source Data: {sourData.StringValue}");
+            GKInfoPanel.ShowSourceDataInfo(tree, sourData, summary);
         }
-
 
         private static string GetDNATestStr(GDMTree tree, GDMDNATest dnaTest)
         {
@@ -264,35 +246,78 @@ namespace GKCore.Sync
         private static void ShowDNATestSummary(GDMTree tree, GDMDNATest dnaTest, StringList summary)
         {
             summary.Add($"{LangMan.LS(LSID.DNATest)}: {dnaTest.TestName}");
-        }
 
+            WriteCheckedLine(LangMan.LS(LSID.DNALaboratory), dnaTest.Agency, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.Date), GKUtils.GetDateDisplayString(dnaTest.Date), summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.DNAFileFormat), dnaTest.FileFormat.ToString(), summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.File), dnaTest.FileReference, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.MDNAHaplogroup), dnaTest.MHaplogroup, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.YDNAHaplogroup), dnaTest.YHaplogroup, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.Restriction), GEDCOMUtils.GetRestrictionStr(dnaTest.Restriction), summary, "  ");
+
+            GKInfoPanel.RecListNotesRefresh(tree, dnaTest, summary, "  ");
+            GKInfoPanel.RecListMediaRefresh(tree, dnaTest, summary, "  ");
+        }
 
         private static string GetPersonalNameStr(GDMTree tree, GDMRecord record, GDMPersonalName persName)
         {
             var indiRec = record as GDMIndividualRecord;
-            return $"Personal Name: {GKUtils.GetNameString(indiRec, persName, false, false)}";
+            return $"Personal Name: {GKUtils.GetNameString(indiRec, persName, true, false)}";
         }
 
         private static void ShowPersonalNameSummary(GDMTree tree, GDMRecord record, GDMPersonalName persName, StringList summary)
         {
             var indiRec = record as GDMIndividualRecord;
-            summary.Add($"Personal Name: {GKUtils.GetNameString(indiRec, persName, false, false)}");
+            summary.Add($"{LangMan.LS(LSID.FullName)}: {GKUtils.GetNameString(indiRec, persName, true, false)}");
+
+            WriteCheckedLine(LangMan.LS(LSID.Nickname), persName.Nickname, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.SurnamePrefix), persName.SurnamePrefix, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.NamePrefix), persName.NamePrefix, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.NameSuffix), persName.NameSuffix, summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.Type), GKInfoPanel.GetNameTypeStr(persName.NameType), summary, "  ");
+            WriteCheckedLine(LangMan.LS(LSID.Language), GEDCOMUtils.GetLanguageStr(persName.Language), summary, "  ");
+
+            GKInfoPanel.RecListNotesRefresh(tree, persName, summary, "  ");
+            GKInfoPanel.RecListSourcesRefresh(tree, persName, summary, "  ");
         }
 
+        private static void WriteCheckedLine(string name, string value, StringList summary, string indent = "")
+        {
+            if (!string.IsNullOrEmpty(value))
+                summary.Add($"{indent}{name}: {value}");
+        }
 
         private static void ShowChildToFamilyLinkSummary(GDMTree tree, GDMChildToFamilyLink ctfLink, StringList summary)
         {
-            summary.Add($"ChildToFamily Link: {ctfLink.XRef}");
+            var record = tree.GetPtrValue<GDMRecord>(ctfLink);
+            summary.Add(string.Format("{0}: [{1}] {2}", LangMan.LS(LSID.Parents), ctfLink.XRef, GKUtils.GetRecordName(tree, record, false)));
+
+            WriteCheckedLine(LangMan.LS(LSID.LinkageType), LangMan.LS(GKData.ParentTypes[(int)ctfLink.PedigreeLinkageType]), summary, "  ");
+
+            GKInfoPanel.RecListNotesRefresh(tree, ctfLink, summary, "  ");
         }
 
         private static void ShowMultimediaLinkSummary(GDMTree tree, GDMMultimediaLink mediaLink, StringList summary)
         {
-            summary.Add($"Media Link: {mediaLink.XRef}");
+            var mediaRec = tree.GetPtrValue<GDMMultimediaRecord>(mediaLink);
+            summary.Add(string.Format("{0}: [{1}] {2}", LangMan.LS(LSID.RPMultimedia), mediaLink.XRef, GKUtils.GetRecordName(tree, mediaRec, false)));
+
+            WriteCheckedLine("CutoutPosition", mediaLink.CutoutPosition.ToString(), summary, "  - ");
+            WriteCheckedLine("IsPrimary", mediaLink.IsPrimary.ToString(), summary, "  - ");
+            WriteCheckedLine("IsPrimaryCutout", mediaLink.IsPrimaryCutout.ToString(), summary, "  - ");
         }
 
         private static void ShowRepositoryCitationSummary(GDMTree tree, GDMRepositoryCitation repoCit, StringList summary)
         {
-            summary.Add($"Repository Citation: {repoCit.StringValue}");
+            var repoRec = tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
+            summary.Add(string.Format("{0}: [{1}] {2}", LangMan.LS(LSID.Repository), repoCit.XRef, GKUtils.GetRecordName(tree, repoRec, false)));
+
+            foreach (var callNum in repoCit.CallNumbers) {
+                WriteCheckedLine(LangMan.LS(LSID.CallNumber), callNum.StringValue, summary, "  - ");
+                WriteCheckedLine(LangMan.LS(LSID.Type), LangMan.LS(GKData.MediaTypes[(int)callNum.MediaType]), summary, "    ");
+            }
+
+            GKInfoPanel.RecListNotesRefresh(tree, repoCit, summary, "  ");
         }
     }
 }

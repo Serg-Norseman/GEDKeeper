@@ -534,6 +534,64 @@ namespace GDModel
             return result;
         }
 
+        public GDMRecord CreateRecord(GDMRecordType recordType)
+        {
+            GDMRecord result;
+
+            switch (recordType) {
+                case GDMRecordType.rtIndividual:
+                    result = new GDMIndividualRecord(this);
+                    break;
+                case GDMRecordType.rtFamily:
+                    result = new GDMFamilyRecord(this);
+                    break;
+                case GDMRecordType.rtNote:
+                    result = new GDMNoteRecord(this);
+                    break;
+                case GDMRecordType.rtMultimedia:
+                    result = new GDMMultimediaRecord(this);
+                    break;
+                case GDMRecordType.rtSource:
+                    result = new GDMSourceRecord(this);
+                    break;
+                case GDMRecordType.rtRepository:
+                    result = new GDMRepositoryRecord(this);
+                    break;
+                case GDMRecordType.rtGroup:
+                    result = new GDMGroupRecord(this);
+                    break;
+                case GDMRecordType.rtResearch:
+                    result = new GDMResearchRecord(this);
+                    break;
+                case GDMRecordType.rtTask:
+                    result = new GDMTaskRecord(this);
+                    break;
+                case GDMRecordType.rtCommunication:
+                    result = new GDMCommunicationRecord(this);
+                    break;
+                case GDMRecordType.rtLocation:
+                    result = new GDMLocationRecord(this);
+                    break;
+                case GDMRecordType.rtSubmission:
+                    result = new GDMSubmissionRecord(this);
+                    break;
+                case GDMRecordType.rtSubmitter:
+                    result = new GDMSubmitterRecord(this);
+                    break;
+                default:
+                    result = null;
+                    break;
+            }
+
+            if (result != null) {
+                NewXRef(result);
+                result.ChangeDate.ChangeDateTime = DateTime.Now;
+                AddRecord(result);
+            }
+
+            return result;
+        }
+
         public bool DeleteIndividualRecord(GDMIndividualRecord iRec)
         {
             if (iRec == null) return false;

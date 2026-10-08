@@ -303,10 +303,7 @@ namespace GKCore.Tools
                     mainTree.AddRecord(rec);
                 }
 
-                for (int i = 0, num = repMap.Count; i < num; i++) {
-                    GDMRecord rec = repMap[i].Rec;
-                    rec.ReplaceXRefs(repMap);
-                }
+                repMap.ReplaceAll();
 
                 if (logBox != null) {
                     logBox.AppendText(string.Format(LangMan.LS(LSID.MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);

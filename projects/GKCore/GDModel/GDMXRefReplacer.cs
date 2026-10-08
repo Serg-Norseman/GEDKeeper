@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
+using GKCore.Design;
 
 namespace GDModel
 {
@@ -32,6 +33,7 @@ namespace GDModel
         }
 
         private readonly List<XRefEntry> fList;
+        private readonly HashSet<string> fSet;
 
 
         public int Count
@@ -48,6 +50,15 @@ namespace GDModel
         public GDMXRefReplacer()
         {
             fList = new List<XRefEntry>();
+            fSet = new HashSet<string>();
+        }
+
+        public bool ContainsXRef(string oldXRef)
+        {
+            // protection
+            oldXRef = GEDCOMUtils.CleanXRef(oldXRef);
+
+            return fSet.Contains(oldXRef);
         }
 
         public void AddXRef(GDMRecord rec, string oldXRef, string newXRef)
@@ -57,6 +68,8 @@ namespace GDModel
             newXRef = GEDCOMUtils.CleanXRef(newXRef);
 
             fList.Add(new XRefEntry(rec, oldXRef, newXRef));
+
+            fSet.Add(oldXRef);
         }
 
         public string FindNewXRef(string oldXRef)
@@ -74,6 +87,18 @@ namespace GDModel
             }
 
             return result;
+        }
+
+        public void ReplaceAll(IProgressController progress = null)
+        {
+            var recsCount = fList.Count;
+            if (recsCount <= 0) return;
+
+            for (int i = 0; i < recsCount; i++) {
+                fList[i].Rec.ReplaceXRefs(this);
+
+                progress?.Increment();
+            }
         }
     }
 }

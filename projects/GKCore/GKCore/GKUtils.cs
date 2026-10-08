@@ -1518,11 +1518,11 @@ namespace GKCore
 
         public static readonly char[] PLACE_DELIMITERS = new char[] { ',' };
 
-        public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress, bool onlyLocality = false)
+        public static string GetPlaceStr(IGDMStructWithPlace swp, bool onlyLocality = false)
         {
-            if (evt == null || !evt.HasPlace) return string.Empty;
+            if (swp == null || !swp.HasPlace) return string.Empty;
 
-            string result = evt.Place.StringValue;
+            string result = swp.Place.StringValue;
 
             if (!string.IsNullOrEmpty(result) && onlyLocality) {
                 string[] placeParts = result.Split(PLACE_DELIMITERS, StringSplitOptions.None);
@@ -1531,6 +1531,15 @@ namespace GKCore
                     result = ((reverseOrder) ? placeParts[0] : placeParts[placeParts.Length - 1]).Trim();
                 }
             }
+
+            return result;
+        }
+
+        public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress, bool onlyLocality = false)
+        {
+            if (evt == null) return string.Empty;
+
+            string result = GetPlaceStr(evt, onlyLocality);
 
             if (includeAddress) {
                 string resi = evt.StringValue;

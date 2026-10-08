@@ -1190,18 +1190,7 @@ namespace GKCore.Controllers
             try {
                 context.BeginUpdate();
 
-                GDMRecord result;
-                switch (original.RecordType) {
-                    case GDMRecordType.rtIndividual:
-                        result = context.Tree.CreateIndividual();
-                        break;
-                    case GDMRecordType.rtLocation:
-                        result = context.Tree.CreateLocation();
-                        break;
-                    default:
-                        return null;
-                }
-
+                var result = context.Tree.CreateRecord(original.RecordType);
                 result.Assign(original);
 
                 return result;

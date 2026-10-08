@@ -421,7 +421,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListMediaRefresh(GDMTree tree, IGDMStructWithMultimediaLinks structWML, StringList summary, string indent = "")
+        public static void RecListMediaRefresh(GDMTree tree, IGDMStructWithMultimediaLinks structWML, StringList summary, string indent = "")
         {
             if (structWML == null || summary == null) return;
 
@@ -446,7 +446,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListNotesRefresh(GDMTree tree, IGDMStructWithNotes structWN, StringList summary, string indent = "")
+        public static void RecListNotesRefresh(GDMTree tree, IGDMStructWithNotes structWN, StringList summary, string indent = "")
         {
             if (structWN == null || summary == null) return;
 
@@ -470,7 +470,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListSourcesRefresh(GDMTree tree, IGDMStructWithSourceCitations structWSC, StringList summary, string indent = "")
+        public static void RecListSourcesRefresh(GDMTree tree, IGDMStructWithSourceCitations structWSC, StringList summary, string indent = "")
         {
             if (structWSC == null || summary == null) return;
 
@@ -523,6 +523,11 @@ namespace GKCore
             result = nm;
 
             return result;
+        }
+
+        public static string GetNameTypeStr(GDMNameType value)
+        {
+            return LangMan.LS(GKData.NameTypes[(int)value]);
         }
 
         public static string GetUserReferenceStr(GDMTree tree, GDMUserReference userRef)
@@ -998,6 +1003,7 @@ namespace GKCore
                         summary.AddQValue(LangMan.LS(LSID.Title), sourceRec.Title.Lines.Text);
                         summary.AddQValue(LangMan.LS(LSID.Publication), sourceRec.Publication.Lines.Text);
                         summary.AddQValue(LangMan.LS(LSID.Text), sourceRec.Text.Lines.Text);
+                        summary.AddQValue(LangMan.LS(LSID.Date), GKUtils.GetDateDisplayString(sourceRec.Date));
 
                         if (sourceRec.RepositoryCitations.Count > 0) {
                             summary.Add("");
@@ -1016,6 +1022,8 @@ namespace GKCore
                         RecListNotesRefresh(baseContext.Tree, sourceRec, summary);
                         RecListMediaRefresh(baseContext.Tree, sourceRec, summary);
 
+                        ShowSourceDataInfo(baseContext.Tree, sourceRec.Data, summary);
+
                         summary.Add("");
                         summary.Add("");
                         if (contentType == RecordContentType.Full) {
@@ -1028,6 +1036,21 @@ namespace GKCore
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.ShowSourceInfo()", ex);
+            }
+        }
+
+        public static void ShowSourceDataInfo(GDMTree tree, GDMSourceData sourData, StringList summary)
+        {
+            if (!sourData.IsEmpty()) {
+                summary.Add("");
+                summary.Add(LangMan.LS(LSID.Data) + ":");
+
+                summary.AddQValue(LangMan.LS(LSID.Agency), sourData.Agency);
+                foreach (var evt in sourData.Events) {
+                    summary.AddQValue(LangMan.LS(LSID.Date), GKUtils.GetDateDisplayString(evt.Date));
+                    summary.AddQValue(LangMan.LS(LSID.Place), GKUtils.GetPlaceStr(evt, true));
+                }
+                RecListNotesRefresh(tree, sourData, summary);
             }
         }
 

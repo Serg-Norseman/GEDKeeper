@@ -449,9 +449,10 @@ namespace GKCore.Sync
 
                     case DiffStatus.Inserted:
                         // VerifyReferences by Record - includes its record!
-                        if (CheckLinks(diff.Obj2)) {
-                            // TODO
-                            //fMainTree.AddRecord(diff.Obj2.Clone());
+                        if (CheckLinks(diff.Obj2, out GDMXRefReplacer xrefReplacer)) {
+                            // if record already added by other steps of sync
+                            if (!xrefReplacer.ContainsXRef(diff.Obj2.XRef))
+                                fMainTree.AddRecord(diff.Obj2.Clone());
                         }
                         break;
 
@@ -485,7 +486,7 @@ namespace GKCore.Sync
 
                     case DiffStatus.Inserted:
                         var tagDiff_i = diff as TagDiff;
-                        if (CheckLinks(tagDiff_i.Obj2)) {
+                        if (CheckLinks(tagDiff_i.Obj2, out GDMXRefReplacer xrefReplacer)) {
                             result = AddStruct(target, tagDiff_i.Obj2);
                         }
                         break;
@@ -500,21 +501,31 @@ namespace GKCore.Sync
             return result;
         }
 
-        private bool CheckLinks(GDMTag tag)
+        private bool CheckLinks(GDMTag tag, out GDMXRefReplacer xrefReplacer)
         {
+            xrefReplacer = new GDMXRefReplacer();
+
             var missedRecords = GDMReferenceVerifier.VerifyReferences(tag, fOtherTree, fMainTree, true);
             if (missedRecords.Count > 0) {
                 var refsList = missedRecords.Select(x => x.XRef);
                 var strList = string.Join(", ", refsList);
                 var vote = AppHost.StdDialogs.ShowQuestion(string.Format("The main tree is missing records:\n{0}. Add them?", strList)).GetAwaiter().GetResult();
                 if (vote) {
-                    // TODO: Create a cross-index from the XRef in the second file to the position in the diff
-                    // to determine whether it is local to the second file or existed in the first.
+                    // The record may have an XRef that is in use in the target database.
+                    // The XRef of all added records will definitely change!
+
+                    // TODO: for all added and changed sub-structures - replace XRefs!
                     foreach (var xref in refsList) {
-                        var sourceRecord = fOtherTree.FindXRef<GDMRecord>(xref);
-                        fMainTree.AddRecord(sourceRecord.Clone());
+                        var sourceRec = fOtherTree.FindXRef<GDMRecord>(xref);
+
+                        var targetRec = fMainTree.CreateRecord(sourceRec.RecordType);
+                        targetRec.Assign(sourceRec);
+
+                        xrefReplacer.AddXRef(targetRec, sourceRec.XRef, targetRec.XRef);
                     }
-                    return false;
+                    xrefReplacer.ReplaceAll();
+
+                    return true;
                 } else {
                     return false;
                 }
@@ -664,7 +675,7 @@ namespace GKCore.Sync
 
                 return false;
             } else if (diff is TagDiff tagDiff) {
-                if (CheckLinks(tagDiff.Obj2)) {
+                if (CheckLinks(tagDiff.Obj2, out GDMXRefReplacer xrefReplacer)) {
                     tagDiff.Obj1.Assign(tagDiff.Obj2);
                     return true;
                 }
