@@ -66,7 +66,7 @@ internal class IndiListPersonalNamesTool : BaseTool
 }
 
 
-internal class IndiUpsertPersonalNameTool : BaseTool
+internal class IndiUpsertPersonalNameTool : WriteTool
 {
     public IndiUpsertPersonalNameTool() : base("individual_upsert_personal_name") { }
 
@@ -102,6 +102,8 @@ internal class IndiUpsertPersonalNameTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -265,7 +267,7 @@ internal class IndiUpsertPersonalNameTool : BaseTool
 }
 
 
-internal class IndiDeletePersonalNameTool : BaseTool
+internal class IndiDeletePersonalNameTool : WriteTool
 {
     public IndiDeletePersonalNameTool() : base("individual_delete_personal_name") { }
 
@@ -286,6 +288,8 @@ internal class IndiDeletePersonalNameTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

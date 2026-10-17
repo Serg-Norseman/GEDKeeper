@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -44,7 +45,7 @@ internal class GroupListMembersTool : BaseTool
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
-            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Group not found with XRef: {groupXRef}");
 
         if (groupRec.Members.Count <= 0)
             return MCPContent.CreateSimpleContent($"Group '{groupXRef}' has no members.");
@@ -72,7 +73,7 @@ internal class GroupListMembersTool : BaseTool
 }
 
 
-internal class GroupAddMemberTool : BaseTool
+internal class GroupAddMemberTool : WriteTool
 {
     public GroupAddMemberTool() : base("group_add_member") { }
 
@@ -93,6 +94,8 @@ internal class GroupAddMemberTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -101,25 +104,25 @@ internal class GroupAddMemberTool : BaseTool
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
-            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Group not found with XRef: {groupXRef}");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (groupRec.IndexOfMember(indiRec) >= 0)
-            return MCPContent.CreateSimpleContent($"Individual {individualXRef} is already a member of group '{groupXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Individual {individualXRef} is already a member of group '{groupXRef}'.");
 
         groupRec.AddMember(indiRec);
         baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string indiName = GKUtils.GetNameString(indiRec, false);
-        return MCPContent.CreateSimpleContent($"Individual added to group '{groupXRef}': {indiName} ({individualXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Individual added to group '{groupXRef}': {indiName} ({individualXRef})");
     }
 }
 
 
-internal class GroupDeleteMemberTool : BaseTool
+internal class GroupDeleteMemberTool : WriteTool
 {
     public GroupDeleteMemberTool() : base("group_delete_member") { }
 
@@ -140,6 +143,8 @@ internal class GroupDeleteMemberTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -148,19 +153,19 @@ internal class GroupDeleteMemberTool : BaseTool
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
-            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Group not found with XRef: {groupXRef}");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (groupRec.IndexOfMember(indiRec) < 0)
-            return MCPContent.CreateSimpleContent($"Individual {individualXRef} is not a member of group '{groupXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Individual {individualXRef} is not a member of group '{groupXRef}'.");
 
         groupRec.RemoveMember(indiRec);
         baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string indiName = GKUtils.GetNameString(indiRec, false);
-        return MCPContent.CreateSimpleContent($"Individual removed from group '{groupXRef}': {indiName} ({individualXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Individual removed from group '{groupXRef}': {indiName} ({individualXRef})");
     }
 }

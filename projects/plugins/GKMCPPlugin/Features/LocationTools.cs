@@ -11,13 +11,14 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
-internal class LocationUpsertTool : BaseTool
+internal class LocationUpsertTool : WriteTool
 {
     public LocationUpsertTool() : base("location_upsert") { }
 
@@ -40,6 +41,8 @@ internal class LocationUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

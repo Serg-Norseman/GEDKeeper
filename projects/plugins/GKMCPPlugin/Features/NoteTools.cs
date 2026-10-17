@@ -11,13 +11,14 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
-internal class NoteUpsertTool : BaseTool
+internal class NoteUpsertTool : WriteTool
 {
     public NoteUpsertTool() : base("note_upsert") { }
 
@@ -38,6 +39,8 @@ internal class NoteUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

@@ -20,7 +20,7 @@ using ZLMKit.Protocols;
 namespace GKMCPPlugin.Features;
 
 
-internal class ResearchUpsertTool : BaseTool
+internal class ResearchUpsertTool : WriteTool
 {
     public ResearchUpsertTool() : base("research_upsert") { }
 
@@ -49,6 +49,8 @@ internal class ResearchUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

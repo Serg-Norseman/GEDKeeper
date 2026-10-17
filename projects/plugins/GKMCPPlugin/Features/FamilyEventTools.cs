@@ -54,7 +54,7 @@ internal class FamListEventsTool : EventTool
 }
 
 
-internal class FamDeleteEventTool : BaseTool
+internal class FamDeleteEventTool : EventTool
 {
     public FamDeleteEventTool() : base("family_delete_event") { }
 
@@ -75,6 +75,8 @@ internal class FamDeleteEventTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -134,6 +136,8 @@ internal class FamUpsertEventTool : EventTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

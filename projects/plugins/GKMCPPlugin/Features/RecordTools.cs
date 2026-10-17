@@ -313,7 +313,7 @@ internal class RecordInfoTool : BaseTool
 }
 
 
-internal class RecordDeleteTool : BaseTool
+internal class RecordDeleteTool : WriteTool
 {
     public RecordDeleteTool() : base("record_delete") { }
 
@@ -333,6 +333,8 @@ internal class RecordDeleteTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -349,7 +351,7 @@ internal class RecordDeleteTool : BaseTool
 }
 
 
-internal class RecordSetRestrictionTool : BaseTool
+internal class RecordSetRestrictionTool : WriteTool
 {
     public RecordSetRestrictionTool() : base("record_set_restriction") { }
 
@@ -370,6 +372,8 @@ internal class RecordSetRestrictionTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -398,7 +402,7 @@ internal class RecordSetRestrictionTool : BaseTool
 }
 
 
-internal class RecordMergeTool : BaseTool
+internal class RecordMergeTool : WriteTool
 {
     public RecordMergeTool() : base("record_merge") { }
 
@@ -419,6 +423,8 @@ internal class RecordMergeTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

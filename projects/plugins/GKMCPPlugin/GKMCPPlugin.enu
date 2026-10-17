@@ -23,3 +23,4 @@
 22=Comma-separated list of allowed origins
 23=Error starting server: {0}
 24=Error stopping server: {0}
+25=Read-only

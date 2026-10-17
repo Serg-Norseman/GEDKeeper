@@ -19,7 +19,7 @@ using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
-internal class CommunicationUpsertTool : BaseTool
+internal class CommunicationUpsertTool : WriteTool
 {
     public CommunicationUpsertTool() : base("communication_upsert") { }
 
@@ -47,6 +47,8 @@ internal class CommunicationUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

@@ -131,7 +131,7 @@ internal class MediaGetTool : BaseTool
 }
 
 
-internal class MediaUpsertTool : BaseTool
+internal class MediaUpsertTool : WriteTool
 {
     public MediaUpsertTool() : base("multimedia_upsert") { }
 
@@ -158,6 +158,8 @@ internal class MediaUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

@@ -54,7 +54,7 @@ internal class IndiListEventsTool : EventTool
 }
 
 
-internal class IndiDeleteEventTool : BaseTool
+internal class IndiDeleteEventTool : EventTool
 {
     public IndiDeleteEventTool() : base("individual_delete_event") { }
 
@@ -75,6 +75,8 @@ internal class IndiDeleteEventTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -133,6 +135,8 @@ internal class IndiUpsertEventTool : EventTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

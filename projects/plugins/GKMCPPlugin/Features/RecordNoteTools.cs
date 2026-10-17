@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -70,7 +71,7 @@ internal class RecordListNotesTool : BaseTool
 }
 
 
-internal class RecordAddNoteTool : BaseTool
+internal class RecordAddNoteTool : WriteTool
 {
     public RecordAddNoteTool() : base("record_add_note") { }
 
@@ -91,6 +92,8 @@ internal class RecordAddNoteTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -119,7 +122,7 @@ internal class RecordAddNoteTool : BaseTool
 }
 
 
-internal class RecordDeleteNoteTool : BaseTool
+internal class RecordDeleteNoteTool : WriteTool
 {
     public RecordDeleteNoteTool() : base("record_delete_note") { }
 
@@ -140,6 +143,8 @@ internal class RecordDeleteNoteTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

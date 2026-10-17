@@ -50,6 +50,7 @@ public class MCPServerForm : Dialog
             fPlugin.EnableCors = _corsCheckBox.Checked ?? false;
             fPlugin.AllowedHosts = _allowedHostsTextBox.Text;
             fPlugin.VerboseLogging = _verboseLoggingCheckBox.Checked ?? false;
+            fPlugin.ReadOnly = _readOnlyCheckBox.Checked ?? false;
 
             await fPlugin.StartAsync();
 
@@ -93,6 +94,7 @@ public class MCPServerForm : Dialog
     private Button _startButton;
     private Button _stopButton;
     private Label _statusLabel;
+    private CheckBox _readOnlyCheckBox;
 
     private void InitControls()
     {
@@ -110,6 +112,8 @@ public class MCPServerForm : Dialog
         _corsCheckBox.CheckedChanged += (s, e) => _allowedHostsTextBox.Enabled = _corsCheckBox.Checked ?? false;
 
         _verboseLoggingCheckBox = new CheckBox { Text = fLangMan.LS(PLS.VerboseServerLogs), Checked = fPlugin.VerboseLogging };
+
+        _readOnlyCheckBox = new CheckBox { Text = fLangMan.LS(PLS.ReadOnly), Checked = fPlugin.ReadOnly };
 
         _startButton = new Button { Text = fLangMan.LS(PLS.Start), ImagePosition = ButtonImagePosition.Left };
         _startButton.Click += OnStartServerClick;
@@ -130,6 +134,7 @@ public class MCPServerForm : Dialog
         configLayout.AddRow(new Label { Text = fLangMan.LS(PLS.TrustedHosts), VerticalAlignment = VerticalAlignment.Center }, _allowedHostsTextBox);
         configLayout.AddRow(null, _verboseLoggingCheckBox);
         configLayout.AddRow(null, _autoStartCheckBox);
+        configLayout.AddRow(null, _readOnlyCheckBox);
 
         var controlLayout = new StackLayout {
             Orientation = Orientation.Horizontal,
@@ -160,6 +165,7 @@ public class MCPServerForm : Dialog
         _corsCheckBox.Enabled = !isRunning;
         _verboseLoggingCheckBox.Enabled = !isRunning;
         _autoStartCheckBox.Enabled = !isRunning;
+        _readOnlyCheckBox.Enabled = !isRunning;
     }
 
     #endregion

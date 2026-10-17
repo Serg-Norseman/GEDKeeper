@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -64,7 +65,7 @@ internal class RecordListUserRefsTool : BaseTool
 }
 
 
-internal class RecordAddUserRefTool : BaseTool
+internal class RecordAddUserRefTool : WriteTool
 {
     public RecordAddUserRefTool() : base("record_add_userref") { }
 
@@ -86,6 +87,8 @@ internal class RecordAddUserRefTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -112,7 +115,7 @@ internal class RecordAddUserRefTool : BaseTool
 }
 
 
-internal class RecordDeleteUserRefTool : BaseTool
+internal class RecordDeleteUserRefTool : WriteTool
 {
     public RecordDeleteUserRefTool() : base("record_delete_userref") { }
 
@@ -133,6 +136,8 @@ internal class RecordDeleteUserRefTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

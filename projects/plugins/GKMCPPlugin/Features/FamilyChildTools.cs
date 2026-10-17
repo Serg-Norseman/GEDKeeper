@@ -74,7 +74,7 @@ internal class FamListChildrenTool : BaseTool
 }
 
 
-internal class FamAddChildTool : BaseTool
+internal class FamAddChildTool : WriteTool
 {
     public FamAddChildTool() : base("family_add_child") { }
 
@@ -98,6 +98,8 @@ internal class FamAddChildTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -131,7 +133,7 @@ internal class FamAddChildTool : BaseTool
 }
 
 
-internal class FamDeleteChildTool : BaseTool
+internal class FamDeleteChildTool : WriteTool
 {
     public FamDeleteChildTool() : base("family_delete_child") { }
 
@@ -152,6 +154,8 @@ internal class FamDeleteChildTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

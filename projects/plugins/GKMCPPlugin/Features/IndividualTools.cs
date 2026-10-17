@@ -12,6 +12,7 @@ using System.Text.Json;
 using GDModel;
 using GKCore;
 using GKCore.Utilities;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -74,7 +75,7 @@ internal class IndiSearchTool : BaseTool
 }
 
 
-internal class IndividualUpsertTool : BaseTool
+internal class IndividualUpsertTool : WriteTool
 {
     public IndividualUpsertTool() : base("individual_upsert") { }
 
@@ -102,6 +103,8 @@ internal class IndividualUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

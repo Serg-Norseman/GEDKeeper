@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -71,7 +72,7 @@ internal class ResearchListTasksTool : BaseTool
 }
 
 
-internal class ResearchAddTaskTool : BaseTool
+internal class ResearchAddTaskTool : WriteTool
 {
     public ResearchAddTaskTool() : base("research_add_task") { }
 
@@ -92,6 +93,8 @@ internal class ResearchAddTaskTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -118,7 +121,7 @@ internal class ResearchAddTaskTool : BaseTool
 }
 
 
-internal class ResearchDeleteTaskTool : BaseTool
+internal class ResearchDeleteTaskTool : WriteTool
 {
     public ResearchDeleteTaskTool() : base("research_delete_task") { }
 
@@ -139,6 +142,8 @@ internal class ResearchDeleteTaskTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -220,7 +225,7 @@ internal class ResearchListCommunicationsTool : BaseTool
 }
 
 
-internal class ResearchAddCommunicationTool : BaseTool
+internal class ResearchAddCommunicationTool : WriteTool
 {
     public ResearchAddCommunicationTool() : base("research_add_communication") { }
 
@@ -241,6 +246,8 @@ internal class ResearchAddCommunicationTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -266,7 +273,7 @@ internal class ResearchAddCommunicationTool : BaseTool
 }
 
 
-internal class ResearchDeleteCommunicationTool : BaseTool
+internal class ResearchDeleteCommunicationTool : WriteTool
 {
     public ResearchDeleteCommunicationTool() : base("research_delete_communication") { }
 
@@ -287,6 +294,8 @@ internal class ResearchDeleteCommunicationTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -366,7 +375,7 @@ internal class ResearchListGroupsTool : BaseTool
 }
 
 
-internal class ResearchAddGroupTool : BaseTool
+internal class ResearchAddGroupTool : WriteTool
 {
     public ResearchAddGroupTool() : base("research_add_group") { }
 
@@ -387,6 +396,8 @@ internal class ResearchAddGroupTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -412,7 +423,7 @@ internal class ResearchAddGroupTool : BaseTool
 }
 
 
-internal class ResearchDeleteGroupTool : BaseTool
+internal class ResearchDeleteGroupTool : WriteTool
 {
     public ResearchDeleteGroupTool() : base("research_delete_group") { }
 
@@ -433,6 +444,8 @@ internal class ResearchDeleteGroupTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

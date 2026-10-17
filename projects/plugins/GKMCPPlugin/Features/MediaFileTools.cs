@@ -68,7 +68,7 @@ internal class MediaListFilesTool : BaseTool
 }
 
 
-internal class MediaUpsertFileTool : BaseTool
+internal class MediaUpsertFileTool : WriteTool
 {
     public MediaUpsertFileTool() : base("multimedia_upsert_file") { }
 
@@ -96,6 +96,8 @@ internal class MediaUpsertFileTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -173,7 +175,7 @@ internal class MediaUpsertFileTool : BaseTool
 }
 
 
-internal class MediaDeleteFileTool : BaseTool
+internal class MediaDeleteFileTool : WriteTool
 {
     public MediaDeleteFileTool() : base("multimedia_delete_file") { }
 
@@ -194,6 +196,8 @@ internal class MediaDeleteFileTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

@@ -20,7 +20,7 @@ using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
-internal class TaskUpsertTool : BaseTool
+internal class TaskUpsertTool : WriteTool
 {
     public TaskUpsertTool() : base("task_upsert") { }
 
@@ -46,6 +46,8 @@ internal class TaskUpsertTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

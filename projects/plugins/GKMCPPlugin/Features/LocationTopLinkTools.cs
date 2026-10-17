@@ -68,7 +68,7 @@ internal class LocationListTopLinksTool : BaseTool
 }
 
 
-internal class LocationUpsertTopLinkTool : BaseTool
+internal class LocationUpsertTopLinkTool : WriteTool
 {
     public LocationUpsertTopLinkTool() : base("location_upsert_top_link") { }
 
@@ -91,6 +91,8 @@ internal class LocationUpsertTopLinkTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -157,7 +159,7 @@ internal class LocationUpsertTopLinkTool : BaseTool
 }
 
 
-internal class LocationDeleteTopLinkTool : BaseTool
+internal class LocationDeleteTopLinkTool : WriteTool
 {
     public LocationDeleteTopLinkTool() : base("location_delete_top_link") { }
 
@@ -178,6 +180,8 @@ internal class LocationDeleteTopLinkTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

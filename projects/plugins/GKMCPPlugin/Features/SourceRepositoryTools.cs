@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -71,7 +72,7 @@ internal class SourceListRepositoriesTool : BaseTool
 }
 
 
-internal class SourceAddRepositoryTool : BaseTool
+internal class SourceAddRepositoryTool : WriteTool
 {
     public SourceAddRepositoryTool() : base("source_add_repository") { }
 
@@ -92,6 +93,8 @@ internal class SourceAddRepositoryTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -117,7 +120,7 @@ internal class SourceAddRepositoryTool : BaseTool
 }
 
 
-internal class SourceDeleteRepositoryTool : BaseTool
+internal class SourceDeleteRepositoryTool : WriteTool
 {
     public SourceDeleteRepositoryTool() : base("source_delete_repository") { }
 
@@ -138,6 +141,8 @@ internal class SourceDeleteRepositoryTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

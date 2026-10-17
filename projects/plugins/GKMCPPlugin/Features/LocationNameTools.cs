@@ -66,7 +66,7 @@ internal class LocationListNamesTool : BaseTool
 }
 
 
-internal class LocationUpsertNameTool : BaseTool
+internal class LocationUpsertNameTool : WriteTool
 {
     public LocationUpsertNameTool() : base("location_upsert_name") { }
 
@@ -90,6 +90,8 @@ internal class LocationUpsertNameTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -155,7 +157,7 @@ internal class LocationUpsertNameTool : BaseTool
 }
 
 
-internal class LocationDeleteNameTool : BaseTool
+internal class LocationDeleteNameTool : WriteTool
 {
     public LocationDeleteNameTool() : base("location_delete_name") { }
 
@@ -176,6 +178,8 @@ internal class LocationDeleteNameTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

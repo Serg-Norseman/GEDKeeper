@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -69,7 +70,7 @@ internal class RecordListMultimediaTool : BaseTool
 }
 
 
-internal class RecordAddMultimediaLinkTool : BaseTool
+internal class RecordAddMultimediaLinkTool : WriteTool
 {
     public RecordAddMultimediaLinkTool() : base("record_add_multimedia") { }
 
@@ -91,6 +92,8 @@ internal class RecordAddMultimediaLinkTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -121,7 +124,7 @@ internal class RecordAddMultimediaLinkTool : BaseTool
 }
 
 
-internal class RecordDeleteMultimediaLinkTool : BaseTool
+internal class RecordDeleteMultimediaLinkTool : WriteTool
 {
     public RecordDeleteMultimediaLinkTool() : base("record_delete_multimedia") { }
 
@@ -142,6 +145,8 @@ internal class RecordDeleteMultimediaLinkTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

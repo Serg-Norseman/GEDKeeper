@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -73,7 +74,7 @@ internal class RecordListSourceCitationsTool : BaseTool
 }
 
 
-internal class RecordAddSourceCitationTool : BaseTool
+internal class RecordAddSourceCitationTool : WriteTool
 {
     public RecordAddSourceCitationTool() : base("record_add_source") { }
 
@@ -96,6 +97,8 @@ internal class RecordAddSourceCitationTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -128,7 +131,7 @@ internal class RecordAddSourceCitationTool : BaseTool
 }
 
 
-internal class RecordDeleteSourceCitationTool : BaseTool
+internal class RecordDeleteSourceCitationTool : WriteTool
 {
     public RecordDeleteSourceCitationTool() : base("record_delete_source") { }
 
@@ -149,6 +152,8 @@ internal class RecordDeleteSourceCitationTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

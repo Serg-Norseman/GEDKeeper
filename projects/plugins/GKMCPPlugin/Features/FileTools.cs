@@ -292,7 +292,7 @@ internal class FileValidateTool : BaseTool
 }
 
 
-internal class FileMergeTool : BaseTool
+internal class FileMergeTool : WriteTool
 {
     public FileMergeTool() : base("file_merge") { }
 
@@ -312,6 +312,8 @@ internal class FileMergeTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

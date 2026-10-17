@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using BSLib;
@@ -40,6 +41,8 @@ public class RuntimeContext : IRuntimeContext
 
     public bool FTSEnabled { get; private set; }
 
+    public bool ReadOnly { get; private set; }
+
     public IMCPServer MCPServer
     {
         get { return fMCPServer; }
@@ -57,6 +60,7 @@ public class RuntimeContext : IRuntimeContext
         ProfileEnabled = true;
         TasksEnabled = true;
         FTSEnabled = false;
+        ReadOnly = true;
 
         fMCPServer = mcpServer;
         fFileSystem = new FileSystemService(allowedDirectories);
@@ -95,5 +99,25 @@ public class RuntimeContext : IRuntimeContext
 
         Logger.Init(Path.Combine(AppHost.GetAppDataPathStatic(), "GKMCPPlugin.log"));
         ZLMKit.MCP.MCPServer.SetLogger(Logger.GetLogger());
+    }
+}
+
+
+internal abstract class WriteTool : BaseTool
+{
+    protected WriteTool(string sign) : base(sign)
+    {
+    }
+
+    public static void ThrowIfReadOnly(IRuntimeContext context)
+    {
+        if (context is RuntimeContext rc && rc.ReadOnly)
+            Throw();
+    }
+
+    [DoesNotReturn]
+    internal static void Throw()
+    {
+        throw new NotSupportedException("The database is read-only.");
     }
 }

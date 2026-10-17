@@ -20,7 +20,7 @@ using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
-internal abstract class EventTool : BaseTool
+internal abstract class EventTool : WriteTool
 {
     protected EventTool(string sign) : base(sign) { }
 

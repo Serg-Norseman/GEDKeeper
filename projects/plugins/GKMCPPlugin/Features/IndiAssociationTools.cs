@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
+using GKMCPPlugin.Utilities;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -64,7 +65,7 @@ internal class IndiListAssociationsTool : BaseTool
 }
 
 
-internal class IndiUpsertAssociationTool : BaseTool
+internal class IndiUpsertAssociationTool : WriteTool
 {
     public IndiUpsertAssociationTool() : base("individual_upsert_association") { }
 
@@ -87,6 +88,8 @@ internal class IndiUpsertAssociationTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 
@@ -142,7 +145,7 @@ internal class IndiUpsertAssociationTool : BaseTool
 }
 
 
-internal class IndiDeleteAssociationTool : BaseTool
+internal class IndiDeleteAssociationTool : WriteTool
 {
     public IndiDeleteAssociationTool() : base("individual_delete_association") { }
 
@@ -163,6 +166,8 @@ internal class IndiDeleteAssociationTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        ThrowIfReadOnly(context);
+
         var baseContext = context.Get<BaseContext>();
         ArgumentNullException.ThrowIfNull(baseContext);
 

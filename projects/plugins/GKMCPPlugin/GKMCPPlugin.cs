@@ -60,6 +60,7 @@ public enum PLS
     AllowedHostsTip = 22,
     StartingError = 23,
     StoppingError = 24,
+    ReadOnly = 25,
 }
 
 public sealed class Plugin : WidgetPlugin
@@ -161,10 +162,18 @@ public sealed class Plugin : WidgetPlugin
     internal bool EnableCors = false;
     internal string AllowedHosts = "http://localhost:3000";
     internal bool VerboseLogging = false;
+    internal bool ReadOnly = true;
 
     public override void LoadOptions(IniFile ini)
     {
         AutoStart = ini.ReadBool("GKMCPPlugin", "AutoStart", false);
+        ServerHost = ini.ReadString("GKMCPPlugin", "ServerHost", "localhost");
+        ServerPort = ini.ReadInteger("GKMCPPlugin", "ServerPort", 8080);
+        EnableCors = ini.ReadBool("GKMCPPlugin", "EnableCors", false);
+        AllowedHosts = ini.ReadString("GKMCPPlugin", "AllowedHosts", "http://localhost:3000");
+        VerboseLogging = ini.ReadBool("GKMCPPlugin", "VerboseLogging", false);
+        ReadOnly = ini.ReadBool("GKMCPPlugin", "ReadOnly", true);
+
         if (AutoStart) {
             StartAsync();
         }
@@ -173,6 +182,12 @@ public sealed class Plugin : WidgetPlugin
     public override void SaveOptions(IniFile ini)
     {
         ini.WriteBool("GKMCPPlugin", "AutoStart", AutoStart);
+        ini.WriteString("GKMCPPlugin", "ServerHost", ServerHost);
+        ini.WriteInteger("GKMCPPlugin", "ServerPort", ServerPort);
+        ini.WriteBool("GKMCPPlugin", "EnableCors", EnableCors);
+        ini.WriteString("GKMCPPlugin", "AllowedHosts", AllowedHosts);
+        ini.WriteBool("GKMCPPlugin", "VerboseLogging", VerboseLogging);
+        ini.WriteBool("GKMCPPlugin", "ReadOnly", ReadOnly);
     }
 
     #endregion
