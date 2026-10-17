@@ -1518,7 +1518,7 @@ namespace GKCore
 
         public static readonly char[] PLACE_DELIMITERS = new char[] { ',' };
 
-        public static string GetPlaceStr(IGDMStructWithPlace swp, bool onlyLocality = false)
+        public static string GetPlaceWAStr(IGDMStructWithPlace swp, bool onlyLocality = false)
         {
             if (swp == null || !swp.HasPlace) return string.Empty;
 
@@ -1539,7 +1539,7 @@ namespace GKCore
         {
             if (evt == null) return string.Empty;
 
-            string result = GetPlaceStr(evt, onlyLocality);
+            string result = GetPlaceWAStr(evt, onlyLocality);
 
             if (includeAddress) {
                 string resi = evt.StringValue;

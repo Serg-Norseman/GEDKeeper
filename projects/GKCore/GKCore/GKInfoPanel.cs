@@ -1048,7 +1048,7 @@ namespace GKCore
                 summary.AddQValue(LangMan.LS(LSID.Agency), sourData.Agency);
                 foreach (var evt in sourData.Events) {
                     summary.AddQValue(LangMan.LS(LSID.Date), GKUtils.GetDateDisplayString(evt.Date));
-                    summary.AddQValue(LangMan.LS(LSID.Place), GKUtils.GetPlaceStr(evt, true));
+                    summary.AddQValue(LangMan.LS(LSID.Place), GKUtils.GetPlaceWAStr(evt, true));
                 }
                 RecListNotesRefresh(tree, sourData, summary);
             }
