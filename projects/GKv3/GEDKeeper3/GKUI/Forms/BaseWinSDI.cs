@@ -32,6 +32,7 @@ using GKUI.Components;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
 using GKUI.Themes;
+using Theme = GKUI.Themes.Theme;
 
 namespace GKUI.Forms
 {

@@ -34,10 +34,10 @@ namespace GKCalculatorPlugin
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly Plugin fPlugin;
+        private readonly CalculatorPlugin fPlugin;
         private readonly ExpCalculator fCalc;
 
-        public CalcWidget(Plugin plugin)
+        public CalcWidget(CalculatorPlugin plugin)
         {
             XamlReader.Load(this);
 

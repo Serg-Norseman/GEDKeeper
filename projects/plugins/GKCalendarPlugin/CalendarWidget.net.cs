@@ -31,9 +31,9 @@ namespace GKCalendarPlugin
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly Plugin fPlugin;
+        private readonly CalendarPlugin fPlugin;
 
-        public CalendarWidget(Plugin plugin)
+        public CalendarWidget(CalendarPlugin plugin)
         {
             XamlReader.Load(this);
 

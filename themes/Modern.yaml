@@ -286,4 +286,11 @@ Elements:
 
   - Element: Glyph_Tools
     Value: "Modern/Tools.png"
+
+
+  - Element: Glyph_Calculator
+    Value: "Modern/Calculator.png"
+
+  - Element: Glyph_Calendar
+    Value: "Modern/Calendar.png"
 ...

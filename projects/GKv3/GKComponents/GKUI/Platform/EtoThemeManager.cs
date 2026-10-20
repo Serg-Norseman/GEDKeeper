@@ -162,6 +162,12 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_FindAndReplace, "" },
                 { ThemeElement.Glyph_View, "Resources.btn_view.png" },
                 { ThemeElement.Glyph_Tools, "Resources.btn_tools.gif" },
+
+                { ThemeElement.Glyph_FamilyBook, "" },
+                { ThemeElement.Glyph_RelationshipCalculator, "" },
+
+                { ThemeElement.Glyph_Calculator, "" },
+                { ThemeElement.Glyph_Calendar, "" },
             }, true);
         }
 
@@ -508,6 +514,8 @@ namespace GKUI.Themes
         {
             if (component is GKContextMenu gkMenu) {
                 if (fCachedFont != null) gkMenu.Font = fCachedFont;
+                //gkMenu.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
+                //gkMenu.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
             }
         }
 
@@ -517,8 +525,8 @@ namespace GKUI.Themes
 
             if (component is GKToolBar gkToolBar) {
                 if (fCachedFont != null) gkToolBar.Font = fCachedFont;
-                //gkToolBar.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
-                //gkToolBar.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
+                gkToolBar.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
+                gkToolBar.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
             }
 
             foreach (var item in ctl.Items) {

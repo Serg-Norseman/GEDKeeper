@@ -66,7 +66,7 @@ namespace GKCalendarPlugin
         ConvertedDate,
     }
 
-    public sealed class Plugin : WidgetPlugin
+    public sealed class CalendarPlugin : WidgetPlugin
     {
         private string fDisplayName = "GKCalendarPlugin";
         private ILangMan fLangMan;

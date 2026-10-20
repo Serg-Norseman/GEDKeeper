@@ -15,10 +15,22 @@ namespace GKUI.Platform
     [Handler(typeof(GKContextMenu.IHandler))]
     public class GKContextMenu : ContextMenu
     {
+        public Color BackgroundColor
+        {
+            get { return Handler.BackgroundColor; }
+            set { Handler.BackgroundColor = value; }
+        }
+
         public Font Font
         {
             get { return Handler.Font; }
             set { Handler.Font = value; }
+        }
+
+        public Color TextColor
+        {
+            get { return Handler.TextColor; }
+            set { Handler.TextColor = value; }
         }
 
         public GKContextMenu()
@@ -29,7 +41,9 @@ namespace GKUI.Platform
 
         public new interface IHandler : ContextMenu.IHandler
         {
+            Color BackgroundColor { get; set; }
             Font Font { get; set; }
+            Color TextColor { get; set; }
         }
     }
 }

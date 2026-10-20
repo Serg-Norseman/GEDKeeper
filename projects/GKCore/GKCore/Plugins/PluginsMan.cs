@@ -13,10 +13,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
+using GKUI.Themes;
 
 namespace GKCore.Plugins
 {
@@ -222,5 +224,27 @@ namespace GKCore.Plugins
                 return IntPtr.Zero;
             }
         }*/
+
+        private static readonly Dictionary<string, ThemeElement> KnownPluginIcons = new Dictionary<string, ThemeElement>() {
+            { "CalculatorPlugin", ThemeElement.Glyph_Calculator },
+            { "CalendarPlugin", ThemeElement.Glyph_Calendar },
+        };
+
+        public static IImage GetThemedPluginIcon(IPlugin plugin)
+        {
+            if (plugin == null)
+                return null;
+
+            IImage pluginIcon = null;
+            string pluginType = plugin.GetType().Name;
+            if (KnownPluginIcons.TryGetValue(pluginType, out ThemeElement themeElement)) {
+                pluginIcon = AppHost.ThemeManager.GetThemeImage(themeElement);
+            }
+            if (pluginIcon == null) {
+                pluginIcon = plugin.Icon;
+            }
+
+            return pluginIcon;
+        }
     }
 }

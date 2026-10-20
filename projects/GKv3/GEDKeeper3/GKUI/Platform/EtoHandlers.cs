@@ -66,6 +66,12 @@ namespace GKUI.Platform
 
     public class GKContextMenuHandler : ContextMenuHandler, GKContextMenu.IHandler
     {
+        public Color BackgroundColor
+        {
+            get { return Control.Background.ToEtoColor(); }
+            set { Control.Background = value.ToWpfBrush(Control.Background); }
+        }
+
         static readonly object FontKey = new object();
 
         public Font Font
@@ -81,6 +87,12 @@ namespace GKUI.Platform
                     }
                 }
             }
+        }
+
+        public Color TextColor
+        {
+            get { return Control.Foreground.ToEtoColor(); }
+            set { Control.Foreground = value.ToWpfBrush(Control.Foreground); }
         }
     }
 
@@ -171,10 +183,22 @@ namespace GKUI.Platform
 
     public class GKContextMenuHandler : ContextMenuHandler, GKContextMenu.IHandler
     {
+        public Color BackgroundColor
+        {
+            get { return Control.GetBase(); }
+            set { Control.SetBase(value); }
+        }
+
         public Font Font
         {
             get { return null; }
             set { }
+        }
+
+        public Color TextColor
+        {
+            get { return Control.GetForeground(); }
+            set { Control.SetForeground(value); }
         }
     }
 

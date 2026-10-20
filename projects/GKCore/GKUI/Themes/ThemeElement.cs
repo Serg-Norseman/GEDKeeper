@@ -145,6 +145,12 @@ namespace GKUI.Themes
         Glyph_FindAndReplace,
         Glyph_View,
         Glyph_Tools,
+
+        Glyph_FamilyBook,
+        Glyph_RelationshipCalculator,
+
+        Glyph_Calculator,
+        Glyph_Calendar,
     }
 
 

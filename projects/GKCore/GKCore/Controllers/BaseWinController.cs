@@ -1123,6 +1123,8 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miPedigreeDescend").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Pedigree);
             GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
             GetControl<IMenuItem>("miStats").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stats);
+            GetControl<IMenuItem>("miExportToFamilyBook").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FamilyBook);
+            GetControl<IMenuItem>("miRelationshipCalculator").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RelationshipCalculator);
 
             GetControl<IMenuItem>("miAncestorsCircle").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CircleAncestors);
             GetControl<IMenuItem>("miDescendantsCircle").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CircleDescendants);
@@ -1153,6 +1155,8 @@ namespace GKCore.Controllers
             GetControl<IToolItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
             GetControl<IToolItem>("tbSendMail").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_SendMail, true);
             GetControl<IToolItem>("tbPartialView").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_PartialView, true);
+
+            UpdatePluginItemsTheme();
         }
 
         #region Dialogs
@@ -1583,7 +1587,8 @@ namespace GKCore.Controllers
                     }
 
                     IMenuItem ownerItem = (plugin.Category == PluginCategory.Report) ? fView.ReportsItem : fView.PluginsItem;
-                    IMenuItem mi = ownerItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
+                    IImage pluginIcon = PluginsMan.GetThemedPluginIcon(plugin);
+                    IMenuItem mi = ownerItem.AddItem(plugin.DisplayName, plugin, pluginIcon, Plugin_Click);
 
                     var widget = plugin as IWidgetPlugin;
                     if (widget != null) {
@@ -1597,6 +1602,23 @@ namespace GKCore.Controllers
                 fView.PluginsItem.Enabled = (fView.PluginsItem.SubItems.Count > 0);
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.UpdatePluginsItems()", ex);
+            }
+        }
+
+        public void UpdatePluginItemsTheme()
+        {
+            try {
+                for (int i = 0; i < fView.ReportsItem.SubItems.Count; i++) {
+                    IMenuItem mi = fView.ReportsItem.SubItems[i];
+                    mi.Glyph = PluginsMan.GetThemedPluginIcon(mi.Tag as IPlugin);
+                }
+
+                for (int i = 0; i < fView.PluginsItem.SubItems.Count; i++) {
+                    IMenuItem mi = fView.PluginsItem.SubItems[i];
+                    mi.Glyph = PluginsMan.GetThemedPluginIcon(mi.Tag as IPlugin);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.UpdatePluginItemsTheme()", ex);
             }
         }
 

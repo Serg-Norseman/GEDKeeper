@@ -35,7 +35,7 @@ namespace GKCalculatorPlugin
         EventsYearCalculation,
     }
 
-    public sealed class Plugin : WidgetPlugin
+    public sealed class CalculatorPlugin : WidgetPlugin
     {
         private string fDisplayName = "GKCalculatorPlugin";
         private ILangMan fLangMan;

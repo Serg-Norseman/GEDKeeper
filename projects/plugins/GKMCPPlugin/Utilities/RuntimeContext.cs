@@ -97,8 +97,8 @@ public class RuntimeContext : IRuntimeContext
             // The console is redirected or unavailable
         }
 
-        Logger.Init(Path.Combine(AppHost.GetAppDataPathStatic(), "GKMCPPlugin.log"));
-        ZLMKit.MCP.MCPServer.SetLogger(Logger.GetLogger());
+        //Logger.Init(Path.Combine(AppHost.GetAppDataPathStatic(), "GKMCPPlugin.log"));
+        //ZLMKit.MCP.MCPServer.SetLogger(Logger.GetLogger());
     }
 }
 

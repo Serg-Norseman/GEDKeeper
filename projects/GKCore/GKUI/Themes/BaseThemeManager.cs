@@ -168,6 +168,12 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_FindAndReplace
                 ThemeElementType.Image, // ThemeElement.Glyph_View
                 ThemeElementType.Image, // ThemeElement.Glyph_Tools
+
+                ThemeElementType.Image, // ThemeElement.Glyph_FamilyBook
+                ThemeElementType.Image, // ThemeElement.Glyph_RelationshipCalculator
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Calculator
+                ThemeElementType.Image, // ThemeElement.Glyph_Calendar
             };
         }
 
