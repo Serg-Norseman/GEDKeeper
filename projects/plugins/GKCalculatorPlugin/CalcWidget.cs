@@ -16,15 +16,12 @@ using GKUI.Themes;
 
 namespace GKCalculatorPlugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class CalcWidget : Form, IWidgetForm, IThemedView
     {
-        private readonly Plugin fPlugin;
+        private readonly CalculatorPlugin fPlugin;
         private readonly ExpCalculator fCalc;
 
-        public CalcWidget(Plugin plugin)
+        public CalcWidget(CalculatorPlugin plugin)
         {
             InitializeComponent();
 

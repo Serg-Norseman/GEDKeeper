@@ -14,14 +14,11 @@ using GKUI.Themes;
 
 namespace GKCalendarPlugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class CalendarWidget : Form, IWidgetForm, IThemedView
     {
-        private readonly Plugin fPlugin;
+        private readonly CalendarPlugin fPlugin;
 
-        public CalendarWidget(Plugin plugin)
+        public CalendarWidget(CalendarPlugin plugin)
         {
             InitializeComponent();
 
