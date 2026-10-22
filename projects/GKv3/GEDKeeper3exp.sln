@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.10.12224.181 stable
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37710.0 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeper3", "GEDKeeper3\GEDKeeper3.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
 EndProject
@@ -101,6 +101,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "themes", "themes", "{D944C2
 		..\..\themes\gk_light_nsw.yaml = ..\..\themes\gk_light_nsw.yaml
 		..\..\themes\gk_light_sui.yaml = ..\..\themes\gk_light_sui.yaml
 		..\..\themes\Modern.yaml = ..\..\themes\Modern.yaml
+		..\..\themes\Predistoria.yaml = ..\..\themes\Predistoria.yaml
 	EndProjectSection
 EndProject
 Global
