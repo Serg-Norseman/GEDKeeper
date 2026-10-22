@@ -16,9 +16,9 @@ namespace GKMCPPlugin;
 public class MCPServerForm : Dialog
 {
     private readonly ILangMan fLangMan;
-    private readonly Plugin fPlugin;
+    private readonly MCPPlugin fPlugin;
 
-    public MCPServerForm(Plugin plugin, ILangMan langMan)
+    public MCPServerForm(MCPPlugin plugin, ILangMan langMan)
     {
         fPlugin = plugin;
         fLangMan = langMan;

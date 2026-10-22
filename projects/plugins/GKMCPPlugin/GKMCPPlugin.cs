@@ -63,21 +63,22 @@ public enum PLS
     ReadOnly = 25,
 }
 
-public sealed class Plugin : WidgetPlugin
+public sealed class MCPPlugin : WidgetPlugin
 {
     private string fDisplayName = "GKMCPPlugin";
     private ILangMan fLangMan;
     private MCPServer fMCPServer;
     private RuntimeContext fRuntimeContext;
+    private IImage fIcon;
 
 
     public override string DisplayName { get { return fDisplayName; } }
     public override ILangMan LangMan { get { return fLangMan; } }
-    public override IImage Icon { get { return null; } }
+    public override IImage Icon { get { return fIcon; } }
     public override PluginCategory Category { get { return PluginCategory.Common; } }
 
 
-    public Plugin()
+    public MCPPlugin()
     {
     }
 
@@ -112,6 +113,8 @@ public sealed class Plugin : WidgetPlugin
     {
         bool result = base.Startup(host);
         try {
+            fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKMCPPlugin.MCPlogo.png", ImageTarget.UI);
+
             RuntimeContext.Initialize();
 
             fMCPServer = new MCPServer();

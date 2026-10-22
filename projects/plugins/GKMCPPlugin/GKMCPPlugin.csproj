@@ -17,6 +17,14 @@
     <Import Project="..\..\GKConfigurations3.targets" />
 
     <ItemGroup>
+        <None Remove="MCPlogo.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="MCPlogo.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
         </Reference>
