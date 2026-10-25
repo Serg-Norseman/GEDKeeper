@@ -29,7 +29,7 @@ namespace GKUI.Platform
             using (var image = Image.Load<Bgr565>(inputStream)) {
                 image.Mutate(x => x.AutoOrient());
 
-                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Bit16 };
+                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
                 image.SaveAsBmp(outputStream, encoder);
             }
             return outputStream;
