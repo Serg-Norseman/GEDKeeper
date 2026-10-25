@@ -337,9 +337,21 @@ namespace GKUI.Platform
 
     public class GKContextMenuHandler : ContextMenuHandler, GKContextMenu.IHandler
     {
+        public Color BackgroundColor
+        {
+            get { return Colors.Transparent; }
+            set {  }
+        }
+
         public Font Font
         {
             get { return null; }
+            set { }
+        }
+
+        public Color TextColor
+        {
+            get { return Colors.Transparent; }
             set { }
         }
     }
