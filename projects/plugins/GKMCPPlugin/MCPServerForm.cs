@@ -95,6 +95,7 @@ public class MCPServerForm : Dialog
     private Button _stopButton;
     private Label _statusLabel;
     private CheckBox _readOnlyCheckBox;
+    private CheckBox _assistantCheckBox;
 
     private void InitControls()
     {
@@ -114,6 +115,8 @@ public class MCPServerForm : Dialog
         _verboseLoggingCheckBox = new CheckBox { Text = fLangMan.LS(PLS.VerboseServerLogs), Checked = fPlugin.VerboseLogging };
 
         _readOnlyCheckBox = new CheckBox { Text = fLangMan.LS(PLS.ReadOnly), Checked = fPlugin.ReadOnly };
+
+        _assistantCheckBox = new CheckBox { Text = fLangMan.LS(PLS.EmbeddedAssistant), Checked = fPlugin.EmbeddedAssistant };
 
         _startButton = new Button { Text = fLangMan.LS(PLS.Start), ImagePosition = ButtonImagePosition.Left };
         _startButton.Click += OnStartServerClick;
@@ -135,6 +138,7 @@ public class MCPServerForm : Dialog
         configLayout.AddRow(null, _verboseLoggingCheckBox);
         configLayout.AddRow(null, _autoStartCheckBox);
         configLayout.AddRow(null, _readOnlyCheckBox);
+        configLayout.AddRow(null, _assistantCheckBox);
 
         var controlLayout = new StackLayout {
             Orientation = Orientation.Horizontal,
@@ -166,6 +170,7 @@ public class MCPServerForm : Dialog
         _verboseLoggingCheckBox.Enabled = !isRunning;
         _autoStartCheckBox.Enabled = !isRunning;
         _readOnlyCheckBox.Enabled = !isRunning;
+        _assistantCheckBox.Enabled = !isRunning;
     }
 
     #endregion

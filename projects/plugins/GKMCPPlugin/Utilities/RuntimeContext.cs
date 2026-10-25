@@ -23,6 +23,7 @@ public class RuntimeContext : IRuntimeContext
 {
     private BaseContext fBaseContext;
     private readonly FileSystemService fFileSystem;
+    private readonly MCPPlugin fMCPPlugin;
     private readonly IMCPServer fMCPServer;
 
     public BaseContext BaseContext
@@ -48,18 +49,21 @@ public class RuntimeContext : IRuntimeContext
         get { return fMCPServer; }
     }
 
-    public RuntimeContext(IMCPServer mcpServer)
+    public RuntimeContext(MCPPlugin mcpPlugin, IMCPServer mcpServer)
     {
+        fMCPPlugin = mcpPlugin;
+
         bool dbEnabled = true;
         var dbPath = Path.Combine(AppHost.GetAppDataPathStatic(), "gkrag.db");
         if (dbEnabled) LLMDatabase.SetDBPath(dbPath);
 
         var allowedDirectories = "D:\\TEMP\\mem".Split(';');
 
-        MemoryEnabled = true;
-        ProfileEnabled = true;
-        TasksEnabled = true;
-        FTSEnabled = false;
+        MemoryEnabled = fMCPPlugin.EmbeddedAssistant;
+        ProfileEnabled = fMCPPlugin.EmbeddedAssistant;
+        TasksEnabled = fMCPPlugin.EmbeddedAssistant;
+        FTSEnabled = fMCPPlugin.EmbeddedAssistant;
+
         ReadOnly = true;
 
         fMCPServer = mcpServer;

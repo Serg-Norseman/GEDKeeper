@@ -61,6 +61,7 @@ public enum PLS
     StartingError = 23,
     StoppingError = 24,
     ReadOnly = 25,
+    EmbeddedAssistant = 26,
 }
 
 public sealed class MCPPlugin : WidgetPlugin
@@ -84,12 +85,14 @@ public sealed class MCPPlugin : WidgetPlugin
 
     public override void BaseChanged(IBaseWindow baseWin)
     {
-        fRuntimeContext.BaseContext = baseWin.Context;
+        if (fRuntimeContext != null)
+            fRuntimeContext.BaseContext = baseWin.Context;
     }
 
     public override void BaseClosed(IBaseWindow baseWin)
     {
-        fRuntimeContext.BaseContext = null;
+        if (fRuntimeContext != null)
+            fRuntimeContext.BaseContext = null;
     }
 
     public override void Execute()
@@ -114,15 +117,7 @@ public sealed class MCPPlugin : WidgetPlugin
         bool result = base.Startup(host);
         try {
             fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKMCPPlugin.MCPlogo.png", ImageTarget.UI);
-
             RuntimeContext.Initialize();
-
-            fMCPServer = new MCPServer();
-            fRuntimeContext = new RuntimeContext(fMCPServer);
-            fMCPServer.Context = fRuntimeContext;
-
-            InitFeatures(fMCPServer, embedded: true, pureMode: false, tdeMode: true, ragMode: true);
-
             return result;
         } catch (Exception ex) {
             Logger.WriteError("GKMCPPlugin.Startup()", ex);
@@ -144,17 +139,29 @@ public sealed class MCPPlugin : WidgetPlugin
 
     internal bool IsRunning()
     {
-        return fMCPServer.IsRunning;
+        return (fMCPServer != null) ? fMCPServer.IsRunning : false;
     }
 
     internal async Task StartAsync()
     {
+        fMCPServer = new MCPServer();
+        fRuntimeContext = new RuntimeContext(this, fMCPServer);
+        fMCPServer.Context = fRuntimeContext;
+
+        InitFeatures(fMCPServer, embedded: true, pureMode: false, tdeMode: true, ragMode: true);
+
         await fMCPServer.StartAsync(ServerHost, ServerPort, EnableCors, AllowedHosts, VerboseLogging);
     }
 
     internal async Task StopAsync()
     {
+        if (fMCPServer == null)
+            return;
+
         await fMCPServer.StopAsync();
+
+        fMCPServer = null;
+        fRuntimeContext = null;
     }
 
     #region Options
@@ -166,6 +173,7 @@ public sealed class MCPPlugin : WidgetPlugin
     internal string AllowedHosts = "http://localhost:3000";
     internal bool VerboseLogging = false;
     internal bool ReadOnly = true;
+    internal bool EmbeddedAssistant = false;
 
     public override void LoadOptions(IniFile ini)
     {
@@ -176,6 +184,7 @@ public sealed class MCPPlugin : WidgetPlugin
         AllowedHosts = ini.ReadString("GKMCPPlugin", "AllowedHosts", "http://localhost:3000");
         VerboseLogging = ini.ReadBool("GKMCPPlugin", "VerboseLogging", false);
         ReadOnly = ini.ReadBool("GKMCPPlugin", "ReadOnly", true);
+        EmbeddedAssistant = ini.ReadBool("GKMCPPlugin", "EmbeddedAssistant", false);
 
         if (AutoStart) {
             StartAsync();
@@ -191,6 +200,7 @@ public sealed class MCPPlugin : WidgetPlugin
         ini.WriteString("GKMCPPlugin", "AllowedHosts", AllowedHosts);
         ini.WriteBool("GKMCPPlugin", "VerboseLogging", VerboseLogging);
         ini.WriteBool("GKMCPPlugin", "ReadOnly", ReadOnly);
+        ini.WriteBool("GKMCPPlugin", "EmbeddedAssistant", EmbeddedAssistant);
     }
 
     #endregion
