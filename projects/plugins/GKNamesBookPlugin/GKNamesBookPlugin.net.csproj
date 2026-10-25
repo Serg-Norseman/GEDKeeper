@@ -29,8 +29,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.13.0" />
-        <PackageReference Include="Eto.Serialization.Xaml" Version="2.13.0" />
+        <PackageReference Include="Eto.Forms" Version="2.12.0" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.12.0" />
     </ItemGroup>
 
     <Import Project="GKNamesBookPlugin.props" />

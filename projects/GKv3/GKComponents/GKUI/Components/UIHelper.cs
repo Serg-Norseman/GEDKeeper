@@ -8,6 +8,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -324,19 +325,19 @@ namespace GKUI.Components
         private static void FixRadioButtonsInt(Control instance, Control control, ref RadioButton controller)
         {
             if (control is StackLayout stackLayout) {
-                foreach (var item in stackLayout.Items) {
-                    var radBtn = item.Control as RadioButton;
-                    if (radBtn != null) {
+                var stackItems = stackLayout.Items.ToList();
+                foreach (var item in stackItems) {
+                    if (item.Control is RadioButton radBtn) {
                         item.Control = ReplaceRadioButton(instance, radBtn, ref controller);
                     } else {
                         FixRadioButtonsInt(instance, item.Control, ref controller);
                     }
                 }
             } else if (control is TableLayout tableLayout) {
+                var tableRows = tableLayout.Rows.ToList();
                 foreach (var row in tableLayout.Rows) {
                     foreach (var cell in row.Cells) {
-                        var radBtn = cell.Control as RadioButton;
-                        if (radBtn != null) {
+                        if (cell.Control is RadioButton radBtn) {
                             cell.Control = ReplaceRadioButton(instance, radBtn, ref controller);
                         } else {
                             FixRadioButtonsInt(instance, cell.Control, ref controller);
