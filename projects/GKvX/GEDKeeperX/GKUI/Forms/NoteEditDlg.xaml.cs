@@ -11,6 +11,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 
 namespace GKUI.Forms
 {
@@ -27,6 +28,16 @@ namespace GKUI.Forms
         ITextBox INoteEdit.Note
         {
             get { return GetControlHandler<ITextBox>(txtNote); }
+        }
+
+        ISheetList INoteEdit.SourcesList
+        {
+            get { return null; }
+        }
+
+        ISheetList INoteEdit.UserRefList
+        {
+            get { return null; }
         }
 
         #endregion

@@ -1,6 +1,8 @@
 ﻿
 # Solutions
 
+https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/?view=net-maui-10.0
+
 ## Disabled and removed features
 
 1. Plugins -> Monolith
@@ -27,22 +29,12 @@
 
 # Experimental
 
-1. https://www.nuget.org/packages/C1.Xamarin.Forms.Grid
-2. https://www.nuget.org/packages/Syncfusion.Xamarin.SfDataGrid
 
 ## Canceled
 
-1. DLToolkit.Forms.Controls and Xamvvm.Forms - obsolete, on Android - ugly
 
 ## Checked packages
 
-Xamarin.Forms 5.0.0.2291-2545
-Xamarin.Essentials 1.7.0-3 -> TargetFrameworkVersion=v10.0, android:targetSdkVersion="29"
-Xamarin.Forms.InputKit 3.7.2, 4.1.6
-Xamarin.Forms.DataGrid 4.8.0
-  - 4.8.0 - selecting items does not work correctly after scrolling
-  - >= 5.0.0.2515 - dont works
-Xamarin.CommunityToolkit 2.0.6
 
 # Dev Requirements
 

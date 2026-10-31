@@ -9,7 +9,7 @@
 using BSLib;
 using GKCore.Design.Graphics;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
+using SkiaSharp.Views.Maui;
 
 namespace GKUI.Components
 {
@@ -17,7 +17,7 @@ namespace GKUI.Components
     {
         public IColor Color
         {
-            get { return UIHelper.ConvertColor(Handle.Color.ToFormsColor()); }
+            get { return UIHelper.ConvertColor(Handle.Color.ToMauiColor()); }
         }
 
         public BrushHandler(SKPaint handle) : base(handle)

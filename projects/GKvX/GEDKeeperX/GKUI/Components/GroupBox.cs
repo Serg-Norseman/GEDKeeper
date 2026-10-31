@@ -7,8 +7,9 @@
  */
 
 using System.Collections.Generic;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Xaml;
 
 namespace GKUI.Components
 {
@@ -19,7 +20,7 @@ namespace GKUI.Components
         private readonly StackLayout fContentLayout;
         private readonly Label fTitle;
 
-        public IList<View> Contents { get => fContentLayout.Children; }
+        public IList<IView> Contents { get => fContentLayout.Children; }
 
         public string Text
         {

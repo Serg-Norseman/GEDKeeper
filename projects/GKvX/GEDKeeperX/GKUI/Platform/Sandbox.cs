@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using GKCore.Design;
-using Xamarin.Essentials;
+using Microsoft.Maui.Devices;
 
 namespace GKUI.Platform
 {

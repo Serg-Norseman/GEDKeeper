@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
@@ -13,10 +13,10 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
+        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
 
-                <xp:TabItem x:Name="pageCommon">
+                <comcom:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
@@ -40,18 +40,18 @@
 
                         <Label HorizontalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageOther">
+                <comcom:TabItem x:Name="pageOther">
                     <StackLayout Orientation="Vertical">
                         <comcom:GKDateControl x:Name="dateCtl" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
 
                         <Editor x:Name="txtText" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabItem>
 
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

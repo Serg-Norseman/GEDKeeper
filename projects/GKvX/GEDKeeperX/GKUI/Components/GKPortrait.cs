@@ -8,8 +8,8 @@
 
 using System.Collections.Generic;
 using GKCore.Design.Controls;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using SkiaSharp.Views.Maui.Controls;
 
 namespace GKUI.Components
 {

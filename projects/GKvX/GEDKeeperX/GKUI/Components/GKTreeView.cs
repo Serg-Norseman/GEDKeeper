@@ -10,7 +10,8 @@ using System;
 using System.Collections.ObjectModel;
 using Adapt.Presentation.Controls;
 using GKCore.Design.Controls;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace GKUI.Components
 {
@@ -46,7 +47,7 @@ namespace GKUI.Components
         {
             var label = new Label {
                 VerticalOptions = LayoutOptions.Center,
-                TextColor = Color.Black
+                TextColor = Colors.Black
             };
             label.SetBinding(Label.TextProperty, "Text");
 

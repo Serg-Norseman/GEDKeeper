@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 using GKCore;
 using GKCore.Locales;
 using GKUI.Platform;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 
 namespace GKUI.Forms
 {
-    public class MainPage : MasterDetailPage, ILocalizable
+    public class MainPage : FlyoutPage, ILocalizable
     {
         private readonly Dictionary<int, Page> fMenuPages;
 
 
         public MainPage()
         {
-            MasterBehavior = MasterBehavior.Popover;
-            Master = new MenuPage();
+            FlyoutLayoutBehavior = FlyoutLayoutBehavior.Popover;
+            Flyout = new MenuPage();
             Detail = new LaunchPage();
 
             fMenuPages = new Dictionary<int, Page>();

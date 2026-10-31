@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net9.0</TargetFrameworks>
+        <UseMaui>True</UseMaui>
+        <OutputType>Library</OutputType>
         <AssemblyName>GKMap.Xamarin</AssemblyName>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -18,8 +20,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
-        <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.40" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.40" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Core" Version="3.119.2" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.2" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.9" />
     </ItemGroup>
 
 </Project>

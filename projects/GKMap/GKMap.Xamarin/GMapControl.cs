@@ -16,7 +16,8 @@ using System.Diagnostics;
 using GKMap.MapObjects;
 using GKMap.MapProviders;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
+using SkiaSharp.Views.Maui;
+using SkiaSharp.Views.Maui.Controls;
 
 namespace GKMap.Xamarin
 {

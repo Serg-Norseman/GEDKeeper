@@ -15,8 +15,8 @@ using GKCore.Controllers;
 using GKCore.Locales;
 using GKUI.Components;
 using GKUI.Platform;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 
 namespace GKUI.Forms
 {

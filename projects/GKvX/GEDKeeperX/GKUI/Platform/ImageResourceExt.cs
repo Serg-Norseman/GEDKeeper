@@ -8,12 +8,13 @@
 
 using System;
 using GKUI.Components;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Xaml;
 
 namespace GKUI.Platform
 {
     [ContentProperty("Source")]
+    [AcceptEmptyServiceProvider]
     public class ImageResourceExt : IMarkupExtension
     {
         public string Source { get; set; }

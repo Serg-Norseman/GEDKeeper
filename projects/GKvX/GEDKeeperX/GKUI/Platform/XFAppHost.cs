@@ -21,11 +21,14 @@ using GKCore.Validation;
 using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
-using Xam.Plugin.TabView;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Microsoft.Maui.Controls;
+using ITimer = GKCore.ITimer;
+using IView = GKCore.Design.IView;
+using IWindow = GKCore.Design.IWindow;
+using XFIKCheckBox = Plugin.InputKit.CheckBox;
+using XFIKRadioButton = Plugin.InputKit.RadioButton;
 
 namespace GKUI.Platform
 {
@@ -100,12 +103,13 @@ namespace GKUI.Platform
         public override IEnumerable<T> GetRunningForms<T>()
         {
             var navPage = (NavigationPage)Application.Current.MainPage;
-            foreach (var page in navPage.Pages) {
+            yield return navPage.CurrentPage as T;
+            /*foreach (var page in navPage.Pages) {
                 T form = page as T;
                 if (form != null) {
                     yield return form;
                 }
-            }
+            }*/
         }
 
         protected override void UpdateLang()
@@ -115,7 +119,7 @@ namespace GKUI.Platform
             var mainPage = (MainPage)navPage.RootPage;
             mainPage.SetLocale();
 
-            var menuPage = (MenuPage)mainPage.Master;
+            var menuPage = (MenuPage)mainPage.Flyout;
             menuPage.SetLocale();
 
             var launchPage = (LaunchPage)mainPage.Detail;
@@ -135,7 +139,7 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            fPlatformSpecifics.CloseApplication();
+            fPlatformSpecifics?.CloseApplication();
         }
 
         private IProgressController GetProgressController()
@@ -167,7 +171,7 @@ namespace GKUI.Platform
 
         public override string GetExternalStorageDirectory()
         {
-            return fPlatformSpecifics.GetExternalStorageDirectory();
+            return fPlatformSpecifics?.GetExternalStorageDirectory();
         }
 
         public override bool HasFeatureSupport(Feature feature)

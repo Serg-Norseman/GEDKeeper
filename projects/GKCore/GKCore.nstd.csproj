@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFrameworks>net8.0</TargetFrameworks>
-        <!-->TargetFrameworks>netstandard2.0</TargetFrameworks-->
         <AssemblyName>GKCore</AssemblyName>
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

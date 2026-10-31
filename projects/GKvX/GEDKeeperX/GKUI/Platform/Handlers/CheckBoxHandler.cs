@@ -6,9 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-using Xamarin.Forms;
-using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
+using ICheckBox = GKCore.Design.Controls.ICheckBox;
+using XFIKCheckBox = Plugin.InputKit.CheckBox;
 
 namespace GKUI.Platform
 {
@@ -16,8 +15,8 @@ namespace GKUI.Platform
     {
         public CheckBoxHandler(XFIKCheckBox control) : base(control)
         {
-            control.Color = Color.Black;
-            control.Padding = new Thickness(0, 0);
+            //control.Color = Colors.Black;
+            //control.Padding = new Thickness(0, 0);
         }
 
         public bool Checked

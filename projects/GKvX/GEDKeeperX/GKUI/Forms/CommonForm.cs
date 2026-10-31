@@ -12,7 +12,9 @@ using GKCore;
 using GKCore.Design;
 using GKUI.Platform;
 using GKUI.Themes;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using IView = GKCore.Design.IView;
+using IWindow = GKCore.Design.IWindow;
 
 namespace GKUI.Forms
 {

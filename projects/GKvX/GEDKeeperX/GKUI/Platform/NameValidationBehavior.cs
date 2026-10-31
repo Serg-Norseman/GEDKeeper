@@ -6,9 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using System.Linq;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
 namespace GKUI.Platform
 {

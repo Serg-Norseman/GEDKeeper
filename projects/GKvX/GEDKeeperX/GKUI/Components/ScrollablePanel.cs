@@ -9,8 +9,11 @@
 using System;
 using BSLib;
 using GKCore.Design;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
+using SkiaSharp.Views.Maui;
+using SkiaSharp.Views.Maui.Controls;
 
 namespace GKUI.Components
 {
@@ -60,18 +63,18 @@ namespace GKUI.Components
 
         private readonly SKCanvasView fCanvas;
         private bool fCenteredImage;
-        private Font fFont;
+        //private Font fFont;
         private bool fHasHScroll;
         private bool fHasVScroll;
         private ExtSize fImageSize;
-        private Rectangle fImageRect;
+        private Rect fImageRect;
         private ExtRect fImageViewport;
         private int fMouseOffsetX, fMouseOffsetY;
         private Color fTextColor;
         private ExtRect fViewport;
 
 
-        public Rectangle CanvasRectangle
+        public Rect CanvasRectangle
         {
             get { return fCanvas.Bounds; }
         }
@@ -85,17 +88,17 @@ namespace GKUI.Components
         /// <summary>
         /// Gets the rectangle that represents the client area of the control.
         /// </summary>
-        public Rectangle ClientRectangle
+        public Rect ClientRectangle
         {
             get {
                 // FIXME: bad!!!
                 //var clientSize = base.ClientSize;
                 var clientSize = base.ContentSize;
-                return new Rectangle(0, 0, clientSize.Width, clientSize.Height);
+                return new Rect(0, 0, clientSize.Width, clientSize.Height);
             }
         }
 
-        public Font Font
+        /*public Font Font
         {
             get { return fFont; }
             set {
@@ -104,9 +107,9 @@ namespace GKUI.Components
                     OnFontChanged(EventArgs.Empty);
                 }
             }
-        }
+        }*/
 
-        protected Rectangle ImageRect
+        protected Rect ImageRect
         {
             get { return fImageRect; }
         }
@@ -230,7 +233,7 @@ namespace GKUI.Components
                 }
             }
 
-            fImageRect = new Rectangle(destX, destY, fImageSize.Width, fImageSize.Height);
+            fImageRect = new Rect(destX, destY, fImageSize.Width, fImageSize.Height);
 
             int width = Math.Min(fImageSize.Width, fViewport.Width);
             int height = Math.Min(fImageSize.Height, fViewport.Height);

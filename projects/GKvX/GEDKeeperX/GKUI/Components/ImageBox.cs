@@ -10,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Media;
+using Microsoft.Maui;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using SkiaSharp.Views.Maui;
+using SkiaSharp.Views.Maui.Controls;
 using Graphics = SkiaSharp.SKCanvas;
 
 namespace GKUI.Components
@@ -34,7 +36,7 @@ namespace GKUI.Components
         private int fScaledImageWidth;
         private Color fSelectionColor;
         private ImageBoxSelectionMode fSelectionMode;
-        private Rectangle fSelectionRegion;
+        private Rect fSelectionRegion;
         private bool fShowNamedRegionTips;
         private bool fSizeToFit;
         private int fUpdateCount;
@@ -111,7 +113,7 @@ namespace GKUI.Components
         /// <summary>
         ///   Gets or sets the selection region.
         /// </summary>
-        public Rectangle SelectionRegion
+        public Rect SelectionRegion
         {
             get { return fSelectionRegion; }
             set {
@@ -179,7 +181,7 @@ namespace GKUI.Components
 
         public ImageBox()
         {
-            BackgroundColor = Color.Gray;
+            BackgroundColor = Colors.Gray;
             Padding = new Thickness(0);
 
             fNamedRegions = new List<NamedRegion>();
@@ -188,9 +190,9 @@ namespace GKUI.Components
             fAllowZoom = true;
             fAutoPan = true;
             fDropShadowSize = 3;
-            fImageBorderColor = Color.AliceBlue;
+            fImageBorderColor = Colors.AliceBlue;
             fImagePadding = new Thickness(10);
-            fSelectionColor = Color.LightBlue;
+            fSelectionColor = Colors.LightBlue;
             fZoom = 100;
         }
 
@@ -290,7 +292,7 @@ namespace GKUI.Components
         ///   Adjusts the view port to fit the given region.
         /// </summary>
         /// <param name="rectangle">The rectangle to fit the view port to.</param>
-        public void ZoomToRegion(Rectangle rectangle)
+        public void ZoomToRegion(Rect rectangle)
         {
             var clientSize = new Size(Viewport.Width, Viewport.Height);
             double ratioX = clientSize.Width / rectangle.Width;
@@ -348,7 +350,7 @@ namespace GKUI.Components
                 gfx.DrawImage(fImage, sourRect, destRect);
 
                 // draw the selection
-                if (fSelectionRegion != Rectangle.Zero) {
+                if (fSelectionRegion != Rect.Zero) {
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
@@ -13,9 +13,9 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageCommon">
+        <comcom:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4">
                             <Grid.ColumnDefinitions>
@@ -41,29 +41,29 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageText">
+                <comcom:TabItem x:Name="pageText">
                     <Editor x:Name="txtText" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageRepositories">
+                <comcom:TabItem x:Name="pageRepositories">
                     <comcom:GKSheetList x:Name="fRepositoriesList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageNotes">
+                <comcom:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageMultimedia">
+                <comcom:TabItem x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageUserRefs">
+                <comcom:TabItem x:Name="pageUserRefs">
                     <comcom:GKSheetList x:Name="fUserRefList" />
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

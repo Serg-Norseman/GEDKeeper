@@ -30,3 +30,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE1006:Naming rule violation")]
 
 [assembly: SuppressMessage("Style", "CA1510:Use ArgumentNullException throw helper")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")] // temp on time of transfer!

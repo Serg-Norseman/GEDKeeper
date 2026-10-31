@@ -8,8 +8,8 @@
 
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Platform
 {

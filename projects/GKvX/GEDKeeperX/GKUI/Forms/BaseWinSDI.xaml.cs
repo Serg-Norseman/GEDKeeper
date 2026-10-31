@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -23,9 +24,10 @@ using GKCore.Locales;
 using GKCore.Search;
 using GKUI.Components;
 using GKUI.Platform;
-using Xam.Plugin.TabView;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Layouts;
 
 namespace GKUI.Forms
 {
@@ -86,7 +88,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            UIHelper.UnsetAnimateTransition(tabsRecords);
             tabsRecords.PositionChanged += tabsRecords_SelectedIndexChanged;
 
             fController = new BaseWinController(this, true);
@@ -119,7 +120,7 @@ namespace GKUI.Forms
             summary.OnLink += mPersonSummaryLink;
             //summary.ContextMenu = summaryMenu;
 
-            var summFrame = new Frame() { Content = summary, Padding = 4, CornerRadius = 4, BorderColor = Color.LightBlue, VerticalOptions = LayoutOptions.FillAndExpand };
+            var summFrame = new Frame() { Content = summary, Padding = 4, CornerRadius = 4, BorderColor = Colors.LightBlue, VerticalOptions = LayoutOptions.FillAndExpand };
 
             var recView = new GKListView();
             //recView.AllowMultipleSelection = true;
@@ -129,7 +130,7 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 
-            var listFrame = new Frame() { Content = recView, Padding = 4, CornerRadius = 4, BorderColor = Color.LightBlue };
+            var listFrame = new Frame() { Content = recView, Padding = 4, CornerRadius = 4, BorderColor = Colors.LightBlue };
             FlexLayout.SetBasis(listFrame, new FlexBasis(0.7f, true));
 
             var qsHorizPlaceholder = new ContentView();
@@ -217,8 +218,6 @@ namespace GKUI.Forms
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            UIHelper.ResetTabViewLayout(tabsRecords);
         }
 
         void IDisplayChangeable.OnDisplayChanged(DisplayInfo displayInfo)
@@ -376,9 +375,9 @@ namespace GKUI.Forms
             fController.CreateNewFile();
         }
 
-        public void LoadFile(string fileName)
+        public async Task LoadFile(string fileName)
         {
-            fController.LoadFile(fileName);
+            await fController.LoadFile(fileName);
         }
 
         public void SaveFile(string fileName)

@@ -1,5 +1,5 @@
 <ContentView
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
     x:Class="GKUI.Forms.QuickSearchDlg">

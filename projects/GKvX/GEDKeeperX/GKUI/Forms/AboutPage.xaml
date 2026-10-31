@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
@@ -19,18 +19,18 @@
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
 
         <Image Source="{plat:ImageResourceExt Resources.image_logo.png}" Aspect="AspectFit" />
-        <Label x:Name="lblVersion" Font="Bold+12pt" />
-        <Label x:Name="lblCopyright" Font="Bold+12pt" />
+        <Label x:Name="lblVersion" FontAttributes="Bold" FontSize="12" />
+        <Label x:Name="lblCopyright" FontAttributes="Bold" FontSize="12" />
 
         <Label VerticalOptions="FillAndExpand" />
 
-        <Button x:Name="lblProjSite" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblProjSite" FontAttributes="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" Text="https://gedkeeper.net/" />
-        <Button x:Name="lblMail" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblMail" FontAttributes="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" Text="mailto:gedkeeper@yandex.ru" />
-        <Button x:Name="lblForum" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblForum" FontAttributes="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" />
-        <Button x:Name="lblChannel" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblChannel" FontAttributes="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" />
 
     </StackLayout>

@@ -6,9 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-using Xamarin.Forms;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
+using Microsoft.Maui;
+using IRadioButton = GKCore.Design.Controls.IRadioButton;
+using XFIKRadioButton = Plugin.InputKit.RadioButton;
 
 namespace GKUI.Platform
 {
@@ -16,7 +16,7 @@ namespace GKUI.Platform
     {
         public RadioButtonHandler(XFIKRadioButton control) : base(control)
         {
-            control.Color = Color.Black;
+            //control.Color = Colors.Black;
             control.Padding = new Thickness(0, 0);
         }
 

@@ -14,7 +14,8 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKUI.Components;
-using Xamarin.Forms;
+using Microsoft.Maui.Graphics;
+using IWindow = GKCore.Design.IWindow;
 
 namespace GKUI.Forms
 {
@@ -57,7 +58,7 @@ namespace GKUI.Forms
                     var arbNode = sys.AddNode(vtx.Sign) as ArborNodeEx;
                     PGNode pgNode = (PGNode)vtx.Value;
 
-                    arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Color.BlueViolet : Color.Navy;
+                    arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Colors.BlueViolet : Colors.Navy;
                     arbNode.Mass = pgNode.Size;
                 }
 

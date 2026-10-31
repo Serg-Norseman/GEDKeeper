@@ -10,7 +10,6 @@ using System;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Export;
 using GKCore.Export.Formats;
 
 namespace GKUI.Components

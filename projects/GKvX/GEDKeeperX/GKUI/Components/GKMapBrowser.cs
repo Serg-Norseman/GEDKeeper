@@ -16,8 +16,10 @@ using GKMap;
 using GKMap.MapObjects;
 using GKMap.MapProviders;
 using GKMap.Xamarin;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
 using SkiaSharp;
-using Xamarin.Forms;
+using Placemark = GKMap.Placemark;
 
 namespace GKUI.Components
 {

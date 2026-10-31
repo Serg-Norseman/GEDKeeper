@@ -12,12 +12,21 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Lists;
-using Xamarin.Forms;
-using Xamarin.Forms.DataGrid;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace GKUI.Components
 {
-    internal class RowBgProvider : IColorProvider
+    public class DataGridColumn
+    {
+        public string Title { get; set; }
+        public int Width { get; set; }
+        public string PropertyName { get; set; }
+        public LayoutOptions HorizontalContentAlignment { get; set; }
+    }
+
+
+    internal class RowBgProvider /*: IColorProvider*/
     {
         private readonly GKListView fListView;
 
@@ -36,10 +45,22 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public sealed partial class GKListView : DataGrid, IListView
+    public sealed partial class GKListView : TableView, IListView
     {
         private bool fCheckBoxes;
         private IListSource fListMan;
+
+
+        public List<DataGridColumn> Columns { get; private set; }
+
+        public object ItemsSource { get; set; }
+
+        public event EventHandler<SelectedItemChangedEventArgs> ItemSelected;
+
+        public object SelectedItem { get; set; }
+        public void ScrollTo(object item, ScrollToPosition pos, bool x) { }
+        public bool IsSortable { get; set; }
+
 
         public event EventHandler MouseDoubleClick;
 
@@ -100,9 +121,9 @@ namespace GKUI.Components
 
         public GKListView()
         {
-            InitializeComponent();
+            //InitializeComponent();
             IsSortable = true;
-            RowsBackgroundColorPalette = new RowBgProvider(this);
+            //RowsBackgroundColorPalette = new RowBgProvider(this);
             RowHeight = 26;
 
             fCheckBoxes = false;
@@ -136,25 +157,25 @@ namespace GKUI.Components
         }
 
         private int fRowFormatting = -1;
-        private Color fRowBackColor = Color.White;
+        private Color fRowBackColor = Colors.White;
 
         internal Color GetRowColor(int rowIndex, object eItem)
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat)) {
-                return Color.White;
+                return Colors.White;
             }
 
             if (fListMan != null) {
                 var item = eItem as ContentItem;
                 if (item != null && fRowFormatting != rowIndex) {
                     var backColor = fListMan.GetBackgroundColor(rowIndex, item.Record);
-                    fRowBackColor = (backColor != null) ? ((ColorHandler)backColor).Handle : Color.White;
+                    fRowBackColor = (backColor != null) ? ((ColorHandler)backColor).Handle : Colors.White;
                     fRowFormatting = rowIndex;
                 }
                 return fRowBackColor;
             }
 
-            return Color.White;
+            return Colors.White;
         }
 
         public void UpdateContents(bool columnsChanged = false)

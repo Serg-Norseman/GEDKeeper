@@ -16,8 +16,8 @@ using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Options;
 using GKUI.Platform;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using Microsoft.Maui.Graphics;
+using SkiaSharp.Views.Maui;
 
 namespace GKUI.Components
 {
@@ -166,7 +166,7 @@ namespace GKUI.Components
 
         public TreeChartBox()
         {
-            BackgroundColor = Color.White;
+            BackgroundColor = Colors.White;
 
             fModel = new TreeChartModel(this);
             fRenderer = null;

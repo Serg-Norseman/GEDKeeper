@@ -53,8 +53,7 @@ Integration with LLM clients via the MCP and RAG is available [MCP Server plugin
 
 ### GEDKeeperX
 
-A mobile implementation of GEDKeeper developed for Android. However, due to the end of Xamarin development
-and a lack of resources to migrate to another framework, support has been temporarily discontinued.
+A mobile implementation of GEDKeeper developed for Android and iOS.
 
 ## Supported languages
 

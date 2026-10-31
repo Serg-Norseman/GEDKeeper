@@ -13,8 +13,7 @@ using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
-using GKUI.Components;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
 namespace GKUI.Forms
 {
@@ -34,9 +33,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            UIHelper.UnsetAnimateTransition(PageControl1);
-            UIHelper.UnsetAnimateTransition(tabsCharts);
-            UIHelper.UnsetAnimateTransition(PageControl2);
             PageControl1.PositionChanged += PageControl1_PositionChanged;
 
             SetLabelClickEvent(lblMaleColor);
@@ -112,7 +108,7 @@ namespace GKUI.Forms
             fController.MoveColumnDown();
         }
 
-        private void PageControl1_PositionChanged(object sender, Xam.Plugin.TabView.PositionChangedEventArgs e)
+        private void PageControl1_PositionChanged(object sender, EventArgs e)
         {
             // FIXME: When switching between tabs multiple times, nested tabs disappear.
 

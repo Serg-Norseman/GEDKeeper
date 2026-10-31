@@ -8,9 +8,9 @@
 
 using System.IO;
 using BSLib;
-using GKCore.Design.Graphics;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using SkiaSharp.Views.Maui.Controls;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Components
 {

@@ -14,9 +14,9 @@ using System.Linq;
 using BSLib;
 using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
 using GKCore.Locales;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Components
 {

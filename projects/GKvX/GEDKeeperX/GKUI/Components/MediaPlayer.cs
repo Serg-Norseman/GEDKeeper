@@ -6,7 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
 namespace GKUI.Components
 {

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     x:Class="GKUI.Forms.AddressEditDlg"
@@ -13,9 +12,9 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageCommon">
+        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4">
                             <Grid.ColumnDefinitions>
@@ -41,19 +40,19 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pagePhones">
+                <comcom:TabItem x:Name="pagePhones">
                     <comcom:GKSheetList x:Name="fPhonesList" />
-                </xp:TabItem>
-                <xp:TabItem x:Name="pageEmails">
+                </comcom:TabItem>
+                <comcom:TabItem x:Name="pageEmails">
                     <comcom:GKSheetList x:Name="fMailsList" />
-                </xp:TabItem>
-                <xp:TabItem x:Name="pageWebPages">
+                </comcom:TabItem>
+                <comcom:TabItem x:Name="pageWebPages">
                     <comcom:GKSheetList x:Name="fWebsList" />
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

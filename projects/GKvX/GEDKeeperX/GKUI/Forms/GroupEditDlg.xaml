@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.GroupEditDlg"
     x:TypeArguments="mvp:IGroupEditDlg, contr:GroupEditDlgController">
 
@@ -20,19 +19,19 @@
             </StackLayout>
         </Frame>
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageMembers">
+        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pageMembers">
                     <comcom:GKSheetList x:Name="fMembersList" />
-                </xp:TabItem>
-                <xp:TabItem x:Name="pageNotes">
+                </comcom:TabItem>
+                <comcom:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </xp:TabItem>
-                <xp:TabItem x:Name="pageMultimedia">
+                </comcom:TabItem>
+                <comcom:TabItem x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

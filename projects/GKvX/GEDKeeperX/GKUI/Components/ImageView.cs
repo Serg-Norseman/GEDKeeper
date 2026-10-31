@@ -12,11 +12,12 @@ using BSLib;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
 using GKCore.Locales;
 using GKCore.Media;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
+using SkiaSharp.Views.Maui.Controls;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Components
 {
@@ -63,7 +64,7 @@ namespace GKUI.Components
                 return ExtRect.Create((int)selectRegion.Left, (int)selectRegion.Top, (int)selectRegion.Right, (int)selectRegion.Bottom);
             }
             set {
-                imageBox.SelectionRegion = new Rectangle(value.Left, value.Top, value.GetWidth(), value.GetHeight());
+                imageBox.SelectionRegion = new Rect(value.Left, value.Top, value.GetWidth(), value.GetHeight());
             }
         }
 

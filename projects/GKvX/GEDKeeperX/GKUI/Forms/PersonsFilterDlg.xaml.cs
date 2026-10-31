@@ -7,12 +7,12 @@
  */
 
 using System;
+using CommunityToolkit.Maui.Behaviors;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
-using Xamarin.CommunityToolkit.Behaviors;
 
 namespace GKUI.Forms
 {
@@ -130,7 +130,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             var mask = "00/00/0000";
-            txtAliveBeforeDate.Behaviors.Add(new MaskedBehavior() { Mask = mask, UnMaskedCharacter = '0' });
+            txtAliveBeforeDate.Behaviors.Add(new MaskedBehavior() { Mask = mask, UnmaskedCharacter = '0' });
             txtAliveBeforeDate.Placeholder = mask;
 
             if (baseWin == null)

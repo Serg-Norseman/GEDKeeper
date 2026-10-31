@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:input="clr-namespace:Plugin.InputKit"
     xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.TTRecMergeDlg"
     x:TypeArguments="mvp:IRecMergeDlg, contr:RecMergeController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageMerge">
+        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pageMerge">
 
                     <StackLayout Orientation="Vertical">
 
@@ -66,9 +66,9 @@
 
                     </StackLayout>
 
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageMergeOptions">
+                <comcom:TabItem x:Name="pageMergeOptions">
                     <StackLayout Orientation="Vertical">
                         <comcom:GroupBox x:Name="rgMode">
                             <input:RadioButtonGroupView>
@@ -103,9 +103,9 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
     </StackLayout>
 

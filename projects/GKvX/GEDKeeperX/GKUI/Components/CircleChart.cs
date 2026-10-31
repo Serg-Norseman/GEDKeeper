@@ -14,8 +14,8 @@ using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Options;
 using GKUI.Platform;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using Microsoft.Maui.Graphics;
+using SkiaSharp.Views.Maui;
 
 namespace GKUI.Components
 {
@@ -323,7 +323,7 @@ namespace GKUI.Components
                 var rect = CanvasRectangle;
                 fRenderer.DrawRectangle(null, backColor, 0, 0, (float)rect.Width, (float)rect.Height);
             } else if (target == RenderTarget.Printer) {
-                fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Color.White), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
+                fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Colors.White), 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             } else {
                 fRenderer.DrawRectangle(null, backColor, 0, 0, fModel.ImageWidth, fModel.ImageHeight);
             }

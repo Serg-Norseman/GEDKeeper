@@ -14,7 +14,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BSLib;
-using CarouselView.FormsPlugin.Abstractions;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
@@ -22,10 +21,10 @@ using GKCore.Design.Graphics;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using Xam.Plugin.TabView;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace GKUI.Components
 {
@@ -34,12 +33,12 @@ namespace GKUI.Components
     /// </summary>
     public static class UIHelper
     {
-        public static Rectangle Rt2Rt(ExtRect ert)
+        public static Rect Rt2Rt(ExtRect ert)
         {
-            return new Rectangle(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
+            return new Rect(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
         }
 
-        public static ExtRect Rt2Rt(Rectangle ert)
+        public static ExtRect Rt2Rt(Rect ert)
         {
             return ExtRect.CreateBounds((int)ert.Left, (int)ert.Top, (int)ert.Width, (int)ert.Height);
         }
@@ -103,14 +102,14 @@ namespace GKUI.Components
 
         public static Color Darker(Color color, float fraction)
         {
-            int rgb = (int)(ColorExtensions.ToUInt(color) & 0xffffff);
+            int rgb = color.ToInt() & 0xffffff;
             int newColor = GfxHelper.Darker(rgb, fraction);
             return Color.FromUint((uint)newColor);
         }
 
         public static Color Lighter(Color color, float fraction)
         {
-            int rgb = (int)(ColorExtensions.ToUInt(color) & 0xffffff);
+            int rgb = color.ToInt() & 0xffffff;
             int newColor = GfxHelper.Lighter(rgb, fraction);
             return Color.FromUint((uint)newColor);
         }
@@ -195,21 +194,6 @@ namespace GKUI.Components
         {
             var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
             return method?.Invoke(obj, args);
-        }
-
-        public static void UnsetAnimateTransition(TabViewControl tabView)
-        {
-            // TabViewControl._carouselView.AnimateTransition = false (!)
-            var _carouselView = typeof(TabViewControl).GetField("_carouselView", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tabView) as CarouselViewControl;
-            if (_carouselView != null) {
-                _carouselView.AnimateTransition = false;
-            }
-        }
-
-        public static void ResetTabViewLayout(TabViewControl tabView)
-        {
-            // HACK: Content of TabViewControl disappears when switching to menu+start screen and then returning back.
-            tabView.Layout((tabView.Parent as View).Bounds);
         }
     }
 }

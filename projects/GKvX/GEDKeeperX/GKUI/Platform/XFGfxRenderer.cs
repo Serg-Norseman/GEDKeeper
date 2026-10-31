@@ -12,9 +12,11 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKUI.Components;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using SkiaSharp.Views.Maui;
+using IFont = GKCore.Design.Graphics.IFont;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Platform
 {
@@ -119,7 +121,7 @@ namespace GKUI.Platform
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
         {
-            var color = (brush != null) ? ((BrushHandler)brush).Handle.Color.ToFormsColor() : Color.Black;
+            var color = (brush != null) ? ((BrushHandler)brush).Handle.Color.ToMauiColor() : Colors.Black;
 
             var skPaint = ((FontHandler)font).Handle;
             var yOffset = skPaint.FontMetrics.Ascent;

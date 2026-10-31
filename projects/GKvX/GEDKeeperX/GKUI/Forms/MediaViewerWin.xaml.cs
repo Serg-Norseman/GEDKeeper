@@ -13,10 +13,11 @@ using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Locales;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using IImage = GKCore.Design.Graphics.IImage;
+using IWindow = GKCore.Design.IWindow;
 
 namespace GKUI.Forms
 {

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace Adapt.Presentation.Controls
 {
@@ -136,7 +137,7 @@ namespace Adapt.Presentation.Controls
         {
             var label = new Label {
                 VerticalOptions = LayoutOptions.Center,
-                TextColor = Color.Black
+                TextColor = Colors.Black
             };
             label.SetBinding(Label.TextProperty, lblProp);
 

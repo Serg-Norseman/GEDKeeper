@@ -11,11 +11,11 @@ using BSLib;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Stats;
+using Microsoft.Maui.Controls;
 using OxyPlot;
 using OxyPlot.Axes;
+using OxyPlot.Maui.Skia;
 using OxyPlot.Series;
-using OxyPlot.Xamarin.Forms;
-using Xamarin.Forms;
 
 namespace GKUI.Components
 {

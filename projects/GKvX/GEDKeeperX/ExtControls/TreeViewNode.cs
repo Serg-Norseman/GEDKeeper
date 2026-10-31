@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reflection;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace Adapt.Presentation.Controls
 {
@@ -68,7 +69,7 @@ namespace Adapt.Presentation.Controls
         private DateTime _ExpandButtonClickedTime;
 
         private readonly BoxView _SpacerBoxView = new BoxView();
-        private readonly BoxView _EmptyBox = new BoxView { BackgroundColor = Color.Blue, Opacity = .5 };
+        private readonly BoxView _EmptyBox = new BoxView { BackgroundColor = Colors.Blue, Opacity = .5 };
 
 
         private const int ExpandButtonWidth = 32;
@@ -100,7 +101,7 @@ namespace Adapt.Presentation.Controls
         #endregion
 
         #region Internal Fields
-        internal readonly BoxView SelectionBoxView = new BoxView { Color = Color.Blue, Opacity = .5, IsVisible = false };
+        internal readonly BoxView SelectionBoxView = new BoxView { Color = Colors.Blue, Opacity = .5, IsVisible = false };
         #endregion
 
         #region Private Properties
@@ -110,7 +111,7 @@ namespace Adapt.Presentation.Controls
         private int Depth => ParentTreeViewItem?.Depth + 1 ?? 0;
 
         private bool _ShowExpandButtonIfEmpty = false;
-        private Color _SelectedBackgroundColor = Color.Blue;
+        private Color _SelectedBackgroundColor = Colors.Blue;
         private double _SelectedBackgroundOpacity = .3;
         #endregion
 
@@ -239,9 +240,9 @@ namespace Adapt.Presentation.Controls
             _TapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
             GestureRecognizers.Add(_TapGestureRecognizer);
 
-            _MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            /*_MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             _MainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            _MainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            _MainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });*/
 
             _MainGrid.Children.Add(SelectionBoxView);
 
@@ -259,8 +260,8 @@ namespace Adapt.Presentation.Controls
             _ContentView.GestureRecognizers.Add(_DoubleClickGestureRecognizer);
 
 
-            _MainGrid.Children.Add(_ContentStackLayout);
-            _MainGrid.Children.Add(_ChildrenStackLayout, 0, 1);
+            /*_MainGrid.Children.Add(_ContentStackLayout);
+            _MainGrid.Children.Add(_ChildrenStackLayout, 0, 1);*/
 
             base.Children.Add(_MainGrid);
 

@@ -14,7 +14,9 @@ using GKCore.BBText;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Utilities;
-using Xamarin.Forms;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace GKUI.Components
 {
@@ -72,7 +74,7 @@ namespace GKUI.Components
 
             fLines = new StringList();
             fLines.OnChange += new NotifyEventHandler(LinesChanged);
-            fLinkColor = Color.Blue;
+            fLinkColor = Colors.Blue;
             fWordWrap = true;
 
             fNavigationCommand = new Command<string>((url) => {
@@ -92,7 +94,7 @@ namespace GKUI.Components
 
             if (fLines.Count != 0) {
                 var parser = new BBTextParser(AppHost.GfxProvider, AppHost.GfxProvider.GetDefaultFontSize(),
-                                              new ColorHandler(fLinkColor), new ColorHandler(Color.Black));
+                                              new ColorHandler(fLinkColor), new ColorHandler(Colors.Black));
 
                 string text = SysUtils.StripHTML(fLines.Text);
                 var chunks = new List<BBTextChunk>();
@@ -138,7 +140,7 @@ namespace GKUI.Components
                             tapRecognizer.Command = fNavigationCommand;
                             tapRecognizer.CommandParameter = chunk.URL;
                             span.GestureRecognizers.Add(tapRecognizer);
-                            span.TextColor = Color.Blue;
+                            span.TextColor = Colors.Blue;
                             span.TextDecorations = TextDecorations.Underline;
                         }
 

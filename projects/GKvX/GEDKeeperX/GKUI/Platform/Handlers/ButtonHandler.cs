@@ -6,9 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using IButton = GKCore.Design.Controls.IButton;
+using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Platform
 {

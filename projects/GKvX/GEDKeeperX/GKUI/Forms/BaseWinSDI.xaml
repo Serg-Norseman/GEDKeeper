@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <forms:CommonWindow
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:comcom="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.BaseWinSDI">
 
     <ContentPage.ToolbarItems>
@@ -32,7 +32,7 @@
     <StackLayout VerticalOptions="FillAndExpand" Spacing="0" Padding="0">
         <ProgressBar x:Name="progressBar" IsVisible="false" VerticalOptions="Start" />
 
-        <xp:TabViewControl x:Name="tabsRecords" VerticalOptions="FillAndExpand" />
+        <comcom:TabViewControl x:Name="tabsRecords" VerticalOptions="FillAndExpand" />
 
         <ContentView x:Name="qsVertPlaceholder">
 

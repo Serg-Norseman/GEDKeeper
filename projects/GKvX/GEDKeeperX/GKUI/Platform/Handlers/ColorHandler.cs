@@ -8,8 +8,7 @@
 
 using BSLib;
 using GKCore.Design.Graphics;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Graphics;
 
 namespace GKUI.Components
 {
@@ -37,7 +36,7 @@ namespace GKUI.Components
 
         public int ToArgb()
         {
-            int result = ColorExtensions.ToInt(Handle);
+            int result = Handle.ToInt();
             return result;
         }
 
@@ -50,27 +49,27 @@ namespace GKUI.Components
 
         public byte GetR()
         {
-            return (byte)(Handle.R * 255);
+            return (byte)(Handle.Red * 255);
         }
 
         public byte GetG()
         {
-            return (byte)(Handle.G * 255);
+            return (byte)(Handle.Green * 255);
         }
 
         public byte GetB()
         {
-            return (byte)(Handle.B * 255);
+            return (byte)(Handle.Blue * 255);
         }
 
         public byte GetA()
         {
-            return (byte)(Handle.A * 255);
+            return (byte)(Handle.Alpha * 255);
         }
 
         public bool IsTransparent()
         {
-            return (Handle == Color.Transparent);
+            return (Handle == Colors.Transparent);
         }
     }
 }

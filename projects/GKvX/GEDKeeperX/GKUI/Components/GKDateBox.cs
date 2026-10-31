@@ -7,9 +7,10 @@
  */
 
 using System;
+using CommunityToolkit.Maui.Behaviors;
 using GKCore;
-using Xamarin.CommunityToolkit.Behaviors;
-using Xamarin.Forms;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
 
 namespace GKUI.Components
 {
@@ -91,7 +92,7 @@ namespace GKUI.Components
 
             // "/" - Date separator based on the specified Culture for the mask
             var mask = GKUtils.GetDateMask(fRegionalDatePattern);//.Replace("/", @"\/");
-            txtMaskedDate.Behaviors.Add(new MaskedBehavior() { Mask = mask, UnMaskedCharacter = '0' });
+            txtMaskedDate.Behaviors.Add(new MaskedBehavior() { Mask = mask, UnmaskedCharacter = '0' });
             txtMaskedDate.Placeholder = fRegionalDatePattern;
         }
 

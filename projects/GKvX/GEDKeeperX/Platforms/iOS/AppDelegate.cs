@@ -10,6 +10,8 @@ using System;
 using System.Threading;
 using Foundation;
 using GKUI;
+using Microsoft.Maui;
+using Microsoft.Maui.Hosting;
 using UIKit;
 
 namespace GEDKeeperX.iOS
@@ -18,7 +20,7 @@ namespace GEDKeeperX.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate, IPlatformSpecifics
+    public partial class AppDelegate : MauiUIApplicationDelegate, IPlatformSpecifics
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
@@ -29,10 +31,15 @@ namespace GEDKeeperX.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new GKUI.App(this));
+            //global::Xamarin.Forms.Forms.Init();
+            //LoadApplication(new GKUI.App(this));
 
             return base.FinishedLaunching(app, options);
+        }
+
+        protected override MauiApp CreateMauiApp()
+        {
+            throw new NotImplementedException();
         }
 
         void IPlatformSpecifics.CloseApplication()

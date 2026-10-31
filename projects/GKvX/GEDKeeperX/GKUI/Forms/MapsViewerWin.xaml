@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonWindow
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.MapsViewerWin">
 
     <forms:CommonWindow.ToolbarItems>
@@ -20,9 +19,9 @@
     </forms:CommonWindow.ToolbarItems>
 
     <StackLayout Orientation="Horizontal">
-        <xp:TabViewControl x:Name="PageControl1" HorizontalOptions="Start" VerticalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pagePlaces">
+        <comcom:TabViewControl x:Name="PageControl1" HorizontalOptions="Start" VerticalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pagePlaces">
                     <StackLayout Spacing="4">
                         <comcom:GroupBox x:Name="grpSelection" VerticalOptions="Start">
                             <input:RadioButtonGroupView>
@@ -39,9 +38,9 @@
 
                         <comcom:GKTreeView x:Name="tvPlaces" MouseDoubleClick="TreePlaces_DoubleClick" VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageCoordinates">
+                <comcom:TabItem x:Name="pageCoordinates">
                     <StackLayout>
                         <comcom:GroupBox x:Name="gbCoords">
                             <Grid ColumnSpacing="4" RowSpacing="4">
@@ -50,9 +49,9 @@
                             </Grid>
                         </comcom:GroupBox>
                     </StackLayout>
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Orientation="Horizontal" Spacing="4" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <comcom:GKMapBrowser x:Name="fMapBrowser" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />

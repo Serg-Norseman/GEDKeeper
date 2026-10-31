@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using GKCore;
-using Xamarin.Forms.Xaml;
+using Microsoft.Maui.Controls.Xaml;
 
 [assembly: AssemblyTitle("GEDKeeperX")]
 [assembly: AssemblyDescription("")]
@@ -11,6 +10,3 @@ using Xamarin.Forms.Xaml;
 [assembly: AssemblyCulture("")]
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-
-[assembly: InternalsVisibleTo("GEDKeeperX.Android")]
-[assembly: InternalsVisibleTo("GEDKeeperX.iOS")]

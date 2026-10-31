@@ -12,8 +12,10 @@ using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Components;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using Xamarin.Forms;
+using IFont = GKCore.Design.Graphics.IFont;
 using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Platform
@@ -131,13 +133,13 @@ namespace GKUI.Platform
             byte alpha, red, green, blue;
             GfxHelper.DecomposeARGB(argb, out alpha, out red, out green, out blue);
 
-            Color color = Color.FromRgba(red, green, blue, 255);
+            Color color = Color.FromRgba(red, green, blue, (byte)255);
             return new ColorHandler(color);
         }
 
         public IColor CreateColor(string signature)
         {
-            Color color = Color.FromHex(signature);
+            Color color = Color.FromArgb(signature);
             return new ColorHandler(color);
         }
 
@@ -167,7 +169,7 @@ namespace GKUI.Platform
 
         public float GetDefaultFontSize()
         {
-            return (float)Device.GetNamedSize(NamedSize.Default, typeof(Label));
+            return 14.0f;
         }
     }
 }

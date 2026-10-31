@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonWindow
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
@@ -13,7 +13,7 @@
 
         <StackLayout x:Name="ToolBar1" Orientation="Horizontal" Spacing="4" HorizontalOptions="FillAndExpand">
             <comcom:GKComboBox x:Name="cbType" WidthRequest="280" SelectedIndexChanged="cbType_SelectedIndexChanged" />
-            <Button x:Name="tbExcelExport" Image="{plat:ImageResourceExt Resources.btn_excel.gif}" Clicked="tbExcelExport_Click" />
+            <Button x:Name="tbExcelExport" ImageSource="{plat:ImageResourceExt Resources.btn_excel.gif}" Clicked="tbExcelExport_Click" />
             <Label HorizontalOptions="FillAndExpand" />
         </StackLayout>
 

@@ -13,7 +13,7 @@ using GKCore.Design.Controls;
 using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
 namespace GKUI.Components
 {

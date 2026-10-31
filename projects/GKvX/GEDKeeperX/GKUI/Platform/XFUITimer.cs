@@ -9,7 +9,8 @@
 using System;
 using BSLib;
 using GKCore;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
 
 namespace GKUI.Platform
 {
@@ -67,7 +68,7 @@ namespace GKUI.Platform
         public void Start()
         {
             fEnabled = true;
-            Device.StartTimer(TimeSpan.FromMilliseconds(fInterval), ElapsedEventHandler);
+            Application.Current.Dispatcher.StartTimer(TimeSpan.FromMilliseconds(fInterval), ElapsedEventHandler);
         }
 
         public void Stop()

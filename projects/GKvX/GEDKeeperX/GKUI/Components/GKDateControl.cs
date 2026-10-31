@@ -13,8 +13,9 @@ using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Locales;
-using Xamarin.Forms;
-using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using XFIKCheckBox = Plugin.InputKit.CheckBox;
 
 namespace GKUI.Components
 {
@@ -343,11 +344,11 @@ namespace GKUI.Components
                     new ColumnDefinition { Width = GridLength.Auto },
                 },
             };
-            grid.Children.Add(cmbDateType, 0, 0);
-            grid.Children.Add(txtDate1, 1, 0);
-            grid.Children.Add(txtDate2, 2, 0);
-            grid.Children.Add(new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 4, Children = { cmbDate1Calendar, chkBC1 } }, 1, 1);
-            grid.Children.Add(new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 4, Children = { cmbDate2Calendar, chkBC2 } }, 2, 1);
+            grid.Add(cmbDateType, 0, 0);
+            grid.Add(txtDate1, 1, 0);
+            grid.Add(txtDate2, 2, 0);
+            grid.Add(new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 4, Children = { cmbDate1Calendar, chkBC1 } }, 1, 1);
+            grid.Add(new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 4, Children = { cmbDate2Calendar, chkBC2 } }, 2, 1);
             Content = grid;
 
             //ResumeLayout();

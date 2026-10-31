@@ -10,7 +10,7 @@ using System;
 using GKCore;
 using GKCore.Locales;
 using GKCore.Options;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
 
 namespace GKUI.Components
 {

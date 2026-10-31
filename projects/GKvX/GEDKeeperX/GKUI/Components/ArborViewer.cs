@@ -10,20 +10,23 @@ using System;
 using BSLib.DataViz.ArborGVT;
 using BSLib.DataViz.SmartGraph;
 using GKCore;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using SkiaSharp.Views.Maui;
+using SkiaSharp.Views.Maui.Controls;
 
 namespace GKUI.Components
 {
     public sealed class ArborNodeEx : ArborNode
     {
         public Color Color;
-        public Rectangle Box;
+        public Rect Box;
 
         public ArborNodeEx(string sign) : base(sign)
         {
-            Color = Color.Gray;
+            Color = Colors.Gray;
         }
     }
 
@@ -47,7 +50,7 @@ namespace GKUI.Components
         protected override void StartTimer()
         {
             fTimerAlive = true;
-            Device.StartTimer(TimeSpan.FromSeconds(TimerInterval / 1000), TimerElapsed);
+            Application.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(TimerInterval / 1000), TimerElapsed);
         }
 
         protected override void StopTimer()
@@ -102,7 +105,7 @@ namespace GKUI.Components
             fCanvas.SizeChanged += OnSizeChanged;
             Content = fCanvas;
 
-            BackgroundColor = Color.White;
+            BackgroundColor = Colors.White;
 
             // repulsion - отталкивание, stiffness - тугоподвижность, friction - сила трения
             fSys = new ArborSystemEx(10000, 500/*1000*/, 0.1, this);
@@ -147,7 +150,7 @@ namespace GKUI.Components
 
                 using (var grayPen = new SKPaint()) {
                     grayPen.Style = SKPaintStyle.Stroke;
-                    grayPen.Color = Color.Gray.ToSKColor();
+                    grayPen.Color = Microsoft.Maui.Graphics.Colors.Gray.ToSKColor();
 
                     foreach (ArborEdge edge in fSys.Edges) {
                         var srcNode = edge.Source as ArborNodeEx;
@@ -192,7 +195,7 @@ namespace GKUI.Components
             return new ArborPoint(p1.X + ua * (p2.X - p1.X), p1.Y + ua * (p2.Y - p1.Y));
         }
 
-        public ArborPoint intersect_line_box(ArborPoint p1, ArborPoint p2, Rectangle boxTuple)
+        public ArborPoint intersect_line_box(ArborPoint p1, ArborPoint p2, Rect boxTuple)
         {
             double bx = boxTuple.X;
             double by = boxTuple.Y;
@@ -262,7 +265,7 @@ namespace GKUI.Components
             }
         }
 
-        public Rectangle getNodeRect(SKPaint textPaint, ArborNode node)
+        public Rect getNodeRect(SKPaint textPaint, ArborNode node)
         {
             SKRect textBounds = new SKRect();
             textPaint.MeasureText(node.Sign, ref textBounds);
@@ -272,7 +275,7 @@ namespace GKUI.Components
             pt.X = Math.Floor(pt.X);
             pt.Y = Math.Floor(pt.Y);
 
-            return new Rectangle((float)pt.X - w / 2, (float)pt.Y - h / 2, w, h);
+            return new Rect((float)pt.X - w / 2, (float)pt.Y - h / 2, w, h);
         }
 
         public ArborNode GetNodeByCoord(int x, int y)

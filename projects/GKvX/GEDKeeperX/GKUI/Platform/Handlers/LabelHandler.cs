@@ -6,10 +6,10 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Components;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls;
+using ILabel = GKCore.Design.Controls.ILabel;
 
 namespace GKUI.Platform
 {

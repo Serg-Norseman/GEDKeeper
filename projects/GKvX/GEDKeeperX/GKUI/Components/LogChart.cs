@@ -9,9 +9,11 @@
 using System;
 using System.Collections.Generic;
 using GKCore;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using SkiaSharp.Views.Maui;
+using SkiaSharp.Views.Maui.Controls;
 
 namespace GKUI.Components
 {
@@ -46,7 +48,7 @@ namespace GKUI.Components
             public int X;
             public int Width;
 
-            public Rectangle Rect;
+            public Rect Rect;
         }
 
         private readonly SKCanvasView fCanvas;
@@ -157,7 +159,7 @@ namespace GKUI.Components
                 frag = fList[i];
 
                 frag.X = x;
-                frag.Rect = new Rectangle(x, 0, frag.Width, Height);
+                frag.Rect = new Rect(x, 0, frag.Width, Height);
                 x = x + (frag.Width + 1);
             }
 

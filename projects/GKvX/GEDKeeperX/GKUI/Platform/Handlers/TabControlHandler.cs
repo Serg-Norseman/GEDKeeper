@@ -9,7 +9,7 @@
 using System;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using Xam.Plugin.TabView;
+using GKUI.Components;
 
 namespace GKUI.Platform
 {

@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.OrganizerWin"
     Appearing="OrganizerWin_Load"
     x:TypeArguments="mvp:IOrganizerWin, contr:OrganizerController">
 
-    <xp:TabViewControl>
-        <xp:TabViewControl.ItemSource>
-            <xp:TabItem x:Name="pageAddresses">
+    <comcom:TabViewControl>
+        <comcom:TabViewControl.ItemSource>
+            <comcom:TabItem x:Name="pageAddresses">
                 <comcom:GKSheetList x:Name="fAdrList" />
-            </xp:TabItem>
-            <xp:TabItem x:Name="pageTelephones">
+            </comcom:TabItem>
+            <comcom:TabItem x:Name="pageTelephones">
                 <comcom:GKSheetList x:Name="fPhonesList" />
-            </xp:TabItem>
-            <xp:TabItem x:Name="pageMails">
+            </comcom:TabItem>
+            <comcom:TabItem x:Name="pageMails">
                 <comcom:GKSheetList x:Name="fMailsList" />
-            </xp:TabItem>
-            <xp:TabItem x:Name="pageWebs">
+            </comcom:TabItem>
+            <comcom:TabItem x:Name="pageWebs">
                 <comcom:GKSheetList x:Name="fWebsList" />
-            </xp:TabItem>
-        </xp:TabViewControl.ItemSource>
-    </xp:TabViewControl>
+            </comcom:TabItem>
+        </comcom:TabViewControl.ItemSource>
+    </comcom:TabViewControl>
 
 </forms:CommonDialog>

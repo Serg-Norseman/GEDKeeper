@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.PersonEditDlg"
     x:TypeArguments="mvp:IMobPersonEditDlg, contr:MobPersonEditDlgController">
 
@@ -71,55 +70,55 @@
             </Grid>
         </Frame>
 
-        <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageEvents">
+        <comcom:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pageEvents">
                     <comcom:GKSheetList x:Name="fEventsList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageSpouses">
+                <comcom:TabItem x:Name="pageSpouses">
                     <comcom:GKSheetList x:Name="fSpousesList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageNames">
+                <comcom:TabItem x:Name="pageNames">
                     <comcom:GKSheetList x:Name="fNamesList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageAssociations">
+                <comcom:TabItem x:Name="pageAssociations">
                     <comcom:GKSheetList x:Name="fAssociationsList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageNotes">
+                <comcom:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageMultimedia">
+                <comcom:TabItem x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageSources">
+                <comcom:TabItem x:Name="pageSources">
                     <comcom:GKSheetList x:Name="fSourcesList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageParents">
+                <comcom:TabItem x:Name="pageParents">
                     <comcom:GKSheetList x:Name="fParentsList" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageOther">
-                    <xp:TabViewControl x:Name="tabsOther" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                        <xp:TabViewControl.ItemSource>
-                            <xp:TabItem x:Name="pageUserRefs">
+                <comcom:TabItem x:Name="pageOther">
+                    <comcom:TabViewControl x:Name="tabsOther" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <comcom:TabViewControl.ItemSource>
+                            <comcom:TabItem x:Name="pageUserRefs">
                                 <comcom:GKSheetList x:Name="fUserRefList" />
-                            </xp:TabItem>
+                            </comcom:TabItem>
 
-                            <xp:TabItem x:Name="pageGroups">
+                            <comcom:TabItem x:Name="pageGroups">
                                 <comcom:GKSheetList x:Name="fGroupsList" />
-                            </xp:TabItem>
-                        </xp:TabViewControl.ItemSource>
-                    </xp:TabViewControl>
-                </xp:TabItem>
+                            </comcom:TabItem>
+                        </comcom:TabViewControl.ItemSource>
+                    </comcom:TabViewControl>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pagePortrait">
+                <comcom:TabItem x:Name="pagePortrait">
                     <StackLayout Orientation="Vertical">
                         <comcom:GKPortrait x:Name="imgPortrait" WidthRequest="140" HeightRequest="160" />
 
@@ -130,9 +129,9 @@
                             <Label HorizontalOptions="EndAndExpand" />
                         </StackLayout>
                     </StackLayout>
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label x:Name="lblRestriction" />

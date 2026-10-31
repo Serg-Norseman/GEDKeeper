@@ -10,22 +10,20 @@ using GKCore;
 using GKCore.Locales;
 using GKUI.Forms;
 using GKUI.Platform;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using static Xamarin.Essentials.Permissions;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace GKUI
 {
     public partial class App : Application
     {
-        public App(IPlatformSpecifics platformSpecifics)
+        public App(/*IPlatformSpecifics platformSpecifics*/)
         {
             InitializeComponent();
 
-            Xamarin.Forms.DataGrid.DataGridComponent.Init();
-
             LangMan.DefInit();
-            XFAppHost.Startup(platformSpecifics);
+            XFAppHost.Startup(/*platformSpecifics*/ null);
 
             MainPage = new NavigationPage(new MainPage());
         }

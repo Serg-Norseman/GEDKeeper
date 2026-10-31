@@ -10,9 +10,10 @@ using System;
 using System.Collections.Generic;
 using BSLib.DataViz.TreeMap;
 using GKCore;
+using Microsoft.Maui.Controls;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
+using SkiaSharp.Views.Maui;
+using SkiaSharp.Views.Maui.Controls;
 
 namespace GKUI.Components
 {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:CommonDialog
-    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
@@ -20,17 +20,17 @@
             </StackLayout>
         </Frame>
 
-        <xp:TabViewControl x:Name="tabsData" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageNotes">
+        <comcom:TabViewControl x:Name="tabsData" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+            <comcom:TabViewControl.ItemSource>
+                <comcom:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
-                </xp:TabItem>
+                </comcom:TabItem>
 
-                <xp:TabItem x:Name="pageUserRefs">
+                <comcom:TabItem x:Name="pageUserRefs">
                     <comcom:GKSheetList x:Name="fUserRefList" />
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabItem>
+            </comcom:TabViewControl.ItemSource>
+        </comcom:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnAddress" Clicked="btnAddress_Click" />

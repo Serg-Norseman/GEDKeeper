@@ -1,17 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <RootNamespace />
+        <OutputType>Exe</OutputType>
+        <UseMaui>True</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ApplicationId>com.SVZsoft.GEDKeeperX</ApplicationId>
+
+        <RootNamespace>GEDKeeperX</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>Android;iPhone</Platforms>
+        <TargetFrameworks>net9.0-android</TargetFrameworks>
+        <!-- ;net9.0-ios  -->
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <DebugSymbols>True</DebugSymbols>
-        <DebugType>Portable</DebugType>
         <Optimize>False</Optimize>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
@@ -26,25 +35,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
-        <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
-        <PackageReference Include="Xamarin.Forms.InputKit" Version="4.1.6" />
-        <PackageReference Include="Xamarin.Forms.DataGrid" Version="4.8.0" />
-        <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
-
-        <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
-        <PackageReference Include="Xam.Plugin.TabView" Version="1.1.1" />
-        <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
-        <PackageReference Include="OxyPlot.Xamarin.Forms" Version="2.1.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.120" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Core" Version="3.119.2" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.2" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.9" />
+        <PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
+        <PackageReference Include="OxyPlot.Maui.Skia" Version="1.2.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
         <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
         <ProjectReference Include="..\..\GKMap\GKMap.Xamarin\GKMap.Xamarin.csproj" />
-        <ProjectReference Include="..\Adapt.Presentation.Controls\Adapt.Presentation.Controls.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -117,6 +121,12 @@
         <EmbeddedResource Include="..\..\..\locales\ukrainian.lng" Link="Resources\locales\ukrainian.lng">
             <LogicalName>Resources.locales.ukrainian.lng</LogicalName>
         </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ExtControls\" />
+      <Folder Include="Platforms\Android\" />
+      <Folder Include="Platforms\iOS\" />
     </ItemGroup>
 
     <Import Project="GEDKeeperX.props" />
