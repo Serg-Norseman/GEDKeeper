@@ -63,14 +63,19 @@ namespace GKUI.Platform
             return fCurrentBase;
         }
 
+        public static NavigationPage GetNavPage()
+        {
+            return Application.Current.Windows[0].Page as NavigationPage;
+        }
+
         public static MainPage GetMainPage()
         {
-            return ((NavigationPage)Application.Current.MainPage).RootPage as MainPage;
+            return GetNavPage().RootPage as MainPage;
         }
 
         private Page GetCurrentPage()
         {
-            var navPage = (NavigationPage)Application.Current.MainPage;
+            var navPage = GetNavPage();
             return (navPage == null) ? null : navPage.CurrentPage;
         }
 
@@ -102,8 +107,10 @@ namespace GKUI.Platform
 
         public override IEnumerable<T> GetRunningForms<T>()
         {
-            var navPage = (NavigationPage)Application.Current.MainPage;
-            yield return navPage.CurrentPage as T;
+            var navPage = GetNavPage();
+            if (navPage == null)
+                yield break;
+
             /*foreach (var page in navPage.Pages) {
                 T form = page as T;
                 if (form != null) {
@@ -114,9 +121,7 @@ namespace GKUI.Platform
 
         protected override void UpdateLang()
         {
-            var navPage = (NavigationPage)Application.Current.MainPage;
-
-            var mainPage = (MainPage)navPage.RootPage;
+            var mainPage = GetMainPage();
             mainPage.SetLocale();
 
             var menuPage = (MenuPage)mainPage.Flyout;

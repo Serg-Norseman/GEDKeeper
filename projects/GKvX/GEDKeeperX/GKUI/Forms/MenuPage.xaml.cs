@@ -52,8 +52,8 @@ namespace GKUI.Forms
             ListViewMenu.SelectedItem = fMenuItems[0];
             ListViewMenu.ItemSelected += async (sender, e) => {
                 var item = e.SelectedItem as HomeMenuItem;
-                if (item == null) return;
-                await XFAppHost.GetMainPage().NavigateMenuAsync((int)item.Id);
+                if (item != null)
+                    await XFAppHost.GetMainPage().NavigateMenuAsync((int)item.Id);
             };
         }
 

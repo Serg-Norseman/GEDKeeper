@@ -1258,7 +1258,8 @@ namespace GKCore
             fAutosaveTimer.Enabled = backupOpts.Autosave;
 
             foreach (var win in GetRunningForms<IWorkWindow>()) {
-                win.UpdateSettings();
+                // may be null during mobile execution
+                win?.UpdateSettings();
             }
         }
 

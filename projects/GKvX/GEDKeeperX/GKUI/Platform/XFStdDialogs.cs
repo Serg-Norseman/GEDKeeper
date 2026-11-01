@@ -120,12 +120,12 @@ namespace GKUI.Platform
             return result;
         }
 
-        public void ShowAlert(string msg, string title = "")
+        public async Task ShowAlert(string msg, string title = "")
         {
-            ShowMessage(msg, title);
+            await ShowMessage(msg, title);
         }
 
-        public void ShowMessage(string msg, string title = "")
+        public async Task ShowMessage(string msg, string title = "")
         {
             var curPage = Application.Current.MainPage;
             if (curPage == null) return;
@@ -134,12 +134,12 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            curPage.DisplayAlert(title, msg, "Ok");
+            await curPage.DisplayAlert(title, msg, "Ok");
         }
 
-        public void ShowError(string msg, string title = "")
+        public async Task ShowError(string msg, string title = "")
         {
-            ShowMessage(msg, title);
+            await ShowMessage(msg, title);
         }
 
         public async Task<bool> ShowQuestion(string msg, string title = "")
@@ -154,9 +154,9 @@ namespace GKUI.Platform
             return await curPage.DisplayAlert(title, msg, "Yes", "No");
         }
 
-        public void ShowWarning(string msg, string title = "")
+        public async Task ShowWarning(string msg, string title = "")
         {
-            ShowMessage(msg, title);
+            await ShowMessage(msg, title);
         }
 
         public async Task<string> GetInput(object owner, string prompt, string value)

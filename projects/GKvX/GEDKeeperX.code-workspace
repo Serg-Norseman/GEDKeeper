@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../GKCore"
+		},
+		{
+			"path": "../GKMap/GKMap.Core"
+		},
+		{
+			"path": "../GKMap/GKMap.Xamarin"
+		}
+	],
+	"settings": {
+		"dotnet.preferCSharpExtension": true
+	}
+}

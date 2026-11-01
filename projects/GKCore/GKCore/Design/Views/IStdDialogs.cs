@@ -37,14 +37,14 @@ namespace GKCore.Design.Views
 
         Task<IFont> SelectFont(IFont font);
 
-        void ShowAlert(string msg, string title = "");
+        Task ShowAlert(string msg, string title = "");
 
-        void ShowError(string msg, string title = "");
+        Task ShowError(string msg, string title = "");
 
-        void ShowMessage(string msg, string title = "");
+        Task ShowMessage(string msg, string title = "");
 
         Task<bool> ShowQuestion(string msg, string title = "");
 
-        void ShowWarning(string msg, string title = "");
+        Task ShowWarning(string msg, string title = "");
     }
 }

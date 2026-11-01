@@ -1217,7 +1217,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public async void ShowFileProperties()
+        public async Task ShowFileProperties()
         {
             try {
                 fContext.BeginUpdate();
@@ -1557,7 +1557,7 @@ namespace GKCore.Controllers
             GKUtils.LoadExtFile(AppHost.GetLogFilename());
         }
 
-        public async void ShowAbout()
+        public async Task ShowAbout()
         {
             using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
                 await AppHost.Instance.ShowModalAsync(dlg, fView, false);

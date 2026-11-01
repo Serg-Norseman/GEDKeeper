@@ -48,8 +48,8 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSave), UIHelper.LoadResourceImage("Resources.btn_save.gif")),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSaveAs)),
-                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileProperties), UIHelper.LoadResourceImage("Resources.btn_properties.gif"), (item) => {
-                    GetBaseWin()?.Controller.ShowFileProperties();
+                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileProperties), UIHelper.LoadResourceImage("Resources.btn_properties.gif"), async (item) => {
+                    await GetBaseWin()?.Controller.ShowFileProperties();
                 }),
 
                 new LaunchItem("Recent", "Sample.ged"), // stub for position hold
@@ -70,8 +70,8 @@ namespace GKUI.Forms
                 new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.TableOfContents), UIHelper.LoadResourceImage("Resources.btn_help.gif"), (item) => {
                     AppHost.Instance.ShowHelpTopic("");
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.MIAbout), UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), (item) => {
-                    GetBaseWin()?.Controller.ShowAbout();
+                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.MIAbout), UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), async (item) => {
+                    await GetBaseWin()?.Controller.ShowAbout();
                 }),
             };
 
@@ -165,14 +165,14 @@ namespace GKUI.Forms
             servicesList.ItemsSource = ServiceItems;
         }
 
-        private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try {
                 var item = e.SelectedItem as LaunchItem;
                 ((ListView)sender).SelectedItem = null;
                 item?.Action?.Invoke(item);
             } catch (Exception ex) {
-                AppHost.StdDialogs.ShowError(ex.Message);
+                await AppHost.StdDialogs.ShowError(ex.Message);
             }
         }
 
@@ -184,7 +184,8 @@ namespace GKUI.Forms
 
         private static BaseWinSDI GetBaseWin()
         {
-            return AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+            var result = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+            return result;
         }
 
         public void SetLocale()
@@ -211,10 +212,11 @@ namespace GKUI.Forms
 
     public class LaunchItem
     {
-        public string Group { get; set; }
-        public string Title { get; set; }
-        public ImageSource Image { get; set; }
-        public Action<LaunchItem> Action { get; set; }
+        public string Group { get; private set; }
+        public string Title { get; private set; }
+        public ImageSource Image { get; private set; }
+        public Action<LaunchItem> Action { get; private set; }
+
 
         public LaunchItem(string group, string title)
         {
