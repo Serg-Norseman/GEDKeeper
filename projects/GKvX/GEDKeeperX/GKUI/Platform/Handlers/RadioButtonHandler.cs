@@ -8,7 +8,7 @@
 
 using Microsoft.Maui;
 using IRadioButton = GKCore.Design.Controls.IRadioButton;
-using XFIKRadioButton = Plugin.InputKit.RadioButton;
+using XFIKRadioButton = GKUI.Components.RadioButton;
 
 namespace GKUI.Platform
 {

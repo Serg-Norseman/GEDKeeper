@@ -4,9 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="GKUI.Forms.LaunchPage">
 
-    <StackLayout Padding="16">
-        <Frame CornerRadius="8" Padding="16">
-            <StackLayout Orientation="Horizontal" Spacing="16" Padding="0">
+    <Grid Padding="12">
+        <Border Stroke="Gray" StrokeThickness="1" StrokeShape="RoundRectangle 6" Padding="12">
+            <StackLayout Orientation="Horizontal" Spacing="12" Padding="0">
                 <ListView x:Name="launchList" HasUnevenRows="True" ItemsSource="{Binding LaunchItems}" IsGroupingEnabled="True" ItemSelected="lv_ItemSelected">
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate>
@@ -47,7 +47,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
-        </Frame>
-    </StackLayout>
+        </Border>
+    </Grid>
 
 </ContentPage>

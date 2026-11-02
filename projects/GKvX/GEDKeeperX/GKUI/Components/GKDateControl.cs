@@ -15,7 +15,7 @@ using GKCore.Design.Controls;
 using GKCore.Locales;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
-using XFIKCheckBox = Plugin.InputKit.CheckBox;
+using XFIKCheckBox = GKUI.Components.CheckBox;
 
 namespace GKUI.Components
 {

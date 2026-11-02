@@ -5,7 +5,6 @@
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     x:Class="GKUI.Forms.TTTreeCheckDlg"
     x:TypeArguments="mvp:ITreeCheckDlg, contr:TreeCheckController">
@@ -28,9 +27,9 @@
 
                 <comcom:TabItem x:Name="pageOptions">
                     <StackLayout Orientation="Vertical" Spacing="8">
-                        <input:CheckBox x:Name="chkCheckPersonPlaces" />
-                        <input:CheckBox x:Name="chkCheckCensuses" />
-                        <input:CheckBox x:Name="chkCheckLinks" />
+                        <comcom:CheckBox x:Name="chkCheckPersonPlaces" />
+                        <comcom:CheckBox x:Name="chkCheckCensuses" />
+                        <comcom:CheckBox x:Name="chkCheckLinks" />
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>

@@ -129,7 +129,7 @@ namespace GKCore.Lists
                     member = await BaseController.SelectPerson(fOwner, fBaseWin, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (member != null) {
                         if (grp.IndexOfMember(member) >= 0) {
-                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                             return;
                         }
 

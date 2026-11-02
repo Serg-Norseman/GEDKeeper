@@ -680,7 +680,7 @@ namespace GKCore.Controllers
                 }
 
                 if (locRec.XRef == locLink.XRef) {
-                    AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                    await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                     result.Result = false;
                     return result;
                 }
@@ -829,7 +829,7 @@ namespace GKCore.Controllers
                 if (targetType == TargetMode.tmSpouse && target != null) {
                     GDMSex sex = target.Sex;
                     if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
+                        await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
                         result.Record = familyRec;
                         result.Result = false;
                         return result;
@@ -1234,7 +1234,7 @@ namespace GKCore.Controllers
             if (father == null) return result;
 
             if (father == person) {
-                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
+                await AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
                 return result;
             }
 
@@ -1281,7 +1281,7 @@ namespace GKCore.Controllers
             if (mother == null) return result;
 
             if (mother == person) {
-                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
+                await AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
                 return result;
             }
 
@@ -1328,7 +1328,7 @@ namespace GKCore.Controllers
             GDMIndividualRecord husband = await SelectPerson(owner, baseWin, wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
                 if (family.HasChild(husband)) {
-                    AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
+                    await AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
                     return result;
                 }
 
@@ -1360,7 +1360,7 @@ namespace GKCore.Controllers
             GDMIndividualRecord wife = await SelectPerson(owner, baseWin, husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
                 if (family.HasChild(wife)) {
-                    AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
+                    await AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
                     return result;
                 }
 
@@ -1641,7 +1641,7 @@ namespace GKCore.Controllers
 
             var baseContext = baseWin.Context;
             if (parent.SpouseToFamilyLinks.Count > 1) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThisPersonHasSeveralFamilies));
+                await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThisPersonHasSeveralFamilies));
             } else {
                 GDMFamilyRecord family = (parent.SpouseToFamilyLinks.Count == 0) ? null : baseContext.Tree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
                 GDMIndividualRecord father = (family == null) ? null : baseContext.Tree.GetPtrValue(family.Husband);
@@ -1660,7 +1660,7 @@ namespace GKCore.Controllers
                     }
 
                     if (family.HasMember(child)) {
-                        AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                        await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                         return null;
                     }
 
@@ -1695,7 +1695,7 @@ namespace GKCore.Controllers
                     break;
 
                 default:
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
+                    await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
                     return null;
             }
 

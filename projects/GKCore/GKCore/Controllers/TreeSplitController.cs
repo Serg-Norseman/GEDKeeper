@@ -135,7 +135,7 @@ namespace GKCore.Controllers
             UpdateView();
             fBase.RefreshLists(false);
 
-            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.RecsDeleted));
+            await AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.RecsDeleted));
         }
 
         public async void Save()

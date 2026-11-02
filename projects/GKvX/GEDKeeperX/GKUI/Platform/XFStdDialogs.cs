@@ -127,7 +127,7 @@ namespace GKUI.Platform
 
         public async Task ShowMessage(string msg, string title = "")
         {
-            var curPage = Application.Current.MainPage;
+            var curPage = XFAppHost.GetMainPage();
             if (curPage == null) return;
 
             if (string.IsNullOrEmpty(title)) {
@@ -144,7 +144,7 @@ namespace GKUI.Platform
 
         public async Task<bool> ShowQuestion(string msg, string title = "")
         {
-            var curPage = Application.Current.MainPage;
+            var curPage = XFAppHost.GetMainPage();
             if (curPage == null) return false;
 
             if (string.IsNullOrEmpty(title)) {

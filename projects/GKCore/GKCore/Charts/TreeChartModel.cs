@@ -108,9 +108,9 @@ namespace GKCore.Charts
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fCollapsePic;
-        private GlobalOptions fGlobalOptions;
+        private readonly GlobalOptions fGlobalOptions;
         private KinshipsGraph fGraph;
-        private bool fGraphicsMode;
+        private readonly bool fGraphicsMode;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
         private long fHighlightedStart;

@@ -151,31 +151,37 @@ namespace GKUI.Platform
             return sfd;
         }
 
-        public void ShowAlert(string msg, string title = "")
+        public async Task ShowAlert(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            await Task.Run(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            });
         }
 
-        public void ShowMessage(string msg, string title = "")
+        public async Task ShowMessage(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            await Task.Run(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            });
         }
 
-        public void ShowError(string msg, string title = "")
+        public async Task ShowError(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            await Task.Run(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            });
         }
 
         public async Task<bool> ShowQuestion(string msg, string title = "")
@@ -188,13 +194,15 @@ namespace GKUI.Platform
             return await Task.FromResult(retVal);
         }
 
-        public void ShowWarning(string msg, string title = "")
+        public async Task ShowWarning(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            await Task.Run(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            });
         }
 
         public async Task<string> GetInput(object owner, string prompt, string value)

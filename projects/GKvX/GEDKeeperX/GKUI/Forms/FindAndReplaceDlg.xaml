@@ -7,7 +7,6 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.FindAndReplaceDlg"
     x:TypeArguments="mvp:IFARDlg, contr:FARDlgController">
 
@@ -23,9 +22,9 @@
 
         <StackLayout Orientation="Horizontal" Spacing="4">
             <StackLayout Orientation="Vertical" Spacing="4">
-                <input:CheckBox x:Name="chkMatchCase" />
-                <input:CheckBox x:Name="chkMatchWildcards" />
-                <input:CheckBox x:Name="chkWholeWord" />
+                <comcom:CheckBox x:Name="chkMatchCase" />
+                <comcom:CheckBox x:Name="chkMatchWildcards" />
+                <comcom:CheckBox x:Name="chkWholeWord" />
                 <Label VerticalOptions="FillAndExpand" />
             </StackLayout>
 

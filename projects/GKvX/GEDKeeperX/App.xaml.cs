@@ -44,7 +44,7 @@ namespace GKUI
                 status = await Permissions.RequestAsync<T>();
                 if (status != PermissionStatus.Granted) {
                     string v = $"Permission must be ALLOW acceess to searching folder";
-                    await App.Current.MainPage.DisplayAlert("", v, "OK");
+                    await XFAppHost.GetMainPage().DisplayAlert("", v, "OK");
                     await Permissions.RequestAsync<T>();
                 }
             }

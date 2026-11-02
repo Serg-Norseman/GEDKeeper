@@ -7,7 +7,7 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:xp="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.ResearchEditDlg"
     x:TypeArguments="mvp:IResearchEditDlg, contr:ResearchEditDlgController">
 
@@ -32,22 +32,22 @@
             </Grid>
         </Frame>
 
-        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageTasks">
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageTasks">
                     <comcom:GKSheetList x:Name="fTasksList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageCommunications">
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageCommunications">
                     <comcom:GKSheetList x:Name="fCommunicationsList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageGroups">
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageGroups">
                     <comcom:GKSheetList x:Name="fGroupsList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageNotes">
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

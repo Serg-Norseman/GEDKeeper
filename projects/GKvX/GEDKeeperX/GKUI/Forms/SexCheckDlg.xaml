@@ -7,7 +7,6 @@
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.SexCheckDlg"
     x:TypeArguments="mvp:ISexCheckDlg, contr:SexCheckDlgController">
 
@@ -16,11 +15,11 @@
         <Entry x:Name="txtName" IsReadOnly="True" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
 
         <comcom:GroupBox x:Name="grpSex" HorizontalOptions="FillAndExpand">
-            <input:RadioButtonGroupView>
-                <input:RadioButton x:Name="rbNone" />
-                <input:RadioButton x:Name="rbMale" />
-                <input:RadioButton x:Name="rbFemale" />
-            </input:RadioButtonGroupView>
+            <comcom:RadioButtonGroupView>
+                <comcom:RadioButton x:Name="rbNone" />
+                <comcom:RadioButton x:Name="rbMale" />
+                <comcom:RadioButton x:Name="rbFemale" />
+            </comcom:RadioButtonGroupView>
         </comcom:GroupBox>
 
         <Label VerticalOptions="FillAndExpand" />

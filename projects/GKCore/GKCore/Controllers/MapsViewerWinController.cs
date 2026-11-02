@@ -292,7 +292,7 @@ namespace GKCore.Controllers
                 }
             } catch (Exception ex) {
                 Logger.WriteError("MapsViewerWinController.SaveSnapshot()", ex);
-                AppHost.StdDialogs.ShowError("Image failed to save: " + ex.Message);
+                await AppHost.StdDialogs.ShowError("Image failed to save: " + ex.Message);
             }
         }
 

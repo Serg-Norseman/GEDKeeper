@@ -506,7 +506,7 @@ namespace GKCore.Controllers
             GDMFamilyRecord family = await BaseController.SelectFamily(fBase, fView, fIndividualRecord);
             if (family != null) {
                 if (family.HasMember(fIndividualRecord)) {
-                    AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                    await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                     return;
                 }
 

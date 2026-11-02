@@ -1054,7 +1054,7 @@ using GDModel.Providers.FamilyShow;
                 } else if (ext == ".geds") {
                     string pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
                     if (string.IsNullOrEmpty(pw)) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
+                        await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
                         return false;
                     }
 
@@ -1071,7 +1071,7 @@ using GDModel.Providers.FamilyShow;
                 } else if (ext == ".gdz" || ext == ".zip") {
                     fileProvider = new GEDZIPProvider(fTree);
                 } else {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
+                    await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
                     return false;
                 }
 
@@ -1104,7 +1104,7 @@ using GDModel.Providers.FamilyShow;
                 }
 
                 if (!result) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
+                    await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
                     Clear();
                 } else {
                     await WorkDataCollector.Collect(this);
@@ -1113,7 +1113,7 @@ using GDModel.Providers.FamilyShow;
                 AppHost.ForceGC();
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.FileLoad.1()", ex);
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
+                await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
                 result = false;
             }
 
@@ -1151,9 +1151,9 @@ using GDModel.Providers.FamilyShow;
                 FileSave(gedcomProvider, fileName, strict);
                 return true;
             } catch (UnauthorizedAccessException) {
-                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
+                await AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
             } catch (Exception ex) {
-                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, "" }));
+                await AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, "" }));
                 Logger.WriteError("BaseContext.FileSave()", ex);
             }
 
@@ -1170,7 +1170,7 @@ using GDModel.Providers.FamilyShow;
             if (ext == ".geds" && !strict) {
                 var pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
                 if (string.IsNullOrEmpty(pw)) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
+                    await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
                     return null;
                 }
 
@@ -1181,7 +1181,7 @@ using GDModel.Providers.FamilyShow;
                 return new GEDZIPProvider(fTree);
             }*/
 
-            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
+            await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
             return null;
         }
 

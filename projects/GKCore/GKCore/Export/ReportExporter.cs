@@ -21,7 +21,7 @@ namespace GKCore.Export
     /// </summary>
     public abstract class ReportExporter : Exporter
     {
-        private bool fAlbumPage;
+        private readonly bool fAlbumPage;
         protected int fDefImageHeight;
         protected int fDefImageWidth;
         protected bool fPDFOnly;
@@ -98,7 +98,7 @@ namespace GKCore.Export
 
 #if !CI_MODE
             if (!success) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.GenerationFailed));
+                await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.GenerationFailed));
             } else {
                 if (show) ShowResult();
             }

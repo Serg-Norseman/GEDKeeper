@@ -20,7 +20,7 @@
             <comcom:GKComboBox x:Name="cmbLinkageType" Grid.Column="1" Grid.Row="1" />
         </Grid>
 
-        <Frame x:Name="panCtlParents" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <Border x:Name="panCtlParents" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <StackLayout Orientation="Vertical">
                 <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
                     <Grid.ColumnDefinitions>
@@ -45,7 +45,7 @@
                     </StackLayout>
                 </Grid>
             </StackLayout>
-        </Frame>
+        </Border>
 
         <Label VerticalOptions="FillAndExpand" />
 

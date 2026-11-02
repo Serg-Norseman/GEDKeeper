@@ -7,16 +7,15 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:xp="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.TTRecMergeDlg"
     x:TypeArguments="mvp:IRecMergeDlg, contr:RecMergeController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageMerge">
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageMerge">
 
                     <StackLayout Orientation="Vertical">
 
@@ -66,29 +65,29 @@
 
                     </StackLayout>
 
-                </comcom:TabItem>
+                </xp:TabItem>
 
-                <comcom:TabItem x:Name="pageMergeOptions">
+                <xp:TabItem x:Name="pageMergeOptions">
                     <StackLayout Orientation="Vertical">
                         <comcom:GroupBox x:Name="rgMode">
-                            <input:RadioButtonGroupView>
-                                <input:RadioButton x:Name="radPersons" IsChecked="true" Checked="radMergeMode_Click" />
-                                <input:RadioButton x:Name="radFamilies" Checked="radMergeMode_Click" />
-                                <input:RadioButton x:Name="radNotes" Checked="radMergeMode_Click" />
-                                <input:RadioButton x:Name="radSources" Checked="radMergeMode_Click" />
-                            </input:RadioButtonGroupView>
+                            <comcom:RadioButtonGroupView>
+                                <comcom:RadioButton x:Name="radPersons" IsChecked="true" Checked="radMergeMode_Click" />
+                                <comcom:RadioButton x:Name="radFamilies" Checked="radMergeMode_Click" />
+                                <comcom:RadioButton x:Name="radNotes" Checked="radMergeMode_Click" />
+                                <comcom:RadioButton x:Name="radSources" Checked="radMergeMode_Click" />
+                            </comcom:RadioButtonGroupView>
                         </comcom:GroupBox>
 
                         <comcom:GroupBox x:Name="grpSearchPersons">
                             <StackLayout Orientation="Vertical">
-                                <input:CheckBox x:Name="chkIndistinctMatching" />
+                                <comcom:CheckBox x:Name="chkIndistinctMatching" />
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label x:Name="lblNameAccuracy" />
                                     <comcom:NumericStepper x:Name="edNameAccuracy" Value="90" />
                                 </StackLayout>
 
-                                <input:CheckBox x:Name="chkBirthYear" />
+                                <comcom:CheckBox x:Name="chkBirthYear" />
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label x:Name="lblYearInaccuracy" />
@@ -98,14 +97,14 @@
                         </comcom:GroupBox>
 
                         <comcom:GroupBox x:Name="grpMergeOther">
-                            <input:CheckBox x:Name="chkBookmarkMerged" CheckChanged="chkBookmarkMerged_CheckedChanged" />
+                            <comcom:CheckBox x:Name="chkBookmarkMerged" CheckChanged="chkBookmarkMerged_CheckedChanged" />
                         </comcom:GroupBox>
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
 
     </StackLayout>
 

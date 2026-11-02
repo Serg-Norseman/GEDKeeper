@@ -7,7 +7,6 @@
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.EventDefEditDlg"
     x:TypeArguments="mvp:IEventDefEditDlg, contr:EventDefEditDlgController">
 
@@ -36,7 +35,7 @@
             <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
             <Entry x:Name="txtType" WidthRequest="260" Grid.Column="1" Grid.Row="2" />
 
-            <input:CheckBox x:Name="chkEnabled" Grid.Column="0" Grid.Row="3" />
+            <comcom:CheckBox x:Name="chkEnabled" Grid.Column="0" Grid.Row="3" />
 
             <Label x:Name="lblDesc" Grid.Column="0" Grid.Row="4" />
             <Entry x:Name="txtDesc" WidthRequest="260" Grid.Column="1" Grid.Row="4" />

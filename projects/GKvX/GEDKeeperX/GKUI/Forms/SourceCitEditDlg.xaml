@@ -7,16 +7,16 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    xmlns:xp="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.SourceCitEditDlg"
     x:TypeArguments="mvp:ISourceCitEditDlg, contr:SourceCitEditDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
 
-                <comcom:TabItem x:Name="pageCommon">
+                <xp:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
@@ -40,18 +40,18 @@
 
                         <Label HorizontalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
+                </xp:TabItem>
 
-                <comcom:TabItem x:Name="pageOther">
+                <xp:TabItem x:Name="pageOther">
                     <StackLayout Orientation="Vertical">
                         <comcom:GKDateControl x:Name="dateCtl" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
 
                         <Editor x:Name="txtText" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
+                </xp:TabItem>
 
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

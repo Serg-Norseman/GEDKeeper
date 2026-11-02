@@ -97,7 +97,7 @@ namespace GKCore.Lists
 
                         if (result) {
                             if (!dataOwner.ValidateNames()) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
+                                await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
                             }
                             dataOwner.SortNames();
                         }

@@ -7,7 +7,7 @@
  */
 
 using ICheckBox = GKCore.Design.Controls.ICheckBox;
-using XFIKCheckBox = Plugin.InputKit.CheckBox;
+using XFIKCheckBox = GKUI.Components.CheckBox;
 
 namespace GKUI.Platform
 {

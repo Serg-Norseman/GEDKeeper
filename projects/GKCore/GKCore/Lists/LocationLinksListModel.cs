@@ -83,7 +83,7 @@ namespace GKCore.Lists
 
                         if (result) {
                             if (!dataOwner.ValidateLinks()) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
+                                await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
                             }
                             dataOwner.SortTopLevels();
                         }

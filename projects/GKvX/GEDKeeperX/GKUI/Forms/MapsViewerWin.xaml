@@ -7,7 +7,6 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.MapsViewerWin">
 
     <forms:CommonWindow.ToolbarItems>
@@ -24,16 +23,16 @@
                 <comcom:TabItem x:Name="pagePlaces">
                     <StackLayout Spacing="4">
                         <comcom:GroupBox x:Name="grpSelection" VerticalOptions="Start">
-                            <input:RadioButtonGroupView>
-                                <input:RadioButton x:Name="radTotal" Checked="radTotal_Click" />
-                                <input:CheckBox x:Name="chkBirth" />
-                                <input:CheckBox x:Name="chkDeath" />
-                                <input:CheckBox x:Name="chkResidence" />
-                                <input:RadioButton x:Name="radSelected" Checked="radTotal_Click" />
+                            <comcom:RadioButtonGroupView>
+                                <comcom:RadioButton x:Name="radTotal" Checked="radTotal_Click" />
+                                <comcom:CheckBox x:Name="chkBirth" />
+                                <comcom:CheckBox x:Name="chkDeath" />
+                                <comcom:CheckBox x:Name="chkResidence" />
+                                <comcom:RadioButton x:Name="radSelected" Checked="radTotal_Click" />
                                 <comcom:GKComboBox x:Name="cmbPersons" />
-                                <input:CheckBox x:Name="chkLinesVisible" IsChecked="True" />
+                                <comcom:CheckBox x:Name="chkLinesVisible" IsChecked="True" />
                                 <Button x:Name="btnSelectPlaces" IsEnabled="False" Clicked="btnSelectPlaces_Click" />
-                            </input:RadioButtonGroupView>
+                            </comcom:RadioButtonGroupView>
                         </comcom:GroupBox>
 
                         <comcom:GKTreeView x:Name="tvPlaces" MouseDoubleClick="TreePlaces_DoubleClick" VerticalOptions="FillAndExpand" />

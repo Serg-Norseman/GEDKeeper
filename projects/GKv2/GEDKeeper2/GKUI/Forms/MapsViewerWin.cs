@@ -28,7 +28,7 @@ namespace GKUI.Forms
     {
         #region Design components
 
-        private GKMapBrowser fMapBrowser;
+        private readonly GKMapBrowser fMapBrowser;
 
         #endregion
 

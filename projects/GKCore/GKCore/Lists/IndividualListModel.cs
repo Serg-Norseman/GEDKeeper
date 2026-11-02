@@ -709,7 +709,7 @@ namespace GKCore.Lists
                     groupRec = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (groupRec != null) {
                         if (groupRec.IndexOfMember(iRec) >= 0) {
-                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                             return;
                         }
 
@@ -821,7 +821,7 @@ namespace GKCore.Lists
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, iRec, persName);
                         }
                     } else {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.RemoveNameFailed));
+                        await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.RemoveNameFailed));
                     }
                     break;
 
@@ -912,7 +912,7 @@ namespace GKCore.Lists
                     GDMFamilyRecord family = await BaseController.SelectFamily(fBaseWin, fOwner, iRec);
                     if (family != null) {
                         if (family.HasMember(iRec)) {
-                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                             return;
                         }
 

@@ -85,7 +85,7 @@ namespace GKUI.Platform
             using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, true)) {
                 var dlgRes = ofd.ShowDialog(null);
 
-                string[] retStr = (dlgRes == DialogResult.Ok) ? ofd.Filenames.ToArray() : new string[0];
+                string[] retStr = (dlgRes == DialogResult.Ok) ? ofd.Filenames.ToArray() : Array.Empty<string>();
                 return await Task.FromResult(retStr);
             }
         }
@@ -170,6 +170,8 @@ namespace GKUI.Platform
             return sfd;
         }
 
+        private static readonly char[] separators = new char[] { ',', ';' };
+
         private static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
         {
             if (fileDlg == null)
@@ -182,7 +184,7 @@ namespace GKUI.Platform
                 string name = filterParts[idx];
                 string exts = filterParts[idx + 1];
 
-                string[] extensions = exts.Split(new char[] { ',', ';' });
+                string[] extensions = exts.Split(separators);
                 for (int k = 0; k < extensions.Length; k++) {
                     string ext = extensions[k];
                     if (ext.Length > 0 && ext[0] == '*') {
@@ -194,35 +196,35 @@ namespace GKUI.Platform
             }
         }
 
-        public void ShowAlert(string msg, string title = "")
+        public async Task ShowAlert(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            Application.Instance.Invoke(() => {
+            await Application.Instance.InvokeAsync(() => {
                 MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
             });
         }
 
-        public void ShowMessage(string msg, string title = "")
+        public async Task ShowMessage(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            Application.Instance.Invoke(() => {
+            await Application.Instance.InvokeAsync(() => {
                 MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Information);
             });
         }
 
-        public void ShowError(string msg, string title = "")
+        public async Task ShowError(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            Application.Instance.Invoke(() => {
+            await Application.Instance.InvokeAsync(() => {
                 MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Error);
             });
         }
@@ -245,13 +247,13 @@ namespace GKUI.Platform
             //return await Task.FromResult(retVal);
         }
 
-        public void ShowWarning(string msg, string title = "")
+        public async Task ShowWarning(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            Application.Instance.Invoke(() => {
+            await Application.Instance.InvokeAsync(() => {
                 MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
             });
         }

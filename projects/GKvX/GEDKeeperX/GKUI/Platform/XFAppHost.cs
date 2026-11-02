@@ -27,8 +27,8 @@ using Microsoft.Maui.Controls;
 using ITimer = GKCore.ITimer;
 using IView = GKCore.Design.IView;
 using IWindow = GKCore.Design.IWindow;
-using XFIKCheckBox = Plugin.InputKit.CheckBox;
-using XFIKRadioButton = Plugin.InputKit.RadioButton;
+using XFIKCheckBox = GKUI.Components.CheckBox;
+using XFIKRadioButton = GKUI.Components.RadioButton;
 
 namespace GKUI.Platform
 {

@@ -7,7 +7,6 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.PersonsFilterDlg">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
@@ -23,27 +22,27 @@
                         <StackLayout Orientation="Horizontal" Spacing="4">
                             <comcom:GroupBox x:Name="rgSex">
                                 <StackLayout Orientation="Vertical">
-                                    <input:RadioButtonGroupView>
-                                        <input:RadioButton x:Name="rbSexAll" />
-                                        <input:RadioButton x:Name="rbSexMale" />
-                                        <input:RadioButton x:Name="rbSexFemale" />
-                                    </input:RadioButtonGroupView>
+                                    <comcom:RadioButtonGroupView>
+                                        <comcom:RadioButton x:Name="rbSexAll" />
+                                        <comcom:RadioButton x:Name="rbSexMale" />
+                                        <comcom:RadioButton x:Name="rbSexFemale" />
+                                    </comcom:RadioButtonGroupView>
                                     <Label />
-                                    <input:CheckBox x:Name="chkOnlyPatriarchs" />
+                                    <comcom:CheckBox x:Name="chkOnlyPatriarchs" />
                                 </StackLayout>
                             </comcom:GroupBox>
 
                             <comcom:GroupBox x:Name="rgLife">
-                                <input:RadioButtonGroupView>
-                                    <input:RadioButton x:Name="rbAll" Checked="rgLife_CheckedChanged" />
-                                    <input:RadioButton x:Name="rbOnlyLive" Checked="rgLife_CheckedChanged" />
-                                    <input:RadioButton x:Name="rbOnlyDead" Checked="rgLife_CheckedChanged" />
-                                    <input:RadioButton x:Name="rbAliveBefore" Checked="rgLife_CheckedChanged" />
+                                <comcom:RadioButtonGroupView>
+                                    <comcom:RadioButton x:Name="rbAll" Checked="rgLife_CheckedChanged" />
+                                    <comcom:RadioButton x:Name="rbOnlyLive" Checked="rgLife_CheckedChanged" />
+                                    <comcom:RadioButton x:Name="rbOnlyDead" Checked="rgLife_CheckedChanged" />
+                                    <comcom:RadioButton x:Name="rbAliveBefore" Checked="rgLife_CheckedChanged" />
                                     <StackLayout Orientation="Horizontal" Spacing="4">
                                         <Label x:Name="lblAliveBefore" />
                                         <Entry x:Name="txtAliveBeforeDate" IsEnabled="False" />
                                     </StackLayout>
-                                </input:RadioButtonGroupView>
+                                </comcom:RadioButtonGroupView>
                             </comcom:GroupBox>
                         </StackLayout>
 

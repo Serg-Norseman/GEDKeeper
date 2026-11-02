@@ -337,7 +337,7 @@ namespace GKCore.Controllers
 
                 if (locLinkRes.Result) {
                     if (!locRec.ValidateLinks()) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
+                        await AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
                     }
                     locRec.SortTopLevels();
 

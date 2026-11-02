@@ -101,7 +101,7 @@ namespace GKCore.Lists
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         if (family.HasMember(child)) {
-                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                             return;
                         }
 
@@ -182,7 +182,7 @@ namespace GKCore.Lists
                         result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                         if (result) {
                             if (family.HasMember(child)) {
-                                AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                                await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                                 return;
                             }
 

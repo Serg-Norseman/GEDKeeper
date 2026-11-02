@@ -1407,7 +1407,7 @@ namespace GKCore.Controllers
                     fContext.SetModified();
                 }
 
-                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.AddedNPhotos, added, fileNames.Length));
+                await AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.AddedNPhotos, added, fileNames.Length));
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.ShowPhotosBatchAdding().0", ex);
             }

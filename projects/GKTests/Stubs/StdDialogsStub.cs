@@ -81,16 +81,19 @@ namespace GKTests.Stubs
             return await Task.FromResult(font);
         }
 
-        public void ShowAlert(string msg, string title = "")
+        public async Task ShowAlert(string msg, string title = "")
         {
+            await Task.CompletedTask;
         }
 
-        public void ShowError(string msg, string title = "")
+        public async Task ShowError(string msg, string title = "")
         {
+            await Task.CompletedTask;
         }
 
-        public void ShowMessage(string msg, string title = "")
+        public async Task ShowMessage(string msg, string title = "")
         {
+            await Task.CompletedTask;
         }
 
         public async Task<bool> ShowQuestion(string msg, string title = "")
@@ -105,8 +108,9 @@ namespace GKTests.Stubs
             fQuestionResult = value;
         }
 
-        public void ShowWarning(string msg, string title = "")
+        public async Task ShowWarning(string msg, string title = "")
         {
+            await Task.CompletedTask;
         }
     }
 }

@@ -2,7 +2,7 @@
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:input="clr-namespace:Plugin.InputKit"
+    xmlns:comcom="clr-namespace:GKUI.Components"
     x:Class="GKUI.Components.ACOptionsControl">
 
     <StackLayout Orientation="Vertical" Padding="8" Spacing="4">
@@ -47,8 +47,8 @@
 
         </Grid>
 
-        <input:CheckBox x:Name="chkHideEmptySegments" />
-        <input:CheckBox x:Name="chkArcText" />
+        <comcom:CheckBox x:Name="chkHideEmptySegments" />
+        <comcom:CheckBox x:Name="chkArcText" />
 
     </StackLayout>
 

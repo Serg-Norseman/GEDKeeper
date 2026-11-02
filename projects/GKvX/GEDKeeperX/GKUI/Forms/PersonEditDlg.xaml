@@ -7,7 +7,6 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.PersonEditDlg"
     x:TypeArguments="mvp:IMobPersonEditDlg, contr:MobPersonEditDlgController">
 
@@ -28,11 +27,11 @@
 
                     <Label x:Name="lblName" Grid.Column="0" Grid.Row="2" />
                     <Entry x:Name="txtName" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="2" />
-                    <input:CheckBox x:Name="chkBookmark" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" />
+                    <comcom:CheckBox x:Name="chkBookmark" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" />
 
                     <Label x:Name="lblPatronymic" Grid.Column="0" Grid.Row="3" />
                     <comcom:GKComboBox x:Name="cmbPatronymic" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="3" />
-                    <input:CheckBox x:Name="chkPatriarch" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" />
+                    <comcom:CheckBox x:Name="chkPatriarch" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" />
                 </Grid>
             </StackLayout>
         </Frame>

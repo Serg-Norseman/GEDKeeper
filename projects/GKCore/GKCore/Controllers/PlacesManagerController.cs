@@ -147,7 +147,7 @@ namespace GKCore.Controllers
 
                 // for cases [*] and [**]
                 if (pObj.Name.Contains("*]")) {
-                    AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
+                    await AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
                 } else {
                     GDMLocationRecord locRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                     if (locRec == null) return;

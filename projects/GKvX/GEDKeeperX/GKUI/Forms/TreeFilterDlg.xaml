@@ -7,7 +7,6 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit"
     x:Class="GKUI.Forms.TreeFilterDlg"
     x:TypeArguments="mvp:ITreeFilterDlg, contr:TreeFilterDlgController"
     Appearing="TreeFilterDlg_Load">
@@ -16,10 +15,10 @@
 
         <comcom:GroupBox x:Name="rgBranchCut">
             <StackLayout Orientation="Vertical" Spacing="4">
-                <input:RadioButtonGroupView>
-                    <input:RadioButton x:Name="rbCutNone" IsChecked="True" Checked="rbCutX_CheckedChanged" />
+                <comcom:RadioButtonGroupView>
+                    <comcom:RadioButton x:Name="rbCutNone" IsChecked="True" Checked="rbCutX_CheckedChanged" />
 
-                    <input:RadioButton x:Name="rbCutYears" Checked="rbCutX_CheckedChanged" />
+                    <comcom:RadioButton x:Name="rbCutYears" Checked="rbCutX_CheckedChanged" />
 
                     <StackLayout Orientation="Horizontal" Spacing="20">
                         <Label />
@@ -29,8 +28,8 @@
                         </StackLayout>
                     </StackLayout>
 
-                    <input:RadioButton x:Name="rbCutPersons" Checked="rbCutX_CheckedChanged" />
-                </input:RadioButtonGroupView>
+                    <comcom:RadioButton x:Name="rbCutPersons" Checked="rbCutX_CheckedChanged" />
+                </comcom:RadioButtonGroupView>
 
                 <comcom:GKSheetList x:Name="fPersonsList" />
             </StackLayout>

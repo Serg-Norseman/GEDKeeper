@@ -64,6 +64,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <MauiIcon Include="Resources\AppIcon\appicon.png" ForegroundScale="0.65" Color="#FFFFFF" />
+
         <EmbeddedResource Include="Resources\gk_logo.png">
             <LogicalName>Resources.gk_logo.png</LogicalName>
         </EmbeddedResource>

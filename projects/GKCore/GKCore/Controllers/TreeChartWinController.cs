@@ -161,7 +161,7 @@ namespace GKCore.Controllers
                         }
 
                         if (fam.HasMember(parent)) {
-                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            await AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
                             return;
                         }
 
