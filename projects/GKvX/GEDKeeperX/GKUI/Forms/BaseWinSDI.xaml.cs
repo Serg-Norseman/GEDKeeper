@@ -118,15 +118,13 @@ namespace GKUI.Forms
         {
             var summary = new HyperView();
             summary.OnLink += mPersonSummaryLink;
-            //summary.ContextMenu = summaryMenu;
 
             var summFrame = new Frame() { Content = summary, Padding = 4, CornerRadius = 4, BorderColor = Colors.LightBlue, VerticalOptions = LayoutOptions.FillAndExpand };
 
             var recView = new GKListView();
-            //recView.AllowMultipleSelection = true;
+            recView.AllowMultipleSelection = true;
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.ItemSelected += List_SelectedIndexChanged;
-            //recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 

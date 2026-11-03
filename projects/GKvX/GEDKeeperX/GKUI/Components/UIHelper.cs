@@ -164,11 +164,6 @@ namespace GKUI.Components
             return ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
         }
 
-        public static ImageSource LoadResourceImage(Type baseType, string resName)
-        {
-            return ImageSource.FromResource(resName, baseType.Assembly);
-        }
-
         public static async Task<T> SelectItem<T>(object owner, IEnumerable<T> items)
         {
             var page = owner as Page;

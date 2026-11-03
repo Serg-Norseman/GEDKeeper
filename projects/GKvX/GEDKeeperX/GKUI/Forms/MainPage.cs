@@ -20,12 +20,16 @@ namespace GKUI.Forms
     {
         private readonly Dictionary<int, Page> fMenuPages;
 
+        public NavigationPage NavigationPage
+        {
+            get { return Detail as NavigationPage; }
+        }
 
         public MainPage()
         {
             FlyoutLayoutBehavior = FlyoutLayoutBehavior.Popover;
             Flyout = new MenuPage();
-            Detail = new LaunchPage();
+            Detail = new NavigationPage(new LaunchPage());
 
             fMenuPages = new Dictionary<int, Page>();
 

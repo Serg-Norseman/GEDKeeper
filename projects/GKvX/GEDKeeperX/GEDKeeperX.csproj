@@ -43,6 +43,7 @@
         <PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.9" />
         <PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
         <PackageReference Include="OxyPlot.Maui.Skia" Version="1.2.0" />
+        <PackageReference Include="akgul.Maui.DataGrid" Version="4.0.6" />
     </ItemGroup>
 
     <ItemGroup>
@@ -64,7 +65,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <MauiIcon Include="Resources\AppIcon\appicon.png" ForegroundScale="0.65" Color="#FFFFFF" />
+        <MauiIcon Include="Resources\AppIcon\appicon.png" ForegroundScale="0.85" Color="#FFFFFF" />
 
         <EmbeddedResource Include="Resources\gk_logo.png">
             <LogicalName>Resources.gk_logo.png</LogicalName>

@@ -65,12 +65,13 @@ namespace GKUI.Platform
 
         public static NavigationPage GetNavPage()
         {
-            return Application.Current.Windows[0].Page as NavigationPage;
+            var mainPage = GetMainPage();
+            return mainPage?.NavigationPage;
         }
 
         public static MainPage GetMainPage()
         {
-            return GetNavPage().RootPage as MainPage;
+            return Application.Current.Windows[0].Page as MainPage;
         }
 
         private Page GetCurrentPage()

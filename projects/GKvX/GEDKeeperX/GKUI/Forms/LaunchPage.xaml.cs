@@ -38,13 +38,17 @@ namespace GKUI.Forms
             {
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileNew), UIHelper.LoadResourceImage("Resources.btn_create_new.gif"), async (item) => {
                     var baseWin = GetBaseWin();
-                    baseWin?.Controller.NewFile();
-                    await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    if (baseWin != null) {
+                        await baseWin.Controller.NewFile();
+                        await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    }
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileLoad), UIHelper.LoadResourceImage("Resources.btn_load.gif"), async (item) => {
                     var baseWin = GetBaseWin();
-                    baseWin?.Controller.LoadFileEx();
-                    await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    if (baseWin != null) {
+                        await baseWin.Controller.LoadFileEx();
+                        await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    }
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSave), UIHelper.LoadResourceImage("Resources.btn_save.gif")),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSaveAs)),
@@ -118,7 +122,7 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.MergeDuplicates), (item) => {
                     var baseWin = GetBaseWin();
-                    BaseController.ShowRecMerge(baseWin, baseWin, null, null);
+                    if (baseWin != null) BaseController.ShowRecMerge(baseWin, baseWin, null, null);
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.FragmentSearch), (item) => {
                     GetBaseWin()?.Controller.ShowFamilyGroups();

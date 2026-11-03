@@ -12,21 +12,13 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using Maui.DataGrid;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 
 namespace GKUI.Components
 {
-    public class DataGridColumn
-    {
-        public string Title { get; set; }
-        public int Width { get; set; }
-        public string PropertyName { get; set; }
-        public LayoutOptions HorizontalContentAlignment { get; set; }
-    }
-
-
-    internal class RowBgProvider /*: IColorProvider*/
+    internal class RowBgProvider : IColorProvider
     {
         private readonly GKListView fListView;
 
@@ -45,26 +37,19 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public sealed partial class GKListView : TableView, IListView
+    public sealed partial class GKListView : DataGrid, IListView
     {
         private bool fCheckBoxes;
         private IListSource fListMan;
 
 
-        public List<DataGridColumn> Columns { get; private set; }
-
-        public object ItemsSource { get; set; }
-
-        public event EventHandler<SelectedItemChangedEventArgs> ItemSelected;
-
-        public object SelectedItem { get; set; }
-        public void ScrollTo(object item, ScrollToPosition pos, bool x) { }
-        public bool IsSortable { get; set; }
-
-
         public event EventHandler MouseDoubleClick;
 
-        public bool AllowMultipleSelection { get; set; }
+        public bool AllowMultipleSelection
+        {
+            get { return base.SelectionMode == SelectionMode.Multiple; }
+            set { base.SelectionMode = (value) ? SelectionMode.Multiple : SelectionMode.Single; }
+        }
 
         public bool Enabled
         {
@@ -122,8 +107,8 @@ namespace GKUI.Components
         public GKListView()
         {
             //InitializeComponent();
-            IsSortable = true;
-            //RowsBackgroundColorPalette = new RowBgProvider(this);
+            SortingEnabled = true;
+            RowsBackgroundColorPalette = new RowBgProvider(this);
             RowHeight = 26;
 
             fCheckBoxes = false;
@@ -261,22 +246,12 @@ namespace GKUI.Components
 
         public void ResizeColumn(int columnIndex)
         {
-            try {
-                // not supported
-            } catch (Exception ex) {
-                Logger.WriteError("GKListView.ResizeColumn()", ex);
-            }
+            // not supported
         }
 
         public void ResizeColumns()
         {
-            if (fListMan == null) return;
-
-            for (int i = 0; i < Columns.Count; i++) {
-                if (fListMan.IsColumnAutosize(i)) {
-                    ResizeColumn(i);
-                }
-            }
+            // not supported
         }
 
         public IList<object> GetSelectedItems()
@@ -284,15 +259,12 @@ namespace GKUI.Components
             try {
                 var result = new List<object>();
 
-                /*if (!fIsVirtual) {
-                    foreach (GKListItem item in SelectedItems) {
-                        result.Add(item.Tag);
+                if (fListMan != null) {
+                    foreach (var item in base.SelectedItems) {
+                        if (item is ContentItem contentItem)
+                            result.Add(contentItem.Record);
                     }
-                } else {
-                    foreach (var index in SelectedRows) {
-                        result.Add(fListMan.GetContentItem(index));
-                    }
-                }*/
+                }
 
                 return result;
             } catch (Exception ex) {

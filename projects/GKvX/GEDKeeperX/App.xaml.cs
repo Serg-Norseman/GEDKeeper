@@ -25,7 +25,7 @@ namespace GKUI
             LangMan.DefInit();
             XFAppHost.Startup(/*platformSpecifics*/ null);
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()

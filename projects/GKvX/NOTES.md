@@ -84,6 +84,4 @@ Xiaomi 13T                  |  6.7" (2712x1220) | 446 ppi |  xh | Android 14    
 
 # Incomprehensible problems
 
-- How to control scrolling and size of SkCanvasView in ScrollView (Charts); centering in container?
 - DataGrid unused space background color black not turning off.
-- When switching between tabs multiple times, nested tabs disappear (OptionsDlg).

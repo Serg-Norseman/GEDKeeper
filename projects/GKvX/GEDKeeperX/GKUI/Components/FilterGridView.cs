@@ -157,11 +157,9 @@ namespace GKUI.Components
             fGridView.AllowMultipleSelection = false;
         }
 
-        private void GridView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void GridView_ItemSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.SelectedItem != null) {
-                var row = e.SelectedItem as FilterConditionRow;
-
+            if (e.CurrentSelection is FilterConditionRow row) {
                 fFieldCombo.Text = row.ColumnText.ToString();
                 fConditionCombo.Text = row.ConditionText.ToString();
                 fValueText.Text = row.ValueText;

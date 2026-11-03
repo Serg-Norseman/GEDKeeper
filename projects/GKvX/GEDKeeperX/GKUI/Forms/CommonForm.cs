@@ -105,7 +105,8 @@ namespace GKUI.Forms
     {
         public virtual void Show(bool showInTaskbar)
         {
-            XFAppHost.GetMainPage().Navigation.PushAsync(this);
+            var nav = XFAppHost.GetMainPage().NavigationPage;
+            nav.PushAsync(this);
         }
 
         public virtual void SetLocale()
