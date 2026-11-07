@@ -19,6 +19,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using BSLib;
 
+#if NET8_0_OR_GREATER
+using System.Management;
+#endif
+
 namespace GKCore.Utilities
 {
     public enum DesktopType
@@ -74,7 +78,7 @@ namespace GKCore.Utilities
 #if NET8_0_OR_GREATER
         public static IEnumerable<string> FastSearchFiles(string rootPath, string pattern)
         {
-            var options = new EnumerationOptions {
+            var options = new System.IO.EnumerationOptions {
                 IgnoreInaccessible = true,
                 RecurseSubdirectories = true,
                 ReturnSpecialDirectories = false,
@@ -964,7 +968,7 @@ namespace GKCore.Utilities
 
         #region System Information
 
-        public static void LogSystemInfo()
+        /*public static void LogSystemInfo()
         {
             try {
                 int frequency = 0;
@@ -1041,6 +1045,96 @@ namespace GKCore.Utilities
 
                 var curProcess = Process.GetCurrentProcess();
                 Logger.WriteInfo($"Process size: {curProcess.WorkingSet64 / 1024 / 1024} MB");
+            } catch (Exception ex) {
+                Logger.WriteError("SysUtils.LogSystemInfo()", ex);
+            }
+        }*/
+
+        public static void LogSystemInfo()
+        {
+            try {
+                int frequency = 0;
+                long totalMemoryKb = 0; // unification
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    using (var searcher = new ManagementObjectSearcher("SELECT CurrentClockSpeed FROM Win32_Processor")) {
+                        foreach (ManagementObject obj in searcher.Get()) {
+                            if (obj["CurrentClockSpeed"] != null && int.TryParse(obj["CurrentClockSpeed"].ToString(), out int freq)) {
+                                frequency = Math.Max(frequency, freq);
+                            }
+                        }
+                    }
+                    using (var searcher = new ManagementObjectSearcher("SELECT TotalVisibleMemorySize FROM Win32_OperatingSystem")) {
+                        foreach (ManagementObject obj in searcher.Get()) {
+                            if (obj["TotalVisibleMemorySize"] != null && long.TryParse(obj["TotalVisibleMemorySize"].ToString(), out long mem)) {
+                                totalMemoryKb = mem;
+                                break;
+                            }
+                        }
+                    }
+                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                    if (File.Exists("/proc/cpuinfo")) {
+                        string[] lines = File.ReadAllLines("/proc/cpuinfo");
+                        foreach (string line in lines) {
+                            if (line.StartsWith("cpu MHz", StringComparison.OrdinalIgnoreCase)) {
+                                string parts = line.Split(':')[1].Trim();
+                                if (double.TryParse(parts, NumberStyles.Any, CultureInfo.InvariantCulture, out double mhz)) {
+                                    frequency = (int)Math.Round(mhz);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (File.Exists("/proc/meminfo")) {
+                        string[] lines = File.ReadAllLines("/proc/meminfo");
+                        foreach (string line in lines) {
+                            if (line.StartsWith("MemTotal:", StringComparison.OrdinalIgnoreCase)) {
+                                // "MemTotal:       16344212 kB"
+                                string digits = Regex.Replace(line, @"[^\d]", "");
+                                if (long.TryParse(digits, out long memKb)) {
+                                    totalMemoryKb = memKb;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                    var freqInfo = new ProcessStartInfo("sysctl", "-n machdep.cpu.freq") {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    using (var process = Process.Start(freqInfo)) {
+                        string line = process?.StandardOutput.ReadLine();
+                        if (!string.IsNullOrEmpty(line) && long.TryParse(line.Trim(), out long hz)) {
+                            frequency = (int)(hz / 1000 / 1000);
+                        }
+                    }
+
+                    var memInfo = new ProcessStartInfo("sysctl", "-n hw.memsize") {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    using (var process = Process.Start(memInfo)) {
+                        string line = process?.StandardOutput.ReadLine();
+                        if (!string.IsNullOrEmpty(line) && long.TryParse(line.Trim(), out long bytes)) {
+                            totalMemoryKb = bytes / 1024;
+                        }
+                    }
+                }
+
+                int coreCount = Environment.ProcessorCount;
+                Logger.WriteInfo($"CPU Cores: {coreCount}");
+                Logger.WriteInfo($"CPU Frequency: {frequency} MHz");
+
+                double totalMemoryGb = totalMemoryKb / 1024.0 / 1024.0;
+                Logger.WriteInfo($"Memory: {totalMemoryGb:0.00} GB");
+
+                using (var curProcess = Process.GetCurrentProcess()) {
+                    Logger.WriteInfo($"Process size: {curProcess.WorkingSet64 / 1024 / 1024} MB");
+                }
             } catch (Exception ex) {
                 Logger.WriteError("SysUtils.LogSystemInfo()", ex);
             }

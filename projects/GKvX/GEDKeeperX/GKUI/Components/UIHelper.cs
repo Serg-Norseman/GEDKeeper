@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BSLib;
@@ -22,7 +21,6 @@ using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
 using Microsoft.Maui.Graphics;
 using SkiaSharp;
 
@@ -151,8 +149,8 @@ namespace GKUI.Components
                 return null;
             }
 
-            var dens = DeviceDisplay.MainDisplayInfo.Density;
-            if (dens >= 2) {
+            /*var dens = DeviceDisplay.MainDisplayInfo.Density;
+            if (dens >= 2)*/ {
                 string fileName = Path.GetFileNameWithoutExtension(resName);
                 string newName = string.Format("{0}@2x.png", fileName);
                 var asm = typeof(UIHelper).Assembly;
@@ -183,12 +181,6 @@ namespace GKUI.Components
                 element = element.Parent;
             }
             return element as Page;
-        }
-
-        public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
-        {
-            var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
-            return method?.Invoke(obj, args);
         }
     }
 }

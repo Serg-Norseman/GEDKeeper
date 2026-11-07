@@ -6,7 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using GKCore;
 using GKCore.Locales;
 using GKUI.Platform;
@@ -14,72 +16,50 @@ using Microsoft.Maui.Controls;
 
 namespace GKUI.Forms
 {
-    public enum MenuItemType
-    {
-        Browse,
-        About,
-        Exit,
-    }
-
-
     public partial class MenuPage : ContentPage, ILocalizable
     {
-        private sealed class HomeMenuItem
-        {
-            public MenuItemType Id { get; set; }
-
-            public string Title { get; set; }
-
-            public HomeMenuItem(MenuItemType id, string title)
-            {
-                Id = id;
-                Title = title;
-            }
-        }
-
-
-        private readonly ObservableCollection<HomeMenuItem> fMenuItems;
+        private readonly ObservableCollection<LaunchItem> fMenuItems;
 
 
         public MenuPage()
         {
             InitializeComponent();
 
-            fMenuItems = new ObservableCollection<HomeMenuItem>();
+            fMenuItems = new ObservableCollection<LaunchItem>();
             ReloadMenu();
 
             ListViewMenu.ItemsSource = fMenuItems;
             ListViewMenu.SelectedItem = fMenuItems[0];
             ListViewMenu.ItemSelected += async (sender, e) => {
-                var item = e.SelectedItem as HomeMenuItem;
-                if (item != null)
-                    await XFAppHost.GetMainPage().NavigateMenuAsync((int)item.Id);
+                try {
+                    if (e.SelectedItem is LaunchItem item) {
+                        // Deselect the list item immediately so that
+                        // the ListView doesn't get stuck in a "pressed" state
+                        ((ListView)sender).SelectedItem = null;
+
+                        await item.Action?.Invoke(item);
+                    }
+                } catch (Exception ex) {
+                    Trace.WriteLine("ListViewMenu.ItemSelected(): " + ex.ToString());
+                }
             };
         }
 
         private void ReloadMenu()
         {
             fMenuItems.Clear();
-            fMenuItems.Add(new HomeMenuItem(MenuItemType.Browse, LangMan.LS(LSID.RM_Records)));
-            fMenuItems.Add(new HomeMenuItem(MenuItemType.About, LangMan.LS(LSID.MIAbout)));
-            fMenuItems.Add(new HomeMenuItem(MenuItemType.Exit, LangMan.LS(LSID.MIExit)));
-        }
 
-        public static Page CreatePageInstance(int id)
-        {
-            Page result = null;
-            switch ((MenuItemType)id) {
-                case MenuItemType.Browse:
-                    result = AppHost.Instance.GetCurrentFile() as Page;
-                    break;
-                case MenuItemType.About:
-                    result = new AboutPage();
-                    break;
-                case MenuItemType.Exit:
-                    AppHost.Instance.Quit();
-                    break;
-            }
-            return result;
+            fMenuItems.Add(new LaunchItem(LangMan.LS(LSID.RM_Records), async (i) => {
+                await XFAppHost.GetMainPage().NavigateAsync(LaunchPage.GetBaseWin());
+            }));
+
+            fMenuItems.Add(new LaunchItem(LangMan.LS(LSID.MIAbout), async (i) => {
+                await XFAppHost.GetMainPage()?.ShowAbout();
+            }));
+
+            fMenuItems.Add(new LaunchItem(LangMan.LS(LSID.MIExit), async (i) => {
+                AppHost.Instance.Quit();
+            }));
         }
 
         public void SetLocale()

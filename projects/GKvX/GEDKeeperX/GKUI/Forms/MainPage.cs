@@ -49,26 +49,17 @@ namespace GKUI.Forms
 
         public async Task NavigateAsync(Page page)
         {
-            if (page == null) return;
-
-            //IsPresented = false;
-            await Navigation.PushAsync(page);
-        }
-
-        public async Task NavigateMenuAsync(int id)
-        {
-            Page page;
-            if (!fMenuPages.TryGetValue(id, out page)) {
-                page = MenuPage.CreatePageInstance(id);
-                if (page != null) {
-                    fMenuPages.Add(id, page);
-                }
-            }
-            await NavigateAsync(page);
+            if (page != null)
+                await Navigation.PushAsync(page);
         }
 
         public void SetLocale()
         {
+        }
+
+        public async Task ShowAbout()
+        {
+            await GetBaseWin()?.Controller.ShowAbout();
         }
     }
 }

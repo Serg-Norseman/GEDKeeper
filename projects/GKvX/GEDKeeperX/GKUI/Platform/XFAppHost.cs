@@ -65,8 +65,7 @@ namespace GKUI.Platform
 
         public static NavigationPage GetNavPage()
         {
-            var mainPage = GetMainPage();
-            return mainPage?.NavigationPage;
+            return GetMainPage()?.NavigationPage;
         }
 
         public static MainPage GetMainPage()
@@ -97,6 +96,7 @@ namespace GKUI.Platform
             var xfModal = dialog as CommonDialog;
             if (xfModal == null) return false;
 
+            // work checked!
             await GetMainPage().Navigation.PushModalAsync(xfModal);
             return await xfModal.DialogResultTask;
         }

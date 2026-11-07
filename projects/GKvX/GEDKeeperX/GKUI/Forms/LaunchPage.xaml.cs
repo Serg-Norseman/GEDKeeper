@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Locales;
@@ -58,24 +59,24 @@ namespace GKUI.Forms
 
                 new LaunchItem("Recent", "Sample.ged"), // stub for position hold
 
-                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.ExportTable), UIHelper.LoadResourceImage("Resources.btn_excel.gif"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.ExportTable), UIHelper.LoadResourceImage("Resources.btn_excel.gif"), async (item) => {
                     GetBaseWin()?.Controller.ExportTable();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.FamilyBook), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.FamilyBook), async (item) => {
                     GetBaseWin()?.Controller.ExportToFamilyBook();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.TreesAlbum), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.TreesAlbum), async (item) => {
                     GetBaseWin()?.Controller.ExportToTreesAlbum();
                 }),
 
-                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.LogView), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.LogView), async (item) => {
                     GetBaseWin()?.Controller.ShowLog();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.TableOfContents), UIHelper.LoadResourceImage("Resources.btn_help.gif"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.TableOfContents), UIHelper.LoadResourceImage("Resources.btn_help.gif"), async (item) => {
                     AppHost.Instance.ShowHelpTopic("");
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.MIAbout), UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), async (item) => {
-                    await GetBaseWin()?.Controller.ShowAbout();
+                    await XFAppHost.GetMainPage()?.ShowAbout();
                 }),
             };
 
@@ -90,50 +91,50 @@ namespace GKUI.Forms
             }
 
             var servicesItems = new List<LaunchItem>() {
-                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIMap), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIMap), async (item) => {
                     GetBaseWin()?.Controller.ShowMap();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.RelationshipCalculator), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.RelationshipCalculator), async (item) => {
                     GetBaseWin()?.Controller.ShowRelationshipCalculator();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIStats), UIHelper.LoadResourceImage("Resources.btn_chart.gif"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIStats), UIHelper.LoadResourceImage("Resources.btn_chart.gif"), async (item) => {
                     GetBaseWin()?.Controller.ShowStats();
                 }),
 
-                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOrganizer), UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOrganizer), UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), async (item) => {
                     GetBaseWin()?.Controller.ShowOrganizer();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.Slideshow), UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.Slideshow), UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), async (item) => {
                     GetBaseWin()?.Controller.ShowSlideshow();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOptions), UIHelper.LoadResourceImage("Resources.btn_tools.gif"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOptions), UIHelper.LoadResourceImage("Resources.btn_tools.gif"), async (item) => {
                     var baseWin = GetBaseWin();
                     AppHost.Instance.ShowOptions(baseWin);
                 }),
 
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCompare), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCompare), async (item) => {
                     GetBaseWin()?.Controller.ShowTreeCompare();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeMerge), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeMerge), async (item) => {
                     GetBaseWin()?.Controller.ShowTreeMerge();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeSplit), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeSplit), async (item) => {
                     GetBaseWin()?.Controller.ShowTreeSplit();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.MergeDuplicates), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.MergeDuplicates), async (item) => {
                     var baseWin = GetBaseWin();
                     if (baseWin != null) BaseController.ShowRecMerge(baseWin, baseWin, null, null);
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.FragmentSearch), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.FragmentSearch), async (item) => {
                     GetBaseWin()?.Controller.ShowFamilyGroups();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCheck), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCheck), async (item) => {
                     GetBaseWin()?.Controller.ShowTreeCheck();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PatriarchsSearch), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PatriarchsSearch), async (item) => {
                     GetBaseWin()?.Controller.ShowPatSearch();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PlacesManager), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PlacesManager), async (item) => {
                     GetBaseWin()?.Controller.ShowPlacesManager();
                 }),
             };
@@ -186,7 +187,7 @@ namespace GKUI.Forms
             return new ObservableCollection<Grouping<string, LaunchItem>>(groups);
         }
 
-        private static BaseWinSDI GetBaseWin()
+        internal static BaseWinSDI GetBaseWin()
         {
             var result = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
             return result;
@@ -219,7 +220,7 @@ namespace GKUI.Forms
         public string Group { get; private set; }
         public string Title { get; private set; }
         public ImageSource Image { get; private set; }
-        public Action<LaunchItem> Action { get; private set; }
+        public Func<LaunchItem, Task> Action { get; private set; }
 
 
         public LaunchItem(string group, string title)
@@ -235,14 +236,20 @@ namespace GKUI.Forms
             Image = image;
         }
 
-        public LaunchItem(string group, string title, Action<LaunchItem> action)
+        public LaunchItem(string group, string title, Func<LaunchItem, Task> action)
         {
             Group = group;
             Title = title;
             Action = action;
         }
 
-        public LaunchItem(string group, string title, ImageSource image, Action<LaunchItem> action)
+        public LaunchItem(string title, Func<LaunchItem, Task> action)
+        {
+            Title = title;
+            Action = action;
+        }
+
+        public LaunchItem(string group, string title, ImageSource image, Func<LaunchItem, Task> action)
         {
             Group = group;
             Title = title;
