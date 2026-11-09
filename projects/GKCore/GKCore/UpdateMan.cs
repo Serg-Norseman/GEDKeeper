@@ -72,7 +72,8 @@ using GKCore.Utilities;
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.GetLastPackage()", ex);
+                // types and causes of errors are known (typically, host is unreachable); call stack is not needed
+                Logger.WriteError("UpdateMan.GetLastPackage(): " + ex.Message);
             }
 
             return result;

@@ -968,7 +968,9 @@ namespace GKCore.Utilities
 
         #region System Information
 
-        /*public static void LogSystemInfo()
+#if !NET8_0_OR_GREATER
+
+        public static void LogSystemInfo()
         {
             try {
                 int frequency = 0;
@@ -1048,7 +1050,9 @@ namespace GKCore.Utilities
             } catch (Exception ex) {
                 Logger.WriteError("SysUtils.LogSystemInfo()", ex);
             }
-        }*/
+        }
+
+#else
 
         public static void LogSystemInfo()
         {
@@ -1139,6 +1143,8 @@ namespace GKCore.Utilities
                 Logger.WriteError("SysUtils.LogSystemInfo()", ex);
             }
         }
+
+#endif
 
         #endregion
     }

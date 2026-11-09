@@ -7,7 +7,7 @@
  */
 
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using GDModel;
 using GKCore.Utilities;
@@ -20,7 +20,7 @@ namespace GKCore.Cultures
     /// </summary>
     public static class CulturesPool
     {
-        private static readonly Dictionary<GDMLanguageID, ICulture> fCultures = new Dictionary<GDMLanguageID, ICulture>();
+        private static readonly ConcurrentDictionary<GDMLanguageID, ICulture> fCultures = new ConcurrentDictionary<GDMLanguageID, ICulture>();
 
 
         public static ICulture DefineCulture(GDMLanguageID langID)
@@ -28,8 +28,7 @@ namespace GKCore.Cultures
             lock (fCultures) {
                 ICulture result;
                 if (!fCultures.TryGetValue(langID, out result)) {
-                    result = CreateCulture(langID);
-                    fCultures.Add(langID, result);
+                    result = fCultures.GetOrAdd(langID, (lid) => CreateCulture(lid));
                 }
                 return result;
             }

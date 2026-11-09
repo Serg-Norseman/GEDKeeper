@@ -36,7 +36,7 @@ using GKCore.Utilities;
 namespace GKCore
 {
 #if !TERM
-using GDModel.Providers.FamilyShow;
+    using GDModel.Providers.FamilyShow;
 #endif
 
     public class FileProps
@@ -942,7 +942,7 @@ using GDModel.Providers.FamilyShow;
                 } else {
                     var fileRef = mmRec.FileReferences[fileNum];
                     inputStream = MediaLoad(fileRef, throwException);
-                    if (inputStream != null) {
+                    if (inputStream != null && inputStream.Length != 0) {
                         var transformStream = gfxProvider.CheckOrientation(inputStream);
                         if (transformStream != inputStream) {
                             // image transformed
@@ -953,6 +953,8 @@ using GDModel.Providers.FamilyShow;
                             inputStream.Dispose();
                             inputStream = transformStream;
                         }
+                    } else {
+                        Logger.WriteError("BaseContext.LoadMediaImage(): inputStream is null or empty");
                     }
                 }
 
@@ -1148,7 +1150,7 @@ using GDModel.Providers.FamilyShow;
                     return false;
                 }
 
-                FileSave(gedcomProvider, fileName, strict);
+                await FileSave(gedcomProvider, fileName, strict);
                 return true;
             } catch (UnauthorizedAccessException) {
                 await AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
@@ -1202,7 +1204,7 @@ using GDModel.Providers.FamilyShow;
                         var copyFileName = Path.Combine(path, pureFileName + "_prev_format" + ext);
 
                         if (File.Exists(copyFileName)) {
-                            //Logger.WriteInfo("A copy of the previous version already exists.");
+                            Logger.WriteInfo("BaseContext.CheckFileVersion(): A copy of the previous version already exists.");
                         } else {
                             File.Copy(fFileName, copyFileName, true);
                             File.SetAttributes(copyFileName, FileAttributes.Archive | FileAttributes.ReadOnly);
@@ -1229,7 +1231,7 @@ using GDModel.Providers.FamilyShow;
             return fileName;
         }
 
-        private void FileSave(GEDCOMProvider gedcomProvider, string fileName, bool strict)
+        private async Task FileSave(GEDCOMProvider gedcomProvider, string fileName, bool strict)
         {
             fileName = CheckFileName(fileName);
 
@@ -1243,13 +1245,15 @@ using GDModel.Providers.FamilyShow;
                 // check for archive and storage, move them if the file changes location
                 MoveMediaContainers(oldFileName, fileName, IsGEDZIP());
 
-                BackupTool.ExtendedBackup(this, fileName);
-
                 fFileName = fileName;
             }
 
             GKUtils.PrepareHeader(fTree, fileName, defaultCharacterSet, false);
             gedcomProvider.SaveToFile(fileName, defaultCharacterSet);
+
+            if (!strict) {
+                await BackupTool.ExtendedBackup(this, fileName);
+            }
         }
 
         public void CriticalSave()

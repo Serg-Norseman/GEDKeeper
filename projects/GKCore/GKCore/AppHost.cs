@@ -1189,7 +1189,8 @@ namespace GKCore
                     pointsList.Add(pt);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.RequestGeoCoords()", ex);
+                // types and causes of errors are known (typically, (403) Forbidden); call stack is not needed
+                Logger.WriteError("AppHost.RequestGeoCoords(): " + ex.Message);
             }
         }
 

@@ -160,45 +160,51 @@ namespace GKUI.Platform
 
         public override bool ExecuteWork(ProgressStart proc, string title = "")
         {
-            var activeWnd = GetActiveWindow();
+            bool result = false;
 
-            using (var progressForm = ResolveDialog<IProgressDialog>()) {
-                var progForm = progressForm as CommonDialog;
+            Application.Instance.Invoke(() => {
+                var activeWnd = GetActiveWindow();
 
-                if (!string.IsNullOrEmpty(title))
-                    progressForm.SetTitle(title);
+                using (var progressForm = ResolveDialog<IProgressDialog>()) {
+                    var progForm = progressForm as CommonDialog;
 
-                var workerThread = new Thread((obj) => {
-                    proc((IProgressController)obj);
-                });
+                    if (!string.IsNullOrEmpty(title))
+                        progressForm.SetTitle(title);
 
-                DialogResult dialogResult = DialogResult.Abort;
-                try {
-                    workerThread.Start(progressForm);
+                    var workerThread = new Thread((obj) => {
+                        proc((IProgressController)obj);
+                    });
 
-                    progForm.ShowModal(activeWnd as Control);
-                    dialogResult = progForm.Result;
-                } finally {
-                    workerThread.Join();
-                }
+                    DialogResult dialogResult = DialogResult.Abort;
+                    try {
+                        workerThread.Start(progressForm);
 
-                if (dialogResult == DialogResult.Abort) {
-                    if (progressForm.ThreadError.Message == "") {
-                        // Abort means there were file IO errors
-                        StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.UnkProblem)*/);
-                    } else {
-                        // Abort means there were file IO errors
-                        StdDialogs.ShowAlert(progressForm.ThreadError.Message);
+                        progForm.ShowModal(activeWnd as Control);
+                        dialogResult = progForm.Result;
+                    } finally {
+                        workerThread.Join();
                     }
-                }
 
-                // None / Ok
-                if (dialogResult > DialogResult.Ok) {
-                    return false;
-                }
+                    if (dialogResult == DialogResult.Abort) {
+                        if (progressForm.ThreadError.Message == "") {
+                            // Abort means there were file IO errors
+                            StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.UnkProblem)*/);
+                        } else {
+                            // Abort means there were file IO errors
+                            StdDialogs.ShowAlert(progressForm.ThreadError.Message);
+                        }
+                    }
 
-                return true;
-            }
+                    // None / Ok
+                    if (dialogResult > DialogResult.Ok) {
+                        result = false;
+                    }
+
+                    result = true;
+                }
+            });
+
+            return result;
         }
 
         public override void CloseDependentWindows(IWindow owner)
