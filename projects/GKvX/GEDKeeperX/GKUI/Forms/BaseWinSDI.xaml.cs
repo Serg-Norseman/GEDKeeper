@@ -149,7 +149,7 @@ namespace GKUI.Forms
                 Children = { listFrame, summStack }
             };
 
-            var tabPage = new TabItem();
+            var tabPage = new TabPage();
             tabPage.HeaderText = pageText;
             tabPage.Content = spl;
             tabsRecords.AddTab(tabPage);

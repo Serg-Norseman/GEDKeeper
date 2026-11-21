@@ -35,10 +35,22 @@
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
 
+            <Style x:Key="dlgGridFooter" TargetType="Grid">
+                <Setter Property="ColumnSpacing" Value="8" />
+                <Setter Property="VerticalOptions" Value="End" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+            </Style>
+
             <Style x:Key="paddedDlg88" TargetType="StackLayout">
                 <Setter Property="Spacing" Value="8" />
                 <Setter Property="Padding" Value="8" />
                 <Setter Property="Orientation" Value="Vertical" />
+            </Style>
+
+            <Style x:Key="paddedGrid88" TargetType="Grid">
+                <Setter Property="ColumnSpacing" Value="8" />
+                <Setter Property="RowSpacing" Value="8" />
+                <Setter Property="Padding" Value="8" />
             </Style>
 
             <Style x:Key="InputBlock" TargetType="StackLayout">
@@ -59,6 +71,13 @@
                 <Setter Property="Padding" Value="1" />
                 <Setter Property="BorderColor" Value="Black" />
                 <Setter Property="CornerRadius" Value="2" />
+            </Style>
+
+            <Style x:Key="RoundBorder" TargetType="Border">
+                <Setter Property="Padding" Value="8" />
+                <Setter Property="Stroke" Value="Gray" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 6" />
             </Style>
 
         </ResourceDictionary>

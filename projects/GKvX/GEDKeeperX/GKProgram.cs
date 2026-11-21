@@ -13,7 +13,7 @@ using Microsoft.Maui.Hosting;
 
 namespace GEDKeeperX;
 
-public static class MauiProgram
+public static class GKProgram
 {
     public static MauiApp CreateMauiApp()
     {

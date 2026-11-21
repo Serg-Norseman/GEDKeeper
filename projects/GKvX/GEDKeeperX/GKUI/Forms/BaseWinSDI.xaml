@@ -32,7 +32,7 @@
     <StackLayout VerticalOptions="FillAndExpand" Spacing="0" Padding="0">
         <ProgressBar x:Name="progressBar" IsVisible="false" VerticalOptions="Start" />
 
-        <comcom:TabViewControl x:Name="tabsRecords" VerticalOptions="FillAndExpand" />
+        <comcom:GKTabControl x:Name="tabsRecords" VerticalOptions="FillAndExpand" />
 
         <ContentView x:Name="qsVertPlaceholder">
 

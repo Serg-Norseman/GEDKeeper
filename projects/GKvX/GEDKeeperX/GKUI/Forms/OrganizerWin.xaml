@@ -10,21 +10,21 @@
     Appearing="OrganizerWin_Load"
     x:TypeArguments="mvp:IOrganizerWin, contr:OrganizerController">
 
-    <comcom:TabViewControl>
-        <comcom:TabViewControl.ItemSource>
-            <comcom:TabItem x:Name="pageAddresses">
+    <comcom:GKTabControl>
+        <comcom:GKTabControl.ItemSource>
+            <comcom:TabPage x:Name="pageAddresses">
                 <comcom:GKSheetList x:Name="fAdrList" />
-            </comcom:TabItem>
-            <comcom:TabItem x:Name="pageTelephones">
+            </comcom:TabPage>
+            <comcom:TabPage x:Name="pageTelephones">
                 <comcom:GKSheetList x:Name="fPhonesList" />
-            </comcom:TabItem>
-            <comcom:TabItem x:Name="pageMails">
+            </comcom:TabPage>
+            <comcom:TabPage x:Name="pageMails">
                 <comcom:GKSheetList x:Name="fMailsList" />
-            </comcom:TabItem>
-            <comcom:TabItem x:Name="pageWebs">
+            </comcom:TabPage>
+            <comcom:TabPage x:Name="pageWebs">
                 <comcom:GKSheetList x:Name="fWebsList" />
-            </comcom:TabItem>
-        </comcom:TabViewControl.ItemSource>
-    </comcom:TabViewControl>
+            </comcom:TabPage>
+        </comcom:GKTabControl.ItemSource>
+    </comcom:GKTabControl>
 
 </forms:CommonDialog>

@@ -2,22 +2,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
-    xmlns:input="clr-namespace:GKUI.Platform.Components"
     x:Class="GKUI.Forms.ProgressDlg">
 
     <StackLayout Orientation="Vertical" Spacing="10">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto">
             <Grid.Children>
                 <Label Text="Loading" x:Name="lblTitle" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" />
                 <ProgressBar x:Name="ProgressBar1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" />

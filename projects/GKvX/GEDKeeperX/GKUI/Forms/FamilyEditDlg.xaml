@@ -42,28 +42,28 @@
             </Grid>
         </Frame>
 
-        <comcom:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageChilds">
+        <comcom:GKTabControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageChilds">
                     <comcom:GKSheetList x:Name="fChildrenList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageEvents">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageEvents">
                     <comcom:GKSheetList x:Name="fEventsList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageNotes">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageMultimedia">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageSources">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageSources">
                     <comcom:GKSheetList x:Name="fSourcesList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageUserRefs">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageUserRefs">
                     <comcom:GKSheetList x:Name="fUserRefList" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label x:Name="lblRestriction" />

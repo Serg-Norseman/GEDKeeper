@@ -38,16 +38,16 @@
             </Grid>
         </Frame>
 
-        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageNotes">
+        <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageMultimedia">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

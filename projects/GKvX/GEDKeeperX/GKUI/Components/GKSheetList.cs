@@ -12,6 +12,7 @@ using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Locales;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 
 namespace GKUI.Components
@@ -112,8 +113,8 @@ namespace GKUI.Components
             fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fList = new GKListView();
-            fList.HorizontalOptions = LayoutOptions.FillAndExpand;
-            fList.VerticalOptions = LayoutOptions.FillAndExpand;
+            fList.HorizontalOptions = LayoutOptions.Fill;
+            fList.VerticalOptions = LayoutOptions.Fill;
             fList.MouseDoubleClick += ItemEdit;
             fList.ItemSelected += List_SelectedIndexChanged;
 
@@ -122,14 +123,19 @@ namespace GKUI.Components
                 Spacing = 4,
                 Children = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste },
                 HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.FillAndExpand
+                VerticalOptions = LayoutOptions.Fill
             };
-
-            Content = new StackLayout() {
-                Orientation = StackOrientation.Horizontal,
-                Spacing = 4,
+            
+            var grid = new Grid() {
+                ColumnSpacing = 4,
                 Children = { fList, fToolBar }
             };
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            grid.SetColumn(fList, 0);
+            grid.SetColumn(fToolBar, 1);
+
+            Content = grid;
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;

@@ -8,10 +8,10 @@ using Microsoft.Maui.Graphics;
 namespace GKUI.Components;
 
 
-public class TabItem : ContentView
+public class TabPage : ContentView
 {
     public static readonly BindableProperty HeaderProperty =
-        BindableProperty.Create(nameof(HeaderText), typeof(string), typeof(TabItem), string.Empty);
+        BindableProperty.Create(nameof(HeaderText), typeof(string), typeof(TabPage), string.Empty);
 
     public string HeaderText
     {
@@ -21,19 +21,19 @@ public class TabItem : ContentView
 }
 
 
-public partial class TabViewControl : ContentView
+public partial class GKTabControl : ContentView
 {
     private readonly HorizontalStackLayout TabsHeaderContainer;
     private readonly ContentPresenter TabContentPresenter;
 
-    public ObservableCollection<TabItem> ItemSource { get; } = new ObservableCollection<TabItem>();
+    public ObservableCollection<TabPage> ItemSource { get; } = new ObservableCollection<TabPage>();
 
     public event EventHandler PositionChanged;
 
     #region Bindable Properties
 
     public static readonly BindableProperty SelectedTabIndexProperty =
-        BindableProperty.Create(nameof(SelectedTabIndex), typeof(int), typeof(TabViewControl), 0,
+        BindableProperty.Create(nameof(SelectedTabIndex), typeof(int), typeof(GKTabControl), 0,
             defaultBindingMode: BindingMode.TwoWay, propertyChanged: OnSelectedTabIndexChanged);
 
     public int SelectedTabIndex
@@ -43,8 +43,8 @@ public partial class TabViewControl : ContentView
     }
 
     public static readonly BindableProperty HeaderBackgroundColorProperty =
-        BindableProperty.Create(nameof(HeaderBackgroundColor), typeof(Color), typeof(TabViewControl), Colors.Transparent,
-            propertyChanged: (b, o, n) => ((TabViewControl)b).TabsHeaderContainer.Background = (Color)n);
+        BindableProperty.Create(nameof(HeaderBackgroundColor), typeof(Color), typeof(GKTabControl), Colors.Transparent,
+            propertyChanged: (b, o, n) => ((GKTabControl)b).TabsHeaderContainer.Background = (Color)n);
 
     public Color HeaderBackgroundColor
     {
@@ -53,8 +53,8 @@ public partial class TabViewControl : ContentView
     }
 
     public static readonly BindableProperty SelectedTabColorProperty =
-        BindableProperty.Create(nameof(SelectedTabColor), typeof(Color), typeof(TabViewControl), Colors.DeepSkyBlue,
-            propertyChanged: (b, o, n) => ((TabViewControl)b).UpdateTabVisuals());
+        BindableProperty.Create(nameof(SelectedTabColor), typeof(Color), typeof(GKTabControl), Colors.DeepSkyBlue,
+            propertyChanged: (b, o, n) => ((GKTabControl)b).UpdateTabVisuals());
 
     public Color SelectedTabColor
     {
@@ -63,8 +63,8 @@ public partial class TabViewControl : ContentView
     }
 
     public static readonly BindableProperty UnselectedTabColorProperty =
-        BindableProperty.Create(nameof(UnselectedTabColor), typeof(Color), typeof(TabViewControl), Colors.LightGray,
-            propertyChanged: (b, o, n) => ((TabViewControl)b).UpdateTabVisuals());
+        BindableProperty.Create(nameof(UnselectedTabColor), typeof(Color), typeof(GKTabControl), Colors.LightGray,
+            propertyChanged: (b, o, n) => ((GKTabControl)b).UpdateTabVisuals());
 
     public Color UnselectedTabColor
     {
@@ -73,8 +73,8 @@ public partial class TabViewControl : ContentView
     }
 
     public static readonly BindableProperty TabTextColorProperty =
-        BindableProperty.Create(nameof(TabTextColor), typeof(Color), typeof(TabViewControl), Colors.White,
-            propertyChanged: (b, o, n) => ((TabViewControl)b).UpdateTabVisuals());
+        BindableProperty.Create(nameof(TabTextColor), typeof(Color), typeof(GKTabControl), Colors.White,
+            propertyChanged: (b, o, n) => ((GKTabControl)b).UpdateTabVisuals());
 
     public Color TabTextColor
     {
@@ -84,7 +84,7 @@ public partial class TabViewControl : ContentView
 
     #endregion
 
-    public TabViewControl()
+    public GKTabControl()
     {
         TabsHeaderContainer = new HorizontalStackLayout {
             Spacing = 5,
@@ -114,7 +114,7 @@ public partial class TabViewControl : ContentView
         ItemSource.CollectionChanged += OnItemsChanged;
     }
 
-    public void AddTab(TabItem item)
+    public void AddTab(TabPage item)
     {
         if (item != null) {
             ItemSource.Add(item);
@@ -142,7 +142,7 @@ public partial class TabViewControl : ContentView
                 BindingContext = item
             };
 
-            button.SetBinding(Button.TextProperty, new Binding(nameof(TabItem.HeaderText), source: item));
+            button.SetBinding(Button.TextProperty, new Binding(nameof(TabPage.HeaderText), source: item));
 
             button.Clicked += OnTabButtonClicked;
 
@@ -162,7 +162,7 @@ public partial class TabViewControl : ContentView
 
     private void OnTabButtonClicked(object sender, EventArgs e)
     {
-        if (sender is Button button && button.BindingContext is TabItem clickedItem) {
+        if (sender is Button button && button.BindingContext is TabPage clickedItem) {
             int index = ItemSource.IndexOf(clickedItem);
             if (index != -1) {
                 SelectedTabIndex = index;
@@ -172,14 +172,14 @@ public partial class TabViewControl : ContentView
 
     private static void OnSelectedTabIndexChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable is TabViewControl control && newValue is int newIndex) {
+        if (bindable is GKTabControl control && newValue is int newIndex) {
             if (newIndex >= 0 && newIndex < control.ItemSource.Count) {
                 control.SelectTab(control.ItemSource[newIndex]);
             }
         }
     }
 
-    private void SelectTab(TabItem selectedItem)
+    private void SelectTab(TabPage selectedItem)
     {
         if (TabContentPresenter.Content != selectedItem) {
             TabContentPresenter.Content = selectedItem;

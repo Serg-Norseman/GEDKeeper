@@ -7,16 +7,15 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.SourceCitEditDlg"
     x:TypeArguments="mvp:ISourceCitEditDlg, contr:SourceCitEditDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
+        <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
 
-                <xp:TabItem x:Name="pageCommon">
+                <comcom:TabPage x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
@@ -40,18 +39,18 @@
 
                         <Label HorizontalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabPage>
 
-                <xp:TabItem x:Name="pageOther">
+                <comcom:TabPage x:Name="pageOther">
                     <StackLayout Orientation="Vertical">
                         <comcom:GKDateControl x:Name="dateCtl" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
 
                         <Editor x:Name="txtText" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
+                </comcom:TabPage>
 
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

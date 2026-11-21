@@ -12,13 +12,13 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl x:Name="tabsFilters" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageFieldsFilter">
+        <comcom:GKTabControl x:Name="tabsFilters" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageFieldsFilter">
                     <comcom:FilterGridView x:Name="filterView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnReset" Style="{StaticResource dlgBtn}" Clicked="btnReset_Click" />

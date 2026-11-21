@@ -13,9 +13,9 @@ using GKUI.Components;
 
 namespace GKUI.Platform
 {
-    public sealed class TabPageHandler : ControlHandler<TabItem, TabPageHandler>, ITabPage
+    public sealed class TabPageHandler : ControlHandler<TabPage, TabPageHandler>, ITabPage
     {
-        public TabPageHandler(TabItem control) : base(control)
+        public TabPageHandler(TabPage control) : base(control)
         {
         }
 
@@ -43,11 +43,11 @@ namespace GKUI.Platform
     }
 
 
-    public sealed class TabControlHandler : BaseControlHandler<TabViewControl, TabControlHandler>, ITabControl
+    public sealed class TabControlHandler : BaseControlHandler<GKTabControl, TabControlHandler>, ITabControl
     {
         private class TabPageItems : ITabPages
         {
-            private readonly TabViewControl fTabControl;
+            private readonly GKTabControl fTabControl;
 
             public ITabPage this[int index]
             {
@@ -64,7 +64,7 @@ namespace GKUI.Platform
                 get { return fTabControl.ItemSource.Count; }
             }
 
-            public TabPageItems(TabViewControl control)
+            public TabPageItems(GKTabControl control)
             {
                 fTabControl = control;
             }
@@ -72,7 +72,7 @@ namespace GKUI.Platform
 
         private readonly TabPageItems fItems;
 
-        public TabControlHandler(TabViewControl control) : base(control)
+        public TabControlHandler(GKTabControl control) : base(control)
         {
             fItems = new TabPageItems(control);
         }

@@ -12,9 +12,9 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageCommon">
+        <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4">
                             <Grid.ColumnDefinitions>
@@ -40,19 +40,19 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pagePhones">
+                <comcom:TabPage x:Name="pagePhones">
                     <comcom:GKSheetList x:Name="fPhonesList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageEmails">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageEmails">
                     <comcom:GKSheetList x:Name="fMailsList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageWebPages">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageWebPages">
                     <comcom:GKSheetList x:Name="fWebsList" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

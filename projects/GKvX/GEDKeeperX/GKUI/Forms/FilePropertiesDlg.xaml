@@ -12,9 +12,9 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageAuthor">
+        <comcom:GKTabControl HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageAuthor">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start">
                             <Grid.ColumnDefinitions>
@@ -37,13 +37,13 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageOther">
+                <comcom:TabPage x:Name="pageOther">
                     <comcom:GKListView x:Name="lvRecordStats" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

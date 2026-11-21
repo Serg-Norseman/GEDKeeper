@@ -7,15 +7,14 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.TTRecMergeDlg"
     x:TypeArguments="mvp:IRecMergeDlg, contr:RecMergeController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageMerge">
+        <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageMerge">
 
                     <StackLayout Orientation="Vertical">
 
@@ -65,9 +64,9 @@
 
                     </StackLayout>
 
-                </xp:TabItem>
+                </comcom:TabPage>
 
-                <xp:TabItem x:Name="pageMergeOptions">
+                <comcom:TabPage x:Name="pageMergeOptions">
                     <StackLayout Orientation="Vertical">
                         <comcom:GroupBox x:Name="rgMode">
                             <comcom:RadioButtonGroupView>
@@ -102,9 +101,9 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
     </StackLayout>
 

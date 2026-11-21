@@ -12,9 +12,9 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageCommon">
+        <comcom:GKTabControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageCommon">
                     <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
@@ -64,19 +64,19 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageNotes">
+                <comcom:TabPage x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageMultimedia">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageSources">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageSources">
                     <comcom:GKSheetList x:Name="fSourcesList" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnAddress" Style="{StaticResource dlgBtn}" Clicked="btnAddress_Click" />

@@ -73,7 +73,7 @@ namespace GKUI.Platform
             return Application.Current.Windows[0].Page as MainPage;
         }
 
-        private Page GetCurrentPage()
+        private static Page GetCurrentPage()
         {
             var navPage = GetNavPage();
             return (navPage == null) ? null : navPage.CurrentPage;
@@ -148,7 +148,7 @@ namespace GKUI.Platform
             fPlatformSpecifics?.CloseApplication();
         }
 
-        private IProgressController GetProgressController()
+        private static IProgressController GetProgressController()
         {
             var progressCtl = GetCurrentPage() as IProgressController;
             return (progressCtl == null) ? new ProgressControllerStub() : progressCtl;
@@ -323,8 +323,8 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(XFIKRadioButton), typeof(RadioButtonHandler));
-            ControlsManager.RegisterHandlerType(typeof(TabItem), typeof(TabPageHandler));
-            ControlsManager.RegisterHandlerType(typeof(TabViewControl), typeof(TabControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKTabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKTreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));

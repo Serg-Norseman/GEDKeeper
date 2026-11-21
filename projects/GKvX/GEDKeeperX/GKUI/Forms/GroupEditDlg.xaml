@@ -10,35 +10,34 @@
     x:Class="GKUI.Forms.GroupEditDlg"
     x:TypeArguments="mvp:IGroupEditDlg, contr:GroupEditDlgController">
 
-    <StackLayout Style="{StaticResource paddedDlg88}">
+    <Grid Style="{StaticResource paddedDlg88}" RowDefinitions="Auto, *, Auto">
 
-        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <StackLayout Orientation="Horizontal" Spacing="4">
-                <Label x:Name="lblName" />
-                <Entry x:Name="edName" HorizontalOptions="FillAndExpand" />
-            </StackLayout>
-        </Frame>
+        <Border Grid.Row="0" Style="{StaticResource RoundBorder}" VerticalOptions="Start" HorizontalOptions="Fill">
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="4">
+                <Label x:Name="lblName" Grid.Column="0" />
+                <Entry x:Name="edName" Grid.Column="1" HorizontalOptions="Fill" />
+            </Grid>
+        </Border>
 
-        <comcom:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
-                <comcom:TabItem x:Name="pageMembers">
+        <comcom:GKTabControl Grid.Row="1" VerticalOptions="Fill" HorizontalOptions="Fill">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageMembers">
                     <comcom:GKSheetList x:Name="fMembersList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageNotes">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </comcom:TabItem>
-                <comcom:TabItem x:Name="pageMultimedia">
+                </comcom:TabPage>
+                <comcom:TabPage x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
-                </comcom:TabItem>
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
-        <StackLayout Style="{StaticResource dlgFooter}">
-            <Label HorizontalOptions="FillAndExpand" />
+        <StackLayout Grid.Row="2" Style="{StaticResource dlgFooter}" HorizontalOptions="End">
             <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
             <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
         </StackLayout>
 
-    </StackLayout>
+    </Grid>
 
 </forms:CommonDialog>

@@ -31,13 +31,13 @@
             </Grid>
         </Frame>
 
-        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:TabViewControl.ItemSource>
-                <xp:TabItem x:Name="pageNotes">
+        <xp:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:GKTabControl.ItemSource>
+                <xp:TabPage x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </xp:TabItem>
-            </xp:TabViewControl.ItemSource>
-        </xp:TabViewControl>
+                </xp:TabPage>
+            </xp:GKTabControl.ItemSource>
+        </xp:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

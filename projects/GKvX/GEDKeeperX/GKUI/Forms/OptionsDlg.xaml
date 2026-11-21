@@ -12,10 +12,10 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:TabViewControl x:Name="PageControl1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <comcom:TabViewControl.ItemSource>
+        <comcom:GKTabControl x:Name="PageControl1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
 
-                <comcom:TabItem x:Name="pageCommon">
+                <comcom:TabPage x:Name="pageCommon">
                     <StackLayout Orientation="Horizontal">
 
                         <comcom:GroupBox x:Name="grpOther">
@@ -88,9 +88,9 @@
 
                         </StackLayout>
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageMultimedia">
+                <comcom:TabPage x:Name="pageMultimedia">
                     <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
 
                         <comcom:CheckBox x:Name="chkRemovableMediaWarning" />
@@ -109,18 +109,18 @@
                         <comcom:CheckBox x:Name="chkHighlightInaccessibleFiles" />
 
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageCharts">
+                <comcom:TabPage x:Name="pageCharts">
 
-                    <comcom:TabViewControl x:Name="tabsCharts">
-                        <comcom:TabViewControl.ItemSource>
-                            <comcom:TabItem x:Name="pageTreeChart">
+                    <comcom:GKTabControl x:Name="tabsCharts">
+                        <comcom:GKTabControl.ItemSource>
+                            <comcom:TabPage x:Name="pageTreeChart">
 
-                                <comcom:TabViewControl x:Name="tabsTreeCharts">
-                                    <comcom:TabViewControl.ItemSource>
+                                <comcom:GKTabControl x:Name="tabsTreeCharts">
+                                    <comcom:GKTabControl.ItemSource>
 
-                                        <comcom:TabItem x:Name="pageTreePersons">
+                                        <comcom:TabPage x:Name="pageTreePersons">
                                             <comcom:GroupBox x:Name="grpTreePersons">
                                                 <ScrollView>
                                                     <StackLayout Orientation="Vertical">
@@ -183,9 +183,9 @@
                                                     </StackLayout>
                                                 </ScrollView>
                                             </comcom:GroupBox>
-                                        </comcom:TabItem>
+                                        </comcom:TabPage>
 
-                                        <comcom:TabItem x:Name="pageTreeDesign">
+                                        <comcom:TabPage x:Name="pageTreeDesign">
                                             <StackLayout Spacing="4">
 
                                                 <Grid ColumnSpacing="4" RowSpacing="4">
@@ -269,28 +269,28 @@
                                                 </Grid>
 
                                             </StackLayout>
-                                        </comcom:TabItem>
+                                        </comcom:TabPage>
 
-                                    </comcom:TabViewControl.ItemSource>
-                                </comcom:TabViewControl>
+                                    </comcom:GKTabControl.ItemSource>
+                                </comcom:GKTabControl>
 
-                            </comcom:TabItem>
+                            </comcom:TabPage>
 
-                            <comcom:TabItem x:Name="pageAncCircle">
+                            <comcom:TabPage x:Name="pageAncCircle">
                                 <comcom:ACOptionsControl x:Name="ancOptionsControl1" />
-                            </comcom:TabItem>
+                            </comcom:TabPage>
 
-                        </comcom:TabViewControl.ItemSource>
-                    </comcom:TabViewControl>
+                        </comcom:GKTabControl.ItemSource>
+                    </comcom:GKTabControl>
 
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageUIView">
+                <comcom:TabPage x:Name="pageUIView">
 
-                    <comcom:TabViewControl x:Name="PageControl2">
-                        <comcom:TabViewControl.ItemSource>
+                    <comcom:GKTabControl x:Name="PageControl2">
+                        <comcom:GKTabControl.ItemSource>
 
-                            <comcom:TabItem x:Name="pageViewCommon">
+                            <comcom:TabPage x:Name="pageViewCommon">
                                 <StackLayout Orientation="Vertical">
 
                                     <Grid ColumnSpacing="4" RowSpacing="4">
@@ -348,9 +348,9 @@
 
                                     <Label VerticalOptions="FillAndExpand" />
                                 </StackLayout>
-                            </comcom:TabItem>
+                            </comcom:TabPage>
 
-                            <comcom:TabItem x:Name="pageViewPersons">
+                            <comcom:TabPage x:Name="pageViewPersons">
                                 <StackLayout Orientation="Horizontal" Spacing="8">
 
                                     <comcom:GKListView x:Name="lstPersonColumns" HorizontalOptions="StartAndExpand" VerticalOptions="FillAndExpand" />
@@ -362,9 +362,9 @@
                                     </StackLayout>
 
                                 </StackLayout>
-                            </comcom:TabItem>
+                            </comcom:TabPage>
 
-                            <comcom:TabItem x:Name="pageNavigation">
+                            <comcom:TabPage x:Name="pageNavigation">
                                 <StackLayout Orientation="Vertical" Spacing="8">
 
                                     <comcom:CheckBox x:Name="chkUseSurnamesInPSF" />
@@ -378,9 +378,9 @@
                                     <comcom:CheckBox x:Name="chkSAFByAllNames" />
 
                                 </StackLayout>
-                            </comcom:TabItem>
+                            </comcom:TabPage>
 
-                            <comcom:TabItem x:Name="pageGeo">
+                            <comcom:TabPage x:Name="pageGeo">
                                 <StackLayout Orientation="Vertical" Spacing="8">
 
                                     <Grid ColumnSpacing="4" RowSpacing="4">
@@ -400,14 +400,14 @@
                                     <comcom:CheckBox x:Name="chkSearchPlacesWithoutCoords" />
 
                                 </StackLayout>
-                            </comcom:TabItem>
+                            </comcom:TabPage>
 
-                        </comcom:TabViewControl.ItemSource>
-                    </comcom:TabViewControl>
+                        </comcom:GKTabControl.ItemSource>
+                    </comcom:GKTabControl>
 
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pagePedigree">
+                <comcom:TabPage x:Name="pagePedigree">
 
                     <comcom:GroupBox x:Name="grpPedigree">
                         <StackLayout Orientation="Vertical">
@@ -442,9 +442,9 @@
                         </StackLayout>
                     </comcom:GroupBox>
 
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageSpecials">
+                <comcom:TabPage x:Name="pageSpecials">
                     <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
                         <StackLayout Orientation="Horizontal" Spacing="4">
                             <Label x:Name="lblChartWindowsShowMode" />
@@ -460,9 +460,9 @@
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageGEDCOM" HeaderText="GEDCOM">
+                <comcom:TabPage x:Name="pageGEDCOM" HeaderText="GEDCOM">
                     <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
                         <comcom:CheckBox x:Name="chkCharsetDetection" />
                         <comcom:CheckBox x:Name="chkDisableNonStdFeatures" />
@@ -470,14 +470,14 @@
                         <comcom:CheckBox x:Name="chkUseExtendedNotes" />
                         <comcom:CheckBox x:Name="chkKeepRichNames" />
                     </StackLayout>
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-                <comcom:TabItem x:Name="pageEventTypes">
+                <comcom:TabPage x:Name="pageEventTypes">
                     <comcom:GKSheetList x:Name="slEventTypes" />
-                </comcom:TabItem>
+                </comcom:TabPage>
 
-            </comcom:TabViewControl.ItemSource>
-        </comcom:TabViewControl>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnResetDefaults" Style="{StaticResource dlgBtn}" Clicked="btnResetDefaults_Click" />
