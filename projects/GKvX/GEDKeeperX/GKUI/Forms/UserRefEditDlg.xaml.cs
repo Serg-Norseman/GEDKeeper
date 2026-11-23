@@ -9,7 +9,6 @@
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -22,26 +21,12 @@ namespace GKUI.Forms
             set { fController.UserReference = value; }
         }
 
-        #region View Interface
-
-        IComboBox IUserRefEditDlg.Ref
-        {
-            get { return GetControlHandler<IComboBox>(cmbRef); }
-        }
-
-        IComboBox IUserRefEditDlg.RefType
-        {
-            get { return GetControlHandler<IComboBox>(cmbRefType); }
-        }
-
-        #endregion
-
         public UserRefEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
             fController = new UserRefEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

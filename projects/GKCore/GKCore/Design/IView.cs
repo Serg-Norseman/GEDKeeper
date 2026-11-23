@@ -10,11 +10,19 @@ using System;
 
 namespace GKCore.Design
 {
+    public interface IViewController : IDisposable
+    {
+        T GetControlHandler<T>(object control) where T : class, IControl;
+        T GetControl<T>(string controlName) where T : class, IControl;
+    }
+
+
     public interface IView : IBaseControl, IDisposable
     {
+        IViewController Controller { get; }
+
         void Close();
         object GetControl(string controlName);
-        T GetCoreControl<T>(string controlName) where T : class, IControl;
         void SetTitle(string value);
         void SetToolTip(object component, string toolTip);
     }

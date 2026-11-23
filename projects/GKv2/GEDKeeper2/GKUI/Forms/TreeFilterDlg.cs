@@ -36,12 +36,12 @@ namespace GKUI.Forms
 
         INumericBox ITreeFilterDlg.YearNum
         {
-            get { return GetControlHandler<INumericBox>(edYear); }
+            get { return fController.GetControlHandler<INumericBox>(edYear); }
         }
 
         IComboBox ITreeFilterDlg.SourceCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbSource); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
         }
 
         ICheckBox ITreeFilterDlg.HideDatesAfterBoundaryCheck
@@ -63,7 +63,7 @@ namespace GKUI.Forms
             fPersonsList = new GKSheetList(Panel1);
 
             fController = new TreeFilterDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void rbCutNoneClick(object sender, EventArgs e)

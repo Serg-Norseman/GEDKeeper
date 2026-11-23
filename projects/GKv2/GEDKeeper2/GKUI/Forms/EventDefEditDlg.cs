@@ -26,27 +26,27 @@ namespace GKUI.Forms
 
         ITextBox IEventDefEditDlg.NameText
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         IComboBox IEventDefEditDlg.TagCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbTag); }
+            get { return fController.GetControlHandler<IComboBox>(cmbTag); }
         }
 
         ITextBox IEventDefEditDlg.TypeText
         {
-            get { return GetControlHandler<ITextBox>(txtType); }
+            get { return fController.GetControlHandler<ITextBox>(txtType); }
         }
 
         ICheckBox IEventDefEditDlg.EnabledCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkEnabled); }
+            get { return fController.GetControlHandler<ICheckBox>(chkEnabled); }
         }
 
         ITextBox IEventDefEditDlg.DescText
         {
-            get { return GetControlHandler<ITextBox>(txtDesc); }
+            get { return fController.GetControlHandler<ITextBox>(txtDesc); }
         }
 
         #endregion
@@ -56,6 +56,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new EventDefEditDlgController(this);
+            fController.InitView(null);
         }
 
         private void edName_KeyPress(object sender, KeyPressEventArgs e)

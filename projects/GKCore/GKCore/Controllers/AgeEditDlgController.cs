@@ -41,6 +41,12 @@ namespace GKCore.Controllers
 
         public AgeEditDlgController(IAgeEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.RelativeCombo1.ReadOnly = true;
             fView.RelativeCombo2.ReadOnly = true;
 

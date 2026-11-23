@@ -44,6 +44,12 @@ namespace GKCore.Controllers
 
         public MediaEditDlgController(IMediaEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.MediaType.ReadOnly = true;
             fView.StoreType.ReadOnly = true;
 
@@ -52,11 +58,6 @@ namespace GKCore.Controllers
             }
 
             fView.Name.Activate();
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.FilesList.ListModel = new MediaFilesListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
@@ -66,7 +67,7 @@ namespace GKCore.Controllers
             fView.FilesList.OnModify += ModifyFilesSheet;
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.FilesList.ListModel.SaveSettings();
             fView.NotesList.ListModel.SaveSettings();

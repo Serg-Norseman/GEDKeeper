@@ -38,15 +38,16 @@ namespace GKCore.Controllers
 
         public TreeFilterDlgController(ITreeFilterDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.SourceCombo.ReadOnly = true;
 
             fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
             fView.PersonsList.OnModify += ListModify;
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fPersonModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.RPIndividuals), false);
             fView.PersonsList.ListView.ListMan = fPersonModel;

@@ -44,12 +44,12 @@ namespace GKUI.Forms
 
         ITextBox ILocationLinkEditDlg.TopLevelText
         {
-            get { return GetControlHandler<ITextBox>(txtTopLevel); }
+            get { return fController.GetControlHandler<ITextBox>(txtTopLevel); }
         }
 
         IDateControl ILocationLinkEditDlg.DateCtl
         {
-            get { return GetControlHandler<IDateControl>(dateCtl); }
+            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new LocationLinkEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnLocationAdd_Click(object sender, EventArgs e)

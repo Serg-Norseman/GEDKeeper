@@ -15,10 +15,8 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordInfoDlg : CommonDialog, IRecordInfoDlg
+    public sealed partial class RecordInfoDlg : CommonDialog<IRecordInfoDlg, RecordInfoDlgController>, IRecordInfoDlg
     {
-        private readonly RecordInfoDlgController fController;
-
         public GDMRecord Record
         {
             get { return fController.Record; }
@@ -39,7 +37,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new RecordInfoDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.UpdateView();
         }
 

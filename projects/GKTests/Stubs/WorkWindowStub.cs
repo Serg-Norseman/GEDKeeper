@@ -16,6 +16,8 @@ namespace GKTests.Stubs
 {
     internal class WorkWindowStub : BaseObject, IWorkWindow
     {
+        public IViewController Controller { get; }
+
         public bool Enabled { get; set; }
         public bool Visible { get; set; }
 
@@ -37,7 +39,6 @@ namespace GKTests.Stubs
         public void SetLocale() {}
         public void Show(bool showInTaskbar) {}
         public object GetControl(string controlName) { return null; }
-        T IView.GetCoreControl<T>(string controlName) { return default(T); }
         public void SetToolTip(object component, string toolTip) { }
         public void SetTitle(string value) { }
     }

@@ -41,9 +41,13 @@ namespace GKCore.Controllers
         public OptionsDlgController(IOptionsDlg view) : base(view)
         {
             fIsTerm = !AppHost.Instance.HasFeatureSupport(Feature.Graphics);
-
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListModel.CreateListColumns();
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
 
             FillGeoSearchCountries();
 

@@ -23,7 +23,7 @@ namespace GKCore.Controllers
         {
             IStatisticsWin view = CreateMockView();
             var controller = new StatisticsWinController(view, null);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
             controller.UpdateStatsTypes();
 
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {

@@ -42,7 +42,6 @@ namespace GKCore.Controllers
         public LanguageSelectDlgController(ILanguageSelectDlg view) : base(view)
         {
             fLangsModel = new LangsListModel();
-            fView.LanguagesList.ListMan = fLangsModel;
 
             if (GlobalOptions.Instance.Languages.Count > 0) {
                 fLangsModel.DataSource = GlobalOptions.Instance.Languages;
@@ -54,7 +53,13 @@ namespace GKCore.Controllers
                 langs.Add(fDefLang);
                 fLangsModel.DataSource = langs;
             }
+        }
 
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
+            fView.LanguagesList.ListMan = fLangsModel;
             fView.LanguagesList.UpdateContents();
             fView.LanguagesList.Activate();
             fView.LanguagesList.SelectItem(fDefLang);

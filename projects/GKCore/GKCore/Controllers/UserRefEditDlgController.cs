@@ -17,11 +17,17 @@ using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class UserRefEditDlgController : DialogController<IUserRefEditDlg>
     {
+        #region Design components
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblReference;
+        private IComboBox _cmbRef;
+        private ILabel _lblRefType;
+        private IComboBox _cmbRefType;
+        #endregion
+
         private GDMUserReference fUserReference;
 
         public GDMUserReference UserReference
@@ -38,23 +44,29 @@ namespace GKCore.Controllers
 
         public UserRefEditDlgController(IUserRefEditDlg view) : base(view)
         {
-            fView.Ref.Add("");
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
+            _cmbRef.Add("");
             for (SpecialUserRef ur = SpecialUserRef.urRI_StGeorgeCross; ur <= SpecialUserRef.urLast; ur++) {
                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
-                fView.Ref.Add(sur);
+                _cmbRef.Add(sur);
             }
-            fView.Ref.ReadOnly = false;
+            _cmbRef.ReadOnly = false;
 
-            fView.RefType.Add("");
-            fView.RefType.Add(LangMan.LS(GKData.URTreeNoteType));
-            fView.RefType.ReadOnly = false;
+            _cmbRefType.Add("");
+            _cmbRefType.Add(LangMan.LS(GKData.URTreeNoteType));
+            _cmbRefType.ReadOnly = false;
         }
 
         public override bool Accept()
         {
             try {
-                fUserReference.StringValue = fView.Ref.Text;
-                fUserReference.ReferenceType = fView.RefType.Text;
+                fUserReference.StringValue = _cmbRef.Text;
+                fUserReference.ReferenceType = _cmbRefType.Text;
 
                 if (!Validate(fUserReference)) return false;
 
@@ -67,25 +79,25 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Ref.Text = fUserReference.StringValue;
-            fView.RefType.Text = fUserReference.ReferenceType;
+            _cmbRef.Text = fUserReference.StringValue;
+            _cmbRefType.Text = fUserReference.ReferenceType;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.UserRef));
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblReference").Text = LangMan.LS(LSID.Reference);
-            GetControl<ILabel>("lblRefType").Text = LangMan.LS(LSID.Type);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblReference.Text = LangMan.LS(LSID.Reference);
+            _lblRefType.Text = LangMan.LS(LSID.Type);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

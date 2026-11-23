@@ -21,7 +21,7 @@ namespace GKCore.Controllers
         {
             ITreeMergeDlg view = CreateMockView();
             var controller = new TreeMergeController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             //SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
             controller.Merge();

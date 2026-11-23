@@ -20,7 +20,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new ChronicleController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void WidgetForm_Load(object sender, EventArgs e)

@@ -20,7 +20,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
+    public sealed partial class RecordSelectDlg : CommonDialog<IRecordSelectDialog, RecordSelectDlgController>, IRecordSelectDialog
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -39,8 +39,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        private readonly RecordSelectDlgController fController;
-
 
         public GDMRecord ResultRecord { get; set; }
 
@@ -48,7 +46,7 @@ namespace GKUI.Forms
 
         IComboBox IRecordSelectDialog.FilterCombo
         {
-            get { return GetControlHandler<IComboBox>(txtFastFilter); }
+            get { return fController.GetControlHandler<IComboBox>(txtFastFilter); }
         }
 
         ITextBox IRecordSelectDialog.FilterText
@@ -76,7 +74,7 @@ namespace GKUI.Forms
             txtFastFilter.KeyDown += Ctrl_KeyDown;
 
             fController = new RecordSelectDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.RecType = recType;
 
             fltCtl.ParamsChanged += txtFastFilter_TextChanged;

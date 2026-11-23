@@ -23,7 +23,7 @@ namespace GKCore.Controllers
         {
             IRelationshipCalculatorDlg view = CreateMockView();
             var controller = new RelationshipCalculatorDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.SetRec1(null);
             controller.SetRec2(null);

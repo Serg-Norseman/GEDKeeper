@@ -43,27 +43,27 @@ namespace GKUI.Forms
 
         ITextBox IAddressEditDlg.Country
         {
-            get { return GetControlHandler<ITextBox>(txtCountry); }
+            get { return fController.GetControlHandler<ITextBox>(txtCountry); }
         }
 
         ITextBox IAddressEditDlg.State
         {
-            get { return GetControlHandler<ITextBox>(txtState); }
+            get { return fController.GetControlHandler<ITextBox>(txtState); }
         }
 
         ITextBox IAddressEditDlg.City
         {
-            get { return GetControlHandler<ITextBox>(txtCity); }
+            get { return fController.GetControlHandler<ITextBox>(txtCity); }
         }
 
         ITextBox IAddressEditDlg.PostalCode
         {
-            get { return GetControlHandler<ITextBox>(txtPostalCode); }
+            get { return fController.GetControlHandler<ITextBox>(txtPostalCode); }
         }
 
         ITextBox IAddressEditDlg.AddressLine
         {
-            get { return GetControlHandler<ITextBox>(txtAddress); }
+            get { return fController.GetControlHandler<ITextBox>(txtAddress); }
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new AddressEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

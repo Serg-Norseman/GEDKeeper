@@ -23,24 +23,24 @@ namespace GKCore.Controllers
         {
             IPersonsFilterDlg view = CreateMockView();
             var controller = new PersonsFilterDlgController(view, RecordsListModel<GDMRecord>.Create(fBaseWin.Context, GDMRecordType.rtIndividual, false));
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
             controller.UpdateView();
 
-            view.GetCoreControl<IRadioButton>("rbAliveBefore").Checked = true;
-            view.GetCoreControl<IRadioButton>("rbAll").Checked = true;
+            controller.GetControl<IRadioButton>("rbAliveBefore").Checked = true;
+            controller.GetControl<IRadioButton>("rbAll").Checked = true;
 
-            view.GetCoreControl<IRadioButton>("rbSexMale").Checked = true;
-            view.GetCoreControl<IRadioButton>("rbOnlyLive").Checked = true;
+            controller.GetControl<IRadioButton>("rbSexMale").Checked = true;
+            controller.GetControl<IRadioButton>("rbOnlyLive").Checked = true;
 
-            view.GetCoreControl<IComboBox>("txtName").Text = "*Ivan*";
+            controller.GetControl<IComboBox>("txtName").Text = "*Ivan*";
 
-            view.GetCoreControl<IComboBox>("cmbResidence").Text = "*test place*";
+            controller.GetControl<IComboBox>("cmbResidence").Text = "*test place*";
 
-            view.GetCoreControl<IComboBox>("cmbEventVal").Text = "*test event*";
+            controller.GetControl<IComboBox>("cmbEventVal").Text = "*test event*";
 
-            view.GetCoreControl<IComboBox>("cmbGroup").Text = "- any -";
+            controller.GetControl<IComboBox>("cmbGroup").Text = "- any -";
 
-            view.GetCoreControl<IComboBox>("cmbSource").Text = "- any -";
+            controller.GetControl<IComboBox>("cmbSource").Text = "- any -";
 
             controller.Accept();
         }
@@ -48,6 +48,13 @@ namespace GKCore.Controllers
         private static IPersonsFilterDlg CreateMockView()
         {
             var view = Substitute.For<IPersonsFilterDlg>();
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<IButton>(view, "btnReset");
+            SubstituteControl<ITabPage>(view, "pageFieldsFilter");
+            view.FilterGrid.Returns(Substitute.For<IFilterGridView>());
+
             SubstituteControl<ITabPage>(view, "pageSpecificFilter");
             SubstituteControl<IRadioButton>(view, "rbAll");
             SubstituteControl<IRadioButton>(view, "rbOnlyLive");
@@ -62,6 +69,17 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblGroups");
             SubstituteControl<ILabel>(view, "lblSources");
             SubstituteControl<ICheckBox>(view, "chkOnlyPatriarchs");
+
+            SubstituteControl<IRadioButton>(view, "rbAliveBefore");
+            SubstituteControl<IRadioButton>(view, "rbAll");
+            SubstituteControl<IRadioButton>(view, "rbSexMale");
+            SubstituteControl<IRadioButton>(view, "rbOnlyLive");
+            SubstituteControl<IComboBox>(view, "txtName");
+            SubstituteControl<IComboBox>(view, "cmbResidence");
+            SubstituteControl<IComboBox>(view, "cmbEventVal");
+            SubstituteControl<IComboBox>(view, "cmbGroup");
+            SubstituteControl<IComboBox>(view, "cmbSource");
+
             return view;
         }
     }

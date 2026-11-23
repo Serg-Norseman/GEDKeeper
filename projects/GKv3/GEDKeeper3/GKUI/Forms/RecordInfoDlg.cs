@@ -17,7 +17,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordInfoDlg : CommonDialog, IRecordInfoDlg
+    public sealed partial class RecordInfoDlg : CommonDialog<IRecordInfoDlg, RecordInfoDlgController>, IRecordInfoDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -26,8 +26,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly RecordInfoDlgController fController;
 
         public GDMRecord Record
         {
@@ -49,7 +47,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new RecordInfoDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.UpdateView();
         }
 

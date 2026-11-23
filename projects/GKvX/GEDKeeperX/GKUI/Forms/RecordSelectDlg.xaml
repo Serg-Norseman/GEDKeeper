@@ -7,7 +7,8 @@
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    x:Class="GKUI.Forms.RecordSelectDlg">
+    x:Class="GKUI.Forms.RecordSelectDlg"
+    x:TypeArguments="mvp:IRecordSelectDialog, contr:RecordSelectDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 

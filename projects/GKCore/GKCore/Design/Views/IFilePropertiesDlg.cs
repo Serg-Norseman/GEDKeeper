@@ -6,17 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-
 namespace GKCore.Design.Views
 {
     public interface IFilePropertiesDlg : ICommonDialog
     {
-        IListView RecordStats { get; }
-
-        IComboBox Language { get; }
-        ITextBox Name { get; }
-        ITextBox Address { get; }
-        ITextBox Tel { get; }
     }
 }

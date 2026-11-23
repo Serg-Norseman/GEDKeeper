@@ -24,7 +24,7 @@ namespace GKCore.Controllers
             var controller = new RepositoryEditDlgController(view);
 
             var baseWin = GetBaseSubst();
-            controller.Init(baseWin);
+            controller.InitView(baseWin);
 
             var rep = baseWin.Context.Tree.CreateRepository();
 

@@ -22,19 +22,18 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form, IView, IThemedForm
+    public abstract class CommonForm : Form, IView, IThemedForm
     {
-        private readonly ControlsManager fControlsManager;
+        public abstract IViewController Controller { get; }
 
         public CommonForm()
         {
-            fControlsManager = new ControlsManager(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fControlsManager.Clear();
+                Controller?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -60,11 +59,6 @@ namespace GKUI.Forms
             Focus();
         }
 
-        protected T GetControlHandler<T>(object control) where T : class, IControl
-        {
-            return fControlsManager.GetControlHandler<T>(control);
-        }
-
         public object GetControl(string controlName)
         {
             var field = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -73,11 +67,6 @@ namespace GKUI.Forms
                 result = this.FindChild(controlName);
             }
             return result;
-        }
-
-        public T GetCoreControl<T>(string controlName) where T : class, IControl
-        {
-            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -103,8 +92,14 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonWindow : CommonForm, IWindow
+    public class CommonWindow<TView, TController> : CommonForm, IWindow
+        where TView : IView
+        where TController : FormController<TView>
     {
+        protected TController fController;
+
+        public override IViewController Controller { get { return fController; } }
+
         public virtual void Show(bool showInTaskbar)
         {
             ShowInTaskbar = showInTaskbar;
@@ -126,26 +121,6 @@ namespace GKUI.Forms
             AppHost.Instance.CloseWindow(this);
             base.OnClosed(e);
         }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class CommonWindow<TView, TController> : CommonWindow
-        where TView : IView
-        where TController : FormController<TView>
-    {
-        protected TController fController;
-
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fController != null) fController.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         public override void ApplyTheme()
         {
@@ -158,9 +133,8 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IThemedForm
+    public class SimpleDialog : Dialog<DialogResult>
     {
-        private readonly ControlsManager fControlsManager;
         private readonly TaskCompletionSource<bool> fTaskSource;
 
         public Task<bool> DialogResultTask
@@ -181,14 +155,12 @@ namespace GKUI.Forms
             }
         }
 
-        public CommonDialog()
+        public SimpleDialog()
         {
             Maximizable = false;
             Minimizable = false;
             Resizable = false;
             ShowInTaskbar = false;
-
-            fControlsManager = new ControlsManager(this);
 
             fTaskSource = new TaskCompletionSource<bool>();
 
@@ -204,10 +176,56 @@ namespace GKUI.Forms
             });*/
         }
 
+        protected new void Close(DialogResult dialogResult)
+        {
+            if (dialogResult != DialogResult.None) {
+                fTaskSource.SetResult(dialogResult == DialogResult.Ok);
+                DialogResult = dialogResult;
+            }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // To correctly close the dialog using the button in the dialog header.
+            if (!e.Cancel && !fTaskSource.Task.IsCompleted)
+                fTaskSource.SetResult(false);
+
+            base.OnClosing(e);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            /*BringToFront();
+            if (ParentWindow != null) {
+                ParentWindow.SendToBack();
+            }*/
+
+            // Only for Windows7
+            if (SysUtils.GetOSType() < OSType.Windows8 && Owner != null) {
+                UIHelper.CenterFormByParent(this, Owner.Bounds);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class CommonDialog : SimpleDialog, ICommonDialog, IThemedForm
+    {
+        public abstract IViewController Controller { get; }
+
+
+        public CommonDialog()
+        {
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fControlsManager.Clear();
+                Controller?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -233,38 +251,6 @@ namespace GKUI.Forms
             Focus();
         }
 
-        protected new void Close(DialogResult dialogResult)
-        {
-            if (dialogResult != DialogResult.None) {
-                fTaskSource.SetResult(dialogResult == DialogResult.Ok);
-                DialogResult = dialogResult;
-            }
-        }
-
-        protected virtual void AcceptClickHandler(object sender, EventArgs e)
-        {
-            Close(DialogResult.Ok);
-        }
-
-        protected virtual void CancelClickHandler(object sender, EventArgs e)
-        {
-            Close(DialogResult.Cancel);
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            // To correctly close the dialog using the button in the dialog header.
-            if (!e.Cancel && !fTaskSource.Task.IsCompleted)
-                fTaskSource.SetResult(false);
-
-            base.OnClosing(e);
-        }
-
-        protected T GetControlHandler<T>(object control) where T : class, IControl
-        {
-            return fControlsManager.GetControlHandler<T>(control);
-        }
-
         public object GetControl(string controlName)
         {
             var field = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -275,30 +261,10 @@ namespace GKUI.Forms
             return result;
         }
 
-        public T GetCoreControl<T>(string controlName) where T : class, IControl
-        {
-            return fControlsManager.GetCoreControl<T>(controlName);
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             ApplyTheme();
-        }
-
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-
-            /*BringToFront();
-            if (ParentWindow != null) {
-                ParentWindow.SendToBack();
-            }*/
-
-            // Only for Windows7
-            if (SysUtils.GetOSType() < OSType.Windows8 && Owner != null) {
-                UIHelper.CenterFormByParent(this, Owner.Bounds);
-            }
         }
 
         public virtual void ApplyTheme()
@@ -318,21 +284,15 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog<TView, TController> : CommonDialog
+    public abstract class CommonDialog<TView, TController> : CommonDialog
         where TView : IView
         where TController : DialogController<TView>
     {
         protected TController fController;
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fController != null) fController.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        public override IViewController Controller { get { return fController; } }
 
-        protected override void AcceptClickHandler(object sender, EventArgs e)
+        protected virtual void AcceptClickHandler(object sender, EventArgs e)
         {
             try {
                 if (fController.Accept())
@@ -342,7 +302,7 @@ namespace GKUI.Forms
             }
         }
 
-        protected override async void CancelClickHandler(object sender, EventArgs e)
+        protected virtual async void CancelClickHandler(object sender, EventArgs e)
         {
             try {
                 if (await fController.Cancel())

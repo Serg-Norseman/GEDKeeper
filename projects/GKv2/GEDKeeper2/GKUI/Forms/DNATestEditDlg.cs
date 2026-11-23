@@ -42,52 +42,52 @@ namespace GKUI.Forms
 
         ITextBox IDNATestEditDlg.TestName
         {
-            get { return GetControlHandler<ITextBox>(txtTestName); }
+            get { return fController.GetControlHandler<ITextBox>(txtTestName); }
         }
 
         IDateBox IDNATestEditDlg.Date
         {
-            get { return GetControlHandler<IDateBox>(dateCtl); }
+            get { return fController.GetControlHandler<IDateBox>(dateCtl); }
         }
 
         IComboBox IDNATestEditDlg.Agency
         {
-            get { return GetControlHandler<IComboBox>(cmbAgency); }
+            get { return fController.GetControlHandler<IComboBox>(cmbAgency); }
         }
 
         IComboBox IDNATestEditDlg.MHaplogroup
         {
-            get { return GetControlHandler<IComboBox>(cmbMHaplogroup); }
+            get { return fController.GetControlHandler<IComboBox>(cmbMHaplogroup); }
         }
 
         IComboBox IDNATestEditDlg.YHaplogroup
         {
-            get { return GetControlHandler<IComboBox>(cmbYHaplogroup); }
+            get { return fController.GetControlHandler<IComboBox>(cmbYHaplogroup); }
         }
 
         IComboBox IDNATestEditDlg.StoreType
         {
-            get { return GetControlHandler<IComboBox>(cmbStoreType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbStoreType); }
         }
 
         ITextBox IDNATestEditDlg.File
         {
-            get { return GetControlHandler<ITextBox>(txtFileRef); }
+            get { return fController.GetControlHandler<ITextBox>(txtFileRef); }
         }
 
         IButton IDNATestEditDlg.FileSelectButton
         {
-            get { return GetControlHandler<IButton>(btnFileSelect); }
+            get { return fController.GetControlHandler<IButton>(btnFileSelect); }
         }
 
         IComboBox IDNATestEditDlg.FileFormat
         {
-            get { return GetControlHandler<IComboBox>(cmbFileFormat); }
+            get { return fController.GetControlHandler<IComboBox>(cmbFileFormat); }
         }
 
         IComboBox IDNATestEditDlg.Restriction
         {
-            get { return GetControlHandler<IComboBox>(cmbRestriction); }
+            get { return fController.GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace GKUI.Forms
             fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new DNATestEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnFileSelect_Click(object sender, EventArgs e)

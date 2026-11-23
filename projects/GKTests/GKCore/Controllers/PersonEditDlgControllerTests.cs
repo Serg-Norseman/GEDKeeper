@@ -25,7 +25,7 @@ namespace GKCore.Controllers
         {
             IStdPersonEditDlg view = CreateMockView();
             var controller = new StdPersonEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var indiRec = fBaseWin.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
             controller.IndividualRecord = indiRec;

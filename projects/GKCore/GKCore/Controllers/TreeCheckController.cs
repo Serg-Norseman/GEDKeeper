@@ -37,9 +37,9 @@ namespace GKCore.Controllers
             fOptions.CheckIndividualPlaces = false;
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             var listModel = new ProblemsListModel(fBase.Context);
             listModel.DataSource = fChecksList;

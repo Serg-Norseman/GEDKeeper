@@ -50,27 +50,27 @@ namespace GKUI.Forms
 
         ITextBox ISourceCitEditDlg.Page
         {
-            get { return GetControlHandler<ITextBox>(txtPage); }
+            get { return fController.GetControlHandler<ITextBox>(txtPage); }
         }
 
         IComboBox ISourceCitEditDlg.Certainty
         {
-            get { return GetControlHandler<IComboBox>(txtCertainty); }
+            get { return fController.GetControlHandler<IComboBox>(txtCertainty); }
         }
 
         IComboBox ISourceCitEditDlg.Source
         {
-            get { return GetControlHandler<IComboBox>(cmbSource); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
         }
 
         IDateControl ISourceCitEditDlg.DataDate
         {
-            get { return GetControlHandler<IDateControl>(dateCtl); }
+            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
         }
 
         ITextBox ISourceCitEditDlg.DataText
         {
-            get { return GetControlHandler<ITextBox>(txtText); }
+            get { return fController.GetControlHandler<ITextBox>(txtText); }
         }
 
         #endregion
@@ -80,7 +80,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new SourceCitEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnSourceAdd_Click(object sender, EventArgs e)

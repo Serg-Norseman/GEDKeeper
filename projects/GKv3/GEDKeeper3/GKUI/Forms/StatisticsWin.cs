@@ -19,7 +19,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
+    public sealed partial class StatisticsWin : CommonWindow<IStatisticsWin, StatisticsWinController>, IStatisticsWin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -34,8 +34,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly StatisticsWinController fController;
 
         #region View Interface
 
@@ -56,7 +54,7 @@ namespace GKUI.Forms
 
         IComboBox IStatisticsWin.StatsType
         {
-            get { return GetControlHandler<IComboBox>(cbType); }
+            get { return Controller?.GetControlHandler<IComboBox>(cbType); }
         }
 
         #endregion
@@ -72,7 +70,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new StatisticsWinController(this, selectedRecords);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)

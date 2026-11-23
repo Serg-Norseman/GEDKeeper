@@ -20,25 +20,23 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form, IView, IThemedForm
+    public abstract class CommonForm : Form, IView, IThemedForm
     {
         private readonly IContainer fComponents;
         private readonly ToolTip fToolTip;
 
-        private readonly ControlsManager fControlsManager;
+        public abstract IViewController Controller { get; }
 
         public CommonForm()
         {
             fComponents = new Container();
             fToolTip = new ToolTip(this.fComponents);
-
-            fControlsManager = new ControlsManager(this);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fControlsManager.Clear();
+                Controller?.Dispose();
                 if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
@@ -60,11 +58,6 @@ namespace GKUI.Forms
             }
         }
 
-        protected T GetControlHandler<T>(object control) where T : class, IControl
-        {
-            return fControlsManager.GetControlHandler<T>(control);
-        }
-
         public object GetControl(string controlName)
         {
             var field = this.GetType().GetField(controlName, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -74,11 +67,6 @@ namespace GKUI.Forms
                 result = (controls != null && controls.Length > 0) ? controls[0] : null;
             }
             return result;
-        }
-
-        public T GetCoreControl<T>(string controlName) where T : class, IControl
-        {
-            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -106,8 +94,14 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonWindow : CommonForm, IWindow
+    public abstract class CommonWindow<TView, TController> : CommonForm, IWindow
+        where TView : IView
+        where TController : FormController<TView>
     {
+        protected TController fController;
+
+        public override IViewController Controller { get { return fController; } }
+
         public virtual void Show(bool showInTaskbar)
         {
             ShowInTaskbar = showInTaskbar;
@@ -131,26 +125,6 @@ namespace GKUI.Forms
             }
             base.OnClosed(e);
         }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class CommonWindow<TView, TController> : CommonWindow
-        where TView : IView
-        where TController : FormController<TView>
-    {
-        protected TController fController;
-
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fController != null) fController.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         public override void ApplyTheme()
         {
@@ -163,7 +137,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : CommonForm, ICommonDialog
+    public abstract class CommonDialog : CommonForm, ICommonDialog
     {
         private readonly TaskCompletionSource<bool> fTaskSource;
 
@@ -215,13 +189,7 @@ namespace GKUI.Forms
     {
         protected TController fController;
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (fController != null) fController.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        public override IViewController Controller { get { return fController; } }
 
         protected override void AcceptClickHandler(object sender, EventArgs e)
         {

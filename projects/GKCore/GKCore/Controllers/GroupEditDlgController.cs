@@ -38,21 +38,22 @@ namespace GKCore.Controllers
 
         public GroupEditDlgController(IGroupEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.MembersList.OnModify += ModifyMembersSheet;
 
             fView.Name.Activate();
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.MembersList.ListModel = new GroupMembersListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.MembersList.ListModel.SaveSettings();
             fView.NotesList.ListModel.SaveSettings();

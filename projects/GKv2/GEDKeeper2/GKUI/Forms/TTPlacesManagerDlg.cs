@@ -26,7 +26,7 @@ namespace GKUI.Forms
 
         ITextBox IPlacesManagerDlg.FilterBox
         {
-            get { return GetControlHandler<ITextBox>(txtFilter); }
+            get { return fController.GetControlHandler<ITextBox>(txtFilter); }
         }
 
         IListView IPlacesManagerDlg.PlacesList
@@ -52,7 +52,7 @@ namespace GKUI.Forms
             ListPlaces.ContextMenuStrip = contextMenu;
 
             fController = new PlacesManagerController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

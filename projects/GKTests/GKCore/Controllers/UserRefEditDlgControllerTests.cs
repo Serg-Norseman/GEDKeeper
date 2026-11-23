@@ -22,6 +22,7 @@ namespace GKCore.Controllers
         {
             IUserRefEditDlg view = CreateMockView();
             var controller = new UserRefEditDlgController(view);
+            controller.InitView(null);
             controller.ApplyTheme();
 
             var userRef = new GDMUserReference();
@@ -29,8 +30,8 @@ namespace GKCore.Controllers
             controller.UserReference = userRef;
             Assert.AreEqual(userRef, controller.UserReference);
 
-            view.Ref.Text = "sample text2";
-            view.RefType.Text = "sample text3";
+            controller.GetControl<IComboBox>("cmbRef").Text = "sample text2";
+            controller.GetControl<IComboBox>("cmbRefType").Text = "sample text3";
 
             controller.Accept();
             controller.UpdateView();

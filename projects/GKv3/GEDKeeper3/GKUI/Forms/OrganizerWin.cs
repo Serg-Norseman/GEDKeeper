@@ -63,7 +63,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new OrganizerController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void OrganizerWin_Load(object sender, EventArgs e)

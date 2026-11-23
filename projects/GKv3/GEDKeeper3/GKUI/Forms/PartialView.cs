@@ -27,7 +27,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class PartialView : CommonWindow, IPartialView
+    public sealed partial class PartialView : CommonWindow<IPartialView, PartialViewController>, IPartialView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -59,8 +59,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly PartialViewController fController;
-
 
         public IWindow OwnerWindow
         {
@@ -73,7 +71,8 @@ namespace GKUI.Forms
             XamlReader.Load(this);
             InitializeComponent();
 
-            fController = new PartialViewController(this, baseWin, recordType);
+            fController = new PartialViewController(this, recordType);
+            fController.InitView(baseWin);
 
             CreatePage(recordType);
 

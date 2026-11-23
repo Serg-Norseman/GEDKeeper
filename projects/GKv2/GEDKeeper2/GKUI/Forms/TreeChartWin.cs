@@ -25,7 +25,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public partial class TreeChartWin : PrintableForm, ITreeChartWin
+    public partial class TreeChartWin : PrintableForm<ITreeChartWin, TreeChartWinController>, ITreeChartWin
     {
         #region Design components
 
@@ -35,8 +35,6 @@ namespace GKUI.Forms
         private ToolStripMenuItem miGensInfDescendants;
 
         #endregion
-
-        private readonly TreeChartWinController fController;
 
         private GDMIndividualRecord fPerson;
 
@@ -105,7 +103,7 @@ namespace GKUI.Forms
             miHideDescSpouses.Checked = fTreeBox.Options.HideDescSpouses;
 
             fController = new TreeChartWinController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             SetupDepth();
         }

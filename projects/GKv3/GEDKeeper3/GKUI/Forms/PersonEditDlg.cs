@@ -178,62 +178,62 @@ namespace GKUI.Forms
 
         ITextBox IPersonEditDlg.Father
         {
-            get { return GetControlHandler<ITextBox>(txtFather); }
+            get { return fController.GetControlHandler<ITextBox>(txtFather); }
         }
 
         ITextBox IPersonEditDlg.Mother
         {
-            get { return GetControlHandler<ITextBox>(txtMother); }
+            get { return fController.GetControlHandler<ITextBox>(txtMother); }
         }
 
         ILabel IPersonEditDlg.SurnameLabel
         {
-            get { return GetControlHandler<ILabel>(lblSurname); }
+            get { return fController.GetControlHandler<ILabel>(lblSurname); }
         }
 
         ITextBox IPersonEditDlg.Surname
         {
-            get { return GetControlHandler<ITextBox>(txtSurname); }
+            get { return fController.GetControlHandler<ITextBox>(txtSurname); }
         }
 
         ITextBox IPersonEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         IComboBox IPersonEditDlg.Patronymic
         {
-            get { return GetControlHandler<IComboBox>(cmbPatronymic); }
+            get { return fController.GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
         ITextBox IPersonEditDlg.Nickname
         {
-            get { return GetControlHandler<ITextBox>(txtNickname); }
+            get { return fController.GetControlHandler<ITextBox>(txtNickname); }
         }
 
         ITextBox IPersonEditDlg.MarriedSurname
         {
-            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
+            get { return fController.GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
         IComboBox IPersonEditDlg.RestrictionCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbRestriction); }
+            get { return fController.GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
         IComboBox IPersonEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbSex); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSex); }
         }
 
         ICheckBox IPersonEditDlg.Patriarch
         {
-            get { return GetControlHandler<ICheckBox>(chkPatriarch); }
+            get { return fController.GetControlHandler<ICheckBox>(chkPatriarch); }
         }
 
         ICheckBox IPersonEditDlg.Bookmark
         {
-            get { return GetControlHandler<ICheckBox>(chkBookmark); }
+            get { return fController.GetControlHandler<ICheckBox>(chkBookmark); }
         }
 
         #endregion
@@ -248,7 +248,7 @@ namespace GKUI.Forms
             imgPortrait.AddButton(btnPortraitDelete);
 
             fController = new StdPersonEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

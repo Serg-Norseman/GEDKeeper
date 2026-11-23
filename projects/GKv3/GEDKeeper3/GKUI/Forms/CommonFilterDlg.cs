@@ -73,7 +73,7 @@ namespace GKUI.Forms
             fListMan = listMan;
 
             fController = new CommonFilterDlgController(this, listMan);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             filterView.ListMan = fListMan;
 

@@ -67,22 +67,22 @@ namespace GKUI.Forms
 
         IComboBox IFamilyEditDlg.MarriageStatus
         {
-            get { return GetControlHandler<IComboBox>(cmbMarriageStatus); }
+            get { return fController.GetControlHandler<IComboBox>(cmbMarriageStatus); }
         }
 
         IComboBox IFamilyEditDlg.Restriction
         {
-            get { return GetControlHandler<IComboBox>(cmbRestriction); }
+            get { return fController.GetControlHandler<IComboBox>(cmbRestriction); }
         }
 
         ITextBox IFamilyEditDlg.Husband
         {
-            get { return GetControlHandler<ITextBox>(txtHusband); }
+            get { return fController.GetControlHandler<ITextBox>(txtHusband); }
         }
 
         ITextBox IFamilyEditDlg.Wife
         {
-            get { return GetControlHandler<ITextBox>(txtWife); }
+            get { return fController.GetControlHandler<ITextBox>(txtWife); }
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace GKUI.Forms
             fUserRefList = new GKSheetList(pageUserRefs);
 
             fController = new FamilyEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)

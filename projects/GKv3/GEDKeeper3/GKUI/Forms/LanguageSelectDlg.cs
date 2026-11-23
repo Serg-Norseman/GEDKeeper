@@ -47,6 +47,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new LanguageSelectDlgController(this);
+            fController.InitView(null);
         }
     }
 }

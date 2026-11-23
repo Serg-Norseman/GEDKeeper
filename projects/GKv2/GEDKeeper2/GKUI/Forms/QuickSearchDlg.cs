@@ -17,10 +17,8 @@ using GKCore.Plugins;
 
 namespace GKUI.Forms
 {
-    public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
+    public sealed partial class QuickSearchDlg : CommonWindow<IQuickSearchDlg, QuickSearchDlgController>, IQuickSearchDlg
     {
-        private readonly QuickSearchDlgController fController;
-
         public IWindow OwnerWindow
         {
             get { return fController.WorkWindow; }
@@ -30,7 +28,7 @@ namespace GKUI.Forms
 
         ITextBox IQuickSearchDlg.SearchPattern
         {
-            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
+            get { return fController.GetControlHandler<ITextBox>(txtSearchPattern); }
         }
 
         #endregion
@@ -81,7 +79,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetLocale()
+        public override void SetLocale()
         {
             fController.SetLocale();
         }

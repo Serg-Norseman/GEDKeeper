@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
         ITextBox IGroupEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(edName); }
+            get { return fController.GetControlHandler<ITextBox>(edName); }
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace GKUI.Forms
             fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new GroupEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

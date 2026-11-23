@@ -35,57 +35,57 @@ namespace GKUI.Forms
 
         ILabel IPersonalNameEditDlg.SurnameLabel
         {
-            get { return GetControlHandler<ILabel>(lblSurname); }
+            get { return fController.GetControlHandler<ILabel>(lblSurname); }
         }
 
         ITextBox IPersonalNameEditDlg.Surname
         {
-            get { return GetControlHandler<ITextBox>(txtSurname); }
+            get { return fController.GetControlHandler<ITextBox>(txtSurname); }
         }
 
         ITextBox IPersonalNameEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         ITextBox IPersonalNameEditDlg.Patronymic
         {
-            get { return GetControlHandler<ITextBox>(txtPatronymic); }
+            get { return fController.GetControlHandler<ITextBox>(txtPatronymic); }
         }
 
         IComboBox IPersonalNameEditDlg.NameType
         {
-            get { return GetControlHandler<IComboBox>(cmbNameType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbNameType); }
         }
 
         ITextBox IPersonalNameEditDlg.NamePrefix
         {
-            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
+            get { return fController.GetControlHandler<ITextBox>(txtNamePrefix); }
         }
 
         ITextBox IPersonalNameEditDlg.Nickname
         {
-            get { return GetControlHandler<ITextBox>(txtNickname); }
+            get { return fController.GetControlHandler<ITextBox>(txtNickname); }
         }
 
         ITextBox IPersonalNameEditDlg.SurnamePrefix
         {
-            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
+            get { return fController.GetControlHandler<ITextBox>(txtSurnamePrefix); }
         }
 
         ITextBox IPersonalNameEditDlg.NameSuffix
         {
-            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
+            get { return fController.GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
         ITextBox IPersonalNameEditDlg.MarriedSurname
         {
-            get { return GetControlHandler<ITextBox>(txtMarriedSurname); }
+            get { return fController.GetControlHandler<ITextBox>(txtMarriedSurname); }
         }
 
         IComboBox IPersonalNameEditDlg.Language
         {
-            get { return GetControlHandler<IComboBox>(cmbLanguage); }
+            get { return fController.GetControlHandler<IComboBox>(cmbLanguage); }
         }
 
         #endregion
@@ -100,7 +100,7 @@ namespace GKUI.Forms
             txtPatronymic.Behaviors.Add(new NameValidationBehavior());
 
             fController = new PersonalNameEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void txtXName_Leave(object sender, EventArgs e)

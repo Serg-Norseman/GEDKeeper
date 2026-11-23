@@ -47,6 +47,7 @@ namespace GKUI.Forms
             cmbGeocoder.AddItem("OSM");
 
             fController = new OptionsDlgController(this);
+            fController.InitView(null);
             fController.UpdateView();
 
             chkSeparateDepth_CheckedChanged(null, null);

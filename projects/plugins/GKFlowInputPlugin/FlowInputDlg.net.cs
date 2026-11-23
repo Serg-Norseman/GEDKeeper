@@ -15,11 +15,10 @@ using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Plugins;
 using GKUI.Components;
-using GKUI.Forms;
 
 namespace GKFlowInputPlugin
 {
-    public partial class FlowInputDlg : CommonForm
+    public partial class FlowInputDlg : Form
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -111,7 +110,7 @@ namespace GKFlowInputPlugin
         {
             btnParse.Text = fLangMan.LS(PLS.DlgAppend);
             btnClose.Text = fLangMan.LS(PLS.DlgClose);
-            SetTitle(fLangMan.LS(PLS.FlowInput));
+            Title = fLangMan.LS(PLS.FlowInput);
             tsSimpleInput.Text = fLangMan.LS(PLS.InputSimple);
             btnMale.Text = new string(fLangMan.LS(PLS.SexM)[0], 1);
             //this.btnFemale.Text = new string(LangMan.LS(PLS.67][0], 1);

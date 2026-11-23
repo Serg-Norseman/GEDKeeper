@@ -21,17 +21,6 @@ namespace GKCore.Controllers
     {
         public StdPersonEditDlgController(IStdPersonEditDlg view) : base(view)
         {
-            fView.ChildrenList.OnModify += ModifyChildrenSheet;
-            fView.ChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fView.ChildrenList.OnModify -= ModifyChildrenSheet;
-                fView.ChildrenList.OnItemValidating -= PersonEditDlg_ItemValidating;
-            }
-            base.Dispose(disposing);
         }
 
         private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
@@ -47,20 +36,26 @@ namespace GKCore.Controllers
             }
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.ChildrenList.OnModify += ModifyChildrenSheet;
+            fView.ChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
 
             fView.ChildrenList.ListModel = new IndividualChildrenListModel(fView, baseWin, fLocalUndoman);
             fView.DNATestsList.ListModel = new DNATestsListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
-            base.Done();
+            base.DoneView();
 
             fView.ChildrenList.ListModel.SaveSettings();
             fView.DNATestsList.ListModel.SaveSettings();
+
+            fView.ChildrenList.OnModify -= ModifyChildrenSheet;
+            fView.ChildrenList.OnItemValidating -= PersonEditDlg_ItemValidating;
         }
 
         protected override void UpdateListModels(GDMIndividualRecord indiRec)

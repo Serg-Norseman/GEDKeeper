@@ -3,6 +3,8 @@
 
 https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/?view=net-maui-10.0
 
+Disappearing - change to Unloaded!
+
 ## Disabled and removed features
 
 1. Plugins -> Monolith

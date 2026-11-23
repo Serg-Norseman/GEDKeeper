@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             IPersonalNameEditDlg view = CreateMockView();
             var controller = new PersonalNameEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var person = new GDMIndividualRecord(fBaseWin.Context.Tree);
             var personalName = new GDMPersonalName();

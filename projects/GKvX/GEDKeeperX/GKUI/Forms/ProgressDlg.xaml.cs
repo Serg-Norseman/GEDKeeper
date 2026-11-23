@@ -20,6 +20,8 @@ namespace GKUI.Forms
         private bool fRequiresClose;
         private int fVal;
 
+        public override IViewController Controller { get { return null; } }
+
         public ProgressDlg()
         {
             InitializeComponent();

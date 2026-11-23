@@ -34,16 +34,16 @@ namespace GKCore.Controllers
             fPhonesList = new List<OrgItem>();
             fMailsList = new List<OrgItem>();
             fWebsList = new List<OrgItem>();
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
 
             fView.AdrList.Buttons = EnumSet<SheetButton>.Create();
             fView.PhonesList.Buttons = EnumSet<SheetButton>.Create();
             fView.MailsList.Buttons = EnumSet<SheetButton>.Create();
             fView.WebsList.Buttons = EnumSet<SheetButton>.Create();
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.AdrList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Address));
             fView.AdrList.ListView.UpdateContents();

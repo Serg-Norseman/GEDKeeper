@@ -79,27 +79,27 @@ namespace GKUI.Forms
 
         IComboBox IMediaEditDlg.MediaType
         {
-            get { return GetControlHandler<IComboBox>(cmbMediaType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbMediaType); }
         }
 
         IComboBox IMediaEditDlg.StoreType
         {
-            get { return GetControlHandler<IComboBox>(cmbStoreType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbStoreType); }
         }
 
         ITextBox IMediaEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         ITextBox IMediaEditDlg.File
         {
-            get { return GetControlHandler<ITextBox>(txtFile); }
+            get { return fController.GetControlHandler<ITextBox>(txtFile); }
         }
 
         IButton IMediaEditDlg.FileSelectButton
         {
-            get { return GetControlHandler<IButton>(btnFileSelect); }
+            get { return fController.GetControlHandler<IButton>(btnFileSelect); }
         }
 
         #endregion
@@ -111,7 +111,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new MediaEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

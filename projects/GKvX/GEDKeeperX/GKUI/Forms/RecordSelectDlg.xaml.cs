@@ -17,12 +17,11 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
+    public sealed partial class RecordSelectDlg : CommonDialog<IRecordSelectDialog, RecordSelectDlgController>, IRecordSelectDialog
     {
 
 
         private GKListView fListRecords;
-        private readonly RecordSelectDlgController fController;
 
 
         public GDMRecord ResultRecord { get; set; }
@@ -36,7 +35,7 @@ namespace GKUI.Forms
 
         ITextBox IRecordSelectDialog.FilterText
         {
-            get { return GetControlHandler<ITextBox>(txtFastFilter); }
+            get { return fController.GetControlHandler<ITextBox>(txtFastFilter); }
         }
 
         IFilterControl IRecordSelectDialog.FilterCtl
@@ -57,7 +56,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new RecordSelectDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.RecType = recType;
 
             fltCtl.ParamsChanged += txtFastFilter_TextChanged;

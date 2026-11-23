@@ -65,6 +65,11 @@ namespace GKCore.Controllers
             fEntries = new List<LocEntry>();
             fEntriesListModel = new LocEntriesListModel();
             fEntriesListModel.DataSource = fEntries;
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
 
             var lvEntries = GetControl<IListView>("lvEntries");
             lvEntries.ListMan = fEntriesListModel;

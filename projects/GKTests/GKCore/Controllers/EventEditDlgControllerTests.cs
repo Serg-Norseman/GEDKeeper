@@ -24,7 +24,7 @@ namespace GKCore.Controllers
         {
             IEventEditDlg view = CreateMockView();
             var controller = new EventEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var evt = new GDMIndividualEvent();
             controller.Event = evt;

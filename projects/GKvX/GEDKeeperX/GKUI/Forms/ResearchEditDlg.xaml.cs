@@ -48,32 +48,32 @@ namespace GKUI.Forms
 
         ITextBox IResearchEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         IComboBox IResearchEditDlg.Priority
         {
-            get { return GetControlHandler<IComboBox>(cmbPriority); }
+            get { return fController.GetControlHandler<IComboBox>(cmbPriority); }
         }
 
         IComboBox IResearchEditDlg.Status
         {
-            get { return GetControlHandler<IComboBox>(cmbStatus); }
+            get { return fController.GetControlHandler<IComboBox>(cmbStatus); }
         }
 
         IDateBox IResearchEditDlg.StartDate
         {
-            get { return GetControlHandler<IDateBox>(txtStartDate); }
+            get { return fController.GetControlHandler<IDateBox>(txtStartDate); }
         }
 
         IDateBox IResearchEditDlg.StopDate
         {
-            get { return GetControlHandler<IDateBox>(txtStopDate); }
+            get { return fController.GetControlHandler<IDateBox>(txtStopDate); }
         }
 
         INumericBox IResearchEditDlg.Percent
         {
-            get { return GetControlHandler<INumericBox>(nudPercent); }
+            get { return fController.GetControlHandler<INumericBox>(nudPercent); }
         }
 
         #endregion
@@ -83,7 +83,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new ResearchEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

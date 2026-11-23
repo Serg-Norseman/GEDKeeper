@@ -43,26 +43,27 @@ namespace GKCore.Controllers
 
         public StatisticsWinController(IStatisticsWin view, List<GDMRecord> selectedRecords) : base(view)
         {
+            fSelectedRecords = selectedRecords;
+            fCurrentValues = new List<StatsItem>();
+            fSummaryValues = new List<SummaryItem>();
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.StatsType.ReadOnly = true;
 
-            fSelectedRecords = selectedRecords;
-
-            fCurrentValues = new List<StatsItem>();
             var listModel = new StatItemsListModel("-");
             listModel.DataSource = fCurrentValues;
             fView.ListStats.ListMan = listModel;
             fView.ListStats.UpdateContents();
 
-            fSummaryValues = new List<SummaryItem>();
             var sumModel = new SummaryListModel();
             sumModel.DataSource = fSummaryValues;
             fView.Summary.ListMan = sumModel;
             fView.Summary.UpdateContents();
-        }
 
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
             fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
         }
 

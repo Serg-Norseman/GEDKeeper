@@ -28,7 +28,7 @@ namespace GKUI.Forms
 
         ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBox>(txtNote); }
+            get { return fController.GetControlHandler<ITextBox>(txtNote); }
         }
 
         ISheetList INoteEdit.SourcesList
@@ -51,7 +51,7 @@ namespace GKUI.Forms
             txtNote.Leave += RichTextBox_Leave;
 
             fController = new NoteEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void RichTextBox_Enter(object sender, EventArgs e)

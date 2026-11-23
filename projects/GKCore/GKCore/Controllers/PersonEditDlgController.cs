@@ -58,24 +58,6 @@ namespace GKCore.Controllers
 
         public PersonEditDlgController(T view) : base(view)
         {
-            fView.NamesList.OnModify += ModifyNamesSheet;
-            fView.SpousesList.OnModify += ModifySpousesSheet;
-            fView.SpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
-            fView.AssociationsList.OnModify += ModifyAssociationsSheet;
-            fView.GroupsList.OnModify += ModifyGroupsSheet;
-            fView.ParentsList.OnModify += ModifyParentsSheet;
-
-            fView.RestrictionCombo.ReadOnly = true;
-            for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnPrivacy; res++) {
-                fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
-            }
-
-            fView.SexCombo.ReadOnly = true;
-            for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
-                string name = GKUtils.SexStr(sx);
-                IImage image = GetSexImage(sx);
-                fView.SexCombo.AddItem(name, sx, image);
-            }
         }
 
         protected override void Dispose(bool disposing)
@@ -148,9 +130,28 @@ namespace GKCore.Controllers
             return image;
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.NamesList.OnModify += ModifyNamesSheet;
+            fView.SpousesList.OnModify += ModifySpousesSheet;
+            fView.SpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
+            fView.AssociationsList.OnModify += ModifyAssociationsSheet;
+            fView.GroupsList.OnModify += ModifyGroupsSheet;
+            fView.ParentsList.OnModify += ModifyParentsSheet;
+
+            fView.RestrictionCombo.ReadOnly = true;
+            for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnPrivacy; res++) {
+                fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+            }
+
+            fView.SexCombo.ReadOnly = true;
+            for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
+                string name = GKUtils.SexStr(sx);
+                IImage image = GetSexImage(sx);
+                fView.SexCombo.AddItem(name, sx, image);
+            }
 
             fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
@@ -164,7 +165,7 @@ namespace GKCore.Controllers
             fView.ParentsList.ListModel = new IndiParentsListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.EventsList.ListModel.SaveSettings();
             fView.NotesList.ListModel.SaveSettings();

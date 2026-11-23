@@ -14,6 +14,7 @@ using GKUI.Platform;
 using GKUI.Themes;
 using Microsoft.Maui.Controls;
 using IView = GKCore.Design.IView;
+using IViewController = GKCore.Design.IViewController;
 using IWindow = GKCore.Design.IWindow;
 
 namespace GKUI.Forms
@@ -21,9 +22,10 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : ContentPage, IView, IThemedView
+    public abstract class CommonForm : ContentPage, IView, IThemedView
     {
-        private readonly ControlsManager fControlsManager;
+        public abstract IViewController Controller { get; }
+
 
         #region View Interface
 
@@ -43,7 +45,6 @@ namespace GKUI.Forms
 
         public CommonForm()
         {
-            fControlsManager = new ControlsManager(this);
         }
 
         public void SetTitle(string value)
@@ -61,19 +62,9 @@ namespace GKUI.Forms
             Focus();
         }
 
-        protected T GetControlHandler<T>(object control) where T : class, IControl
-        {
-            return fControlsManager.GetControlHandler<T>(control);
-        }
-
         public object GetControl(string controlName)
         {
             return FindByName(controlName);
-        }
-
-        public T GetCoreControl<T>(string controlName) where T : class, IControl
-        {
-            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         public virtual void Close()
@@ -101,8 +92,14 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonWindow : CommonForm, IWindow
+    public abstract class CommonWindow<TView, TController> : CommonForm, IWindow
+        where TView : IView
+        where TController : FormController<TView>
     {
+        protected TController fController;
+
+        public override IViewController Controller { get { return fController; } }
+
         public virtual void Show(bool showInTaskbar)
         {
             // for this(BaseWinSDI) Navigation throws exception
@@ -112,17 +109,6 @@ namespace GKUI.Forms
         public virtual void SetLocale()
         {
         }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class CommonWindow<TView, TController> : CommonWindow
-        where TView : IView
-        where TController : FormController<TView>
-    {
-        protected TController fController;
     }
 
 
@@ -138,7 +124,7 @@ namespace GKUI.Forms
     ///
     /// Ref: https://stackoverflow.com/questions/24174241/how-can-i-await-modal-form-dismissal-using-xamarin-forms
     /// </summary>
-    public class CommonDialog : CommonForm, ICommonDialog
+    public abstract class CommonDialog : CommonForm, ICommonDialog
     {
         private DialogResult fResult;
         private readonly TaskCompletionSource<bool> fTaskSource;
@@ -188,11 +174,13 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog<TView, TController> : CommonDialog
+    public abstract class CommonDialog<TView, TController> : CommonDialog
         where TView : IView
         where TController : DialogController<TView>
     {
         protected TController fController;
+
+        public override IViewController Controller { get { return fController; } }
 
         protected async override void AcceptClickHandler(object sender, EventArgs e)
         {

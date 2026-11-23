@@ -64,6 +64,8 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
+        public override IViewController Controller { get { return null; } }
+
         public PedigreeImporterDlg(IPlugin plugin, IBaseWindow curBase)
         {
             XamlReader.Load(this);
@@ -73,9 +75,9 @@ namespace GKPedigreeImporterPlugin
             fPlugin = plugin;
             fLangMan = fPlugin.LangMan;
 
-            cbDateSeparator.Items.AddRange(new string[] { ".", "/", "-"});
+            cbDateSeparator.Items.AddRange(new string[] { ".", "/", "-" });
             cbDatesFormat.Items.AddRange(new string[] { "DD/MM/YYYY", "YYYY/MM/DD" });
-            cbGenerationFormat.Items.AddRange(new string[] { "I, II, III, IV...", fLangMan.LS(PLS.Generation) + " N"});
+            cbGenerationFormat.Items.AddRange(new string[] { "I, II, III, IV...", fLangMan.LS(PLS.Generation) + " N" });
             cbNameFormat.Items.AddRange(new string[] { fLangMan.LS(PLS.NPS), fLangMan.LS(PLS.SNP) });
             cbPersonSeparator.Items.AddRange(new string[] { fLangMan.LS(PLS.NoSpecial), ";", "," });
 

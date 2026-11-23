@@ -32,27 +32,27 @@ namespace GKUI.Forms
 
         IComboBox IMediaFileDlg.MediaType
         {
-            get { return GetControlHandler<IComboBox>(cmbMediaType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbMediaType); }
         }
 
         IComboBox IMediaFileDlg.StoreType
         {
-            get { return GetControlHandler<IComboBox>(cmbStoreType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbStoreType); }
         }
 
         ITextBox IMediaFileDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         ITextBox IMediaFileDlg.File
         {
-            get { return GetControlHandler<ITextBox>(txtFile); }
+            get { return fController.GetControlHandler<ITextBox>(txtFile); }
         }
 
         IButton IMediaFileDlg.FileSelectButton
         {
-            get { return GetControlHandler<IButton>(btnFileSelect); }
+            get { return fController.GetControlHandler<IButton>(btnFileSelect); }
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new MediaFileEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private async void btnFileSelect_Click(object sender, EventArgs e)

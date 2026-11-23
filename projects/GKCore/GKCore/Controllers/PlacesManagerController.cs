@@ -35,17 +35,18 @@ namespace GKCore.Controllers
             fPlaces.Sorted = true;
 
             fPlacesModel = new FlatListModel();
-            fView.PlacesList.ListMan = fPlacesModel;
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             fPlacesModel.ListColumns.Clear();
             fPlacesModel.ListColumns.AddColumn(LangMan.LS(LSID.Place), DataType.dtString, 400, false);
             fPlacesModel.ListColumns.AddColumn(LangMan.LS(LSID.LinksCount), DataType.dtInteger, 100, false);
             fPlacesModel.ListColumns.ResetDefaults();
+
+            fView.PlacesList.ListMan = fPlacesModel;
         }
 
         public override void UpdateView()

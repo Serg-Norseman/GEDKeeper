@@ -5,7 +5,10 @@
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:comcom="clr-namespace:GKUI.Components"
-    x:Class="GKUI.Forms.BaseWinSDI">
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    x:Class="GKUI.Forms.BaseWinSDI"
+    x:TypeArguments="mvp:IBaseWindowView, contr:BaseWinController">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="tbFileNew" Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_create_new.gif}" Clicked="miFileNew_Click" />

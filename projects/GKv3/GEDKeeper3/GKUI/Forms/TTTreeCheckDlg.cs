@@ -48,7 +48,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new TreeCheckController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)

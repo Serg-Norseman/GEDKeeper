@@ -27,7 +27,7 @@ namespace GKCore.Controllers
             var controller = new FamilyEditDlgController(view);
 
             var baseWin = GetBaseSubst();
-            controller.Init(baseWin);
+            controller.InitView(baseWin);
 
             var famRec = baseWin.Context.Tree.CreateFamily();
             controller.FamilyRecord = famRec;

@@ -29,7 +29,7 @@ namespace GKCore.Controllers
         {
             var view = Substitute.For<IMediaViewerWin>();
             var controller = new MediaViewerController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.UpdateView();
         }
@@ -59,7 +59,7 @@ namespace GKCore.Controllers
 
                 var view = Substitute.For<IMediaViewerWin>();
                 var controller = new MediaViewerController(view);
-                controller.Init(fBaseWin);
+                controller.InitView(fBaseWin);
                 controller.MultimediaRecord = fileRefV;
                 controller.UpdateView();
             } finally {
@@ -77,7 +77,7 @@ namespace GKCore.Controllers
 
                 var view = Substitute.For<IMediaViewerWin>();
                 var controller = new MediaViewerController(view);
-                controller.Init(fBaseWin);
+                controller.InitView(fBaseWin);
                 controller.MultimediaRecord = fileRefV;
                 controller.UpdateView();
             } finally {
@@ -95,7 +95,7 @@ namespace GKCore.Controllers
 
                 var view = Substitute.For<IMediaViewerWin>();
                 var controller = new MediaViewerController(view);
-                controller.Init(fBaseWin);
+                controller.InitView(fBaseWin);
                 controller.MultimediaRecord = fileRefV;
                 controller.UpdateView();
             } finally {
@@ -113,7 +113,7 @@ namespace GKCore.Controllers
 
                 var view = Substitute.For<IMediaViewerWin>();
                 var controller = new MediaViewerController(view);
-                controller.Init(fBaseWin);
+                controller.InitView(fBaseWin);
                 controller.MultimediaRecord = fileRefV;
                 controller.UpdateView();
             } finally {
@@ -133,7 +133,7 @@ namespace GKCore.Controllers
 
                 var view = Substitute.For<IMediaViewerWin>();
                 var controller = new MediaViewerController(view);
-                controller.Init(fBaseWin);
+                controller.InitView(fBaseWin);
                 controller.MultimediaRecord = fileRefV;
                 controller.UpdateView();
             } finally {

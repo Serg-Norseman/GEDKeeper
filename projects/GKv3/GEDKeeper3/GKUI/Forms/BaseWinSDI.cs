@@ -31,12 +31,11 @@ using GKCore.Search;
 using GKUI.Components;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
-using GKUI.Themes;
 using Theme = GKUI.Themes.Theme;
 
 namespace GKUI.Forms
 {
-    public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
+    public sealed partial class BaseWinSDI : CommonWindow<IBaseWindowView, BaseWinController>, IBaseWindowView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -151,8 +150,6 @@ namespace GKUI.Forms
 
         #region Private fields
 
-        private readonly BaseWinController fController;
-
         private readonly BaseContext fContext;
 
         #endregion
@@ -175,17 +172,17 @@ namespace GKUI.Forms
 
         ITabControl IBaseWindowView.RecordTabs
         {
-            get { return GetControlHandler<ITabControl>(tabsRecords); }
+            get { return Controller?.GetControlHandler<ITabControl>(tabsRecords); }
         }
 
         IMenuItem IBaseWindowView.ReportsItem
         {
-            get { return GetControlHandler<IMenuItem>(miReports); }
+            get { return Controller?.GetControlHandler<IMenuItem>(miReports); }
         }
 
         IMenuItem IBaseWindowView.PluginsItem
         {
-            get { return GetControlHandler<IMenuItem>(miPlugins); }
+            get { return Controller?.GetControlHandler<IMenuItem>(miPlugins); }
         }
 
         #endregion

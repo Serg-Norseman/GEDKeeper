@@ -15,6 +15,8 @@ namespace GKTests.Stubs
 {
     internal class RecordSelectDialogStub : IRecordSelectDialog
     {
+        public IViewController Controller { get; }
+
         private static GDMRecord TestResult;
 
         public static void SetTestResult(GDMRecord value)
@@ -42,7 +44,6 @@ namespace GKTests.Stubs
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*") { }
         public void SetTitle(string value) { }
         public void SetToolTip(object component, string toolTip) { }
-        T IView.GetCoreControl<T>(string controlName) { return default(T); }
 
         public RecordSelectDialogStub(IBaseWindow baseWin, GDMRecordType recType)
         {

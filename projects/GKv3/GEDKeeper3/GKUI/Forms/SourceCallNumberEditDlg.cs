@@ -41,12 +41,12 @@ namespace GKUI.Forms
 
         ITextBox ISourceCallNumberEditDlg.CallNumberText
         {
-            get { return GetControlHandler<ITextBox>(txtNumber); }
+            get { return fController.GetControlHandler<ITextBox>(txtNumber); }
         }
 
         IComboBox ISourceCallNumberEditDlg.MediaTypeCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbMediaType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbMediaType); }
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new SourceCallNumberDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

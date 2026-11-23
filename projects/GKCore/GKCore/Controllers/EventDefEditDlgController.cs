@@ -38,6 +38,12 @@ namespace GKCore.Controllers
 
         public EventDefEditDlgController(IEventDefEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.TagCombo.ReadOnly = true;
         }
 

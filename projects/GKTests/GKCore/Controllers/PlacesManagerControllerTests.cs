@@ -21,7 +21,7 @@ namespace GKCore.Controllers
         {
             IPlacesManagerDlg view = CreateMockView();
             var controller = new PlacesManagerController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.CheckPlaces();
             controller.CreateLocationRecord(view.PlacesList.GetSelectedItems());

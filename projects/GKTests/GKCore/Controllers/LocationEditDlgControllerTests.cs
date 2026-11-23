@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             ILocationEditDlg view = CreateMockView();
             var controller = new LocationEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var locRec = fBaseWin.Context.Tree.CreateLocation();
 

@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             IRecordSelectDialog view = CreateMockView();
             var controller = new RecordSelectDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
             controller.RecType = GDMRecordType.rtIndividual;
         }
 

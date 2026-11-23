@@ -7,6 +7,7 @@
  */
 
 using System.Windows.Forms;
+using GKCore.Design;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -14,11 +15,13 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class StatusForm : CommonWindow, IStatusForm
+    public abstract class StatusForm<TView, TController> : CommonWindow<TView, TController>, IStatusForm
+        where TView : IView
+        where TController : FormController<TView>
     {
         public sealed class StatusLinesEx : IStatusLines
         {
-            private readonly StatusForm fForm;
+            private readonly StatusForm<TView, TController> fForm;
 
             public string this[int index]
             {
@@ -26,7 +29,7 @@ namespace GKUI.Forms
                 set { fForm.SetStatusLine(index, value); }
             }
 
-            internal StatusLinesEx(StatusForm form)
+            internal StatusLinesEx(StatusForm<TView, TController> form)
             {
                 fForm = form;
             }

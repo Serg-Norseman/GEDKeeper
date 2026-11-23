@@ -21,15 +21,15 @@ namespace GKCore.Controllers
         {
             ITreeCompareDlg view = CreateMockView();
             var controller = new TreeCompareController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
-            view.GetCoreControl<IRadioButton>("radMatchInternal").Checked = true;
+            controller.GetControl<IRadioButton>("radMatchInternal").Checked = true;
             controller.Match();
 
-            view.GetCoreControl<IRadioButton>("radAnalysis").Checked = true;
+            controller.GetControl<IRadioButton>("radAnalysis").Checked = true;
             controller.Match();
 
-            view.GetCoreControl<IRadioButton>("radMathExternal").Checked = true;
+            controller.GetControl<IRadioButton>("radMathExternal").Checked = true;
 
             //SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
             controller.SelectExternalFile();

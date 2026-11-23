@@ -40,11 +40,6 @@ namespace GKCore.Controllers
         public SourceCitEditDlgController(ISourceCitEditDlg view) : base(view)
         {
             fSourcesList = new StringList();
-
-            fView.Certainty.ReadOnly = true;
-            for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
-                fView.Certainty.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
-            }
         }
 
         public override bool Accept()
@@ -97,9 +92,14 @@ namespace GKCore.Controllers
             fView.Source.Text = src.ShortTitle;
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.Certainty.ReadOnly = true;
+            for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
+                fView.Certainty.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
+            }
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");

@@ -45,6 +45,12 @@ namespace GKCore.Controllers
 
         public ParentsEditDlgController(IParentsEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.LinkageTypeCombo.ReadOnly = true;
             for (GDMPedigreeLinkageType plt = GDMPedigreeLinkageType.plNone; plt <= GDMPedigreeLinkageType.plFoster; plt++) {
                 fView.LinkageTypeCombo.Add(LangMan.LS(GKData.ParentTypes[(int)plt]));

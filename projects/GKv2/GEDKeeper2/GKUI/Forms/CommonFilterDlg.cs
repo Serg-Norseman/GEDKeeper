@@ -65,7 +65,7 @@ namespace GKUI.Forms
             fListMan = listMan;
 
             fController = new CommonFilterDlgController(this, listMan);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             filterView = new FilterGridView(fListMan);
             filterView.Dock = DockStyle.Fill;

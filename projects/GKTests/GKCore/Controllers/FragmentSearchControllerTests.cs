@@ -21,7 +21,7 @@ namespace GKCore.Controllers
         {
             IFragmentSearchDlg view = CreateMockView();
             var controller = new FragmentSearchController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.CheckGroups();
         }

@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             ISourceCitEditDlg view = CreateMockView();
             var controller = new SourceCitEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var sourceCitation = new GDMSourceCitation();
             controller.SourceCitation = sourceCitation;

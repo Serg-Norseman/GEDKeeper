@@ -43,6 +43,12 @@ namespace GKCore.Controllers
 
         public DNATestEditDlgController(IDNATestEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.Restriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
                 fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
@@ -61,17 +67,12 @@ namespace GKCore.Controllers
             }
 
             fView.TestName.Activate();
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.NotesList.ListModel.SaveSettings();
             fView.MediaList.ListModel.SaveSettings();

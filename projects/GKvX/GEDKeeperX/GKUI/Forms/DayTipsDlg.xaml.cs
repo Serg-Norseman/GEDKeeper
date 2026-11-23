@@ -14,10 +14,8 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
+    public partial class DayTipsDlg : CommonDialog<IDayTipsDlg, DayTipsDlgController>, IDayTipsDlg
     {
-        private readonly DayTipsDlgController fController;
-
         public bool ShowTipsChecked
         {
             get { return chkShow.IsChecked; }
@@ -28,17 +26,17 @@ namespace GKUI.Forms
 
         ILabel IDayTipsDlg.TitleLabel
         {
-            get { return GetControlHandler<ILabel>(lblTitle); }
+            get { return fController.GetControlHandler<ILabel>(lblTitle); }
         }
 
         ITextContainer IDayTipsDlg.TipText
         {
-            get { return GetControlHandler<ITextContainer>(txtTip); }
+            get { return fController.GetControlHandler<ITextContainer>(txtTip); }
         }
 
         IButton IDayTipsDlg.NextButton
         {
-            get { return GetControlHandler<IButton>(btnNextTip); }
+            get { return fController.GetControlHandler<IButton>(btnNextTip); }
         }
 
         #endregion

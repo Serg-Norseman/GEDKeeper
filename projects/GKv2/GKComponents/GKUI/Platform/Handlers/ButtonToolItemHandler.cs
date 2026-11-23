@@ -35,8 +35,8 @@ namespace GKUI.Platform.Handlers
         {
             get { return fGlyph; }
             set {
-                fGlyph = value;
-                Control.Image = fGlyph == null ? null : ((ImageHandler)fGlyph).Handle;
+                //fGlyph = value;
+                Control.Image = value == null ? null : ((ImageHandler)value).Handle;
             }
         }
 

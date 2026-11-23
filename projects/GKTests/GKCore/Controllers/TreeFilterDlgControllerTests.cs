@@ -23,22 +23,22 @@ namespace GKCore.Controllers
         {
             ITreeFilterDlg view = CreateMockView();
             var controller = new TreeFilterDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var filter = new ChartFilter();
             controller.Filter = filter;
 
             controller.UpdateView();
 
-            view.GetCoreControl<IRadioButton>("rbCutNone").Checked = true;
+            controller.GetControl<IRadioButton>("rbCutNone").Checked = true;
             controller.Accept();
             Assert.AreEqual(ChartFilter.BranchCutType.None, filter.BranchCut);
 
-            view.GetCoreControl<IRadioButton>("rbCutYears").Checked = true;
+            controller.GetControl<IRadioButton>("rbCutYears").Checked = true;
             controller.Accept();
             Assert.AreEqual(ChartFilter.BranchCutType.Years, filter.BranchCut);
 
-            view.GetCoreControl<IRadioButton>("rbCutPersons").Checked = true;
+            controller.GetControl<IRadioButton>("rbCutPersons").Checked = true;
             controller.Accept();
             Assert.AreEqual(ChartFilter.BranchCutType.Persons, filter.BranchCut);
         }

@@ -25,7 +25,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public partial class CircleChartWin : PrintableForm, ICircleChartWin
+    public partial class CircleChartWin : PrintableForm<ICircleChartWin, CircleChartWinController>, ICircleChartWin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -42,8 +42,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly CircleChartWinController fController;
 
         private readonly CircleChart fCircleChart;
 
@@ -76,7 +74,7 @@ namespace GKUI.Forms
             Content = fCircleChart;
 
             fController = new CircleChartWinController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

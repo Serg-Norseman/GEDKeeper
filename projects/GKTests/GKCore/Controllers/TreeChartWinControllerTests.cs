@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using NSubstitute;
 using NUnit.Framework;
@@ -18,8 +19,69 @@ namespace GKCore.Controllers
         [Test]
         public void Test_TreeChartWinController()
         {
-            var view = Substitute.For<ITreeChartWin>();
+            var view = CreateMockView();
             var controller = new TreeChartWinController(view);
+        }
+
+        private static ITreeChartWin CreateMockView()
+        {
+            var view = Substitute.For<ITreeChartWin>();
+
+            SubstituteControl<IToolItem>(view, "tbGensAncestors");
+            SubstituteControl<IToolItem>(view, "tbGensDescendants");
+            SubstituteControl<IToolItem>(view, "tbModes");
+
+            SubstituteControl<IToolItem>(view, "miEdit");
+            SubstituteControl<IToolItem>(view, "miFatherAdd");
+            SubstituteControl<IToolItem>(view, "miMotherAdd");
+            SubstituteControl<IToolItem>(view, "miFamilyAdd");
+            SubstituteControl<IToolItem>(view, "miSpouseAdd");
+            SubstituteControl<IToolItem>(view, "miSonAdd");
+            SubstituteControl<IToolItem>(view, "miDaughterAdd");
+            SubstituteControl<IToolItem>(view, "miDelete");
+            SubstituteControl<IToolItem>(view, "miGoToRecord");
+            SubstituteControl<IToolItem>(view, "miGoToPrimaryBranch");
+            SubstituteControl<IToolItem>(view, "miOpenInNewWindow");
+            SubstituteControl<IToolItem>(view, "miMergeDuplicates");
+            SubstituteControl<IToolItem>(view, "miRebuildTree");
+            SubstituteControl<IToolItem>(view, "miRebuildKinships");
+            SubstituteControl<IToolItem>(view, "miSelectColor");
+
+            SubstituteControl<IToolItem>(view, "tbImageSave");
+            SubstituteControl<IToolItem>(view, "tbPrev");
+            SubstituteControl<IToolItem>(view, "tbNext");
+            SubstituteControl<IToolItem>(view, "tbOptions");
+            SubstituteControl<IToolItem>(view, "tbFilter");
+
+            SubstituteControl<IToolItem>(view, "tbGensCommon");
+            SubstituteControl<IToolItem>(view, "tbBorders");
+            SubstituteControl<IToolItem>(view, "tbDocPrint");
+            SubstituteControl<IToolItem>(view, "tbDocPreview");
+            SubstituteControl<IMenuItem>(view, "miFillImage");
+
+            SubstituteControl<IMenuItem>(view, "miGensInfAncestors");
+            SubstituteControl<IMenuItem>(view, "miGensInfDescendants");
+            SubstituteControl<IMenuItem>(view, "miModeBoth");
+            SubstituteControl<IMenuItem>(view, "miModeAncestors");
+            SubstituteControl<IMenuItem>(view, "miModeDescendants");
+
+            SubstituteControl<IMenuItem>(view, "miGensInfCommon");
+            SubstituteControl<IMenuItem>(view, "miMaps");
+            SubstituteControl<IMenuItem>(view, "miMapAncestors");
+            SubstituteControl<IMenuItem>(view, "miMapDescendants");
+            SubstituteControl<IMenuItem>(view, "miMapAll");
+
+            SubstituteControl<IMenuItem>(view, "miFillColor");
+            SubstituteControl<IMenuItem>(view, "miTraceSelected");
+            SubstituteControl<IMenuItem>(view, "miTraceKinships");
+            SubstituteControl<IMenuItem>(view, "miCertaintyIndex");
+            SubstituteControl<IMenuItem>(view, "miXRefVisible");
+            SubstituteControl<IMenuItem>(view, "miTrackSelectedLines");
+            SubstituteControl<IMenuItem>(view, "miTrackMatchedSources");
+            SubstituteControl<IMenuItem>(view, "miHideDescSpouses");
+            SubstituteControl<IMenuItem>(view, "miParentAges");
+
+            return view;
         }
     }
 }

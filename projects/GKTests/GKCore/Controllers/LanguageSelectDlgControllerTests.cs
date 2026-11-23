@@ -24,6 +24,7 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnCancel");
 
             var controller = new LanguageSelectDlgController(view);
+            controller.InitView(null);
         }
     }
 }

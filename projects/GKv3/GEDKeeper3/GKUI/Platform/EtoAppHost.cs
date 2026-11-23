@@ -166,7 +166,7 @@ namespace GKUI.Platform
                 var activeWnd = GetActiveWindow();
 
                 using (var progressForm = ResolveDialog<IProgressDialog>()) {
-                    var progForm = progressForm as CommonDialog;
+                    var progForm = progressForm as SimpleDialog;
 
                     if (!string.IsNullOrEmpty(title))
                         progressForm.SetTitle(title);

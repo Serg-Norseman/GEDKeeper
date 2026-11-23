@@ -15,10 +15,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class SlideshowWin : StatusForm, ISlideshowWin
+    public partial class SlideshowWin : StatusForm<ISlideshowWin, SlideshowController>, ISlideshowWin
     {
-        private readonly SlideshowController fController;
-
         public IWindow OwnerWindow
         {
             get { return fController.Base; }
@@ -30,7 +28,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new SlideshowController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.LoadList();
         }
 

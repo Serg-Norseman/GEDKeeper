@@ -23,12 +23,12 @@ namespace GKUI.Forms
 
         INumericBox IPatriarchsSearchDlg.MinGensNum
         {
-            get { return GetControlHandler<INumericBox>(edMinGens); }
+            get { return fController.GetControlHandler<INumericBox>(edMinGens); }
         }
 
         ICheckBox IPatriarchsSearchDlg.WithoutDatesCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkWithoutDates); }
+            get { return fController.GetControlHandler<ICheckBox>(chkWithoutDates); }
         }
 
         IListView IPatriarchsSearchDlg.PatriarchsList
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             ListPatriarchs.CheckBoxes = true;
 
             fController = new PatriarchsSearchController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void ListPatriarchs_DblClick(object sender, EventArgs e)

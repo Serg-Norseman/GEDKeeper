@@ -37,6 +37,12 @@ namespace GKCore.Controllers
 
         public LocationNameEditDlgController(ILocationNameEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.NameText.Activate();
         }
 

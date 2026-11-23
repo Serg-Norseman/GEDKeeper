@@ -10,7 +10,7 @@ using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
-    public interface IPersonsFilterDlg : ICommonDialog
+    public interface IPersonsFilterDlg : ICommonFilterDlg
     {
         IComboBox SourceCombo { get; }
         IComboBox GroupCombo { get; }

@@ -30,7 +30,7 @@ namespace GKUI.Forms
             chkReverseOrder.Checked = GlobalOptions.Instance.ReversePlaceEntitiesOrder;
 
             fController = new LocExpertDlgController(this);
-            fController.Init(curBase);
+            fController.InitView(curBase);
             fController.InitView(eventDates, placeName);
         }
 

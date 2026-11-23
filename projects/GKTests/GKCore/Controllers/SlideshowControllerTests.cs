@@ -25,7 +25,7 @@ namespace GKCore.Controllers
             SubstituteControl<IToolItem>(view, "tbNext");
 
             var controller = new SlideshowController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.UpdateView();
         }

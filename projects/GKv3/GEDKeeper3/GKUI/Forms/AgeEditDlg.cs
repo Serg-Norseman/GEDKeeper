@@ -46,22 +46,22 @@ namespace GKUI.Forms
 
         IComboBox IAgeEditDlg.RelativeCombo1
         {
-            get { return GetControlHandler<IComboBox>(cmbRel1); }
+            get { return fController.GetControlHandler<IComboBox>(cmbRel1); }
         }
 
         ITextBox IAgeEditDlg.ValueText1
         {
-            get { return GetControlHandler<ITextBox>(txtVal1); }
+            get { return fController.GetControlHandler<ITextBox>(txtVal1); }
         }
 
         IComboBox IAgeEditDlg.RelativeCombo2
         {
-            get { return GetControlHandler<IComboBox>(cmbRel2); }
+            get { return fController.GetControlHandler<IComboBox>(cmbRel2); }
         }
 
         ITextBox IAgeEditDlg.ValueText2
         {
-            get { return GetControlHandler<ITextBox>(txtVal2); }
+            get { return fController.GetControlHandler<ITextBox>(txtVal2); }
         }
 
         #endregion
@@ -75,7 +75,7 @@ namespace GKUI.Forms
             txtVal2.Provider = new FixedMaskedTextProvider(mask, CultureInfo.InvariantCulture);
 
             fController = new AgeEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

@@ -94,17 +94,17 @@ namespace GKUI.Forms
 
         ITextBox ILocationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         ITextBox ILocationEditDlg.Latitude
         {
-            get { return GetControlHandler<ITextBox>(txtLatitude); }
+            get { return fController.GetControlHandler<ITextBox>(txtLatitude); }
         }
 
         ITextBox ILocationEditDlg.Longitude
         {
-            get { return GetControlHandler<ITextBox>(txtLongitude); }
+            get { return fController.GetControlHandler<ITextBox>(txtLongitude); }
         }
 
         #endregion
@@ -116,7 +116,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabsData_SelectedIndexChanged;
 
             fController = new LocationEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void tabsData_SelectedIndexChanged(object sender, EventArgs e)

@@ -26,7 +26,7 @@ namespace GKCore.Controllers
         {
             IMediaEditDlg view = CreateMockView();
             var controller = new MediaEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var multimediaRecord = new GDMMultimediaRecord(fBaseWin.Context.Tree);
             multimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle());
@@ -56,6 +56,7 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnAccept");
             SubstituteControl<IButton>(view, "btnCancel");
             SubstituteControl<ITabPage>(view, "pageCommon");
+            SubstituteControl<ITabPage>(view, "pageFiles");
             SubstituteControl<ITabPage>(view, "pageNotes");
             SubstituteControl<ITabPage>(view, "pageSources");
             SubstituteControl<ITabPage>(view, "pageUserRefs");
@@ -65,6 +66,7 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblFile");
             SubstituteControl<IButton>(view, "btnView");
 
+            view.FilesList.Returns(Substitute.For<ISheetList>());
             view.NotesList.Returns(Substitute.For<ISheetList>());
             view.SourcesList.Returns(Substitute.For<ISheetList>());
             view.UserRefList.Returns(Substitute.For<ISheetList>());

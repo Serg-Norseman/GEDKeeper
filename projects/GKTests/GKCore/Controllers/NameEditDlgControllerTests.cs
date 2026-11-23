@@ -23,7 +23,7 @@ namespace GKCore.Controllers
         {
             INameEditDlg view = CreateMockView();
             var controller = new NameEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var nameEntry = new NameEntry();
             controller.NameEntry = nameEntry;

@@ -58,22 +58,22 @@ namespace GKUI.Forms
 
         ITextBox IParentsEditDlg.Father
         {
-            get { return GetControlHandler<ITextBox>(txtFather); }
+            get { return fController.GetControlHandler<ITextBox>(txtFather); }
         }
 
         ITextBox IParentsEditDlg.Mother
         {
-            get { return GetControlHandler<ITextBox>(txtMother); }
+            get { return fController.GetControlHandler<ITextBox>(txtMother); }
         }
 
         ITextBox IParentsEditDlg.ChildName
         {
-            get { return GetControlHandler<ITextBox>(txtChildName); }
+            get { return fController.GetControlHandler<ITextBox>(txtChildName); }
         }
 
         IComboBox IParentsEditDlg.LinkageTypeCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbLinkageType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbLinkageType); }
         }
 
         #endregion
@@ -83,7 +83,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new ParentsEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

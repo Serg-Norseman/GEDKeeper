@@ -14,6 +14,7 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
@@ -21,7 +22,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
+    public partial class PatriarchsViewerWin : CommonWindow<IPatriarchsViewer, PatriarchsViewerController>, IPatriarchsViewer
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -43,6 +44,8 @@ namespace GKUI.Forms
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
             XamlReader.Load(this);
+
+            fController = new PatriarchsViewerController(this);
 
             fBase = baseWin;
             fMinGens = minGens;

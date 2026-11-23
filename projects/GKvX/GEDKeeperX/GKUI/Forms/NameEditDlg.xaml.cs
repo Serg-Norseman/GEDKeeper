@@ -26,22 +26,22 @@ namespace GKUI.Forms
 
         ITextBox INameEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         ITextBox INameEditDlg.FPatr
         {
-            get { return GetControlHandler<ITextBox>(txtFPatr); }
+            get { return fController.GetControlHandler<ITextBox>(txtFPatr); }
         }
 
         ITextBox INameEditDlg.MPatr
         {
-            get { return GetControlHandler<ITextBox>(txtMPatr); }
+            get { return fController.GetControlHandler<ITextBox>(txtMPatr); }
         }
 
         IComboBox INameEditDlg.SexCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbSex); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSex); }
         }
 
         #endregion
@@ -55,6 +55,7 @@ namespace GKUI.Forms
             txtMPatr.Behaviors.Add(new NameValidationBehavior());
 
             fController = new NameEditDlgController(this);
+            fController.InitView(null);
         }
     }
 }

@@ -25,7 +25,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public partial class TreeChartWin : PrintableForm, ITreeChartWin
+    public partial class TreeChartWin : PrintableForm<ITreeChartWin, TreeChartWinController>, ITreeChartWin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -90,8 +90,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly TreeChartWinController fController;
-
         private GDMIndividualRecord fPerson;
 
 
@@ -155,7 +153,7 @@ namespace GKUI.Forms
             miHideDescSpouses.Checked = fTreeBox.Options.HideDescSpouses;
 
             fController = new TreeChartWinController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             SetupDepth();
         }

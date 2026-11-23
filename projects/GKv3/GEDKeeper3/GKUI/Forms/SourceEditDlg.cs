@@ -82,32 +82,32 @@ namespace GKUI.Forms
 
         ITextBox ISourceEditDlg.ShortTitle
         {
-            get { return GetControlHandler<ITextBox>(txtShortTitle); }
+            get { return fController.GetControlHandler<ITextBox>(txtShortTitle); }
         }
 
         ITextBox ISourceEditDlg.Author
         {
-            get { return GetControlHandler<ITextBox>(txtAuthor); }
+            get { return fController.GetControlHandler<ITextBox>(txtAuthor); }
         }
 
         ITextBox ISourceEditDlg.DescTitle
         {
-            get { return GetControlHandler<ITextBox>(txtTitle); }
+            get { return fController.GetControlHandler<ITextBox>(txtTitle); }
         }
 
         ITextBox ISourceEditDlg.Publication
         {
-            get { return GetControlHandler<ITextBox>(txtPublication); }
+            get { return fController.GetControlHandler<ITextBox>(txtPublication); }
         }
 
         ITextBox ISourceEditDlg.Text
         {
-            get { return GetControlHandler<ITextBox>(txtText); }
+            get { return fController.GetControlHandler<ITextBox>(txtText); }
         }
 
         IDateControl ISourceEditDlg.Date
         {
-            get { return GetControlHandler<IDateControl>(dateCtl); }
+            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
         }
 
         #endregion
@@ -119,7 +119,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new SourceEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

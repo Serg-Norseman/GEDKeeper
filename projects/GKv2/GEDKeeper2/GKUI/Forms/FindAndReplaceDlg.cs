@@ -36,7 +36,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new FARDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.UpdateView();
         }
 

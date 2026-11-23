@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             ISexCheckDlg view = CreateMockView();
             var controller = new SexCheckDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             //controller.indi = "test indi";
             controller.Sex = GDMSex.svMale;

@@ -41,6 +41,11 @@ namespace GKCore.Controllers
         public TaskEditDlgController(ITaskEditDlg view) : base(view)
         {
             fTempRec = null;
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
 
             fView.Priority.ReadOnly = true;
             for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
@@ -51,16 +56,11 @@ namespace GKCore.Controllers
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 fView.GoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.NotesList.ListModel.SaveSettings();
         }

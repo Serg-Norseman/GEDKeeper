@@ -13,6 +13,7 @@ using BSLib.DataViz.ArborGVT;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
@@ -20,7 +21,7 @@ using ArborNodeEx = GKUI.Components.ArborNodeEx;
 
 namespace GKUI.Forms
 {
-    public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
+    public partial class PatriarchsViewerWin : CommonWindow<IPatriarchsViewer, PatriarchsViewerController>, IPatriarchsViewer
     {
         #region Design components
 
@@ -40,6 +41,9 @@ namespace GKUI.Forms
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
             InitializeComponent();
+
+            fController = new PatriarchsViewerController(this);
+            fController.InitView(baseWin);
 
             fBase = baseWin;
             fMinGens = minGens;

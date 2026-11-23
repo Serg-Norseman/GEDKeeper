@@ -82,6 +82,7 @@ namespace GKUI.Forms
             UIHelper.FixRadioButtons(this, grpPedigreeFormat);
 
             fController = new OptionsDlgController(this);
+            fController.InitView(null);
             fController.UpdateView();
 
             chkSeparateDepth_CheckedChanged(null, null);
@@ -114,7 +115,7 @@ namespace GKUI.Forms
 
         private void PanColor_Click(object sender, EventArgs e)
         {
-            fController.SelectLabColor(GetControlHandler<ILabel>(sender as Label));
+            fController.SelectLabColor(fController.GetControlHandler<ILabel>(sender as Label));
         }
 
         private async void panChartFont_Click(object sender, EventArgs e)

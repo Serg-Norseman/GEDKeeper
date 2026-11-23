@@ -70,6 +70,7 @@
     <Compile Include="GDModel\Providers\GEDCOM\BKAnsel1251.cs" />
     <Compile Include="GKCore\Charts\LineRouter.cs" />
     <Compile Include="GKCore\Controllers\MediaFileEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\PatriarchsViewerController.cs" />
     <Compile Include="GKCore\Design\Views\IChronicleWin.cs" />
     <Compile Include="GKCore\Backups\BackupTool.cs" />
     <Compile Include="GDModel\GDMAge.cs" />
@@ -189,7 +190,6 @@
     <Compile Include="GKCore\Design\Graphics\IPen.cs" />
     <Compile Include="GKCore\Design\Graphics\IPrintable.cs" />
     <Compile Include="GKCore\Design\ControlHandler.cs" />
-    <Compile Include="GKCore\Design\ControlsManager.cs" />
     <Compile Include="GKCore\Design\Controls\ComboItem.cs" />
     <Compile Include="GKCore\Design\Controls\IButton.cs" />
     <Compile Include="GKCore\Design\Controls\ICheckBox.cs" />

@@ -24,12 +24,12 @@ namespace GKUI.Forms
 
         ITreeView IFragmentSearchDlg.GroupsTree
         {
-            get { return GetControlHandler<ITreeView>(tvGroups); }
+            get { return fController.GetControlHandler<ITreeView>(tvGroups); }
         }
 
         ILogChart IFragmentSearchDlg.LogChart
         {
-            get { return GetControlHandler<ILogChart>(gkLogChart1); }
+            get { return fController.GetControlHandler<ILogChart>(gkLogChart1); }
         }
 
         #endregion
@@ -39,7 +39,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new FragmentSearchController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             fDataMap.Model.CreatingItem += fController.DataMap_CreateGroupItem;
             fDataMap.MouseDoubleClick += DataMap_DoubleClick;

@@ -20,7 +20,7 @@ using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
 {
-    public partial class SlideshowWin : StatusForm, ISlideshowWin
+    public partial class SlideshowWin : StatusForm<ISlideshowWin, SlideshowController>, ISlideshowWin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -32,8 +32,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly SlideshowController fController;
 
         public IWindow OwnerWindow
         {
@@ -48,7 +46,7 @@ namespace GKUI.Forms
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
 
             fController = new SlideshowController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.LoadList();
         }
 

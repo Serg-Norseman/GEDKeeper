@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             IPortraitSelectDlg view = CreateMockView();
             var controller = new PortraitSelectDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var multimediaLink = new GDMMultimediaLink();
             controller.MultimediaLink = multimediaLink;

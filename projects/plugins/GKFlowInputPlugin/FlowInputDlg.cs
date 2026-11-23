@@ -29,6 +29,8 @@ namespace GKFlowInputPlugin
         private GDMSex fSimpleTempSex = GDMSex.svMale;
         private readonly FlowInput fFlowInput;
 
+        public override IViewController Controller { get { return null; } }
+
         public FlowInputDlg(IPlugin plugin, IBaseWindow baseWin)
         {
             InitializeComponent();

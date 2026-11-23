@@ -7,15 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface IUserRefEditDlg : ICommonDialog
     {
         GDMUserReference UserReference { get; set; }
-
-        IComboBox Ref { get; }
-        IComboBox RefType { get; }
     }
 }

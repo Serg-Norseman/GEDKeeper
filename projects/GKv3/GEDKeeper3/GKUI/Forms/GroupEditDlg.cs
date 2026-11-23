@@ -62,7 +62,7 @@ namespace GKUI.Forms
 
         ITextBox IGroupEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(edName); }
+            get { return fController.GetControlHandler<ITextBox>(edName); }
         }
 
         #endregion
@@ -72,7 +72,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new GroupEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

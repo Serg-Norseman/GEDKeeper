@@ -19,10 +19,8 @@ using GKCore.Locales;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
+    public sealed partial class ScriptEditWin : CommonDialog<IScriptEditWin, ScriptEditWinController>, IScriptEditWin
     {
-        private readonly ScriptEditWinController fController;
-
         private string fFileName;
         private bool fModified;
 
@@ -52,12 +50,12 @@ namespace GKUI.Forms
 
         ITextBox IScriptEditWin.ScriptText
         {
-            get { return GetControlHandler<ITextBox>(txtScriptText); }
+            get { return fController.GetControlHandler<ITextBox>(txtScriptText); }
         }
 
         ITextBox IScriptEditWin.DebugOutput
         {
-            get { return GetControlHandler<ITextBox>(txtDebugOutput); }
+            get { return fController.GetControlHandler<ITextBox>(txtDebugOutput); }
         }
 
         void IScriptConsole.print(string text)
@@ -146,7 +144,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new ScriptEditWinController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 

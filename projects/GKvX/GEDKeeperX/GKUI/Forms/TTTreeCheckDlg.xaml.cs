@@ -30,7 +30,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new TreeCheckController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         /*

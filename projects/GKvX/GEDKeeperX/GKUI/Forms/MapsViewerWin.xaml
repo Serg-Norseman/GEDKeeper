@@ -7,7 +7,8 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    x:Class="GKUI.Forms.MapsViewerWin">
+    x:Class="GKUI.Forms.MapsViewerWin"
+    x:TypeArguments="mvp:IMapsViewerWin, contr:MapsViewerWinController">
 
     <forms:CommonWindow.ToolbarItems>
         <ToolbarItem x:Name="tbLoadPlaces" Order="Primary" Priority="0" Clicked="tbLoadPlaces_Click" />

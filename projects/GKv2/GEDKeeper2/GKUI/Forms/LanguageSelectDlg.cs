@@ -34,6 +34,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new LanguageSelectDlgController(this);
+            fController.InitView(null);
         }
     }
 }

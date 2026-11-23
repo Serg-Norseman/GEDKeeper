@@ -13,6 +13,7 @@ using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
 
@@ -21,20 +22,15 @@ namespace GKUI.Forms
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>
-    public class PrintableForm : StatusForm
+    public abstract class PrintableForm<TView, TController> : StatusForm<TView, TController>
+        where TView : IView
+        where TController : FormController<TView>
     {
         private PrintDocument fPrintDoc;
 
         protected PrintableForm()
         {
             InitPrintDoc();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-            }
-            base.Dispose(disposing);
         }
 
         #region Internal print support

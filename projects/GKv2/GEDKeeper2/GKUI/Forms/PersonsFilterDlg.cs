@@ -24,37 +24,37 @@ namespace GKUI.Forms
 
         IComboBox IPersonsFilterDlg.SourceCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbSource); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
         }
 
         IComboBox IPersonsFilterDlg.GroupCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbGroup); }
+            get { return fController.GetControlHandler<IComboBox>(cmbGroup); }
         }
 
         ITextBox IPersonsFilterDlg.AliveBeforeDate
         {
-            get { return GetControlHandler<ITextBox>(txtAliveBeforeDate); }
+            get { return fController.GetControlHandler<ITextBox>(txtAliveBeforeDate); }
         }
 
         ICheckBox IPersonsFilterDlg.OnlyPatriarchsCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
+            get { return fController.GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
         }
 
         IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbEventVal); }
+            get { return fController.GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
         IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbResidence); }
+            get { return fController.GetControlHandler<IComboBox>(cmbResidence); }
         }
 
         IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return GetControlHandler<IComboBox>(txtName); }
+            get { return fController.GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
@@ -128,7 +128,7 @@ namespace GKUI.Forms
             tabsFilters.SelectedIndex = 1;
 
             fPersonsFilterDlgController = new PersonsFilterDlgController(this, listMan);
-            fPersonsFilterDlgController.Init(baseWin);
+            fPersonsFilterDlgController.InitView(baseWin);
             fPersonsFilterDlgController.UpdateView();
         }
 
@@ -151,7 +151,7 @@ namespace GKUI.Forms
         private void cmbFilter_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete && e.Control) {
-                var combo = GetControlHandler<IComboBox>(sender);
+                var combo = fController.GetControlHandler<IComboBox>(sender);
                 fPersonsFilterDlgController.RemoveFilter(combo);
             }
         }

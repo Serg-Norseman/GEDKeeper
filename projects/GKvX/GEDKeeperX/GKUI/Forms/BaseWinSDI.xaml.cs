@@ -31,14 +31,11 @@ using Microsoft.Maui.Layouts;
 
 namespace GKUI.Forms
 {
-    public partial class BaseWinSDI : CommonWindow, IBaseWindowView, IProgressController, IDisplayChangeable
+    public partial class BaseWinSDI : CommonWindow<IBaseWindowView, BaseWinController>, IBaseWindowView, IProgressController, IDisplayChangeable
     {
         #region Private fields
 
-        private readonly BaseWinController fController;
-
         private readonly BaseContext fContext;
-
         private readonly QuickSearchDlg fQuickSearch;
         private readonly ContentView[] fQSPlaceholders;
 
@@ -67,7 +64,7 @@ namespace GKUI.Forms
 
         ITabControl IBaseWindowView.RecordTabs
         {
-            get { return GetControlHandler<ITabControl>(tabsRecords); }
+            get { return fController.GetControlHandler<ITabControl>(tabsRecords); }
         }
 
         IMenuItem IBaseWindowView.ReportsItem

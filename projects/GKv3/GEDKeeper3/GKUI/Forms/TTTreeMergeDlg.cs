@@ -37,12 +37,12 @@ namespace GKUI.Forms
 
         ITextBox ITreeMergeDlg.UpdateBase
         {
-            get { return GetControlHandler<ITextBox>(edUpdateBase); }
+            get { return fController.GetControlHandler<ITextBox>(edUpdateBase); }
         }
 
         ITextBox ITreeMergeDlg.SyncLog
         {
-            get { return GetControlHandler<ITextBox>(mSyncRes); }
+            get { return fController.GetControlHandler<ITextBox>(mSyncRes); }
         }
 
         #endregion
@@ -52,7 +52,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new TreeMergeController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnTreeMerge_Click(object sender, EventArgs e)

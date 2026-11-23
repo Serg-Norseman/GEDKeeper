@@ -31,9 +31,9 @@ namespace GKCore.Controllers
         {
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             var listModel = new PatriarchsListModel(fBase.Context);
             fView.PatriarchsList.ListMan = listModel;

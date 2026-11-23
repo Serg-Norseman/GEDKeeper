@@ -21,7 +21,7 @@ namespace GKCore.Controllers
         {
             IPatriarchsSearchDlg view = CreateMockView();
             var controller = new PatriarchsSearchController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             view.MinGensNum.Value = 1;
             controller.Search();

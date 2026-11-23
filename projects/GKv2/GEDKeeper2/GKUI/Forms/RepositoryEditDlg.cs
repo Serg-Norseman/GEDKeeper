@@ -42,7 +42,7 @@ namespace GKUI.Forms
 
         ITextBox IRepositoryEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace GKUI.Forms
             fUserRefList = new GKSheetList(pageUserRefs);
 
             fController = new RepositoryEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnAddress_Click(object sender, EventArgs e)

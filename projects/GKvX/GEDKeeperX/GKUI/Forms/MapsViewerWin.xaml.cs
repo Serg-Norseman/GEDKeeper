@@ -21,10 +21,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class MapsViewerWin : CommonWindow, IMapsViewerWin
+    public sealed partial class MapsViewerWin : CommonWindow<IMapsViewerWin, MapsViewerWinController>, IMapsViewerWin
     {
-        private readonly MapsViewerWinController fController;
-
         public IWindow OwnerWindow
         {
             get { return fController.Base; }
@@ -39,47 +37,47 @@ namespace GKUI.Forms
 
         IComboBox IMapsViewerWin.PersonsCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbPersons); }
+            get { return fController.GetControlHandler<IComboBox>(cmbPersons); }
         }
 
         ITreeView IMapsViewerWin.PlacesTree
         {
-            get { return GetControlHandler<ITreeView>(tvPlaces); }
+            get { return fController.GetControlHandler<ITreeView>(tvPlaces); }
         }
 
         IButton IMapsViewerWin.SelectPlacesBtn
         {
-            get { return GetControlHandler<IButton>(btnSelectPlaces); }
+            get { return fController.GetControlHandler<IButton>(btnSelectPlaces); }
         }
 
         ICheckBox IMapsViewerWin.BirthCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkBirth); }
+            get { return fController.GetControlHandler<ICheckBox>(chkBirth); }
         }
 
         ICheckBox IMapsViewerWin.DeathCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkDeath); }
+            get { return fController.GetControlHandler<ICheckBox>(chkDeath); }
         }
 
         ICheckBox IMapsViewerWin.ResidenceCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkResidence); }
+            get { return fController.GetControlHandler<ICheckBox>(chkResidence); }
         }
 
         ICheckBox IMapsViewerWin.LinesVisibleCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkLinesVisible); }
+            get { return fController.GetControlHandler<ICheckBox>(chkLinesVisible); }
         }
 
         IRadioButton IMapsViewerWin.TotalRadio
         {
-            get { return GetControlHandler<IRadioButton>(radTotal); }
+            get { return fController.GetControlHandler<IRadioButton>(radTotal); }
         }
 
         IRadioButton IMapsViewerWin.SelectedRadio
         {
-            get { return GetControlHandler<IRadioButton>(radSelected); }
+            get { return fController.GetControlHandler<IRadioButton>(radSelected); }
         }
 
         #endregion
@@ -91,7 +89,7 @@ namespace GKUI.Forms
             radTotal.IsChecked = true;
 
             fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             {
                 fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;

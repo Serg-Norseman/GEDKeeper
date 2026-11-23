@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -39,26 +38,12 @@ namespace GKUI.Forms
             set { fController.Association = value; }
         }
 
-        #region View Interface
-
-        IComboBox IAssociationEditDlg.Relation
-        {
-            get { return GetControlHandler<IComboBox>(cmbRelation); }
-        }
-
-        ITextBox IAssociationEditDlg.Person
-        {
-            get { return GetControlHandler<ITextBox>(txtPerson); }
-        }
-
-        #endregion
-
         public AssociationEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
 
             fController = new AssociationEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

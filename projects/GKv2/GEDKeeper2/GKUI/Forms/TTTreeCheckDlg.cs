@@ -38,7 +38,7 @@ namespace GKUI.Forms
             ListChecks.ContextMenuStrip = contextMenu;
 
             fController = new TreeCheckController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnAnalyseBase_Click(object sender, EventArgs e)

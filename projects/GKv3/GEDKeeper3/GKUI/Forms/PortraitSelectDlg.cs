@@ -48,7 +48,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new PortraitSelectDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

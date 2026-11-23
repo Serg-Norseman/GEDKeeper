@@ -57,7 +57,7 @@ namespace GKUI.Forms
 
         ITextBox IRepositoryEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion
@@ -69,7 +69,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new RepositoryEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

@@ -20,11 +20,12 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class CommonFilterDlgController : DialogController<ICommonFilterDlg>
+    public class CommonFilterDlgController<T> : DialogController<T>
+        where T : ICommonFilterDlg
     {
         private readonly IRecordsListModel fListMan;
 
-        public CommonFilterDlgController(ICommonFilterDlg view, IRecordsListModel listMan) : base(view)
+        public CommonFilterDlgController(T view, IRecordsListModel listMan) : base(view)
         {
             fListMan = listMan;
         }
@@ -86,6 +87,17 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CommonFilterDlgController : CommonFilterDlgController<ICommonFilterDlg>
+    {
+        public CommonFilterDlgController(ICommonFilterDlg view, IRecordsListModel listMan) : base(view, listMan)
+        {
         }
     }
 }

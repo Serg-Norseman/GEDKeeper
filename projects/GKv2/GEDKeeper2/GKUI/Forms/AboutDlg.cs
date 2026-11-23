@@ -14,10 +14,8 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class AboutDlg : CommonDialog, IAboutDlg
+    public sealed partial class AboutDlg : CommonDialog<IAboutDlg, AboutDlgController>, IAboutDlg
     {
-        private readonly AboutDlgController fController;
-
         public AboutDlg()
         {
             InitializeComponent();

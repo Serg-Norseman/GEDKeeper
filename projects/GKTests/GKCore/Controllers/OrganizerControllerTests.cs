@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             IOrganizerWin view = CreateMockView();
             var controller = new OrganizerController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.UpdateView();
         }

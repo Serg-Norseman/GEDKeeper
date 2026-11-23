@@ -39,6 +39,12 @@ namespace GKCore.Controllers
 
         public LocationLinkEditDlgController(ILocationLinkEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.TopLevelText.Activate();
 
             fView.DateCtl.DateChanged += new EventHandler(OnDateChanged);

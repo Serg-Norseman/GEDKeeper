@@ -26,6 +26,8 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
+        public override IViewController Controller { get { return null; } }
+
         public PedigreeImporterDlg(IPlugin plugin, IBaseWindow curBase)
         {
             InitializeComponent();

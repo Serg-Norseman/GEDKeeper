@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using GKCore.Design;
 using GKCore.Design.Graphics;
 
 namespace GKUI.Forms
@@ -13,7 +14,9 @@ namespace GKUI.Forms
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>
-    public class PrintableForm : StatusForm
+    public class PrintableForm<TView, TController> : StatusForm<TView, TController>
+        where TView : IView
+        where TController : FormController<TView>
     {
         protected PrintableForm()
         {

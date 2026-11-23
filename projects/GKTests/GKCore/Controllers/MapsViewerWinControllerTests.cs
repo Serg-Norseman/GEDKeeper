@@ -21,7 +21,7 @@ namespace GKCore.Controllers
         {
             IMapsViewerWin view = CreateMockView();
             var controller = new MapsViewerWinController(view, null);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
         }
 
         private static IMapsViewerWin CreateMockView()

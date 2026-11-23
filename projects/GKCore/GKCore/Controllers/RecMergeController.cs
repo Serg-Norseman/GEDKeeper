@@ -34,17 +34,18 @@ namespace GKCore.Controllers
         public RecMergeController(IRecMergeDlg view) : base(view)
         {
             fRMSkip = new StringList();
-
-            SetRec1(null);
-            SetRec2(null);
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
             if (fBase != null) {
                 SetMergeMode(GDMRecordType.rtIndividual);
             }
+
+            SetRec1(null);
+            SetRec2(null);
         }
 
         public override void UpdateView()

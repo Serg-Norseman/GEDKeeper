@@ -39,14 +39,15 @@ namespace GKCore.Controllers
 
         public AddressEditDlgController(IAddressEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.PhonesList.OnModify += ListModify;
             fView.MailsList.OnModify += ListModify;
             fView.WebsList.OnModify += ListModify;
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.PhonesList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Telephone));
             fView.PhonesList.ListView.UpdateContents();

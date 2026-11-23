@@ -46,20 +46,21 @@ namespace GKCore.Controllers
         public EventEditDlgController(IEventEditDlg view) : base(view)
         {
             fTempLocation = null;
-            fView.EventType.Activate();
-            fView.Date.DateChanged += new EventHandler(dateCtl_DateChanged);
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.EventType.Activate();
+            fView.Date.DateChanged += new EventHandler(dateCtl_DateChanged);
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
             fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.NotesList.ListModel.SaveSettings();
             fView.MediaList.ListModel.SaveSettings();

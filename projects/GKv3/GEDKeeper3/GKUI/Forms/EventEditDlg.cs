@@ -80,32 +80,32 @@ namespace GKUI.Forms
 
         IComboBox IEventEditDlg.EventType
         {
-            get { return GetControlHandler<IComboBox>(cmbEventType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbEventType); }
         }
 
         IDateControl IEventEditDlg.Date
         {
-            get { return GetControlHandler<IDateControl>(dateCtl); }
+            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
         }
 
         IComboBox IEventEditDlg.Attribute
         {
-            get { return GetControlHandler<IComboBox>(txtAttribute); }
+            get { return fController.GetControlHandler<IComboBox>(txtAttribute); }
         }
 
         ITextBox IEventEditDlg.Place
         {
-            get { return GetControlHandler<ITextBox>(txtEventPlace); }
+            get { return fController.GetControlHandler<ITextBox>(txtEventPlace); }
         }
 
         IComboBox IEventEditDlg.Cause
         {
-            get { return  GetControlHandler<IComboBox>(txtEventCause); }
+            get { return fController.GetControlHandler<IComboBox>(txtEventCause); }
         }
 
         IComboBox IEventEditDlg.Agency
         {
-            get { return  GetControlHandler<IComboBox>(txtEventOrg); }
+            get { return fController.GetControlHandler<IComboBox>(txtEventOrg); }
         }
 
         #endregion
@@ -117,7 +117,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new EventEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

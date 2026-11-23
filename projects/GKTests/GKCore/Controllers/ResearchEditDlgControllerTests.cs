@@ -25,7 +25,7 @@ namespace GKCore.Controllers
         {
             IResearchEditDlg view = CreateMockView();
             var controller = new ResearchEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var resRecord = new GDMResearchRecord(fBaseWin.Context.Tree);
             controller.ResearchRecord = resRecord;

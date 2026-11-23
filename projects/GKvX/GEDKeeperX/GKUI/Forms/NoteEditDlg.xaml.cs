@@ -27,7 +27,7 @@ namespace GKUI.Forms
 
         ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBox>(txtNote); }
+            get { return fController.GetControlHandler<ITextBox>(txtNote); }
         }
 
         ISheetList INoteEdit.SourcesList
@@ -47,7 +47,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new NoteEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             ITreeCheckDlg view = CreateMockView();
             var controller = new TreeCheckController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.UpdateView();
 

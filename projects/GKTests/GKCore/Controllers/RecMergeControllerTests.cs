@@ -22,12 +22,12 @@ namespace GKCore.Controllers
         {
             IRecMergeDlg view = CreateMockView();
             var controller = new RecMergeController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
-            view.GetCoreControl<ICheckBox>("chkBookmarkMerged").Checked = true;
-            view.GetCoreControl<ICheckBox>("chkBookmarkMerged").Checked = false;
+            controller.GetControl<ICheckBox>("chkBookmarkMerged").Checked = true;
+            controller.GetControl<ICheckBox>("chkBookmarkMerged").Checked = false;
 
-            view.GetCoreControl<IRadioButton>("radPersons").Checked = true;
+            controller.GetControl<IRadioButton>("radPersons").Checked = true;
 
             //CustomWindowTest.SetSelectItemHandler(0);
             //ClickButton("btnRec1Select", form);
@@ -64,6 +64,12 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnRec2Select");
             SubstituteControl<IButton>(view, "btnEditLeft");
             SubstituteControl<IButton>(view, "btnEditRight");
+            SubstituteControl<IButton>(view, "btnMergeToLeft");
+            SubstituteControl<IButton>(view, "btnMergeToRight");
+            SubstituteControl<ILabel>(view, "Lab1");
+            SubstituteControl<ILabel>(view, "Lab2");
+            SubstituteControl<ITextBox>(view, "Edit1");
+            SubstituteControl<ITextBox>(view, "Edit2");
 
             view.View1.Returns(Substitute.For<IHyperView>());
             view.View2.Returns(Substitute.For<IHyperView>());

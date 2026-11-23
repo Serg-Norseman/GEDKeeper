@@ -49,6 +49,8 @@ namespace GEDmill
     /// </summary>
     public partial class MainForm : CommonForm, ILocalizable
     {
+        public override IViewController Controller { get { return null; } }
+
         private static readonly GKCore.Logging.ILogger fLogger = LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(MainForm).Name);
 
         private readonly ILangMan fLangMan;

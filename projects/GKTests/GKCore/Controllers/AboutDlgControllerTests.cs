@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Threading.Tasks;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using NSubstitute;
@@ -29,7 +28,7 @@ namespace GKCore.Controllers
         private static IAboutDlg CreateMockView()
         {
             var view = Substitute.For<IAboutDlg>();
-            SubstituteControl<ILabel>(view, "btnClose");
+            SubstituteControl<IButton>(view, "btnClose");
             SubstituteControl<ILabel>(view, "lblProduct");
             SubstituteControl<ILabel>(view, "lblVersion");
             SubstituteControl<ILabel>(view, "lblCopyright");

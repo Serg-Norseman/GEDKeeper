@@ -57,22 +57,22 @@ namespace GKUI.Forms
 
         INumericBox ITreeFilterDlg.YearNum
         {
-            get { return GetControlHandler<INumericBox>(edYear); }
+            get { return fController.GetControlHandler<INumericBox>(edYear); }
         }
 
         IComboBox ITreeFilterDlg.SourceCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbSource); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
         }
 
         ICheckBox ITreeFilterDlg.HideDatesAfterBoundaryCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkHideDatesAfterBoundary); }
+            get { return fController.GetControlHandler<ICheckBox>(chkHideDatesAfterBoundary); }
         }
 
         ITextBox ITreeFilterDlg.DateBoundary
         {
-            get { return GetControlHandler<ITextBox>(txtDateBoundary); }
+            get { return fController.GetControlHandler<ITextBox>(txtDateBoundary); }
         }
 
         #endregion
@@ -86,7 +86,7 @@ namespace GKUI.Forms
             txtDateBoundary.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             fController = new TreeFilterDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void rbCutX_CheckedChanged(object sender, EventArgs e)

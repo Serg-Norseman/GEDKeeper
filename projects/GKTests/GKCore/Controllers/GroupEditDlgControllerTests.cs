@@ -24,7 +24,7 @@ namespace GKCore.Controllers
         {
             IGroupEditDlg view = CreateMockView();
             var controller = new GroupEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var group = fBaseWin.Context.Tree.CreateGroup();
 

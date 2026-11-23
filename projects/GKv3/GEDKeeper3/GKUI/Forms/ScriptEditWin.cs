@@ -20,7 +20,7 @@ using GKCore.Locales;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ScriptEditWin : CommonDialog, IScriptEditWin
+    public sealed partial class ScriptEditWin : CommonDialog<IScriptEditWin, ScriptEditWinController>, IScriptEditWin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -36,8 +36,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly ScriptEditWinController fController;
 
         private string fFileName;
         private bool fModified;
@@ -68,12 +66,12 @@ namespace GKUI.Forms
 
         ITextBox IScriptEditWin.ScriptText
         {
-            get { return GetControlHandler<ITextBox>(txtScriptText); }
+            get { return fController.GetControlHandler<ITextBox>(txtScriptText); }
         }
 
         ITextBox IScriptEditWin.DebugOutput
         {
-            get { return GetControlHandler<ITextBox>(txtDebugOutput); }
+            get { return fController.GetControlHandler<ITextBox>(txtDebugOutput); }
         }
 
         void IScriptConsole.print(string text)
@@ -156,7 +154,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new ScriptEditWinController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             txtScriptText.TextChanged += mmScriptText_TextChanged;
 

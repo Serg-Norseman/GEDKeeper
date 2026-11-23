@@ -36,7 +36,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new TreeSplitController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnSelectFamily_Click(object sender, EventArgs e)

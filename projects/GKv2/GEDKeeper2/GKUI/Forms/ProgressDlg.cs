@@ -25,6 +25,8 @@ namespace GKUI.Forms
         private int fVal;
 
 
+        public override IViewController Controller { get { return null; } }
+
         public ThreadError ThreadError { get; set; }
 
 

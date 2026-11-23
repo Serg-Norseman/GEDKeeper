@@ -18,47 +18,61 @@ using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class FilePropertiesDlgController : DialogController<IFilePropertiesDlg>
     {
+        #region Design components
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageAuthor;
+        private ILabel _lblName;
+        private ILabel _lblAddress;
+        private ILabel _lblTelephone;
+        private ITextBox _txtName;
+        private ITextBox _txtTel;
+        private ITextBox _txtAddress;
+        private ITabPage _pageOther;
+        private IListView _lvRecordStats;
+        //private IButton _btnLangEdit;
+        private IComboBox _txtLanguage;
+        private ILabel _lblLanguage;
+        #endregion
+
         private readonly FlatListModel fListModel;
 
         public FilePropertiesDlgController(IFilePropertiesDlg view) : base(view)
         {
             fListModel = new FlatListModel();
-            fView.RecordStats.ListMan = fListModel;
-
-            fView.Language.ReadOnly = true;
-            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
-                fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
-            }
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
-
             fListModel.ListColumns.Clear();
             fListModel.ListColumns.AddColumn(LangMan.LS(LSID.RM_Records), DataType.dtString, 300, false);
             fListModel.ListColumns.AddColumn(LangMan.LS(LSID.Count), DataType.dtInteger, 100, false);
             fListModel.ListColumns.ResetDefaults();
         }
 
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
+            _lvRecordStats.ListMan = fListModel;
+
+            _txtLanguage.ReadOnly = true;
+            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
+                _txtLanguage.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
+            }
+        }
+
         public override bool Accept()
         {
             try {
-                fBase.Context.Tree.Header.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
+                fBase.Context.Tree.Header.Language = _txtLanguage.GetSelectedTag<GDMLanguageID>();
 
                 GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
-                submitter.Name = fView.Name.Text;
-                submitter.Address.SetAddressArray(fView.Address.Lines);
+                submitter.Name = _txtName.Text;
+                submitter.Address.SetAddressArray(_txtAddress.Lines);
 
                 if (submitter.Address.PhoneNumbers.Count > 0) {
-                    submitter.Address.PhoneNumbers[0].StringValue = fView.Tel.Text;
+                    submitter.Address.PhoneNumbers[0].StringValue = _txtTel.Text;
                 } else {
-                    submitter.Address.AddPhoneNumber(fView.Tel.Text);
+                    submitter.Address.AddPhoneNumber(_txtTel.Text);
                 }
 
                 fBase.NotifyRecord(submitter, RecordAction.raEdit);
@@ -72,14 +86,14 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Language.SetSelectedTag(fBase.Context.Tree.Header.Language);
+            _txtLanguage.SetSelectedTag(fBase.Context.Tree.Header.Language);
 
             GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
-            fView.Name.Text = submitter.Name;
-            fView.Address.Text = submitter.Address.Lines.Text;
+            _txtName.Text = submitter.Name;
+            _txtAddress.Text = submitter.Address.Lines.Text;
 
             if (submitter.Address.PhoneNumbers.Count > 0) {
-                fView.Tel.Text = submitter.Address.PhoneNumbers[0].StringValue;
+                _txtTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
             }
 
             // update stats
@@ -87,29 +101,29 @@ namespace GKCore.Controllers
             for (int i = 1; i < stats.Length; i++) {
                 fListModel.AddItem(null, LangMan.LS(GKData.RecordTypes[i].Name), stats[i].ToString());
             }
-            fView.RecordStats.UpdateContents();
+            _lvRecordStats.UpdateContents();
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.MIFileProperties));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageAuthor").Text = LangMan.LS(LSID.Author);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.GeneralName);
-            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.Address);
-            GetControl<ILabel>("lblTelephone").Text = LangMan.LS(LSID.Telephone);
-            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
-            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageAuthor.Text = LangMan.LS(LSID.Author);
+            _lblName.Text = LangMan.LS(LSID.GeneralName);
+            _lblAddress.Text = LangMan.LS(LSID.Address);
+            _lblTelephone.Text = LangMan.LS(LSID.Telephone);
+            _pageOther.Text = LangMan.LS(LSID.Other);
+            _lblLanguage.Text = LangMan.LS(LSID.Language);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

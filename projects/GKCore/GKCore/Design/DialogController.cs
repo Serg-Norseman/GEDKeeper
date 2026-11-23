@@ -98,15 +98,15 @@ namespace GKCore.Design
             }
 
             if (!result) {
-                Done();
+                DoneView();
             }
 
             return result;
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
             if (fBase != null) {
                 fLocalUndoman = new ChangeTracker(fBase.Context);
             }

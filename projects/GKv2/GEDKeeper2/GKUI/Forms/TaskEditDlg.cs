@@ -36,32 +36,32 @@ namespace GKUI.Forms
 
         IComboBox ITaskEditDlg.Priority
         {
-            get { return GetControlHandler<IComboBox>(txtPriority); }
+            get { return fController.GetControlHandler<IComboBox>(txtPriority); }
         }
 
         IDateBox ITaskEditDlg.StartDate
         {
-            get { return GetControlHandler<IDateBox>(txtStartDate); }
+            get { return fController.GetControlHandler<IDateBox>(txtStartDate); }
         }
 
         IDateBox ITaskEditDlg.StopDate
         {
-            get { return GetControlHandler<IDateBox>(txtStopDate); }
+            get { return fController.GetControlHandler<IDateBox>(txtStopDate); }
         }
 
         IComboBox ITaskEditDlg.GoalType
         {
-            get { return GetControlHandler<IComboBox>(cmbGoalType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbGoalType); }
         }
 
         ITextBox ITaskEditDlg.Goal
         {
-            get { return GetControlHandler<ITextBox>(txtGoal); }
+            get { return fController.GetControlHandler<ITextBox>(txtGoal); }
         }
 
         IButton ITaskEditDlg.GoalSelect
         {
-            get { return GetControlHandler<IButton>(btnGoalSelect); }
+            get { return fController.GetControlHandler<IButton>(btnGoalSelect); }
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace GKUI.Forms
             fNotesList = new GKSheetList(pageNotes);
 
             fController = new TaskEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnGoalSelect_Click(object sender, EventArgs e)

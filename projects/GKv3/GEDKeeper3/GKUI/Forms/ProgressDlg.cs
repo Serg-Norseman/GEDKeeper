@@ -41,6 +41,7 @@ namespace GKUI.Forms
         private DateTime fStartTime;
         private int fVal;
 
+        public override IViewController Controller { get { return null; } }
 
         public ThreadError ThreadError { get; set; }
 

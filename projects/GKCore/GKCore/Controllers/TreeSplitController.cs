@@ -38,9 +38,9 @@ namespace GKCore.Controllers
             fSplitList = new List<GDMRecord>();
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             fSelectedRecList = new List<GDMRecord>();
             var listModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.Record));

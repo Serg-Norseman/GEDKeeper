@@ -43,7 +43,7 @@ namespace GKUI.Forms
 
         ITextBox INoteEdit.Note
         {
-            get { return GetControlHandler<ITextBox>(txtNote); }
+            get { return fController.GetControlHandler<ITextBox>(txtNote); }
         }
 
         ISheetList INoteEdit.SourcesList
@@ -65,7 +65,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new NoteEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void Dispose(bool disposing)

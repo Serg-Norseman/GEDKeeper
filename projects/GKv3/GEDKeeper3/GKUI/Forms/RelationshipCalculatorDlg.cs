@@ -16,7 +16,7 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class RelationshipCalculatorDlg : CommonDialog, IRelationshipCalculatorDlg
+    public sealed partial class RelationshipCalculatorDlg : CommonDialog<IRelationshipCalculatorDlg, RelationshipCalculatorDlgController>, IRelationshipCalculatorDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -34,8 +34,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly RelationshipCalculatorDlgController fController;
-
         public IBaseWindow Base
         {
             get { return fController.Base; }
@@ -45,27 +43,27 @@ namespace GKUI.Forms
 
         ILabel IRelationshipCalculatorDlg.Label1
         {
-            get { return GetControlHandler<ILabel>(Lab1); }
+            get { return fController.GetControlHandler<ILabel>(Lab1); }
         }
 
         ILabel IRelationshipCalculatorDlg.Label2
         {
-            get { return GetControlHandler<ILabel>(Lab2); }
+            get { return fController.GetControlHandler<ILabel>(Lab2); }
         }
 
         ITextBox IRelationshipCalculatorDlg.Person1
         {
-            get { return GetControlHandler<ITextBox>(Edit1); }
+            get { return fController.GetControlHandler<ITextBox>(Edit1); }
         }
 
         ITextBox IRelationshipCalculatorDlg.Person2
         {
-            get { return GetControlHandler<ITextBox>(Edit2); }
+            get { return fController.GetControlHandler<ITextBox>(Edit2); }
         }
 
         ITextBox IRelationshipCalculatorDlg.Result
         {
-            get { return GetControlHandler<ITextBox>(txtResult); }
+            get { return fController.GetControlHandler<ITextBox>(txtResult); }
         }
 
         #endregion
@@ -75,7 +73,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new RelationshipCalculatorDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
 
             fController.SetRec1(null);
             fController.SetRec2(null);

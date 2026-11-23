@@ -38,7 +38,7 @@ namespace GKCore.Controllers
         }
 
         private readonly List<ImageRef> fFileRefs;
-        private readonly ITimer fTimer;
+        private ITimer fTimer;
 
         private bool fActive;
         private int fCurrentIndex;
@@ -58,7 +58,6 @@ namespace GKCore.Controllers
         {
             fFileRefs = new List<ImageRef>();
             fCurrentIndex = -1;
-            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
         }
 
         protected override void Dispose(bool disposing)
@@ -68,6 +67,12 @@ namespace GKCore.Controllers
                     fTimer.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+            fTimer = AppHost.Instance.CreateTimer(1000, Timer1Tick);
         }
 
         private void Timer1Tick(object sender, EventArgs e)

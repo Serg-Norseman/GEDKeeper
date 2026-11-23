@@ -38,18 +38,19 @@ namespace GKCore.Controllers
 
         public RepositoryEditDlgController(IRepositoryEditDlg view) : base(view)
         {
-            fView.Name.Activate();
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.Name.Activate();
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.NotesList.ListModel.SaveSettings();
             fView.UserRefList.ListModel.SaveSettings();

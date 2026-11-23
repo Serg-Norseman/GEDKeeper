@@ -4,7 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    x:Class="GKUI.Forms.TreeChartWin">
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    x:Class="GKUI.Forms.TreeChartWin"
+    x:TypeArguments="mvp:ITreeChartWin, contr:TreeChartWinController">
 
     <forms:PrintableForm.ToolbarItems>
         <ToolbarItem x:Name="tbImageSave" Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_save_image.gif}" Clicked="tbImageSave_Click" />

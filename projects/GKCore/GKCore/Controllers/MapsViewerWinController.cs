@@ -50,9 +50,9 @@ namespace GKCore.Controllers
             fSearchPlacesWithoutCoords = GlobalOptions.Instance.SearchPlacesWithoutCoords;
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             CultureInfo culture = CultureInfo.CurrentCulture;
             string basePoint = AppHost.Instance.LocalesCollection.GetMapBasePoint(culture.Name);

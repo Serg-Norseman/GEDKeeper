@@ -5,7 +5,10 @@
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    x:Class="GKUI.Forms.DayTipsDlg">
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    x:Class="GKUI.Forms.DayTipsDlg"
+    x:TypeArguments="mvp:IDayTipsDlg, contr:DayTipsDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 

@@ -18,15 +18,13 @@ using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
 {
-    public partial class SlideshowWin : StatusForm, ISlideshowWin
+    public partial class SlideshowWin : StatusForm<ISlideshowWin, SlideshowController>, ISlideshowWin
     {
         #region Design components
 
         private readonly ImageBox fImageCtl;
 
         #endregion
-
-        private readonly SlideshowController fController;
 
         public IWindow OwnerWindow
         {
@@ -50,7 +48,7 @@ namespace GKUI.Forms
             ResumeLayout(false);
 
             fController = new SlideshowController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.LoadList();
         }
 

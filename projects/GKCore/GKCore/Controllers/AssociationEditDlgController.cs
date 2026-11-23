@@ -17,11 +17,18 @@ using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class AssociationEditDlgController : DialogController<IAssociationEditDlg>
     {
+        #region Design components
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnPersonAdd;
+        private ILabel _lblRelation;
+        private ILabel _lblPerson;
+        private IComboBox _cmbRelation;
+        private ITextBox _txtPerson;
+        #endregion
+
         private GDMAssociation fAssociation;
         private GDMIndividualRecord fTempPerson;
 
@@ -40,14 +47,20 @@ namespace GKCore.Controllers
 
         public AssociationEditDlgController(IAssociationEditDlg view) : base(view)
         {
-            fView.Relation.AddStrings(GlobalOptions.Instance.Relations);
-            fView.Relation.ReadOnly = false;
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
+            _cmbRelation.AddStrings(GlobalOptions.Instance.Relations);
+            _cmbRelation.ReadOnly = false;
         }
 
         public override bool Accept()
         {
             try {
-                string rel = fView.Relation.Text.Trim();
+                string rel = _cmbRelation.Text.Trim();
                 if (!string.IsNullOrEmpty(rel) && GlobalOptions.Instance.Relations.IndexOf(rel) < 0) {
                     GlobalOptions.Instance.Relations.Add(rel);
                 }
@@ -64,24 +77,24 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Relation.Text = fAssociation.Relation;
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
+            _cmbRelation.Text = fAssociation.Relation;
+            _txtPerson.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 
         public async void SetPerson()
         {
             fTempPerson = await BaseController.SelectPerson(fView, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
-            fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
+            _txtPerson.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.Association));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblRelation").Text = LangMan.LS(LSID.Relation);
-            GetControl<ILabel>("lblPerson").Text = LangMan.LS(LSID.Person);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblRelation.Text = LangMan.LS(LSID.Relation);
+            _lblPerson.Text = LangMan.LS(LSID.Person);
 
             SetToolTip("btnPersonAdd", LangMan.LS(LSID.PersonAttachTip));
         }
@@ -90,10 +103,9 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            GetControl<IButton>("btnPersonAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnPersonAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
         }
     }
 }

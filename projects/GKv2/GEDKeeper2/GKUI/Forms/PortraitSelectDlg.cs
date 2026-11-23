@@ -39,7 +39,7 @@ namespace GKUI.Forms
             imageView1.SelectionMode = ImageBoxSelectionMode.Rectangle;
 
             fController = new PortraitSelectDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

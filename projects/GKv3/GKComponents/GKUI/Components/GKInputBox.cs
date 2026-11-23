@@ -18,7 +18,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GKInputBox : GKUI.Forms.CommonDialog
+    public sealed class GKInputBox : GKUI.Forms.SimpleDialog
     {
         private enum NumbersMode { nmNone, nmInt, nmFloat }
 
@@ -37,7 +37,7 @@ namespace GKUI.Components
 
             InitializeComponent();
 
-            SetTitle(caption);
+            Title = caption;
             label1.Text = prompt;
             Value = value;
             fNumbersMode = numbersMode;

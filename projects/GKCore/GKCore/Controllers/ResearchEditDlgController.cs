@@ -38,6 +38,19 @@ namespace GKCore.Controllers
 
         public ResearchEditDlgController(IResearchEditDlg view) : base(view)
         {
+        }
+
+        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMPointer);
+            }
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.TasksList.OnModify += ListJumpHandler;
             fView.CommunicationsList.OnModify += ListJumpHandler;
             fView.GroupsList.OnModify += ListJumpHandler;
@@ -51,18 +64,6 @@ namespace GKCore.Controllers
             for (GDMResearchStatus rs = GDMResearchStatus.rsDefined; rs <= GDMResearchStatus.rsWithdrawn; rs++) {
                 fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
-        }
-
-        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                JumpToRecord(eArgs.ItemData as GDMPointer);
-            }
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.TasksList.ListModel = new ResTasksListModel(fView, baseWin, fLocalUndoman);
             fView.CommunicationsList.ListModel = new ResCommunicationsListModel(fView, baseWin, fLocalUndoman);
@@ -70,7 +71,7 @@ namespace GKCore.Controllers
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.TasksList.ListModel.SaveSettings();
             fView.CommunicationsList.ListModel.SaveSettings();

@@ -20,12 +20,12 @@ namespace GKUI.Forms
 
         ITextBox ITreeCompareDlg.ExternalBase
         {
-            get { return GetControlHandler<ITextBox>(txtCompareFile); }
+            get { return fController.GetControlHandler<ITextBox>(txtCompareFile); }
         }
 
         ITextBox ITreeCompareDlg.CompareOutput
         {
-            get { return GetControlHandler<ITextBox>(ListCompare); }
+            get { return fController.GetControlHandler<ITextBox>(ListCompare); }
         }
 
         #endregion
@@ -35,7 +35,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new TreeCompareController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnFileChoose_Click(object sender, EventArgs e)

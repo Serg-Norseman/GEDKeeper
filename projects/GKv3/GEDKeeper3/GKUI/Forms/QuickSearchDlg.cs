@@ -18,7 +18,7 @@ using GKCore.Plugins;
 
 namespace GKUI.Forms
 {
-    public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
+    public sealed partial class QuickSearchDlg : CommonWindow<IQuickSearchDlg, QuickSearchDlgController>, IQuickSearchDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -30,8 +30,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly QuickSearchDlgController fController;
-
         public IWindow OwnerWindow
         {
             get { return fController.WorkWindow; }
@@ -41,7 +39,7 @@ namespace GKUI.Forms
 
         ITextBox IQuickSearchDlg.SearchPattern
         {
-            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
+            get { return Controller?.GetControlHandler<ITextBox>(txtSearchPattern); }
         }
 
         #endregion

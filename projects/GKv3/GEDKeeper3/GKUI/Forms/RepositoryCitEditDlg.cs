@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
         IComboBox IRepositoryCitEditDlg.RepositoryCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbRepository); }
+            get { return fController.GetControlHandler<IComboBox>(cmbRepository); }
         }
 
         ISheetList IRepositoryCitEditDlg.CallNumbersList
@@ -62,7 +62,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new RepositoryCitDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnRepositoryAdd_Click(object sender, EventArgs e)

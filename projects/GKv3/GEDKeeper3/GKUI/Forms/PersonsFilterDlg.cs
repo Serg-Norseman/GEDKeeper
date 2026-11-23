@@ -18,7 +18,7 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class PersonsFilterDlg : CommonDialog, ICommonFilterDlg, IPersonsFilterDlg
+    public partial class PersonsFilterDlg : CommonDialog<IPersonsFilterDlg, PersonsFilterDlgController>, IPersonsFilterDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -56,9 +56,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly CommonFilterDlgController fCommonController;
-        private readonly PersonsFilterDlgController fController;
-
         private readonly IBaseWindow fBase;
         private readonly IRecordsListModel fListMan;
 
@@ -71,37 +68,37 @@ namespace GKUI.Forms
 
         IComboBox IPersonsFilterDlg.SourceCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbSource); }
+            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
         }
 
         IComboBox IPersonsFilterDlg.GroupCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbGroup); }
+            get { return fController.GetControlHandler<IComboBox>(cmbGroup); }
         }
 
         ITextBox IPersonsFilterDlg.AliveBeforeDate
         {
-            get { return GetControlHandler<ITextBox>(txtAliveBeforeDate); }
+            get { return fController.GetControlHandler<ITextBox>(txtAliveBeforeDate); }
         }
 
         ICheckBox IPersonsFilterDlg.OnlyPatriarchsCheck
         {
-            get { return GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
+            get { return fController.GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
         }
 
         IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbEventVal); }
+            get { return fController.GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
         IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return GetControlHandler<IComboBox>(cmbResidence); }
+            get { return fController.GetControlHandler<IComboBox>(cmbResidence); }
         }
 
         IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return GetControlHandler<IComboBox>(txtName); }
+            get { return fController.GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
@@ -185,14 +182,10 @@ namespace GKUI.Forms
             fListMan = listMan;
             filterView.ListMan = fListMan;
 
-            fCommonController = new CommonFilterDlgController(this, listMan);
-            fCommonController.Init(baseWin);
-            fCommonController.UpdateView();
-
             tabsFilters.SelectedIndex = 1;
 
             fController = new PersonsFilterDlgController(this, listMan);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
             fController.UpdateView();
         }
 
@@ -203,21 +196,20 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            if (fCommonController.Accept() && fController.Accept())
+            if (fController.Accept())
                 Close(DialogResult.Ok);
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
             fListMan.Filter.Clear();
-            fCommonController.UpdateView();
             fController.UpdateView();
         }
 
         private void cmbFilter_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Keys.Delete && e.Control) {
-                var combo = GetControlHandler<IComboBox>(sender);
+                var combo = fController.GetControlHandler<IComboBox>(sender);
                 fController.RemoveFilter(combo);
             }
         }

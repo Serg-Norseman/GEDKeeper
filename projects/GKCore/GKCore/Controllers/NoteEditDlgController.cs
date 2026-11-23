@@ -43,9 +43,9 @@ namespace GKCore.Controllers
         {
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
@@ -53,7 +53,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fView.SourcesList.ListModel.SaveSettings();

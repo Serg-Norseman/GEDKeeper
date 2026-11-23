@@ -24,7 +24,7 @@ namespace GKCore.Controllers
         {
             ISourceEditDlg view = CreateMockView();
             var controller = new SourceEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var src = fBaseWin.Context.Tree.CreateSource();
             controller.SourceRecord = src;

@@ -73,32 +73,32 @@ namespace GKUI.Forms
 
         IButton IRecMergeDlg.SkipBtn
         {
-            get { return GetControlHandler<IButton>(btnSkip); }
+            get { return fController.GetControlHandler<IButton>(btnSkip); }
         }
 
         IProgressBar IRecMergeDlg.ProgressBar
         {
-            get { return GetControlHandler<IProgressBar>(ProgressBar1); }
+            get { return fController.GetControlHandler<IProgressBar>(ProgressBar1); }
         }
 
         ICheckBox IRecMergeDlg.IndistinctMatchingChk
         {
-            get { return GetControlHandler<ICheckBox>(chkIndistinctMatching); }
+            get { return fController.GetControlHandler<ICheckBox>(chkIndistinctMatching); }
         }
 
         INumericBox IRecMergeDlg.NameAccuracyNum
         {
-            get { return GetControlHandler<INumericBox>(edNameAccuracy); }
+            get { return fController.GetControlHandler<INumericBox>(edNameAccuracy); }
         }
 
         ICheckBox IRecMergeDlg.BirthYearChk
         {
-            get { return GetControlHandler<ICheckBox>(chkBirthYear); }
+            get { return fController.GetControlHandler<ICheckBox>(chkBirthYear); }
         }
 
         INumericBox IRecMergeDlg.YearInaccuracyNum
         {
-            get { return GetControlHandler<INumericBox>(edYearInaccuracy); }
+            get { return fController.GetControlHandler<INumericBox>(edYearInaccuracy); }
         }
 
         #endregion
@@ -118,7 +118,7 @@ namespace GKUI.Forms
             pan2.Content = (fView2);
 
             fController = new RecMergeController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void radMergeMode_Click(object sender, EventArgs e)

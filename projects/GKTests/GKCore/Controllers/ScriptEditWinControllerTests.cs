@@ -21,7 +21,7 @@ namespace GKCore.Controllers
         {
             IScriptEditWin view = CreateMockView();
             var controller = new ScriptEditWinController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             controller.NewScript();
 

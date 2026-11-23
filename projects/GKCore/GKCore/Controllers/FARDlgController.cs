@@ -30,6 +30,12 @@ namespace GKCore.Controllers
 
         public FARDlgController(IFARDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             GetControl<IComboBox>("cmbProperty").ReadOnly = true;
             GetControl<IComboBox>("cmbRecord").ReadOnly = true;
         }

@@ -24,7 +24,7 @@ namespace GKCore.Controllers
         {
             ITaskEditDlg view = CreateMockView();
             var controller = new TaskEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var taskRecord = new GDMTaskRecord(fBaseWin.Context.Tree);
             controller.TaskRecord = taskRecord;

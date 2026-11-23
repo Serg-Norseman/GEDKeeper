@@ -13,6 +13,8 @@ namespace GKTests.Stubs
 {
     internal class ProgressStub : IProgressDialog
     {
+        public IViewController Controller { get; }
+
         public bool Enabled { get; set; }
         public bool Visible { get; set; }
         public void Activate() { }
@@ -20,7 +22,6 @@ namespace GKTests.Stubs
         public void Dispose() { }
         public void SetToolTip(object component, string toolTip) { }
         public object GetControl(string controlName) { return null; }
-        T IView.GetCoreControl<T>(string controlName) { return default(T); }
         public bool ShowModalX(IView owner) { return true; }
 
 

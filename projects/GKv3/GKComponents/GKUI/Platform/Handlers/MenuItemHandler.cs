@@ -54,8 +54,8 @@ namespace GKUI.Platform.Handlers
             get { return fGlyph; }
             set {
                 if (Control is ButtonMenuItem btnItem) {
-                    fGlyph = value;
-                    btnItem.Image = fGlyph == null ? null : ((ImageHandler)fGlyph).Handle;
+                    //fGlyph = value;
+                    btnItem.Image = value == null ? null : ((ImageHandler)value).Handle;
                 }
             }
         }

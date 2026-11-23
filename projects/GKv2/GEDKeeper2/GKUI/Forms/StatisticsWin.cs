@@ -19,12 +19,10 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
+    public sealed partial class StatisticsWin : CommonWindow<IStatisticsWin, StatisticsWinController>, IStatisticsWin
     {
         private readonly ZGraphControl fGraph;
         private readonly GKListView fListStats;
-
-        private readonly StatisticsWinController fController;
 
         #region View Interface
 
@@ -45,7 +43,7 @@ namespace GKUI.Forms
 
         IComboBox IStatisticsWin.StatsType
         {
-            get { return GetControlHandler<IComboBox>(cbType); }
+            get { return fController.GetControlHandler<IComboBox>(cbType); }
         }
 
         #endregion
@@ -80,7 +78,7 @@ namespace GKUI.Forms
             Panel1.Controls.SetChildIndex(ToolBar1, 4);
 
             fController = new StatisticsWinController(this, selectedRecords);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)

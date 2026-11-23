@@ -44,17 +44,17 @@ namespace GKUI.Forms
 
         ITextBox ILocationNameEditDlg.NameText
         {
-            get { return GetControlHandler<ITextBox>(txtTitle); }
+            get { return fController.GetControlHandler<ITextBox>(txtTitle); }
         }
 
         ITextBox ILocationNameEditDlg.AbbrText
         {
-            get { return GetControlHandler<ITextBox>(txtShortTitle); }
+            get { return fController.GetControlHandler<ITextBox>(txtShortTitle); }
         }
 
         IDateControl ILocationNameEditDlg.DateCtl
         {
-            get { return GetControlHandler<IDateControl>(dateCtl); }
+            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
         }
 
         #endregion
@@ -64,7 +64,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new LocationNameEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
     }
 }

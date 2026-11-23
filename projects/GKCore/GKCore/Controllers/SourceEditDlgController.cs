@@ -39,9 +39,6 @@ namespace GKCore.Controllers
 
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
-            fView.RepositoriesList.OnModify += ModifyReposSheet;
-
-            fView.ShortTitle.Activate();
         }
 
         private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
@@ -51,9 +48,13 @@ namespace GKCore.Controllers
             }
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.RepositoriesList.OnModify += ModifyReposSheet;
+
+            fView.ShortTitle.Activate();
 
             fView.RepositoriesList.ListModel = new RepositoryCitationsListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
@@ -61,7 +62,7 @@ namespace GKCore.Controllers
             fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.RepositoriesList.ListModel.SaveSettings();
             fView.NotesList.ListModel.SaveSettings();

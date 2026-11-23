@@ -28,8 +28,8 @@ namespace GKUI.Platform
         {
             get { return fGlyph; }
             set {
-                fGlyph = value;
-                base.Image = (fGlyph == null) ? null : ((ImageHandler)fGlyph).Handle;
+                //fGlyph = value;
+                base.Image = (value == null) ? null : ((ImageHandler)value).Handle;
             }
         }
 

@@ -65,27 +65,27 @@ namespace GKUI.Forms
 
         ITextBox ICommunicationEditDlg.Corresponder
         {
-            get { return GetControlHandler<ITextBox>(txtCorresponder); }
+            get { return fController.GetControlHandler<ITextBox>(txtCorresponder); }
         }
 
         IComboBox ICommunicationEditDlg.CorrType
         {
-            get { return GetControlHandler<IComboBox>(cmbCorrType); }
+            get { return fController.GetControlHandler<IComboBox>(cmbCorrType); }
         }
 
         IDateBox ICommunicationEditDlg.Date
         {
-            get { return GetControlHandler<IDateBox>(txtDate); }
+            get { return fController.GetControlHandler<IDateBox>(txtDate); }
         }
 
         IComboBox ICommunicationEditDlg.Dir
         {
-            get { return GetControlHandler<IComboBox>(txtDir); }
+            get { return fController.GetControlHandler<IComboBox>(txtDir); }
         }
 
         ITextBox ICommunicationEditDlg.Name
         {
-            get { return GetControlHandler<ITextBox>(txtName); }
+            get { return fController.GetControlHandler<ITextBox>(txtName); }
         }
 
         #endregion
@@ -95,7 +95,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new CommunicationEditDlgController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void btnPersonAdd_Click(object sender, EventArgs e)

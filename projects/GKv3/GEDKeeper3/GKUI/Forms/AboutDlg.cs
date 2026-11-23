@@ -15,7 +15,7 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class AboutDlg : CommonDialog, IAboutDlg
+    public sealed partial class AboutDlg : CommonDialog<IAboutDlg, AboutDlgController>, IAboutDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -31,8 +31,6 @@ namespace GKUI.Forms
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly AboutDlgController fController;
 
         public AboutDlg()
         {

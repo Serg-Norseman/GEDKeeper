@@ -24,7 +24,7 @@ namespace GKCore.Controllers
         {
             ITreeSplitDlg view = CreateMockView();
             var controller = new TreeSplitController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             GDMIndividualRecord iRec = fBaseWin.Context.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);

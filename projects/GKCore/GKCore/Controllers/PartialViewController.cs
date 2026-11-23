@@ -44,12 +44,10 @@ namespace GKCore.Controllers
         }
 
 
-        public PartialViewController(IPartialView view, IBaseWindow baseWin, GDMRecordType recordType) : base(view)
+        public PartialViewController(IPartialView view, GDMRecordType recordType) : base(view)
         {
             fChangedRecords = new List<GDMRecord>();
             fNavman = new NavigationStack<GDMRecord>();
-
-            Init(baseWin);
             fRecordType = recordType;
         }
 

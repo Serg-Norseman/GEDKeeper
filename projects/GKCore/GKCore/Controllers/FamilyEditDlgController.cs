@@ -40,6 +40,12 @@ namespace GKCore.Controllers
 
         public FamilyEditDlgController(IFamilyEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.Restriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
                 fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
@@ -52,11 +58,6 @@ namespace GKCore.Controllers
 
             fView.ChildrenList.OnModify += ModifyChildrenSheet;
             fView.ChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.ChildrenList.ListModel = new FamilyChildrenListModel(fView, baseWin, fLocalUndoman);
             fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
@@ -66,7 +67,7 @@ namespace GKCore.Controllers
             fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.ChildrenList.ListModel.SaveSettings();
             fView.EventsList.ListModel.SaveSettings();

@@ -15,6 +15,7 @@ using System.Drawing.Printing;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Options;
 using GKUI.Components;
@@ -25,7 +26,9 @@ namespace GKUI.Forms
     /// <summary>
     /// Form's class, common for the implementation of the print.
     /// </summary>
-    public class PrintableForm : StatusForm
+    public abstract class PrintableForm<TView, TController> : StatusForm<TView, TController>
+        where TView : IView
+        where TController : FormController<TView>
     {
         private const int PageMargin = 20;
 

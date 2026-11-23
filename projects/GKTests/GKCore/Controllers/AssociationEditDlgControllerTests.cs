@@ -27,7 +27,7 @@ namespace GKCore.Controllers
             controller.ApplyTheme();
 
             var baseWin = GetBaseSubst();
-            controller.Init(baseWin);
+            controller.InitView(baseWin);
             Assert.AreEqual(baseWin, controller.Base);
 
             var association = new GDMAssociation(); // for xref pointers to work
@@ -42,7 +42,7 @@ namespace GKCore.Controllers
 
             // substitutes of values
             var relValue = "test relation";
-            view.Relation.Text.Returns(relValue);
+            controller.GetControl<IComboBox>("cmbRelation").Text.Returns(relValue);
             var relPerson = baseWin.Context.Tree.CreateIndividual();
             RecordSelectDialogStub.SetTestResult(relPerson);
 

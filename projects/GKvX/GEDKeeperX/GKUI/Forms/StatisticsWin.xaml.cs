@@ -16,10 +16,8 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
+    public sealed partial class StatisticsWin : CommonWindow<IStatisticsWin, StatisticsWinController>, IStatisticsWin
     {
-        private readonly StatisticsWinController fController;
-
         #region View Interface
 
         IGraphControl IStatisticsWin.Graph
@@ -39,7 +37,7 @@ namespace GKUI.Forms
 
         IComboBox IStatisticsWin.StatsType
         {
-            get { return GetControlHandler<IComboBox>(cbType); }
+            get { return fController.GetControlHandler<IComboBox>(cbType); }
         }
 
         #endregion
@@ -55,7 +53,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new StatisticsWinController(this, selectedRecords);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)

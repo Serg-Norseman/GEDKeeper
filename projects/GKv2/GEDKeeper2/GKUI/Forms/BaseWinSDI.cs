@@ -35,11 +35,9 @@ using GKUI.Themes;
 
 namespace GKUI.Forms
 {
-    public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
+    public sealed partial class BaseWinSDI : CommonWindow<IBaseWindowView, BaseWinController>, IBaseWindowView
     {
         #region Private fields
-
-        private readonly BaseWinController fController;
 
         private readonly BaseContext fContext;
 
@@ -63,17 +61,17 @@ namespace GKUI.Forms
 
         ITabControl IBaseWindowView.RecordTabs
         {
-            get { return GetControlHandler<ITabControl>(tabsRecords); }
+            get { return fController.GetControlHandler<ITabControl>(tabsRecords); }
         }
 
         IMenuItem IBaseWindowView.ReportsItem
         {
-            get { return GetControlHandler<IMenuItem>(miReports); }
+            get { return fController.GetControlHandler<IMenuItem>(miReports); }
         }
 
         IMenuItem IBaseWindowView.PluginsItem
         {
-            get { return GetControlHandler<IMenuItem>(miPlugins); }
+            get { return fController.GetControlHandler<IMenuItem>(miPlugins); }
         }
 
         #endregion

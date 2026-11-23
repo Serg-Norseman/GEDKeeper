@@ -28,11 +28,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class PartialView : CommonWindow, IPartialView
+    public sealed partial class PartialView : CommonWindow<IPartialView, PartialViewController>, IPartialView
     {
-        private readonly PartialViewController fController;
-
-
         public IWindow OwnerWindow
         {
             get { return fController.Base; }
@@ -45,7 +42,8 @@ namespace GKUI.Forms
 
             Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
 
-            fController = new PartialViewController(this, baseWin, recordType);
+            fController = new PartialViewController(this, recordType);
+            fController.InitView(baseWin);
 
             CreatePage(baseWin, recordType);
 

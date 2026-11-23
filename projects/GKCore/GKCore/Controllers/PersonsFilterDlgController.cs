@@ -9,7 +9,6 @@
 using System;
 using BSLib;
 using GDModel;
-using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
@@ -21,14 +20,14 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PersonsFilterDlgController : DialogController<IPersonsFilterDlg>
+    public sealed class PersonsFilterDlgController : CommonFilterDlgController<IPersonsFilterDlg>
     {
-        private readonly IndividualListModel fListMan;
+        private readonly IndividualListModel fIndiListMan;
         private readonly GlobalOptions fOptions;
 
-        public PersonsFilterDlgController(IPersonsFilterDlg view, IRecordsListModel listMan) : base(view)
+        public PersonsFilterDlgController(IPersonsFilterDlg view, IRecordsListModel listMan) : base(view, listMan)
         {
-            fListMan = (IndividualListModel)listMan;
+            fIndiListMan = (IndividualListModel)listMan;
             fOptions = GlobalOptions.Instance;
 
             fView.GroupCombo.ReadOnly = true;
@@ -60,7 +59,10 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
+                if (!base.Accept())
+                    return false;
+
+                IndividualListFilter iFilter = (IndividualListFilter)fIndiListMan.Filter;
 
                 iFilter.Name = GKUtils.SaveFilter(fView.NameCombo.Text, fOptions.NameFilters);
                 iFilter.Residence = GKUtils.SaveFilter(fView.ResidenceCombo.Text, fOptions.ResidenceFilters);
@@ -131,7 +133,9 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
+            base.UpdateView();
+
+            IndividualListFilter iFilter = (IndividualListFilter)fIndiListMan.Filter;
 
             UpdateFiltersCombo(fView.NameCombo, fOptions.NameFilters);
             UpdateFiltersCombo(fView.ResidenceCombo, fOptions.ResidenceFilters);
@@ -214,6 +218,8 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            base.SetLocale();
+
             GetControl<ITabPage>("pageSpecificFilter").Text = LangMan.LS(LSID.PersonsFilter);
             GetControl<IRadioButton>("rbAll").Text = LangMan.LS(LSID.All);
             GetControl<IRadioButton>("rbOnlyLive").Text = LangMan.LS(LSID.OnlyAlive);
@@ -232,7 +238,7 @@ namespace GKCore.Controllers
 
         public override void ApplyTheme()
         {
-            // dummy
+            base.ApplyTheme();
         }
     }
 }

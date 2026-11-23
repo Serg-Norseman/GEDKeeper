@@ -24,7 +24,7 @@ namespace GKCore.Controllers
         {
             ICommunicationEditDlg view = CreateMockView();
             var controller = new CommunicationEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var commRec = fBaseWin.Context.Tree.CreateCommunication();
             controller.CommunicationRecord = commRec;

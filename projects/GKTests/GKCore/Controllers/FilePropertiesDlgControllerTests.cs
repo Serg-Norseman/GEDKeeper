@@ -24,14 +24,14 @@ namespace GKCore.Controllers
             var controller = new FilePropertiesDlgController(view);
 
             var baseWin = GetBaseSubst();
-            controller.Init(baseWin);
+            controller.InitView(baseWin);
 
             controller.UpdateView();
 
-            view.Name.Text = "sample text";
+            controller.GetControl<ITextBox>("txtName").Text = "sample text";
 
             var langValue = GDMLanguageID.AngloSaxon;
-            view.Language.GetSelectedTag<GDMLanguageID>().Returns(langValue);
+            controller.GetControl<IComboBox>("txtLanguage").GetSelectedTag<GDMLanguageID>().Returns(langValue);
 
             controller.Accept();
 
@@ -44,6 +44,7 @@ namespace GKCore.Controllers
             var view = Substitute.For<IFilePropertiesDlg>();
             SubstituteControl<IButton>(view, "btnAccept");
             SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<IButton>(view, "btnLangEdit");
             SubstituteControl<ITabPage>(view, "pageAuthor");
             SubstituteControl<ITabPage>(view, "pageOther");
             SubstituteControl<ILabel>(view, "lblName");
@@ -51,11 +52,11 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblTelephone");
             SubstituteControl<ILabel>(view, "lblLanguage");
 
-            view.RecordStats.Returns(Substitute.For<IListView>());
-            view.Language.Returns(Substitute.For<IComboBox>());
-            view.Name.Returns(Substitute.For<ITextBox>());
-            view.Address.Returns(Substitute.For<ITextBox>());
-            view.Tel.Returns(Substitute.For<ITextBox>());
+            SubstituteControl<IListView>(view, "lvRecordStats");
+            SubstituteControl<IComboBox>(view, "txtLanguage");
+            SubstituteControl<ITextBox>(view, "txtName");
+            SubstituteControl<ITextBox>(view, "txtAddress");
+            SubstituteControl<ITextBox>(view, "txtTel");
             return view;
         }
     }

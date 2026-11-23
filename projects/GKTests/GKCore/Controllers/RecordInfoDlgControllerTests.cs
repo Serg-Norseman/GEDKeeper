@@ -26,7 +26,7 @@ namespace GKCore.Controllers
             view.HyperView.Lines.Returns(new StringList());
 
             var controller = new RecordInfoDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var iRec = fBaseWin.Context.Tree.CreateIndividual();
             controller.Record = iRec;

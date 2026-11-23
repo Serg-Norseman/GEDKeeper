@@ -25,6 +25,11 @@ namespace GKCore.Controllers
 
         public CircleChartWinController(ICircleChartWin view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
             GetControl<IToolItem>("tbDocPreview").Enabled = AppHost.Instance.HasFeatureSupport(Feature.PrintPreview);
         }
 

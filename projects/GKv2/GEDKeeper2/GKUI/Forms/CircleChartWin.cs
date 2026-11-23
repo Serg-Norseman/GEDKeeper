@@ -23,10 +23,8 @@ using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public partial class CircleChartWin : PrintableForm, ICircleChartWin
+    public partial class CircleChartWin : PrintableForm<ICircleChartWin, CircleChartWinController>, ICircleChartWin
     {
-        private readonly CircleChartWinController fController;
-
         private readonly CircleChart fCircleChart;
 
         public IWindow OwnerWindow
@@ -61,7 +59,7 @@ namespace GKUI.Forms
             Controls.SetChildIndex(fCircleChart, 0);
 
             fController = new CircleChartWinController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         protected override void OnLoad(EventArgs e)

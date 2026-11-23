@@ -44,12 +44,13 @@ namespace GKCore.Controllers
 
         public LocationEditDlgController(ILocationEditDlg view) : base(view)
         {
-            fView.Name.Activate();
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
+
+            fView.Name.Activate();
 
             fView.NamesList.ListModel = new LocationNamesListModel(fView, baseWin, fLocalUndoman);
             fView.LinksList.ListModel = new LocationLinksListModel(fView, baseWin, fLocalUndoman);
@@ -64,7 +65,7 @@ namespace GKCore.Controllers
             fView.GeoCoordsList.UpdateContents();
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.NamesList.ListModel.SaveSettings();
             fView.LinksList.ListModel.SaveSettings();

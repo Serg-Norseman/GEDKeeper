@@ -43,9 +43,9 @@ namespace GKCore.Controllers
             fRepositoriesList = new StringList();
         }
 
-        public override void Init(IBaseWindow baseWin)
+        public override void InitView(IBaseWindow baseWin)
         {
-            base.Init(baseWin);
+            base.InitView(baseWin);
 
             fBase.Context.GetRepositoriesList(fRepositoriesList);
             RefreshRepositoriesList("");
@@ -55,7 +55,7 @@ namespace GKCore.Controllers
             fView.CallNumbersList.ListModel = new CallNumbersListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.CallNumbersList.ListModel.SaveSettings();
         }

@@ -21,9 +21,8 @@ using IWindow = GKCore.Design.IWindow;
 
 namespace GKUI.Forms
 {
-    public partial class MediaViewerWin : CommonWindow, IMediaViewerWin
+    public partial class MediaViewerWin : CommonWindow<IMediaViewerWin, MediaViewerController>, IMediaViewerWin
     {
-        private readonly MediaViewerController fController;
         private View fViewer;
 
         public GDMMultimediaRecord MultimediaRecord
@@ -57,7 +56,7 @@ namespace GKUI.Forms
             SetLocale();
 
             fController = new MediaViewerController(this);
-            fController.Init(baseWin);
+            fController.InitView(baseWin);
         }
 
         public override void SetLocale()

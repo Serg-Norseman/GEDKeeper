@@ -22,7 +22,7 @@ namespace GKCore.Controllers
         {
             INoteEditDlg view = CreateMockView();
             var controller = new NoteEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var noteRecord = new GDMNoteRecord(fBaseWin.Context.Tree);
             controller.NoteRecord = noteRecord;

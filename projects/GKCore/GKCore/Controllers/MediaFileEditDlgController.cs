@@ -43,6 +43,12 @@ namespace GKCore.Controllers
 
         public MediaFileEditDlgController(IMediaFileEditDlg view) : base(view)
         {
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
+
             fView.MediaType.ReadOnly = true;
             fView.StoreType.ReadOnly = true;
 

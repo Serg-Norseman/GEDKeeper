@@ -7,15 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface IAssociationEditDlg : ICommonDialog
     {
         GDMAssociation Association { get; set; }
-
-        ITextBox Person { get; }
-        IComboBox Relation { get; }
     }
 }

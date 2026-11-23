@@ -40,6 +40,11 @@ namespace GKCore.Controllers
         public CommunicationEditDlgController(ICommunicationEditDlg view) : base(view)
         {
             fTempInd = null;
+        }
+
+        public override void InitView(IBaseWindow baseWin)
+        {
+            base.InitView(baseWin);
 
             fView.CorrType.ReadOnly = true;
             for (GDMCommunicationType ct = GDMCommunicationType.ctCall; ct <= GDMCommunicationType.ctLast; ct++) {
@@ -53,17 +58,12 @@ namespace GKCore.Controllers
             });
 
             fView.Name.Activate();
-        }
-
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView,baseWin,  fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
-        public override void Done()
+        public override void DoneView()
         {
             fView.NotesList.ListModel.SaveSettings();
             fView.MediaList.ListModel.SaveSettings();

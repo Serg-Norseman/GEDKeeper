@@ -23,7 +23,7 @@ namespace GKCore.Controllers
         {
             IParentsEditDlg view = CreateMockView();
             var controller = new ParentsEditDlgController(view);
-            controller.Init(fBaseWin);
+            controller.InitView(fBaseWin);
 
             var individual = new GDMIndividualRecord(null);
             var childLink = new GDMChildToFamilyLink();
