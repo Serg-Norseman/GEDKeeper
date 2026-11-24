@@ -19,11 +19,21 @@ using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class AgeEditDlgController : DialogController<IAgeEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IComboBox _cmbRel1;
+        private IComboBox _cmbRel2;
+        private ILabel _lblAge1;
+        private ITextBox _txtVal1;
+        private ILabel _lblAge2;
+        private ITextBox _txtVal2;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMCustomEvent fEvent;
 
 
@@ -47,15 +57,15 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.RelativeCombo1.ReadOnly = true;
-            fView.RelativeCombo2.ReadOnly = true;
+            _cmbRel1.ReadOnly = true;
+            _cmbRel2.ReadOnly = true;
 
             for (int i = 0; i < GEDCOMConsts.AgeRelatives.Length; i++) {
-                fView.RelativeCombo1.AddItem(GEDCOMConsts.AgeRelatives[i], i - 1);
-                fView.RelativeCombo2.AddItem(GEDCOMConsts.AgeRelatives[i], i - 1);
+                _cmbRel1.AddItem(GEDCOMConsts.AgeRelatives[i], i - 1);
+                _cmbRel2.AddItem(GEDCOMConsts.AgeRelatives[i], i - 1);
             }
 
-            fView.RelativeCombo1.Activate();
+            _cmbRel1.Activate();
         }
 
         public static string GetFixedMask()
@@ -146,16 +156,16 @@ namespace GKCore.Controllers
             try {
                 if (fEvent is GDMIndividualEventDetail indiEvent) {
                     var age = indiEvent.Age;
-                    age.StringValue = GetAgeStr(fView.ValueText1.Text);
-                    age.Relative = fView.RelativeCombo1.GetSelectedTag<int>();
+                    age.StringValue = GetAgeStr(_txtVal1.Text);
+                    age.Relative = _cmbRel1.GetSelectedTag<int>();
                 } else if (fEvent is GDMFamilyEvent famEvent) {
                     var husbAge = famEvent.HusbandAge;
-                    husbAge.StringValue = GetAgeStr(fView.ValueText1.Text);
-                    husbAge.Relative = fView.RelativeCombo1.GetSelectedTag<int>();
+                    husbAge.StringValue = GetAgeStr(_txtVal1.Text);
+                    husbAge.Relative = _cmbRel1.GetSelectedTag<int>();
 
                     var wifeAge = famEvent.WifeAge;
-                    wifeAge.StringValue = GetAgeStr(fView.ValueText2.Text);
-                    wifeAge.Relative = fView.RelativeCombo2.GetSelectedTag<int>();
+                    wifeAge.StringValue = GetAgeStr(_txtVal2.Text);
+                    wifeAge.Relative = _cmbRel2.GetSelectedTag<int>();
                 }
 
                 CommitChanges();
@@ -171,26 +181,26 @@ namespace GKCore.Controllers
         {
             if (fEvent is GDMIndividualEventDetail indiEvent) {
                 var age = indiEvent.Age;
-                fView.RelativeCombo1.SetSelectedTag(age.Relative);
-                SetAgeStr(fView.ValueText1, age);
+                _cmbRel1.SetSelectedTag(age.Relative);
+                SetAgeStr(_txtVal1, age);
 
-                GetControl<ILabel>("lblAge1").Text = LangMan.LS(LSID.Age);
+                _lblAge1.Text = LangMan.LS(LSID.Age);
 
-                fView.RelativeCombo2.Visible = false;
-                fView.ValueText2.Visible = false;
-                GetControl<ILabel>("lblAge2").Visible = false;
+                _cmbRel2.Visible = false;
+                _txtVal2.Visible = false;
+                _lblAge2.Visible = false;
             } else if (fEvent is GDMFamilyEvent famEvent) {
                 var husbAge = famEvent.HusbandAge;
-                fView.RelativeCombo1.SetSelectedTag(husbAge.Relative);
-                SetAgeStr(fView.ValueText1, husbAge);
+                _cmbRel1.SetSelectedTag(husbAge.Relative);
+                SetAgeStr(_txtVal1, husbAge);
 
-                GetControl<ILabel>("lblAge1").Text = LangMan.LS(LSID.HusbandAge);
+                _lblAge1.Text = LangMan.LS(LSID.HusbandAge);
 
                 var wifeAge = famEvent.WifeAge;
-                fView.RelativeCombo2.SetSelectedTag(wifeAge.Relative);
-                SetAgeStr(fView.ValueText2, wifeAge);
+                _cmbRel2.SetSelectedTag(wifeAge.Relative);
+                SetAgeStr(_txtVal2, wifeAge);
 
-                GetControl<ILabel>("lblAge2").Text = LangMan.LS(LSID.WifeAge);
+                _lblAge2.Text = LangMan.LS(LSID.WifeAge);
             }
         }
 
@@ -198,16 +208,16 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Age));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

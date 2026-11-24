@@ -30,8 +30,8 @@ namespace GKCore.Controllers
             controller.UserReference = userRef;
             Assert.AreEqual(userRef, controller.UserReference);
 
-            controller.GetControl<IComboBox>("cmbRef").Text = "sample text2";
-            controller.GetControl<IComboBox>("cmbRefType").Text = "sample text3";
+            _cmbRef.Text = "sample text2";
+            _cmbRefType.Text = "sample text3";
 
             controller.Accept();
             controller.UpdateView();
@@ -40,15 +40,22 @@ namespace GKCore.Controllers
             Assert.AreEqual("sample text3", userRef.ReferenceType);
         }
 
-        private static IUserRefEditDlg CreateMockView()
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblReference;
+        private IComboBox _cmbRef;
+        private ILabel _lblRefType;
+        private IComboBox _cmbRefType;
+
+        private IUserRefEditDlg CreateMockView()
         {
             var view = Substitute.For<IUserRefEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblReference");
-            SubstituteControl<IComboBox>(view, "cmbRef");
-            SubstituteControl<ILabel>(view, "lblRefType");
-            SubstituteControl<IComboBox>(view, "cmbRefType");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _lblReference = SubstCtl<ILabel>(view, "lblReference");
+            _cmbRef = SubstCtl<IComboBox>(view, "cmbRef");
+            _lblRefType = SubstCtl<ILabel>(view, "lblRefType");
+            _cmbRefType = SubstCtl<IComboBox>(view, "cmbRefType");
             return view;
         }
     }

@@ -7,22 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface ICommunicationEditDlg : ICommonDialog
     {
         GDMCommunicationRecord CommunicationRecord { get; set; }
-
-        ITextBox Corresponder { get; }
-        IComboBox CorrType { get; }
-        IDateBox Date { get; }
-        IComboBox Dir { get; }
-        ITextBox Name { get; }
-
-        ISheetList NotesList { get; }
-        ISheetList MediaList { get; }
     }
 }

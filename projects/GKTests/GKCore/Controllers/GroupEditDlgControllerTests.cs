@@ -31,16 +31,16 @@ namespace GKCore.Controllers
             controller.GroupRecord = group;
             Assert.AreEqual(group, controller.GroupRecord);
 
-            view.Name.Text = "sample group";
+            _edName.Text = "sample group";
 
             // add member
             var iRec1 = fBaseWin.Context.Tree.CreateIndividual();
             RecordSelectDialogStub.SetTestResult(iRec1);
-            await ((GroupMembersListModel)view.MembersList.ListModel).Modify(view.MembersList, new ModifyEventArgs(RecordAction.raAdd, null));
+            await ((GroupMembersListModel)_fMembersList.ListModel).Modify(_fMembersList, new ModifyEventArgs(RecordAction.raAdd, null));
             Assert.AreEqual(1, group.Members.Count);
             // delete member
             StdDialogsStub.SetQuestionResult(true);
-            await ((GroupMembersListModel)view.MembersList.ListModel).Modify(view.MembersList, new ModifyEventArgs(RecordAction.raDelete, group.Members[0]));
+            await ((GroupMembersListModel)_fMembersList.ListModel).Modify(_fMembersList, new ModifyEventArgs(RecordAction.raDelete, group.Members[0]));
             Assert.AreEqual(0, group.Members.Count);
 
             controller.Accept();
@@ -52,19 +52,30 @@ namespace GKCore.Controllers
             controller.JumpToRecord(group); // simulate jump to self
         }
 
-        private static IGroupEditDlg CreateMockView()
+        private ITextBox _edName;
+        private ILabel _lblName;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageMembers;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ISheetList _fMembersList;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+
+        private IGroupEditDlg CreateMockView()
         {
             var view = Substitute.For<IGroupEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ITabPage>(view, "pageMembers");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ITabPage>(view, "pageMultimedia");
-
-            view.MembersList.Returns(Substitute.For<ISheetList>());
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.MediaList.Returns(Substitute.For<ISheetList>());
+            _edName = SubstCtl<ITextBox>(view, "edName");
+            _lblName = SubstCtl<ILabel>(view, "lblName");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _pageMultimedia = SubstCtl<ITabPage>(view, "pageMultimedia");
+            _pageMembers = SubstCtl<ITabPage>(view, "pageMembers");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _fMembersList = SubstCtl<ISheetList>(view, "fMembersList");
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _fMediaList = SubstCtl<ISheetList>(view, "fMediaList");
             return view;
         }
     }

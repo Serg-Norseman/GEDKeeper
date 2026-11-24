@@ -9,9 +9,7 @@
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 
 namespace GKUI.Forms
 {
@@ -22,51 +20,6 @@ namespace GKUI.Forms
             get { return fController.Address; }
             set { fController.Address = value; }
         }
-
-        #region View Interface
-
-        ISheetList IAddressEditDlg.PhonesList
-        {
-            get { return fPhonesList; }
-        }
-
-        ISheetList IAddressEditDlg.MailsList
-        {
-            get { return fMailsList; }
-        }
-
-        ISheetList IAddressEditDlg.WebsList
-        {
-            get { return fWebsList; }
-        }
-
-
-        ITextBox IAddressEditDlg.Country
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtCountry); }
-        }
-
-        ITextBox IAddressEditDlg.State
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtState); }
-        }
-
-        ITextBox IAddressEditDlg.City
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtCity); }
-        }
-
-        ITextBox IAddressEditDlg.PostalCode
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtPostalCode); }
-        }
-
-        ITextBox IAddressEditDlg.AddressLine
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtAddress); }
-        }
-
-        #endregion
 
         public AddressEditDlg(IBaseWindow baseWin)
         {

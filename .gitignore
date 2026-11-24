@@ -32,3 +32,5 @@ GEDKeeper2Lux.sln
 /projects/GKv2/packages/**/
 /projects/GKv3/packages/**/
 
+AGENTS.md
+QWEN.md

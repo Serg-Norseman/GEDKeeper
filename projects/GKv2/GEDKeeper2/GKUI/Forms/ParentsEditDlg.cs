@@ -10,7 +10,6 @@ using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -28,30 +27,6 @@ namespace GKUI.Forms
             get { return fController.IndividualRecord; }
             set { fController.IndividualRecord = value; }
         }
-
-        #region View Interface
-
-        ITextBox IParentsEditDlg.Father
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFather); }
-        }
-
-        ITextBox IParentsEditDlg.Mother
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtMother); }
-        }
-
-        ITextBox IParentsEditDlg.ChildName
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtChildName); }
-        }
-
-        IComboBox IParentsEditDlg.LinkageTypeCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbLinkageType); }
-        }
-
-        #endregion
 
         public ParentsEditDlg(IBaseWindow baseWin)
         {

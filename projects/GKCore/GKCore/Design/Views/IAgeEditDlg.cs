@@ -7,20 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface IAgeEditDlg : ICommonDialog
     {
         GDMCustomEvent Event { get; set; }
-
-        IComboBox RelativeCombo1 { get; }
-
-        ITextBox ValueText1 { get; }
-
-        IComboBox RelativeCombo2 { get; }
-
-        ITextBox ValueText2 { get; }
     }
 }

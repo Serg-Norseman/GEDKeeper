@@ -25,6 +25,17 @@ namespace GKCore.Controllers
     /// </summary>
     public class NoteEditDlgController : DialogController<INoteEdit>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITextBox _txtNote;
+        private ITabControl _tabsData;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMNoteRecord fNoteRecord;
 
         public GDMNoteRecord NoteRecord
@@ -48,23 +59,23 @@ namespace GKCore.Controllers
             base.InitView(baseWin);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
-                fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+                _fSourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+                _fUserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
             }
         }
 
         public override void DoneView()
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                fView.SourcesList.ListModel.SaveSettings();
-                fView.UserRefList.ListModel.SaveSettings();
+                _fSourcesList.ListModel.SaveSettings();
+                _fUserRefList.ListModel.SaveSettings();
             }
         }
 
         public override bool Accept()
         {
             try {
-                string noteText = fView.Note.Text.Trim();
+                string noteText = _txtNote.Text.Trim();
                 if (!string.IsNullOrEmpty(noteText)) {
                     int size = Encoding.UTF8.GetByteCount(noteText);
                     if (size > GEDCOMConsts.MaxNoteSize) {
@@ -88,38 +99,38 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Note.Text = fNoteRecord.Lines.Text.Trim();
+            _txtNote.Text = fNoteRecord.Lines.Text.Trim();
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                fView.SourcesList.ListModel.DataOwner = fNoteRecord;
-                fView.UserRefList.ListModel.DataOwner = fNoteRecord;
+                _fSourcesList.ListModel.DataOwner = fNoteRecord;
+                _fUserRefList.ListModel.DataOwner = fNoteRecord;
             }
         }
 
         public void SetBold()
         {
-            fView.Note.SelectedText = string.Format(" [b]{0}[/b] ", fView.Note.SelectedText);
+            _txtNote.SelectedText = string.Format(" [b]{0}[/b] ", _txtNote.SelectedText);
         }
 
         public void SetItalic()
         {
-            fView.Note.SelectedText = string.Format(" [i]{0}[/i] ", fView.Note.SelectedText);
+            _txtNote.SelectedText = string.Format(" [i]{0}[/i] ", _txtNote.SelectedText);
         }
 
         public void SetUnderline()
         {
-            fView.Note.SelectedText = string.Format(" [u]{0}[/u] ", fView.Note.SelectedText);
+            _txtNote.SelectedText = string.Format(" [u]{0}[/u] ", _txtNote.SelectedText);
         }
 
         public void SetURL()
         {
-            fView.Note.SelectedText = string.Format(" [url={0}]{0}[/url] ", fView.Note.SelectedText);
+            _txtNote.SelectedText = string.Format(" [url={0}]{0}[/url] ", _txtNote.SelectedText);
         }
 
         public void SelectAndCopy()
         {
-            fView.Note.SelectAll();
-            fView.Note.Copy();
+            _txtNote.SelectAll();
+            _txtNote.Copy();
         }
 
         public async void Import()
@@ -129,7 +140,7 @@ namespace GKCore.Controllers
                 return;
 
             using (var sr = new StreamReader(fileName)) {
-                fView.Note.Text = sr.ReadToEnd();
+                _txtNote.Text = sr.ReadToEnd();
             }
         }
 
@@ -140,26 +151,26 @@ namespace GKCore.Controllers
                 return;
 
             using (var sw = new StreamWriter(fileName)) {
-                sw.Write(fView.Note.Text);
+                sw.Write(_txtNote.Text);
             }
         }
 
         public void Clear()
         {
-            fView.Note.Text = string.Empty;
+            _txtNote.Text = string.Empty;
         }
 
         public void SetSize(string value)
         {
-            fView.Note.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, fView.Note.SelectedText);
+            _txtNote.SelectedText = string.Format(" [size=+{0}]{1}[/size] ", value, _txtNote.SelectedText);
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.Note));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ITabPage>("pageEditor").Text = LangMan.LS(LSID.Note);
@@ -172,8 +183,8 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 

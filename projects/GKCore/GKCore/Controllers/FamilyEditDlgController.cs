@@ -24,6 +24,41 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class FamilyEditDlgController : DialogController<IFamilyEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabControl _tabsData;
+        private ITabPage _pageEvents;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageSources;
+        private ITabPage _pageChilds;
+        private ITabPage _pageUserRefs;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IGroupBox _GroupBox1;
+        private ILabel _lblHusband;
+        private ITextBox _txtHusband;
+        private IButton _btnHusbandAdd;
+        private IButton _btnHusbandDelete;
+        private IButton _btnHusbandSel;
+        private IButton _btnWifeSel;
+        private IButton _btnWifeDelete;
+        private IButton _btnWifeAdd;
+        private ITextBox _txtWife;
+        private ILabel _lblWife;
+        private ILabel _lblStatus;
+        private IComboBox _cmbMarriageStatus;
+        private ILabel _lblRestriction;
+        private IComboBox _cmbRestriction;
+        private ISheetList _fChildrenList;
+        private ISheetList _fEventsList;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMFamilyRecord fFamilyRecord;
 
         public GDMFamilyRecord FamilyRecord
@@ -46,35 +81,35 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.Restriction.ReadOnly = true;
+            _cmbRestriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
-                fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+                _cmbRestriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
-            fView.MarriageStatus.ReadOnly = true;
+            _cmbMarriageStatus.ReadOnly = true;
             for (int i = 0; i < GKData.MarriageStatus.Length; i++) {
-                fView.MarriageStatus.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
+                _cmbMarriageStatus.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
             }
 
-            fView.ChildrenList.OnModify += ModifyChildrenSheet;
-            fView.ChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
+            _fChildrenList.OnModify += ModifyChildrenSheet;
+            _fChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
 
-            fView.ChildrenList.ListModel = new FamilyChildrenListModel(fView, baseWin, fLocalUndoman);
-            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            _fChildrenList.ListModel = new FamilyChildrenListModel(fView, baseWin, fLocalUndoman);
+            _fEventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fSourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            _fUserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.ChildrenList.ListModel.SaveSettings();
-            fView.EventsList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
-            fView.SourcesList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
+            _fChildrenList.ListModel.SaveSettings();
+            _fEventsList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
+            _fSourcesList.ListModel.SaveSettings();
+            _fUserRefList.ListModel.SaveSettings();
         }
 
         private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
@@ -110,8 +145,8 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fFamilyRecord.Status = (GDMMarriageStatus)fView.MarriageStatus.SelectedIndex;
-                fFamilyRecord.Restriction = (GDMRestriction)fView.Restriction.SelectedIndex;
+                fFamilyRecord.Status = (GDMMarriageStatus)_cmbMarriageStatus.SelectedIndex;
+                fFamilyRecord.Restriction = (GDMRestriction)_cmbRestriction.SelectedIndex;
 
                 fBase.Context.ProcessFamily(fFamilyRecord);
 
@@ -131,21 +166,21 @@ namespace GKCore.Controllers
             try {
                 bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
 
-                fView.ChildrenList.ListModel.DataOwner = fFamilyRecord;
-                fView.EventsList.ListModel.DataOwner = fFamilyRecord;
-                fView.NotesList.ListModel.DataOwner = fFamilyRecord;
-                fView.MediaList.ListModel.DataOwner = fFamilyRecord;
-                fView.SourcesList.ListModel.DataOwner = fFamilyRecord;
-                fView.UserRefList.ListModel.DataOwner = fFamilyRecord;
+                _fChildrenList.ListModel.DataOwner = fFamilyRecord;
+                _fEventsList.ListModel.DataOwner = fFamilyRecord;
+                _fNotesList.ListModel.DataOwner = fFamilyRecord;
+                _fMediaList.ListModel.DataOwner = fFamilyRecord;
+                _fSourcesList.ListModel.DataOwner = fFamilyRecord;
+                _fUserRefList.ListModel.DataOwner = fFamilyRecord;
 
                 if (fFamilyRecord == null) {
-                    fView.MarriageStatus.Enabled = false;
-                    fView.MarriageStatus.SelectedIndex = 0;
-                    fView.Restriction.SelectedIndex = 0;
+                    _cmbMarriageStatus.Enabled = false;
+                    _cmbMarriageStatus.SelectedIndex = 0;
+                    _cmbRestriction.SelectedIndex = 0;
                 } else {
-                    fView.MarriageStatus.Enabled = true && !disNoStd;
-                    fView.MarriageStatus.SelectedIndex = (int)fFamilyRecord.Status;
-                    fView.Restriction.SelectedIndex = (sbyte)fFamilyRecord.Restriction;
+                    _cmbMarriageStatus.Enabled = true && !disNoStd;
+                    _cmbMarriageStatus.SelectedIndex = (int)fFamilyRecord.Status;
+                    _cmbRestriction.SelectedIndex = (sbyte)fFamilyRecord.Restriction;
                 }
 
                 UpdateControls();
@@ -175,39 +210,39 @@ namespace GKCore.Controllers
 
         public void LockEditor(bool locked)
         {
-            GetControl<IButton>("btnHusbandAdd").Enabled = !locked;
-            GetControl<IButton>("btnHusbandDelete").Enabled = !locked;
-            GetControl<IButton>("btnWifeAdd").Enabled = !locked;
-            GetControl<IButton>("btnWifeDelete").Enabled = !locked;
+            _btnHusbandAdd.Enabled = !locked;
+            _btnHusbandDelete.Enabled = !locked;
+            _btnWifeAdd.Enabled = !locked;
+            _btnWifeDelete.Enabled = !locked;
 
-            fView.MarriageStatus.Enabled = !locked;
+            _cmbMarriageStatus.Enabled = !locked;
 
-            fView.ChildrenList.ReadOnly = locked;
-            fView.EventsList.ReadOnly = locked;
-            fView.NotesList.ReadOnly = locked;
-            fView.MediaList.ReadOnly = locked;
-            fView.SourcesList.ReadOnly = locked;
-            fView.UserRefList.ReadOnly = locked;
+            _fChildrenList.ReadOnly = locked;
+            _fEventsList.ReadOnly = locked;
+            _fNotesList.ReadOnly = locked;
+            _fMediaList.ReadOnly = locked;
+            _fSourcesList.ReadOnly = locked;
+            _fUserRefList.ReadOnly = locked;
         }
 
         public void SetHusband(string value)
         {
             bool res = !string.IsNullOrEmpty(value);
-            fView.Husband.Text = (res) ? value : LangMan.LS(LSID.UnkMale);
+            _txtHusband.Text = (res) ? value : LangMan.LS(LSID.UnkMale);
 
-            GetControl<IButton>("btnHusbandAdd").Enabled = !res;
-            GetControl<IButton>("btnHusbandDelete").Enabled = res;
-            GetControl<IButton>("btnHusbandSel").Enabled = res;
+            _btnHusbandAdd.Enabled = !res;
+            _btnHusbandDelete.Enabled = res;
+            _btnHusbandSel.Enabled = res;
         }
 
         public void SetWife(string value)
         {
             bool res = !string.IsNullOrEmpty(value);
-            fView.Wife.Text = (res) ? value : LangMan.LS(LSID.UnkFemale);
+            _txtWife.Text = (res) ? value : LangMan.LS(LSID.UnkFemale);
 
-            GetControl<IButton>("btnWifeAdd").Enabled = !res;
-            GetControl<IButton>("btnWifeDelete").Enabled = res;
-            GetControl<IButton>("btnWifeSel").Enabled = res;
+            _btnWifeAdd.Enabled = !res;
+            _btnWifeDelete.Enabled = res;
+            _btnWifeSel.Enabled = res;
         }
 
         public async void AddHusband()
@@ -250,18 +285,18 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblHusband").Text = LangMan.LS(LSID.Husband);
-            GetControl<ILabel>("lblWife").Text = LangMan.LS(LSID.Wife);
-            GetControl<ILabel>("lblStatus").Text = LangMan.LS(LSID.Status);
-            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.Childs);
-            GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.Events);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
-            GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblHusband.Text = LangMan.LS(LSID.Husband);
+            _lblWife.Text = LangMan.LS(LSID.Wife);
+            _lblStatus.Text = LangMan.LS(LSID.Status);
+            _pageChilds.Text = LangMan.LS(LSID.Childs);
+            _pageEvents.Text = LangMan.LS(LSID.Events);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
+            _pageSources.Text = LangMan.LS(LSID.RPSources);
+            _pageUserRefs.Text = LangMan.LS(LSID.UserRefs);
+            _lblRestriction.Text = LangMan.LS(LSID.Restriction);
 
             SetToolTip("btnHusbandAdd", LangMan.LS(LSID.HusbandAddTip));
             SetToolTip("btnHusbandDelete", LangMan.LS(LSID.HusbandDeleteTip));
@@ -275,16 +310,16 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnHusbandAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnHusbandDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
-            GetControl<IButton>("btnHusbandSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+            _btnHusbandAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnHusbandDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnHusbandSel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
 
-            GetControl<IButton>("btnWifeAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnWifeDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
-            GetControl<IButton>("btnWifeSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+            _btnWifeAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnWifeDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnWifeSel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
         }
     }
 }

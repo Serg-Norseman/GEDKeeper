@@ -10,9 +10,7 @@ using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -27,25 +25,6 @@ namespace GKUI.Forms
             get { return fController.RepositoryRecord; }
             set { fController.RepositoryRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList IRepositoryEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IRepositoryEditDlg.UserRefList
-        {
-            get { return fUserRefList; }
-        }
-
-        ITextBox IRepositoryEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        #endregion
 
         public RepositoryEditDlg(IBaseWindow baseWin)
         {

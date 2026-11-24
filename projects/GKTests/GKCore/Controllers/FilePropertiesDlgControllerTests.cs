@@ -28,10 +28,10 @@ namespace GKCore.Controllers
 
             controller.UpdateView();
 
-            controller.GetControl<ITextBox>("txtName").Text = "sample text";
+            _txtName.Text = "sample text";
 
             var langValue = GDMLanguageID.AngloSaxon;
-            controller.GetControl<IComboBox>("txtLanguage").GetSelectedTag<GDMLanguageID>().Returns(langValue);
+            _txtLanguage.GetSelectedTag<GDMLanguageID>().Returns(langValue);
 
             controller.Accept();
 
@@ -39,24 +39,38 @@ namespace GKCore.Controllers
             Assert.AreEqual("sample text", submitter.Name);
         }
 
-        private static IFilePropertiesDlg CreateMockView()
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageAuthor;
+        private ILabel _lblName;
+        private ILabel _lblAddress;
+        private ILabel _lblTelephone;
+        private ITextBox _txtName;
+        private ITextBox _txtTel;
+        private ITextBox _txtAddress;
+        private ITabPage _pageOther;
+        private IListView _lvRecordStats;
+        private IButton _btnLangEdit;
+        private IComboBox _txtLanguage;
+        private ILabel _lblLanguage;
+
+        private IFilePropertiesDlg CreateMockView()
         {
             var view = Substitute.For<IFilePropertiesDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<IButton>(view, "btnLangEdit");
-            SubstituteControl<ITabPage>(view, "pageAuthor");
-            SubstituteControl<ITabPage>(view, "pageOther");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ILabel>(view, "lblAddress");
-            SubstituteControl<ILabel>(view, "lblTelephone");
-            SubstituteControl<ILabel>(view, "lblLanguage");
-
-            SubstituteControl<IListView>(view, "lvRecordStats");
-            SubstituteControl<IComboBox>(view, "txtLanguage");
-            SubstituteControl<ITextBox>(view, "txtName");
-            SubstituteControl<ITextBox>(view, "txtAddress");
-            SubstituteControl<ITextBox>(view, "txtTel");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _pageAuthor = SubstCtl<ITabPage>(view, "pageAuthor");
+            _lblName = SubstCtl<ILabel>(view, "lblName");
+            _lblAddress = SubstCtl<ILabel>(view, "lblAddress");
+            _lblTelephone = SubstCtl<ILabel>(view, "lblTelephone");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _txtTel = SubstCtl<ITextBox>(view, "txtTel");
+            _txtAddress = SubstCtl<ITextBox>(view, "txtAddress");
+            _pageOther = SubstCtl<ITabPage>(view, "pageOther");
+            _lvRecordStats = SubstCtl<IListView>(view, "lvRecordStats");
+            _btnLangEdit = SubstCtl<IButton>(view, "btnLangEdit");
+            _txtLanguage = SubstCtl<IComboBox>(view, "txtLanguage");
+            _lblLanguage = SubstCtl<ILabel>(view, "lblLanguage");
             return view;
         }
     }

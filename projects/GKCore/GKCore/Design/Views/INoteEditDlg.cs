@@ -7,19 +7,12 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface INoteEdit : ICommonDialog
     {
         GDMNoteRecord NoteRecord { get; set; }
-
-        ITextBox Note { get; }
-
-        ISheetList SourcesList { get; }
-        ISheetList UserRefList { get; }
     }
 
 

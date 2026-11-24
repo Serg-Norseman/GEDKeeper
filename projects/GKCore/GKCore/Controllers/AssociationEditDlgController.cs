@@ -20,6 +20,7 @@ namespace GKCore.Controllers
     public sealed class AssociationEditDlgController : DialogController<IAssociationEditDlg>
     {
         #region Design components
+#pragma warning disable CS0649, IDE0044
         private IButton _btnAccept;
         private IButton _btnCancel;
         private IButton _btnPersonAdd;
@@ -27,6 +28,7 @@ namespace GKCore.Controllers
         private ILabel _lblPerson;
         private IComboBox _cmbRelation;
         private ITextBox _txtPerson;
+#pragma warning restore CS0649, IDE0044
         #endregion
 
         private GDMAssociation fAssociation;

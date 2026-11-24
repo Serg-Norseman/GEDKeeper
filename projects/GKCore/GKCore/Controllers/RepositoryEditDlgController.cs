@@ -22,6 +22,21 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RepositoryEditDlgController : DialogController<IRepositoryEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabControl _tabsData;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ITabPage _pageNotes;
+        private IButton _btnAddress;
+        private ISheetList _fNotesList;
+        private ISheetList _fUserRefList;
+        private ITabPage _pageUserRefs;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMRepositoryRecord fRepositoryRecord;
 
         public GDMRepositoryRecord RepositoryRecord
@@ -44,22 +59,22 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.Name.Activate();
+            _txtName.Activate();
 
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fUserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.NotesList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fUserRefList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                fRepositoryRecord.RepositoryName = fView.Name.Text;
+                fRepositoryRecord.RepositoryName = _txtName.Text;
 
                 if (!Validate(fRepositoryRecord)) return false;
 
@@ -76,10 +91,10 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = fRepositoryRecord.RepositoryName;
+            _txtName.Text = fRepositoryRecord.RepositoryName;
 
-            fView.NotesList.ListModel.DataOwner = fRepositoryRecord;
-            fView.UserRefList.ListModel.DataOwner = fRepositoryRecord;
+            _fNotesList.ListModel.DataOwner = fRepositoryRecord;
+            _fUserRefList.ListModel.DataOwner = fRepositoryRecord;
         }
 
         public async void ModifyAddress()
@@ -90,20 +105,20 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.Repository));
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
-            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.Address) + @"...";
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblName.Text = LangMan.LS(LSID.Title);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageUserRefs.Text = LangMan.LS(LSID.UserRefs);
+            _btnAddress.Text = LangMan.LS(LSID.Address) + @"...";
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

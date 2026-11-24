@@ -31,7 +31,7 @@ namespace GKCore.Controllers
             controller.RepositoryRecord = rep;
             Assert.AreEqual(rep, controller.RepositoryRecord);
 
-            view.Name.Text = "test repo";
+            _txtName.Text = "test repo";
 
             controller.Accept();
             controller.UpdateView();
@@ -41,20 +41,32 @@ namespace GKCore.Controllers
             // TODO: btnAddress, NotesList, UserRefList
         }
 
-        private static IRepositoryEditDlg CreateMockView()
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabControl _tabsData;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ITabPage _pageNotes;
+        private IButton _btnAddress;
+        private ISheetList _fNotesList;
+        private ISheetList _fUserRefList;
+        private ITabPage _pageUserRefs;
+
+        private IRepositoryEditDlg CreateMockView()
         {
             var view = Substitute.For<IRepositoryEditDlg>();
 
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ITabPage>(view, "pageUserRefs");
-            SubstituteControl<IButton>(view, "btnAddress");
-            SubstituteControl<ILabel>(view, "lblName");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _tabsData = SubstCtl<ITabControl>(view, "tabsData");
+            _lblName = SubstCtl<ILabel>(view, "lblName");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _btnAddress = SubstCtl<IButton>(view, "btnAddress");
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _fUserRefList = SubstCtl<ISheetList>(view, "fUserRefList");
+            _pageUserRefs = SubstCtl<ITabPage>(view, "pageUserRefs");
 
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.UserRefList.Returns(Substitute.For<ISheetList>());
-            view.Name.Returns(Substitute.For<ITextBox>());
             return view;
         }
     }

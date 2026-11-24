@@ -7,8 +7,6 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
@@ -17,17 +15,5 @@ namespace GKCore.Design.Views
         GDMFamilyRecord FamilyRecord { get; set; }
 
         void SetTarget(TargetMode targetType, GDMIndividualRecord target);
-
-        ISheetList NotesList { get; }
-        ISheetList MediaList { get; }
-        ISheetList SourcesList { get; }
-        ISheetList ChildrenList { get; }
-        ISheetList EventsList { get; }
-        ISheetList UserRefList { get; }
-
-        IComboBox MarriageStatus { get; }
-        IComboBox Restriction { get; }
-        ITextBox Husband { get; }
-        ITextBox Wife { get; }
     }
 }

@@ -20,12 +20,14 @@ namespace GKCore.Controllers
     public sealed class UserRefEditDlgController : DialogController<IUserRefEditDlg>
     {
         #region Design components
+#pragma warning disable CS0649, IDE0044
         private IButton _btnAccept;
         private IButton _btnCancel;
         private ILabel _lblReference;
         private IComboBox _cmbRef;
         private ILabel _lblRefType;
         private IComboBox _cmbRefType;
+#pragma warning restore CS0649, IDE0044
         #endregion
 
         private GDMUserReference fUserReference;

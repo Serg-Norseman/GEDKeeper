@@ -7,7 +7,6 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
@@ -15,10 +14,5 @@ namespace GKCore.Design.Views
     {
         GDMChildToFamilyLink ChildLink { get; set; }
         GDMIndividualRecord IndividualRecord { get; set; }
-
-        ITextBox Father { get; }
-        ITextBox Mother { get; }
-        ITextBox ChildName { get; }
-        IComboBox LinkageTypeCombo { get; }
     }
 }

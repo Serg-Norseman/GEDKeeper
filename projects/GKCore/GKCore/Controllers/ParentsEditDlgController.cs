@@ -22,6 +22,26 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ParentsEditDlgController : DialogController<IParentsEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IGroupBox _GroupBox1;
+        private ILabel _lblChildName;
+        private ITextBox _txtChildName;
+        private ILabel _lblLinkageType;
+        private IComboBox _cmbLinkageType;
+        private ILabel _lblParents;
+        private ITextBox _txtFather;
+        private ITextBox _txtMother;
+        private IButton _btnParentsEdit;
+        private IButton _btnFatherAdd;
+        private IButton _btnFatherDelete;
+        private IButton _btnMotherAdd;
+        private IButton _btnMotherDelete;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMChildToFamilyLink fChildLink;
         private GDMIndividualRecord fIndividualRecord;
 
@@ -51,16 +71,16 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.LinkageTypeCombo.ReadOnly = true;
+            _cmbLinkageType.ReadOnly = true;
             for (GDMPedigreeLinkageType plt = GDMPedigreeLinkageType.plNone; plt <= GDMPedigreeLinkageType.plFoster; plt++) {
-                fView.LinkageTypeCombo.Add(LangMan.LS(GKData.ParentTypes[(int)plt]));
+                _cmbLinkageType.Add(LangMan.LS(GKData.ParentTypes[(int)plt]));
             }
         }
 
         public override bool Accept()
         {
             try {
-                fChildLink.PedigreeLinkageType = (GDMPedigreeLinkageType)fView.LinkageTypeCombo.SelectedIndex;
+                fChildLink.PedigreeLinkageType = (GDMPedigreeLinkageType)_cmbLinkageType.SelectedIndex;
 
                 fLocalUndoman.Commit();
 
@@ -76,8 +96,8 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.ChildName.Text = GKUtils.GetNameString(fIndividualRecord, false);
-                fView.LinkageTypeCombo.SelectedIndex = (sbyte)fChildLink.PedigreeLinkageType;
+                _txtChildName.Text = GKUtils.GetNameString(fIndividualRecord, false);
+                _cmbLinkageType.SelectedIndex = (sbyte)fChildLink.PedigreeLinkageType;
 
                 UpdateControls();
             } catch (Exception ex) {
@@ -96,26 +116,26 @@ namespace GKCore.Controllers
 
                 if (father != null) {
                     SetFatherAvl(true);
-                    fView.Father.Text = GKUtils.GetNameString(father, false);
+                    _txtFather.Text = GKUtils.GetNameString(father, false);
                 } else {
                     SetFatherAvl(false);
-                    fView.Father.Text = "";
+                    _txtFather.Text = "";
                 }
 
                 if (mother != null) {
                     SetMotherAvl(true);
-                    fView.Mother.Text = GKUtils.GetNameString(mother, false);
+                    _txtMother.Text = GKUtils.GetNameString(mother, false);
                 } else {
                     SetMotherAvl(false);
-                    fView.Mother.Text = "";
+                    _txtMother.Text = "";
                 }
             } else {
                 SetParentsAvl(false);
                 SetFatherAvl(false);
                 SetMotherAvl(false);
 
-                fView.Father.Text = "";
-                fView.Mother.Text = "";
+                _txtFather.Text = "";
+                _txtMother.Text = "";
             }
         }
 
@@ -160,30 +180,30 @@ namespace GKCore.Controllers
 
         private void SetParentsAvl(bool avail)
         {
-            GetControl<IButton>("btnParentsEdit").Enabled = avail;
+            _btnParentsEdit.Enabled = avail;
         }
 
         private void SetFatherAvl(bool avail)
         {
-            GetControl<IButton>("btnFatherAdd").Enabled = !avail;
-            GetControl<IButton>("btnFatherDelete").Enabled = avail;
+            _btnFatherAdd.Enabled = !avail;
+            _btnFatherDelete.Enabled = avail;
         }
 
         private void SetMotherAvl(bool avail)
         {
-            GetControl<IButton>("btnMotherAdd").Enabled = !avail;
-            GetControl<IButton>("btnMotherDelete").Enabled = avail;
+            _btnMotherAdd.Enabled = !avail;
+            _btnMotherDelete.Enabled = avail;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.WinPersonEdit));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblChildName").Text = LangMan.LS(LSID.GeneralName);
-            GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.Parents);
-            GetControl<ILabel>("lblLinkageType").Text = LangMan.LS(LSID.LinkageType);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblChildName.Text = LangMan.LS(LSID.GeneralName);
+            _lblParents.Text = LangMan.LS(LSID.Parents);
+            _lblLinkageType.Text = LangMan.LS(LSID.LinkageType);
 
             SetToolTip("btnParentsEdit", LangMan.LS(LSID.ParentsEditTip));
             SetToolTip("btnFatherAdd", LangMan.LS(LSID.FatherAddTip));
@@ -196,16 +216,16 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnParentsEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit, true);
+            _btnParentsEdit.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit, true);
 
-            GetControl<IButton>("btnFatherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnFatherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnFatherAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnFatherDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
 
-            GetControl<IButton>("btnMotherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnMotherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnMotherAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnMotherDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
         }
     }
 }

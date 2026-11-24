@@ -22,6 +22,21 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class GroupEditDlgController : DialogController<IGroupEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITextBox _edName;
+        private ILabel _lblName;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageMembers;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ISheetList _fMembersList;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMGroupRecord fGroupRecord;
 
         public GDMGroupRecord GroupRecord
@@ -44,20 +59,20 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.MembersList.OnModify += ModifyMembersSheet;
+            _fMembersList.OnModify += ModifyMembersSheet;
 
-            fView.Name.Activate();
+            _edName.Activate();
 
-            fView.MembersList.ListModel = new GroupMembersListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMembersList.ListModel = new GroupMembersListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.MembersList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
+            _fMembersList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
         }
 
         private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
@@ -70,7 +85,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                fGroupRecord.GroupName = fView.Name.Text;
+                fGroupRecord.GroupName = _edName.Text;
 
                 fBase.NotifyRecord(fGroupRecord, RecordAction.raEdit);
 
@@ -85,30 +100,30 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = (fGroupRecord == null) ? "" : fGroupRecord.GroupName;
+            _edName.Text = (fGroupRecord == null) ? "" : fGroupRecord.GroupName;
 
-            fView.MembersList.ListModel.DataOwner = fGroupRecord;
-            fView.NotesList.ListModel.DataOwner = fGroupRecord;
-            fView.MediaList.ListModel.DataOwner = fGroupRecord;
+            _fMembersList.ListModel.DataOwner = fGroupRecord;
+            _fNotesList.ListModel.DataOwner = fGroupRecord;
+            _fMediaList.ListModel.DataOwner = fGroupRecord;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.WinGroupEdit));
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
-            GetControl<ITabPage>("pageMembers").Text = LangMan.LS(LSID.Members);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblName.Text = LangMan.LS(LSID.Title);
+            _pageMembers.Text = LangMan.LS(LSID.Members);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

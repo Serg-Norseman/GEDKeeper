@@ -23,6 +23,35 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class SourceEditDlgController : DialogController<ISourceEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabControl _tabsData;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageRepositories;
+        private ITabPage _pageText;
+        private ITextBox _txtText;
+        private ITabPage _pageCommon;
+        private ILabel _lblShortTitle;
+        private ITextBox _txtShortTitle;
+        private ILabel _lblAuthor;
+        private ITextBox _txtAuthor;
+        private ILabel _lblTitle;
+        private ITextBox _txtTitle;
+        private ILabel _lblPublication;
+        private ITextBox _txtPublication;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+        private ISheetList _fRepositoriesList;
+        private ILabel _lblDate;
+        private IDateControl _dateCtl;
+        private ITabPage _pageUserRefs;
+        private ISheetList _fUserRefList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMSourceRecord fSourceRecord;
 
         public GDMSourceRecord SourceRecord
@@ -52,39 +81,39 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.RepositoriesList.OnModify += ModifyReposSheet;
+            _fRepositoriesList.OnModify += ModifyReposSheet;
 
-            fView.ShortTitle.Activate();
+            _txtShortTitle.Activate();
 
-            fView.RepositoriesList.ListModel = new RepositoryCitationsListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            _fRepositoriesList.ListModel = new RepositoryCitationsListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fUserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.RepositoriesList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
+            _fRepositoriesList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
+            _fUserRefList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                GDMCustomDate dt = fView.Date.Date;
+                GDMCustomDate dt = _dateCtl.Date;
                 if (dt == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
                     return false;
                 }
                 fSourceRecord.Date.ParseString(dt.StringValue);
 
-                fSourceRecord.ShortTitle = fView.ShortTitle.Text;
-                fSourceRecord.Originator.SetLines(fView.Author.Text);
-                fSourceRecord.Title.SetLines(fView.DescTitle.Text);
-                fSourceRecord.Publication.SetLines(fView.Publication.Text);
-                fSourceRecord.Text.SetLines(fView.Text.Text);
+                fSourceRecord.ShortTitle = _txtShortTitle.Text;
+                fSourceRecord.Originator.SetLines(_txtAuthor.Text);
+                fSourceRecord.Title.SetLines(_txtTitle.Text);
+                fSourceRecord.Publication.SetLines(_txtPublication.Text);
+                fSourceRecord.Text.SetLines(_txtText.Text);
 
                 if (!Validate(fSourceRecord)) return false;
 
@@ -101,46 +130,46 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.ShortTitle.Text = fSourceRecord.ShortTitle;
-            fView.Author.Text = fSourceRecord.Originator.Lines.Text.Trim();
-            fView.DescTitle.Text = fSourceRecord.Title.Lines.Text.Trim();
-            fView.Publication.Text = fSourceRecord.Publication.Lines.Text.Trim();
-            fView.Text.Text = fSourceRecord.Text.Lines.Text.Trim();
+            _txtShortTitle.Text = fSourceRecord.ShortTitle;
+            _txtAuthor.Text = fSourceRecord.Originator.Lines.Text.Trim();
+            _txtTitle.Text = fSourceRecord.Title.Lines.Text.Trim();
+            _txtPublication.Text = fSourceRecord.Publication.Lines.Text.Trim();
+            _txtText.Text = fSourceRecord.Text.Lines.Text.Trim();
 
-            fView.Date.Date = fSourceRecord.Date.Value;
-            fView.Date.Enabled = !GlobalOptions.Instance.DisableNonStdFeatures;
+            _dateCtl.Date = fSourceRecord.Date.Value;
+            _dateCtl.Enabled = !GlobalOptions.Instance.DisableNonStdFeatures;
 
-            fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
-            fView.NotesList.ListModel.DataOwner = fSourceRecord;
-            fView.MediaList.ListModel.DataOwner = fSourceRecord;
-            fView.UserRefList.ListModel.DataOwner = fSourceRecord;
+            _fRepositoriesList.ListModel.DataOwner = fSourceRecord;
+            _fNotesList.ListModel.DataOwner = fSourceRecord;
+            _fMediaList.ListModel.DataOwner = fSourceRecord;
+            _fUserRefList.ListModel.DataOwner = fSourceRecord;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.Source));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblShortTitle").Text = LangMan.LS(LSID.ShortTitle);
-            GetControl<ILabel>("lblAuthor").Text = LangMan.LS(LSID.Author);
-            GetControl<ILabel>("lblTitle").Text = LangMan.LS(LSID.Title);
-            GetControl<ILabel>("lblPublication").Text = LangMan.LS(LSID.Publication);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageText").Text = LangMan.LS(LSID.Text);
-            GetControl<ITabPage>("pageRepositories").Text = LangMan.LS(LSID.RPRepositories);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
-            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblShortTitle.Text = LangMan.LS(LSID.ShortTitle);
+            _lblAuthor.Text = LangMan.LS(LSID.Author);
+            _lblTitle.Text = LangMan.LS(LSID.Title);
+            _lblPublication.Text = LangMan.LS(LSID.Publication);
+            _lblDate.Text = LangMan.LS(LSID.Date);
+            _pageCommon.Text = LangMan.LS(LSID.Common);
+            _pageText.Text = LangMan.LS(LSID.Text);
+            _pageRepositories.Text = LangMan.LS(LSID.RPRepositories);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
+            _pageUserRefs.Text = LangMan.LS(LSID.UserRefs);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

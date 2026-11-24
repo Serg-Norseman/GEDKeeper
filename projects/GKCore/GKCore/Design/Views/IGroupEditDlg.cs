@@ -7,19 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface IGroupEditDlg : ICommonDialog
     {
         GDMGroupRecord GroupRecord { get; set; }
-
-        ITextBox Name { get; }
-
-        ISheetList NotesList { get; }
-        ISheetList MediaList { get; }
-        ISheetList MembersList { get; }
     }
 }

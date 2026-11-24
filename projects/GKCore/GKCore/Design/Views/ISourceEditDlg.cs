@@ -7,26 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface ISourceEditDlg : ICommonDialog
     {
         GDMSourceRecord SourceRecord { get; set; }
-
-        ISheetList NotesList { get; }
-        ISheetList MediaList { get; }
-        ISheetList RepositoriesList { get; }
-        ISheetList UserRefList { get; }
-
-        ITextBox ShortTitle { get; }
-        ITextBox Author { get; }
-        ITextBox DescTitle { get; }
-        ITextBox Publication { get; }
-        ITextBox Text { get; }
-
-        IDateControl Date { get; }
     }
 }

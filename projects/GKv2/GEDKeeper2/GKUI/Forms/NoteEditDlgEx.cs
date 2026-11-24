@@ -12,7 +12,6 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 
 namespace GKUI.Forms
 {
@@ -23,25 +22,6 @@ namespace GKUI.Forms
             get { return fController.NoteRecord; }
             set { fController.NoteRecord = value; }
         }
-
-        #region View Interface
-
-        ITextBox INoteEdit.Note
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtNote); }
-        }
-
-        ISheetList INoteEdit.SourcesList
-        {
-            get { return null; }
-        }
-
-        ISheetList INoteEdit.UserRefList
-        {
-            get { return null; }
-        }
-
-        #endregion
 
         public NoteEditDlgEx(IBaseWindow baseWin)
         {

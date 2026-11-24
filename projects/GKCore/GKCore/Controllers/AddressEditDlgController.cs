@@ -18,11 +18,32 @@ using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class AddressEditDlgController : DialogController<IAddressEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageCommon;
+        private ITabPage _pagePhones;
+        private ITabPage _pageEmails;
+        private ITabPage _pageWebPages;
+        private ILabel _lblCountry;
+        private ILabel _lblState;
+        private ILabel _lblCity;
+        private ILabel _lblPostalCode;
+        private ILabel _lblAddress;
+        private ITextBox _txtCountry;
+        private ITextBox _txtState;
+        private ITextBox _txtCity;
+        private ITextBox _txtPostalCode;
+        private ITextBox _txtAddress;
+        private ISheetList _fPhonesList;
+        private ISheetList _fMailsList;
+        private ISheetList _fWebsList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMAddress fAddress;
 
         public GDMAddress Address
@@ -45,28 +66,28 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.PhonesList.OnModify += ListModify;
-            fView.MailsList.OnModify += ListModify;
-            fView.WebsList.OnModify += ListModify;
+            _fPhonesList.OnModify += ListModify;
+            _fMailsList.OnModify += ListModify;
+            _fWebsList.OnModify += ListModify;
 
-            fView.PhonesList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Telephone));
-            fView.PhonesList.ListView.UpdateContents();
+            _fPhonesList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Telephone));
+            _fPhonesList.ListView.UpdateContents();
 
-            fView.MailsList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Mail));
-            fView.MailsList.ListView.UpdateContents();
+            _fMailsList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Mail));
+            _fMailsList.ListView.UpdateContents();
 
-            fView.WebsList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.WebSite));
-            fView.WebsList.ListView.UpdateContents();
+            _fWebsList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.WebSite));
+            _fWebsList.ListView.UpdateContents();
         }
 
         public override bool Accept()
         {
             try {
-                fAddress.AddressCountry = fView.Country.Text;
-                fAddress.AddressState = fView.State.Text;
-                fAddress.AddressCity = fView.City.Text;
-                fAddress.AddressPostalCode = fView.PostalCode.Text;
-                fAddress.SetAddressText(fView.AddressLine.Text);
+                fAddress.AddressCountry = _txtCountry.Text;
+                fAddress.AddressState = _txtState.Text;
+                fAddress.AddressCity = _txtCity.Text;
+                fAddress.AddressPostalCode = _txtPostalCode.Text;
+                fAddress.SetAddressText(_txtAddress.Text);
 
                 if (!Validate(fAddress)) return false;
 
@@ -79,35 +100,35 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Country.Text = fAddress.AddressCountry;
-            fView.State.Text = fAddress.AddressState;
-            fView.City.Text = fAddress.AddressCity;
-            fView.PostalCode.Text = fAddress.AddressPostalCode;
-            fView.AddressLine.Text = fAddress.Lines.Text.Trim();
+            _txtCountry.Text = fAddress.AddressCountry;
+            _txtState.Text = fAddress.AddressState;
+            _txtCity.Text = fAddress.AddressCity;
+            _txtPostalCode.Text = fAddress.AddressPostalCode;
+            _txtAddress.Text = fAddress.Lines.Text.Trim();
 
             UpdateLists();
         }
 
         public void UpdateLists()
         {
-            ((TagsListModel)fView.PhonesList.ListView.ListMan).DataSource = fAddress.PhoneNumbers.GetList();
-            fView.PhonesList.ListView.UpdateContents();
+            ((TagsListModel)_fPhonesList.ListView.ListMan).DataSource = fAddress.PhoneNumbers.GetList();
+            _fPhonesList.ListView.UpdateContents();
 
-            ((TagsListModel)fView.MailsList.ListView.ListMan).DataSource = fAddress.EmailAddresses.GetList();
-            fView.MailsList.ListView.UpdateContents();
+            ((TagsListModel)_fMailsList.ListView.ListMan).DataSource = fAddress.EmailAddresses.GetList();
+            _fMailsList.ListView.UpdateContents();
 
-            ((TagsListModel)fView.WebsList.ListView.ListMan).DataSource = fAddress.WebPages.GetList();
-            fView.WebsList.ListView.UpdateContents();
+            ((TagsListModel)_fWebsList.ListView.ListMan).DataSource = fAddress.WebPages.GetList();
+            _fWebsList.ListView.UpdateContents();
         }
 
         private async void ListModify(object sender, ModifyEventArgs eArgs)
         {
             GDMTag itemTag = eArgs.ItemData as GDMTag;
-            if (sender == fView.PhonesList) {
+            if (sender == _fPhonesList) {
                 await DoPhonesAction(eArgs.Action, itemTag);
-            } else if (sender == fView.MailsList) {
+            } else if (sender == _fMailsList) {
                 await DoMailsAction(eArgs.Action, itemTag);
-            } else if (sender == fView.WebsList) {
+            } else if (sender == _fWebsList) {
                 await DoWebsAction(eArgs.Action, itemTag);
             }
         }
@@ -203,25 +224,25 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Address));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Address);
-            GetControl<ILabel>("lblCountry").Text = LangMan.LS(LSID.AdCountry);
-            GetControl<ILabel>("lblState").Text = LangMan.LS(LSID.AdState);
-            GetControl<ILabel>("lblCity").Text = LangMan.LS(LSID.AdCity);
-            GetControl<ILabel>("lblPostalCode").Text = LangMan.LS(LSID.AdPostalCode);
-            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.AddressLine);
-            GetControl<ITabPage>("pagePhones").Text = LangMan.LS(LSID.Telephones);
-            GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.EMails);
-            GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.WebSites);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageCommon.Text = LangMan.LS(LSID.Address);
+            _lblCountry.Text = LangMan.LS(LSID.AdCountry);
+            _lblState.Text = LangMan.LS(LSID.AdState);
+            _lblCity.Text = LangMan.LS(LSID.AdCity);
+            _lblPostalCode.Text = LangMan.LS(LSID.AdPostalCode);
+            _lblAddress.Text = LangMan.LS(LSID.AddressLine);
+            _pagePhones.Text = LangMan.LS(LSID.Telephones);
+            _pageEmails.Text = LangMan.LS(LSID.EMails);
+            _pageWebPages.Text = LangMan.LS(LSID.WebSites);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

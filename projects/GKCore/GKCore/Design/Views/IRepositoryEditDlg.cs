@@ -7,17 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface IRepositoryEditDlg : ICommonDialog
     {
         GDMRepositoryRecord RepositoryRecord { get; set; }
-
-        ISheetList NotesList { get; }
-        ISheetList UserRefList { get; }
-        ITextBox Name { get; }
     }
 }

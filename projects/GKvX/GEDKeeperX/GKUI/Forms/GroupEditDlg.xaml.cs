@@ -9,9 +9,7 @@
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 
 namespace GKUI.Forms
 {
@@ -22,30 +20,6 @@ namespace GKUI.Forms
             get { return fController.GroupRecord; }
             set { fController.GroupRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList IGroupEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IGroupEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ISheetList IGroupEditDlg.MembersList
-        {
-            get { return fMembersList; }
-        }
-
-        ITextBox IGroupEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(edName); }
-        }
-
-        #endregion
 
         public GroupEditDlg(IBaseWindow baseWin)
         {

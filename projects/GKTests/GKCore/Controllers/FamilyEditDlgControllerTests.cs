@@ -55,7 +55,7 @@ namespace GKCore.Controllers
             // on all messages
             StdDialogsStub.SetQuestionResult(true);
 
-            view.MarriageStatus.SelectedIndex = 0;
+            _cmbMarriageStatus.SelectedIndex = 0;
 
             // spouses
             controller.DeleteHusband();
@@ -65,7 +65,7 @@ namespace GKCore.Controllers
             Assert.AreEqual(0, famRec.Children.Count);
             var child = baseWin.Context.Tree.CreateIndividual();
             RecordSelectDialogStub.SetTestResult(child);
-            await ModifySheetList<ChildrenListModel>(view.ChildrenList, RecordAction.raAdd, null);
+            await ModifySheetList<ChildrenListModel>(_fChildrenList, RecordAction.raAdd, null);
             Assert.AreEqual(1, famRec.Children.Count);
 
             /*SelectSheetListItem("fChildsList", fDialog, 0);
@@ -73,7 +73,7 @@ namespace GKCore.Controllers
             ClickToolStripButton("fChildsList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual(1, famRec.Children.Count);*/
 
-            await ModifySheetList<ChildrenListModel>(view.ChildrenList, RecordAction.raDelete, famRec.Children[0]);
+            await ModifySheetList<ChildrenListModel>(_fChildrenList, RecordAction.raDelete, famRec.Children[0]);
             Assert.AreEqual(0, famRec.Children.Count);
 
             // events
@@ -98,7 +98,7 @@ namespace GKCore.Controllers
             Assert.AreEqual(0, famRec.Notes.Count);
             var notRec = baseWin.Context.Tree.CreateNote();
             RecordSelectDialogStub.SetTestResult(notRec);
-            await ModifySheetList<NoteLinksListModel>(view.NotesList, RecordAction.raAdd, null);
+            await ModifySheetList<NoteLinksListModel>(_fNotesList, RecordAction.raAdd, null);
             Assert.AreEqual(1, famRec.Notes.Count);
 
             /*SelectSheetListItem("fNotesList", dlg, 0);
@@ -106,7 +106,7 @@ namespace GKCore.Controllers
             ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
             Assert.AreEqual(1, famRec.Notes.Count);*/
 
-            await ModifySheetList<NoteLinksListModel>(view.NotesList, RecordAction.raDelete, famRec.Notes[0]);
+            await ModifySheetList<NoteLinksListModel>(_fNotesList, RecordAction.raDelete, famRec.Notes[0]);
             Assert.AreEqual(0, famRec.Notes.Count);
             controller.Accept();
 
@@ -149,39 +149,70 @@ namespace GKCore.Controllers
             ClickButton("btnAccept", fDialog);*/
         }
 
-        private static IFamilyEditDlg CreateMockView()
+        private ITabControl _tabsData;
+        private ITabPage _pageEvents;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageSources;
+        private ITabPage _pageChilds;
+        private ITabPage _pageUserRefs;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IGroupBox _GroupBox1;
+        private ILabel _lblHusband;
+        private ITextBox _txtHusband;
+        private IButton _btnHusbandAdd;
+        private IButton _btnHusbandDelete;
+        private IButton _btnHusbandSel;
+        private IButton _btnWifeSel;
+        private IButton _btnWifeDelete;
+        private IButton _btnWifeAdd;
+        private ITextBox _txtWife;
+        private ILabel _lblWife;
+        private ILabel _lblStatus;
+        private IComboBox _cmbMarriageStatus;
+        private ILabel _lblRestriction;
+        private IComboBox _cmbRestriction;
+        private ISheetList _fChildrenList;
+        private ISheetList _fEventsList;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+
+        private IFamilyEditDlg CreateMockView()
         {
             var view = Substitute.For<IFamilyEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageChilds");
-            SubstituteControl<ITabPage>(view, "pageEvents");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ITabPage>(view, "pageMultimedia");
-            SubstituteControl<ITabPage>(view, "pageSources");
-            SubstituteControl<ITabPage>(view, "pageUserRefs");
-            SubstituteControl<IGroupBox>(view, "GroupBox1");
-            SubstituteControl<ILabel>(view, "lblHusband");
-            SubstituteControl<ILabel>(view, "lblWife");
-            SubstituteControl<ILabel>(view, "lblStatus");
-            SubstituteControl<ILabel>(view, "lblRestriction");
-            SubstituteControl<IButton>(view, "btnHusbandAdd");
-            SubstituteControl<IButton>(view, "btnHusbandDelete");
-            SubstituteControl<IButton>(view, "btnHusbandSel");
-            SubstituteControl<IButton>(view, "btnWifeAdd");
-            SubstituteControl<IButton>(view, "btnWifeDelete");
-            SubstituteControl<IButton>(view, "btnWifeSel");
-
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.MediaList.Returns(Substitute.For<ISheetList>());
-            view.SourcesList.Returns(Substitute.For<ISheetList>());
-            view.ChildrenList.Returns(Substitute.For<ISheetList>());
-            view.EventsList.Returns(Substitute.For<ISheetList>());
-            view.UserRefList.Returns(Substitute.For<ISheetList>());
-            view.MarriageStatus.Returns(Substitute.For<IComboBox>());
-            view.Restriction.Returns(Substitute.For<IComboBox>());
-            view.Husband.Returns(Substitute.For<ITextBox>());
-            view.Wife.Returns(Substitute.For<ITextBox>());
+            _tabsData = SubstCtl<ITabControl>(view, "tabsData");
+            _pageEvents = SubstCtl<ITabPage>(view, "pageEvents");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _pageMultimedia = SubstCtl<ITabPage>(view, "pageMultimedia");
+            _pageSources = SubstCtl<ITabPage>(view, "pageSources");
+            _pageChilds = SubstCtl<ITabPage>(view, "pageChilds");
+            _pageUserRefs = SubstCtl<ITabPage>(view, "pageUserRefs");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _GroupBox1 = SubstCtl<IGroupBox>(view, "GroupBox1");
+            _lblHusband = SubstCtl<ILabel>(view, "lblHusband");
+            _txtHusband = SubstCtl<ITextBox>(view, "txtHusband");
+            _btnHusbandAdd = SubstCtl<IButton>(view, "btnHusbandAdd");
+            _btnHusbandDelete = SubstCtl<IButton>(view, "btnHusbandDelete");
+            _btnHusbandSel = SubstCtl<IButton>(view, "btnHusbandSel");
+            _btnWifeSel = SubstCtl<IButton>(view, "btnWifeSel");
+            _btnWifeDelete = SubstCtl<IButton>(view, "btnWifeDelete");
+            _btnWifeAdd = SubstCtl<IButton>(view, "btnWifeAdd");
+            _txtWife = SubstCtl<ITextBox>(view, "txtWife");
+            _lblWife = SubstCtl<ILabel>(view, "lblWife");
+            _lblStatus = SubstCtl<ILabel>(view, "lblStatus");
+            _cmbMarriageStatus = SubstCtl<IComboBox>(view, "cmbMarriageStatus");
+            _lblRestriction = SubstCtl<ILabel>(view, "lblRestriction");
+            _cmbRestriction = SubstCtl<IComboBox>(view, "cmbRestriction");
+            _fChildrenList = SubstCtl<ISheetList>(view, "fChildrenList");
+            _fEventsList = SubstCtl<ISheetList>(view, "fEventsList");
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _fMediaList = SubstCtl<ISheetList>(view, "fMediaList");
+            _fSourcesList = SubstCtl<ISheetList>(view, "fSourcesList");
+            _fUserRefList = SubstCtl<ISheetList>(view, "fUserRefList");
             return view;
         }
     }

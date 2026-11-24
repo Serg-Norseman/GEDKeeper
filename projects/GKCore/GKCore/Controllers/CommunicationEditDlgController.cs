@@ -17,11 +17,30 @@ using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class CommunicationEditDlgController : DialogController<ICommunicationEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IGroupBox _GroupBox1;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblTheme;
+        private ITextBox _txtName;
+        private ILabel _lblDate;
+        private IDateBox _txtDate;
+        private ILabel _lblType;
+        private IComboBox _cmbCorrType;
+        private IComboBox _txtDir;
+        private ILabel _lblCorresponder;
+        private ITextBox _txtCorresponder;
+        private IButton _btnPersonAdd;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMCommunicationRecord fCommunicationRecord;
         private GDMIndividualRecord fTempInd;
 
@@ -46,36 +65,36 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.CorrType.ReadOnly = true;
+            _cmbCorrType.ReadOnly = true;
             for (GDMCommunicationType ct = GDMCommunicationType.ctCall; ct <= GDMCommunicationType.ctLast; ct++) {
-                fView.CorrType.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
+                _cmbCorrType.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
-            fView.Dir.ReadOnly = true;
-            fView.Dir.AddRange(new object[] {
+            _txtDir.ReadOnly = true;
+            _txtDir.AddRange(new object[] {
                 LangMan.LS(LSID.CD_1),
                 LangMan.LS(LSID.CD_2)
             });
 
-            fView.Name.Activate();
+            _txtName.Activate();
 
-            fView.NotesList.ListModel = new NoteLinksListModel(fView,baseWin,  fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                fCommunicationRecord.CommName = fView.Name.Text;
-                fCommunicationRecord.CommunicationType = (GDMCommunicationType)fView.CorrType.SelectedIndex;
-                fCommunicationRecord.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.NormalizeDate, true));
-                fCommunicationRecord.SetCorresponder((GDMCommunicationDir)fView.Dir.SelectedIndex, fTempInd);
+                fCommunicationRecord.CommName = _txtName.Text;
+                fCommunicationRecord.CommunicationType = (GDMCommunicationType)_cmbCorrType.SelectedIndex;
+                fCommunicationRecord.Date.Assign(GDMDate.CreateByFormattedStr(_txtDate.NormalizeDate, true));
+                fCommunicationRecord.SetCorresponder((GDMCommunicationDir)_txtDir.SelectedIndex, fTempInd);
 
                 fBase.NotifyRecord(fCommunicationRecord, RecordAction.raEdit);
 
@@ -91,28 +110,28 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
-                fView.NotesList.ListModel.DataOwner = fCommunicationRecord;
-                fView.MediaList.ListModel.DataOwner = fCommunicationRecord;
+                _fNotesList.ListModel.DataOwner = fCommunicationRecord;
+                _fMediaList.ListModel.DataOwner = fCommunicationRecord;
 
                 if (fCommunicationRecord == null) {
-                    fView.Name.Text = "";
-                    fView.CorrType.SelectedIndex = -1;
-                    fView.Date.Text = "";
-                    fView.Dir.SelectedIndex = 0;
-                    fView.Corresponder.Text = "";
+                    _txtName.Text = "";
+                    _cmbCorrType.SelectedIndex = -1;
+                    _txtDate.Text = "";
+                    _txtDir.SelectedIndex = 0;
+                    _txtCorresponder.Text = "";
                 } else {
-                    fView.Name.Text = fCommunicationRecord.CommName;
-                    fView.CorrType.SelectedIndex = (int)fCommunicationRecord.CommunicationType;
-                    fView.Date.NormalizeDate = fCommunicationRecord.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                    _txtName.Text = fCommunicationRecord.CommName;
+                    _cmbCorrType.SelectedIndex = (int)fCommunicationRecord.CommunicationType;
+                    _txtDate.NormalizeDate = fCommunicationRecord.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                     fTempInd = fBase.Context.Tree.GetPtrValue(fCommunicationRecord.Corresponder);
 
                     if (fTempInd != null) {
-                        fView.Dir.SelectedIndex = (int)fCommunicationRecord.CommDirection;
-                        fView.Corresponder.Text = GKUtils.GetNameString(fTempInd, false);
+                        _txtDir.SelectedIndex = (int)fCommunicationRecord.CommDirection;
+                        _txtCorresponder.Text = GKUtils.GetNameString(fTempInd, false);
                     } else {
-                        fView.Dir.SelectedIndex = 0;
-                        fView.Corresponder.Text = "";
+                        _txtDir.SelectedIndex = 0;
+                        _txtCorresponder.Text = "";
                     }
                 }
             } catch (Exception ex) {
@@ -123,21 +142,21 @@ namespace GKCore.Controllers
         public async void SetPerson()
         {
             fTempInd = await BaseController.SelectPerson(fView, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
-            fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, false));
+            _txtCorresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, false));
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.WinCommunicationEdit));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
-            GetControl<ILabel>("lblTheme").Text = LangMan.LS(LSID.Theme);
-            GetControl<ILabel>("lblCorresponder").Text = LangMan.LS(LSID.Corresponder);
-            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
+            _lblTheme.Text = LangMan.LS(LSID.Theme);
+            _lblCorresponder.Text = LangMan.LS(LSID.Corresponder);
+            _lblType.Text = LangMan.LS(LSID.Type);
+            _lblDate.Text = LangMan.LS(LSID.Date);
 
             SetToolTip("btnPersonAdd", LangMan.LS(LSID.PersonAttachTip));
         }
@@ -146,10 +165,10 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnPersonAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnPersonAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
         }
     }
 }

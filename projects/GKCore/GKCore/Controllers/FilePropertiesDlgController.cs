@@ -21,6 +21,7 @@ namespace GKCore.Controllers
     public sealed class FilePropertiesDlgController : DialogController<IFilePropertiesDlg>
     {
         #region Design components
+#pragma warning disable CS0649, IDE0044
         private IButton _btnAccept;
         private IButton _btnCancel;
         private ITabPage _pageAuthor;
@@ -35,6 +36,7 @@ namespace GKCore.Controllers
         //private IButton _btnLangEdit;
         private IComboBox _txtLanguage;
         private ILabel _lblLanguage;
+#pragma warning restore CS0649, IDE0044
         #endregion
 
         private readonly FlatListModel fListModel;

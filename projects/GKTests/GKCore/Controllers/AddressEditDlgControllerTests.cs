@@ -23,8 +23,11 @@ namespace GKCore.Controllers
         [Test]
         public async Task Test_AddressEditDlgController()
         {
+            var baseWin = GetBaseSubst();
+
             IAddressEditDlg view = CreateMockView();
             var controller = new AddressEditDlgController(view);
+            controller.InitView(baseWin);
             controller.ApplyTheme();
 
             var addr = new GDMAddress();
@@ -37,7 +40,7 @@ namespace GKCore.Controllers
             addr.AddressCity = "city";
             addr.AddressPostalCode = "0123456";
             controller.UpdateView();
-            AssertViewMatchesModel(addr, view);
+            AssertViewMatchesModel(addr, controller);
 
             await TestPhonesActions(controller, addr);
             await TestMailsActions(controller, addr);
@@ -96,39 +99,65 @@ namespace GKCore.Controllers
             Assert.AreEqual(0, addr.PhoneNumbers.Count);
         }
 
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageCommon;
+        private ITabPage _pagePhones;
+        private ITabPage _pageEmails;
+        private ITabPage _pageWebPages;
+        private ILabel _lblCountry;
+        private ILabel _lblState;
+        private ILabel _lblCity;
+        private ILabel _lblPostalCode;
+        private ILabel _lblAddress;
+        private ITextBox _txtCountry;
+        private ITextBox _txtState;
+        private ITextBox _txtCity;
+        private ITextBox _txtPostalCode;
+        private ITextBox _txtAddress;
+        private ISheetList _fPhonesList;
+        private ISheetList _fMailsList;
+        private ISheetList _fWebsList;
+
         private IAddressEditDlg CreateMockView()
         {
             var view = Substitute.For<IAddressEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageCommon");
-            SubstituteControl<ILabel>(view, "lblCountry");
-            SubstituteControl<ILabel>(view, "lblState");
-            SubstituteControl<ILabel>(view, "lblCity");
-            SubstituteControl<ILabel>(view, "lblPostalCode");
-            SubstituteControl<ILabel>(view, "lblAddress");
-            SubstituteControl<ITabPage>(view, "pagePhones");
-            SubstituteControl<ITabPage>(view, "pageEmails");
-            SubstituteControl<ITabPage>(view, "pageWebPages");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _pageCommon = SubstCtl<ITabPage>(view, "pageCommon");
+            _lblCountry = SubstCtl<ILabel>(view, "lblCountry");
+            _lblState = SubstCtl<ILabel>(view, "lblState");
+            _lblCity = SubstCtl<ILabel>(view, "lblCity");
+            _lblPostalCode = SubstCtl<ILabel>(view, "lblPostalCode");
+            _lblAddress = SubstCtl<ILabel>(view, "lblAddress");
+            _pagePhones = SubstCtl<ITabPage>(view, "pagePhones");
+            _pageEmails = SubstCtl<ITabPage>(view, "pageEmails");
+            _pageWebPages = SubstCtl<ITabPage>(view, "pageWebPages");
+            _txtCountry = SubstCtl<ITextBox>(view, "txtCountry");
+            _txtState = SubstCtl<ITextBox>(view, "txtState");
+            _txtCity = SubstCtl<ITextBox>(view, "txtCity");
+            _txtPostalCode = SubstCtl<ITextBox>(view, "txtPostalCode");
+            _txtAddress = SubstCtl<ITextBox>(view, "txtAddress");
 
-            var sheetSubst = SubstituteSheetList(new TagsListModel(fBaseWin.Context, "phones"));
-            view.PhonesList.Returns(sheetSubst);
+            _fPhonesList = SubstituteSheetList(new TagsListModel(fBaseWin.Context, "phones"));
+            SubstituteControl(view, "fPhonesList", _fPhonesList);
 
-            sheetSubst = SubstituteSheetList(new TagsListModel(fBaseWin.Context, "mails"));
-            view.MailsList.Returns(sheetSubst);
+            _fMailsList = SubstituteSheetList(new TagsListModel(fBaseWin.Context, "mails"));
+            SubstituteControl(view, "fMailsList", _fMailsList);
 
-            sheetSubst = SubstituteSheetList(new TagsListModel(fBaseWin.Context, "webs"));
-            view.WebsList.Returns(sheetSubst);
+            _fWebsList = SubstituteSheetList(new TagsListModel(fBaseWin.Context, "webs"));
+            SubstituteControl(view, "fWebsList", _fWebsList);
+
             return view;
         }
 
-        private void AssertViewMatchesModel(GDMAddress address, IAddressEditDlg view)
+        private void AssertViewMatchesModel(GDMAddress address, AddressEditDlgController controller)
         {
-            Assert.AreEqual(address.AddressCountry, view.Country.Text);
-            Assert.AreEqual(address.AddressState, view.State.Text);
-            Assert.AreEqual(address.AddressCity, view.City.Text);
-            Assert.AreEqual(address.AddressPostalCode, view.PostalCode.Text);
-            Assert.AreEqual(address.Lines.Text.Trim(), view.AddressLine.Text);
+            Assert.AreEqual(address.AddressCountry, _txtCountry.Text);
+            Assert.AreEqual(address.AddressState, _txtState.Text);
+            Assert.AreEqual(address.AddressCity, _txtCity.Text);
+            Assert.AreEqual(address.AddressPostalCode, _txtPostalCode.Text);
+            Assert.AreEqual(address.Lines.Text.Trim(), _txtAddress.Text);
         }
     }
 }

@@ -44,25 +44,42 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static IParentsEditDlg CreateMockView()
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IGroupBox _GroupBox1;
+        private ILabel _lblChildName;
+        private ITextBox _txtChildName;
+        private ILabel _lblLinkageType;
+        private IComboBox _cmbLinkageType;
+        private ILabel _lblParents;
+        private ITextBox _txtFather;
+        private ITextBox _txtMother;
+        private IButton _btnParentsEdit;
+        private IButton _btnFatherAdd;
+        private IButton _btnFatherDelete;
+        private IButton _btnMotherAdd;
+        private IButton _btnMotherDelete;
+
+        private IParentsEditDlg CreateMockView()
         {
             var view = Substitute.For<IParentsEditDlg>();
 
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblChildName");
-            SubstituteControl<ILabel>(view, "lblParents");
-            SubstituteControl<ILabel>(view, "lblLinkageType");
-            SubstituteControl<IButton>(view, "btnParentsEdit");
-            SubstituteControl<IButton>(view, "btnFatherAdd");
-            SubstituteControl<IButton>(view, "btnFatherDelete");
-            SubstituteControl<IButton>(view, "btnMotherAdd");
-            SubstituteControl<IButton>(view, "btnMotherDelete");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _GroupBox1 = SubstCtl<IGroupBox>(view, "GroupBox1");
+            _lblChildName = SubstCtl<ILabel>(view, "lblChildName");
+            _txtChildName = SubstCtl<ITextBox>(view, "txtChildName");
+            _lblLinkageType = SubstCtl<ILabel>(view, "lblLinkageType");
+            _cmbLinkageType = SubstCtl<IComboBox>(view, "cmbLinkageType");
+            _lblParents = SubstCtl<ILabel>(view, "lblParents");
+            _txtFather = SubstCtl<ITextBox>(view, "txtFather");
+            _txtMother = SubstCtl<ITextBox>(view, "txtMother");
+            _btnParentsEdit = SubstCtl<IButton>(view, "btnParentsEdit");
+            _btnFatherAdd = SubstCtl<IButton>(view, "btnFatherAdd");
+            _btnFatherDelete = SubstCtl<IButton>(view, "btnFatherDelete");
+            _btnMotherAdd = SubstCtl<IButton>(view, "btnMotherAdd");
+            _btnMotherDelete = SubstCtl<IButton>(view, "btnMotherDelete");
 
-            view.Father.Returns(Substitute.For<ITextBox>());
-            view.Mother.Returns(Substitute.For<ITextBox>());
-            view.ChildName.Returns(Substitute.For<ITextBox>());
-            view.LinkageTypeCombo.Returns(Substitute.For<IComboBox>());
             return view;
         }
     }

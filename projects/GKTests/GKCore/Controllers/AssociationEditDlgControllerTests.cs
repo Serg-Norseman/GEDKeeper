@@ -42,7 +42,7 @@ namespace GKCore.Controllers
 
             // substitutes of values
             var relValue = "test relation";
-            controller.GetControl<IComboBox>("cmbRelation").Text.Returns(relValue);
+            _cmbRelation.Text.Returns(relValue);
             var relPerson = baseWin.Context.Tree.CreateIndividual();
             RecordSelectDialogStub.SetTestResult(relPerson);
 
@@ -54,16 +54,24 @@ namespace GKCore.Controllers
             Assert.AreEqual(relPerson, baseWin.Context.Tree.GetPtrValue(association));
         }
 
-        private static IAssociationEditDlg CreateMockView()
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnPersonAdd;
+        private ILabel _lblRelation;
+        private ILabel _lblPerson;
+        private IComboBox _cmbRelation;
+        private ITextBox _txtPerson;
+
+        private IAssociationEditDlg CreateMockView()
         {
             var view = Substitute.For<IAssociationEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblRelation");
-            SubstituteControl<IComboBox>(view, "cmbRelation");
-            SubstituteControl<ILabel>(view, "lblPerson");
-            SubstituteControl<ITextBox>(view, "txtPerson");
-            SubstituteControl<IButton>(view, "btnPersonAdd");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _lblRelation = SubstCtl<ILabel>(view, "lblRelation");
+            _cmbRelation = SubstCtl<IComboBox>(view, "cmbRelation");
+            _lblPerson = SubstCtl<ILabel>(view, "lblPerson");
+            _txtPerson = SubstCtl<ITextBox>(view, "txtPerson");
+            _btnPersonAdd = SubstCtl<IButton>(view, "btnPersonAdd");
             return view;
         }
     }

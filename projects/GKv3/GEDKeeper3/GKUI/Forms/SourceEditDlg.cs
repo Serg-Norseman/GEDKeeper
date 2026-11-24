@@ -12,9 +12,7 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
 
@@ -47,6 +45,7 @@ namespace GKUI.Forms
         private GKSheetList fRepositoriesList;
         private Label lblDate;
         private GKDateControl dateCtl;
+        private TabPage pageUserRefs;
         private GKSheetList fUserRefList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
@@ -57,60 +56,6 @@ namespace GKUI.Forms
             get { return fController.SourceRecord; }
             set { fController.SourceRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList ISourceEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList ISourceEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ISheetList ISourceEditDlg.RepositoriesList
-        {
-            get { return fRepositoriesList; }
-        }
-
-        ISheetList ISourceEditDlg.UserRefList
-        {
-            get { return fUserRefList; }
-        }
-
-        ITextBox ISourceEditDlg.ShortTitle
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtShortTitle); }
-        }
-
-        ITextBox ISourceEditDlg.Author
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtAuthor); }
-        }
-
-        ITextBox ISourceEditDlg.DescTitle
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtTitle); }
-        }
-
-        ITextBox ISourceEditDlg.Publication
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtPublication); }
-        }
-
-        ITextBox ISourceEditDlg.Text
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtText); }
-        }
-
-        IDateControl ISourceEditDlg.Date
-        {
-            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
-        }
-
-        #endregion
 
         public SourceEditDlg(IBaseWindow baseWin)
         {

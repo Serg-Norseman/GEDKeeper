@@ -10,9 +10,7 @@ using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -27,45 +25,6 @@ namespace GKUI.Forms
             get { return fController.CommunicationRecord; }
             set { fController.CommunicationRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList ICommunicationEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList ICommunicationEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ITextBox ICommunicationEditDlg.Corresponder
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtCorresponder); }
-        }
-
-        IComboBox ICommunicationEditDlg.CorrType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbCorrType); }
-        }
-
-        IDateBox ICommunicationEditDlg.Date
-        {
-            get { return fController.GetControlHandler<IDateBox>(txtDate); }
-        }
-
-        IComboBox ICommunicationEditDlg.Dir
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtDir); }
-        }
-
-        ITextBox ICommunicationEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        #endregion
 
         public CommunicationEditDlg(IBaseWindow baseWin)
         {

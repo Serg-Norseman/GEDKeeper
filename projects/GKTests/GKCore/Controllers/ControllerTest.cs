@@ -48,6 +48,18 @@ namespace GKCore.Controllers
             TestUtils.SubstituteControl<T>(dialog, ctlName);
         }
 
+        public static void SubstituteControl<T>(IView dialog, string ctlName, T substControl) where T : class, IControl
+        {
+            TestUtils.SubstituteControl<T>(dialog, ctlName, substControl);
+        }
+
+        protected static T SubstCtl<T>(IView dialog, string ctlName) where T : class, IControl
+        {
+            var substControl = Substitute.For<T>();
+            TestUtils.SubstituteControl(dialog, ctlName, substControl);
+            return substControl;
+        }
+
         protected static async Task ModifySheetList<T>(ISheetList sheetList, RecordAction action, object itemData) where T : ISheetModel
         {
             await ((T)sheetList.ListModel).Modify(sheetList, new ModifyEventArgs(action, itemData));

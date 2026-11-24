@@ -9,6 +9,7 @@
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -27,7 +28,7 @@ namespace GKCore.Controllers
             var noteRecord = new GDMNoteRecord(fBaseWin.Context.Tree);
             controller.NoteRecord = noteRecord;
 
-            view.Note.Text = "sample text";
+            _txtNote.Text = "sample text";
 
             controller.Accept();
             controller.UpdateView();
@@ -35,13 +36,22 @@ namespace GKCore.Controllers
             Assert.AreEqual("sample text", noteRecord.Lines.Text);
         }
 
-        private static INoteEditDlg CreateMockView()
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITextBox _txtNote;
+        private ITabControl _tabsData;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+
+        private INoteEditDlg CreateMockView()
         {
             var view = Substitute.For<INoteEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-
-            view.Note.Returns(Substitute.For<ITextBox>());
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _txtNote = SubstCtl<ITextBox>(view, "txtNote");
+            _tabsData = SubstCtl<ITabControl>(view, "tabsData");
+            _fSourcesList = SubstCtl<ISheetList>(view, "fSourcesList");
+            _fUserRefList = SubstCtl<ISheetList>(view, "fUserRefList");
             return view;
         }
     }

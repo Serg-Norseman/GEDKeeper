@@ -10,9 +10,7 @@ using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
 
@@ -32,60 +30,6 @@ namespace GKUI.Forms
             get { return fController.FamilyRecord; }
             set { fController.FamilyRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList IFamilyEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IFamilyEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ISheetList IFamilyEditDlg.SourcesList
-        {
-            get { return fSourcesList; }
-        }
-
-        ISheetList IFamilyEditDlg.ChildrenList
-        {
-            get { return fChildrenList; }
-        }
-
-        ISheetList IFamilyEditDlg.EventsList
-        {
-            get { return fEventsList; }
-        }
-
-        ISheetList IFamilyEditDlg.UserRefList
-        {
-            get { return fUserRefList; }
-        }
-
-        IComboBox IFamilyEditDlg.MarriageStatus
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbMarriageStatus); }
-        }
-
-        IComboBox IFamilyEditDlg.Restriction
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbRestriction); }
-        }
-
-        ITextBox IFamilyEditDlg.Husband
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtHusband); }
-        }
-
-        ITextBox IFamilyEditDlg.Wife
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtWife); }
-        }
-
-        #endregion
 
         public FamilyEditDlg(IBaseWindow baseWin)
         {

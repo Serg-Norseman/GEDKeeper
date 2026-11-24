@@ -11,9 +11,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Locales;
 
 namespace GKUI.Forms
 {
@@ -24,30 +22,6 @@ namespace GKUI.Forms
             get { return fController.Event; }
             set { fController.Event = value; }
         }
-
-        #region View Interface
-
-        IComboBox IAgeEditDlg.RelativeCombo1
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbRel1); }
-        }
-
-        ITextBox IAgeEditDlg.ValueText1
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtVal1); }
-        }
-
-        IComboBox IAgeEditDlg.RelativeCombo2
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbRel2); }
-        }
-
-        ITextBox IAgeEditDlg.ValueText2
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtVal2); }
-        }
-
-        #endregion
 
         public AgeEditDlg(IBaseWindow baseWin)
         {

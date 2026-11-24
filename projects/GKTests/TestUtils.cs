@@ -310,6 +310,11 @@ namespace GKTests
             dialog.GetControl(ctlName).Returns(substControl);
         }
 
+        public static void SubstituteControl<T>(IView dialog, string ctlName, T substControl) where T : class, IControl
+        {
+            dialog.GetControl(ctlName).Returns(substControl);
+        }
+
         public static byte[] stm2array(Stream stream)
         {
             byte[] result;
