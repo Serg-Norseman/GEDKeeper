@@ -11,7 +11,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -33,15 +32,6 @@ namespace GKUI.Forms
             get { return fController.MultimediaLink; }
             set { fController.MultimediaLink = value; }
         }
-
-        #region View Interface
-
-        IImageView IPortraitSelectDlg.ImageCtl
-        {
-            get { return imageView1; }
-        }
-
-        #endregion
 
         public PortraitSelectDlg(IBaseWindow baseWin)
         {

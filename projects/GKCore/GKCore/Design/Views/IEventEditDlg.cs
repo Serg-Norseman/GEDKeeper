@@ -7,26 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface IEventEditDlg : ICommonDialog, IDataReceiver
     {
         GDMCustomEvent Event { get; set; }
-
-        IComboBox EventType { get; }
-
-        IDateControl Date { get; }
-
-        IComboBox Attribute { get; }
-        ITextBox Place { get; }
-        IComboBox Cause { get; }
-        IComboBox Agency { get; }
-
-        ISheetList NotesList { get; }
-        ISheetList MediaList { get; }
-        ISheetList SourcesList { get; }
     }
 }

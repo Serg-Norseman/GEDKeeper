@@ -11,7 +11,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -39,25 +38,6 @@ namespace GKUI.Forms
             get { return fController.LocationName; }
             set { fController.LocationName = value; }
         }
-
-        #region View Interface
-
-        ITextBox ILocationNameEditDlg.NameText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtTitle); }
-        }
-
-        ITextBox ILocationNameEditDlg.AbbrText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtShortTitle); }
-        }
-
-        IDateControl ILocationNameEditDlg.DateCtl
-        {
-            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
-        }
-
-        #endregion
 
         public LocationNameEditDlg(IBaseWindow baseWin)
         {

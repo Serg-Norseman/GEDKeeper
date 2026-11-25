@@ -17,6 +17,33 @@ namespace GKCore.Controllers
     [TestFixture]
     public class LocationEditDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageCommon;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblLatitude;
+        private ITextBox _txtLatitude;
+        private ILabel _lblLongitude;
+        private ITextBox _txtLongitude;
+        private IGroupBox _grpSearch;
+        private IListView _ListGeoCoords;
+        private IButton _btnSearch;
+        private IButton _btnSelect;
+        private IButton _btnSelectName;
+        private IButton _btnSelectCursor;
+        private IButton _btnShowOnMap;
+        private IMapBrowser _fMapBrowser;
+        private ISheetList _fMediaList;
+        private ISheetList _fNamesList;
+        private ISheetList _fLinksList;
+        private ISheetList _fNotesList;
+        private ITabPage _pageHistory;
+        private IGroupBox _pageHistNames;
+        private IGroupBox _pageHistLinks;
+
         [Test]
         public void Test_LocationEditDlgController()
         {
@@ -29,7 +56,7 @@ namespace GKCore.Controllers
             controller.LocationRecord = locRec;
             Assert.AreEqual(locRec, controller.LocationRecord);
 
-            view.Name.Text = "sample location";
+            _txtName.Text = "sample location";
 
             controller.Accept();
             controller.UpdateView();
@@ -50,33 +77,36 @@ namespace GKCore.Controllers
             controller.ShowOnMap();
         }
 
-        private static ILocationEditDlg CreateMockView()
+        private ILocationEditDlg CreateMockView()
         {
             var view = Substitute.For<ILocationEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageCommon");
-            SubstituteControl<ITabPage>(view, "pageHistory");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ITabPage>(view, "pageMultimedia");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ILabel>(view, "lblLatitude");
-            SubstituteControl<ILabel>(view, "lblLongitude");
-            SubstituteControl<IButton>(view, "btnShowOnMap");
-            SubstituteControl<IGroupBox>(view, "grpSearch");
-            SubstituteControl<IButton>(view, "btnSearch");
-            SubstituteControl<IButton>(view, "btnSelect");
-            SubstituteControl<IButton>(view, "btnSelectName");
-            SubstituteControl<IButton>(view, "btnSelectCursor");
-            SubstituteControl<IGroupBox>(view, "pageHistNames");
-            SubstituteControl<IGroupBox>(view, "pageHistLinks");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _pageCommon = SubstCtl<ITabPage>(view, "pageCommon");
+            _pageHistory = SubstCtl<ITabPage>(view, "pageHistory");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _pageMultimedia = SubstCtl<ITabPage>(view, "pageMultimedia");
+            _lblName = SubstCtl<ILabel>(view, "lblName");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _lblLatitude = SubstCtl<ILabel>(view, "lblLatitude");
+            _txtLatitude = SubstCtl<ITextBox>(view, "txtLatitude");
+            _lblLongitude = SubstCtl<ILabel>(view, "lblLongitude");
+            _txtLongitude = SubstCtl<ITextBox>(view, "txtLongitude");
+            _btnShowOnMap = SubstCtl<IButton>(view, "btnShowOnMap");
+            _grpSearch = SubstCtl<IGroupBox>(view, "grpSearch");
+            _btnSearch = SubstCtl<IButton>(view, "btnSearch");
+            _btnSelect = SubstCtl<IButton>(view, "btnSelect");
+            _btnSelectName = SubstCtl<IButton>(view, "btnSelectName");
+            _btnSelectCursor = SubstCtl<IButton>(view, "btnSelectCursor");
+            _pageHistNames = SubstCtl<IGroupBox>(view, "pageHistNames");
+            _pageHistLinks = SubstCtl<IGroupBox>(view, "pageHistLinks");
 
-            view.MapBrowser.Returns(Substitute.For<IMapBrowser>());
-            view.NamesList.Returns(Substitute.For<ISheetList>());
-            view.LinksList.Returns(Substitute.For<ISheetList>());
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.MediaList.Returns(Substitute.For<ISheetList>());
-            view.GeoCoordsList.Returns(Substitute.For<IListView>());
+            _fMapBrowser = SubstCtl<IMapBrowser>(view, "fMapBrowser");
+            _fNamesList = SubstCtl<ISheetList>(view, "fNamesList");
+            _fLinksList = SubstCtl<ISheetList>(view, "fLinksList");
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _fMediaList = SubstCtl<ISheetList>(view, "fMediaList");
+            _ListGeoCoords = SubstCtl<IListView>(view, "ListGeoCoords");
             return view;
         }
     }

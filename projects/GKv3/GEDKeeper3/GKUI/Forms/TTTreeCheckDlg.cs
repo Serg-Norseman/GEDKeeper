@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -32,15 +31,6 @@ namespace GKUI.Forms
         private GKListView ListChecks;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        IListView ITreeCheckDlg.ChecksList
-        {
-            get { return ListChecks; }
-        }
-
         #endregion
 
         public TTTreeCheckDlg(IBaseWindow baseWin)

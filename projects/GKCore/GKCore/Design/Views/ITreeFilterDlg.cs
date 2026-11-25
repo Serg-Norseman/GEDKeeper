@@ -7,20 +7,11 @@
  */
 
 using GKCore.Charts;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface ITreeFilterDlg : ICommonDialog
     {
         ChartFilter Filter { get; set; }
-
-        ISheetList PersonsList { get; }
-        INumericBox YearNum { get; }
-        IComboBox SourceCombo { get; }
-
-        ICheckBox HideDatesAfterBoundaryCheck { get; }
-        ITextBox DateBoundary { get; }
     }
 }

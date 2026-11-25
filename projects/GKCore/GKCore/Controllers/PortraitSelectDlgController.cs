@@ -24,6 +24,14 @@ namespace GKCore.Controllers
     /// </summary>
     public class PortraitSelectDlgController : DialogController<IPortraitSelectDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IImageView _imageView1;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMMultimediaLink fMultimediaLink;
 
         public GDMMultimediaLink MultimediaLink
@@ -45,7 +53,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                BaseController.SetMultimediaLinkRegion(fMultimediaLink, fView.ImageCtl.SelectionRegion, true);
+                BaseController.SetMultimediaLinkRegion(fMultimediaLink, _imageView1.SelectionRegion, true);
 
                 var uid = fMultimediaLink.GetUID(fBase.Context.Tree);
                 PortraitsCache.Instance.RemoveObsolete(uid);
@@ -65,10 +73,10 @@ namespace GKCore.Controllers
             IImage img = fBase.Context.LoadMediaImage(mmRec, 0, -1, -1, ExtRect.Empty, false, false);
             if (img == null) return;
 
-            fView.ImageCtl.OpenImage(null, img);
+            _imageView1.OpenImage(null, img);
 
             if (fMultimediaLink.IsPrimaryCutout) {
-                fView.ImageCtl.SelectionRegion = fMultimediaLink.CutoutPosition.Value;
+                _imageView1.SelectionRegion = fMultimediaLink.CutoutPosition.Value;
             }
         }
 
@@ -76,16 +84,16 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.PortraitSelect));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

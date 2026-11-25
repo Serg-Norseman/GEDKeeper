@@ -57,25 +57,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region View Interface
-
-        ITabControl IBaseWindowView.RecordTabs
-        {
-            get { return fController.GetControlHandler<ITabControl>(tabsRecords); }
-        }
-
-        IMenuItem IBaseWindowView.ReportsItem
-        {
-            get { return fController.GetControlHandler<IMenuItem>(miReports); }
-        }
-
-        IMenuItem IBaseWindowView.PluginsItem
-        {
-            get { return fController.GetControlHandler<IMenuItem>(miPlugins); }
-        }
-
-        #endregion
-
         #region Instance control
 
         public BaseWinSDI()
@@ -85,6 +66,7 @@ namespace GKUI.Forms
             Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
 
             fController = new BaseWinController(this, true);
+            fController.InitView(null);
             fContext = fController.Context;
             fContext.ModifiedChanged += BaseContext_ModifiedChanged;
 

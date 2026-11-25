@@ -21,6 +21,28 @@ namespace GKCore.Controllers
     [TestFixture]
     public class MediaEditDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnView;
+        private IButton _btnFileSelect;
+        private ITabPage _pageNotes;
+        private ITabPage _pageSources;
+        private ITabPage _pageCommon;
+        private ITabPage _pageFiles;
+        private ITabPage _pageUserRefs;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblType;
+        private IComboBox _cmbMediaType;
+        private ILabel _lblStoreType;
+        private IComboBox _cmbStoreType;
+        private ILabel _lblFile;
+        private ITextBox _txtFile;
+        private ISheetList _fFilesList;
+        private ISheetList _fNotesList;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+
         [Test]
         public async Task Test_MediaEditDlgController()
         {
@@ -34,9 +56,9 @@ namespace GKCore.Controllers
 
             var mediaSampleFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
             try {
-                view.Name.Text = "sample text";
-                view.MediaType.SelectedIndex = 1;
-                view.StoreType.SelectedIndex = 0; // Reference
+                _txtName.Text = "sample text";
+                _cmbMediaType.SelectedIndex = 1;
+                _cmbStoreType.SelectedIndex = 0; // Reference
 
                 StdDialogsStub.SetOpenedFile(mediaSampleFile);
                 await controller.SelectFile();
@@ -49,32 +71,32 @@ namespace GKCore.Controllers
             }
         }
 
-        private static IMediaEditDlg CreateMockView()
+        private IMediaEditDlg CreateMockView()
         {
             var view = Substitute.For<IMediaEditDlg>();
 
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageCommon");
-            SubstituteControl<ITabPage>(view, "pageFiles");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ITabPage>(view, "pageSources");
-            SubstituteControl<ITabPage>(view, "pageUserRefs");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ILabel>(view, "lblType");
-            SubstituteControl<ILabel>(view, "lblStoreType");
-            SubstituteControl<ILabel>(view, "lblFile");
-            SubstituteControl<IButton>(view, "btnView");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _btnView = SubstCtl<IButton>(view, "btnView");
+            _btnFileSelect = SubstCtl<IButton>(view, "btnFileSelect");
+            _pageCommon = SubstCtl<ITabPage>(view, "pageCommon");
+            _pageFiles = SubstCtl<ITabPage>(view, "pageFiles");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _pageSources = SubstCtl<ITabPage>(view, "pageSources");
+            _pageUserRefs = SubstCtl<ITabPage>(view, "pageUserRefs");
+            _lblName = SubstCtl<ILabel>(view, "lblName");
+            _lblType = SubstCtl<ILabel>(view, "lblType");
+            _lblStoreType = SubstCtl<ILabel>(view, "lblStoreType");
+            _lblFile = SubstCtl<ILabel>(view, "lblFile");
 
-            view.FilesList.Returns(Substitute.For<ISheetList>());
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.SourcesList.Returns(Substitute.For<ISheetList>());
-            view.UserRefList.Returns(Substitute.For<ISheetList>());
-            view.MediaType.Returns(Substitute.For<IComboBox>());
-            view.StoreType.Returns(Substitute.For<IComboBox>());
-            view.Name.Returns(Substitute.For<ITextBox>());
-            view.File.Returns(Substitute.For<ITextBox>());
-            view.FileSelectButton.Returns(Substitute.For<IButton>());
+            _fFilesList = SubstCtl<ISheetList>(view, "fFilesList");
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _fSourcesList = SubstCtl<ISheetList>(view, "fSourcesList");
+            _fUserRefList = SubstCtl<ISheetList>(view, "fUserRefList");
+            _cmbMediaType = SubstCtl<IComboBox>(view, "cmbMediaType");
+            _cmbStoreType = SubstCtl<IComboBox>(view, "cmbStoreType");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _txtFile = SubstCtl<ITextBox>(view, "txtFile");
             return view;
         }
     }

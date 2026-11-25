@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -30,6 +29,7 @@ namespace GKUI.Forms
         private Label Lab2;
         private Label Lab1;
         private Button btnClose;
+        private Button btnSwap;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -38,35 +38,6 @@ namespace GKUI.Forms
         {
             get { return fController.Base; }
         }
-
-        #region View Interface
-
-        ILabel IRelationshipCalculatorDlg.Label1
-        {
-            get { return fController.GetControlHandler<ILabel>(Lab1); }
-        }
-
-        ILabel IRelationshipCalculatorDlg.Label2
-        {
-            get { return fController.GetControlHandler<ILabel>(Lab2); }
-        }
-
-        ITextBox IRelationshipCalculatorDlg.Person1
-        {
-            get { return fController.GetControlHandler<ITextBox>(Edit1); }
-        }
-
-        ITextBox IRelationshipCalculatorDlg.Person2
-        {
-            get { return fController.GetControlHandler<ITextBox>(Edit2); }
-        }
-
-        ITextBox IRelationshipCalculatorDlg.Result
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtResult); }
-        }
-
-        #endregion
 
         public RelationshipCalculatorDlg(IBaseWindow baseWin)
         {

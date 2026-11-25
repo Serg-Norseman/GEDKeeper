@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Locales;
 
 namespace GKCore.Design.Views
@@ -19,9 +18,6 @@ namespace GKCore.Design.Views
 
     public interface IScriptEditWin : ICommonDialog, ILocalizable, IScriptConsole
     {
-        ITextBox ScriptText { get; }
-        ITextBox DebugOutput { get; }
-
         string FileName { get; set; }
         bool Modified { get; set; }
 

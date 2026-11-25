@@ -27,6 +27,207 @@ namespace GKCore.Controllers
 {
     public class OptionsDlgController : DialogController<IOptionsDlg>
     {
+        // Note: fields are not created for controls absent in the GKv2 or GKvX forms,
+        // they are accessed by string name:
+        //   only GKv3 (Feature.DesktopV3): chkAutoSortEvents, chkConvenientSourcesFormat, chkFBIncludeEvents,
+        //   chkFBIncludeFamilyEvents, chkFBIncludeNotes, chkFBMergeNotes, chkMultipleSpouseLines,
+        //   chkShowEventsOnlyAlive, chkSortEvents, chkSourceFilterChecksEvents, pageFamilyBook, pageReports
+        //   absent in GKvX: btnExtBackupFolderChoose, chkDisplayFullFileName, chkExtBackupEnabled,
+        //   chkOverrideThemesFont, lblChartFontTitle, lblExtBackupFolder, lblUIFont, lblUIFontTitle,
+        //   lvPlugins, pageComBackup, pageComOther, pageNames, pagePlugins, txtExtBackupFolder
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private ITabPage _pageCommon;
+        private ITabPage _pageUIView;
+        private ITabPage _pageCharts;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageEventTypes;
+        private ITabPage _pagePedigree;
+        private ITabPage _pageSpecials;
+        private ITabPage _pageGeo;
+        private ITabPage _pageNavigation;
+        private ITabPage _pageTreeChart;
+        private ITabPage _pageTreeDesign;
+        private ITabPage _pageTreePersons;
+        private ITabPage _pageAncCircle;
+        private ITabPage _pageViewCommon;
+        private ITabPage _pageViewPersons;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnColumnUp;
+        private IButton _btnColumnDown;
+        private IButton _btnResetDefaults;
+        private IGroupBox _grpInternet;
+        private IGroupBox _grpFileBackup;
+        private IGroupBox _grpOther;
+        private IGroupBox _rgFNPFormat;
+        private IGroupBox _grpDateFormat;
+        private IGroupBox _grpAdvancedNames;
+        private IGroupBox _grpPedigree;
+        private IGroupBox _grpPedigreeFormat;
+        private IGroupBox _grpSpacings;
+        private ILabel _lblAscendNumbering;
+        private ILabel _lblBackupRevisionsMaxCount;
+        private ILabel _lblBranchDist;
+        private ILabel _lblCertaintyAlgorithm;
+        private ILabel _lblChartFont;
+        private ILabel _lblChartWindowsShowMode;
+        private ILabel _lblDefaultDepth;
+        private ILabel _lblDefaultDepthAncestors;
+        private ILabel _lblDefaultDepthDescendants;
+        private ILabel _lblDescendNumbering;
+        private ILabel _lblFemaleColor;
+        private ILabel _lblGenDist;
+        private ILabel _lblGeocoder;
+        private ILabel _lblGeoSearchCountry;
+        private ILabel _lblLanguage;
+        private ILabel _lblMaleColor;
+        private ILabel _lblMargins;
+        private ILabel _lblMatchPatternMethod;
+        private ILabel _lblMediaStoreDefault;
+        private ILabel _lblMinutes;
+        private ILabel _lblPadding;
+        private ILabel _lblProxyLogin;
+        private ILabel _lblProxyPassword;
+        private ILabel _lblProxyPort;
+        private ILabel _lblProxyServer;
+        private ILabel _lblSpouseDist;
+        private ILabel _lblTextEffect;
+        private ILabel _lblUnHusbandColor;
+        private ILabel _lblUnkSexColor;
+        private ILabel _lblUnWifeColor;
+        private ITextBox _txtProxyLogin;
+        private ITextBox _txtProxyPass;
+        private ITextBox _txtProxyPort;
+        private ITextBox _txtProxyServer;
+        private IComboBox _cmbAscendNumbering;
+        private IComboBox _cmbCertaintyAlgorithm;
+        private IComboBox _cmbChartWindowsShowMode;
+        private IComboBox _cmbDescendNumbering;
+        private IComboBox _cmbGeocoder;
+        private IComboBox _cmbGeoSearchCountry;
+        private IComboBox _cmbLanguages;
+        private IComboBox _cmbMatchPatternMethod;
+        private IComboBox _cmbMediaStoreDefault;
+        private IComboBox _cmbTextEffect;
+        private ICheckBox _chkAllowDeleteMediaFileFromRefs;
+        private ICheckBox _chkAllowDeleteMediaFileFromStgArc;
+        private ICheckBox _chkAllowMediaDirectRefs;
+        private ICheckBox _chkAllowMediaStoreRelativeReferences;
+        private ICheckBox _chkAttributes;
+        private ICheckBox _chkAutoCheckUpdates;
+        private ICheckBox _chkAutosave;
+        private ICheckBox _chkAutoSortChildren;
+        private ICheckBox _chkAutoSortSpouses;
+        private ICheckBox _chkBirthDate;
+        private ICheckBox _chkBoldNames;
+        private ICheckBox _chkCharsetDetection;
+        private ICheckBox _chkCheckTreeSize;
+        private ICheckBox _chkChildlessExclude;
+        private ICheckBox _chkDateDesignations;
+        private ICheckBox _chkDeathDate;
+        private ICheckBox _chkDefaultPortraits;
+        private ICheckBox _chkDeleteMediaFileWithoutConfirm;
+        private ICheckBox _chkDialogClosingWarn;
+        private ICheckBox _chkDiffLines;
+        private ICheckBox _chkDisableNonStdFeatures;
+        private ICheckBox _chkDottedLinesOfAdoptedChildren;
+        private ICheckBox _chkDottedLinesOfDivorcedSpouses;
+        private ICheckBox _chkELAbbreviatedNames;
+        private ICheckBox _chkEmbeddedMediaPlayer;
+        private ICheckBox _chkEnableStdValidation;
+        private ICheckBox _chkExtendedKinships;
+        private ICheckBox _chkExtendedLocations;
+        private ICheckBox _chkExtendedTree;
+        private ICheckBox _chkExtendWomanSurnames;
+        private ICheckBox _chkFilesOverwriteWarn;
+        private ICheckBox _chkFirstCapitalLetterInNames;
+        private ICheckBox _chkFullNameOnOneLine;
+        private ICheckBox _chkGenerations;
+        private ICheckBox _chkHideUnknownSpouses;
+        private ICheckBox _chkHighlightInaccessibleFiles;
+        private ICheckBox _chkHighlightUnmarried;
+        private ICheckBox _chkHighlightUnparented;
+        private ICheckBox _chkInvertedTree;
+        private ICheckBox _chkKeepInfoPansOverallSize;
+        private ICheckBox _chkKeepRichNames;
+        private ICheckBox _chkKinship;
+        private ICheckBox _chkLoadRecentFiles;
+        private ICheckBox _chkLocalizedCalendarSignatures;
+        private ICheckBox _chkMarriagesDates;
+        private ICheckBox _chkMinimizingWidth;
+        private ICheckBox _chkMourningEdges;
+        private ICheckBox _chkName;
+        private ICheckBox _chkNotes;
+        private ICheckBox _chkOnlyLocality;
+        private ICheckBox _chkOnlyYears;
+        private ICheckBox _chkPatronymic;
+        private ICheckBox _chkPlacesWithAddress;
+        private ICheckBox _chkPortraits;
+        private ICheckBox _chkPortraitsVisible;
+        private ICheckBox _chkRemovableMediaWarning;
+        private ICheckBox _chkReversePlacesOrder;
+        private ICheckBox _chkSAFByAllNames;
+        private ICheckBox _chkSameCardsWidth;
+        private ICheckBox _chkSearchPlacesWithoutCoords;
+        private ICheckBox _chkSeparateDAPLines;
+        private ICheckBox _chkSeparateDepth;
+        private ICheckBox _chkShortenDateRanges;
+        private ICheckBox _chkShortKinshipForm;
+        private ICheckBox _chkShowAge;
+        private ICheckBox _chkShowDatesCalendar;
+        private ICheckBox _chkShowDatesSigns;
+        private ICheckBox _chkShowNumberOfSubstructures;
+        private ICheckBox _chkShowOnStart;
+        private ICheckBox _chkShowPlaces;
+        private ICheckBox _chkSignsVisible;
+        private ICheckBox _chkSimpleSingleSurnames;
+        private ICheckBox _chkSourceCitations;
+        private ICheckBox _chkSourcePages;
+        private ICheckBox _chkSources;
+        private ICheckBox _chkSurname;
+        private ICheckBox _chkSurnameFirstInOrder;
+        private ICheckBox _chkSurnameInCapitals;
+        private ICheckBox _chkTreeDecorative;
+        private ICheckBox _chkTreeSurnameFirst;
+        private ICheckBox _chkURNotesVisible;
+        private ICheckBox _chkUseAdditionalDates;
+        private ICheckBox _chkUseBirthDatesInPSF;
+        private ICheckBox _chkUseExtendedNotes;
+        private ICheckBox _chkUseExtraControls;
+        private ICheckBox _chkUseInlineImagesInSvg;
+        private ICheckBox _chkUseProxy;
+        private ICheckBox _chkUseSurnamesInPSF;
+        private INumericBox _numASMin;
+        private INumericBox _numBackupRevisionsMaxCount;
+        private INumericBox _numBranchDist;
+        private INumericBox _numDefaultDepth;
+        private INumericBox _numDefaultDepthAncestors;
+        private INumericBox _numDefaultDepthDescendants;
+        private INumericBox _numGenDist;
+        private INumericBox _numMargins;
+        private INumericBox _numPadding;
+        private INumericBox _numSpouseDist;
+        private IRadioButton _radCompact;
+        private IRadioButton _radDMY;
+        private IRadioButton _radExcess;
+        private IRadioButton _radFBEachRevision;
+        private IRadioButton _radFBNone;
+        private IRadioButton _radFBOnlyPrev;
+        private IRadioButton _radMaiden;
+        private IRadioButton _radMaiden_Married;
+        private IRadioButton _radMarried;
+        private IRadioButton _radMarried_Maiden;
+        private IRadioButton _radS_N_P;
+        private IRadioButton _radS_NP;
+        private IRadioButton _radSNP;
+        private IRadioButton _radYMD;
+        private IListView _lstPersonColumns;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly GlobalOptions fOptions;
         private readonly ListColumns fTempColumns;
         private bool fIsTerm;
@@ -53,31 +254,30 @@ namespace GKCore.Controllers
 
             fView.EventTypesList.ListModel = new EventDefsListModel(fView, null, null);
 
-            var listView = GetControl<IListView>("lstPersonColumns");
             var columnsModel = new ColumnsListModel();
-            listView.ListMan = columnsModel;
+            _lstPersonColumns.ListMan = columnsModel;
             columnsModel.DataSource = fTempColumns.OrderedColumns;
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                listView = GetControl<IListView>("lvPlugins");
+                var listView = GetControl<IListView>("lvPlugins");
                 var pluginsModel = new PluginsListModel();
                 pluginsModel.DataSource = AppHost.Plugins.List;
                 listView.ListMan = pluginsModel;
             }
 
-            GetControl<IComboBox>("cmbLanguages").ReadOnly = true;
-            GetControl<IComboBox>("cmbCertaintyAlgorithm").ReadOnly = true;
-            GetControl<IComboBox>("cmbMediaStoreDefault").ReadOnly = true;
+            _cmbLanguages.ReadOnly = true;
+            _cmbCertaintyAlgorithm.ReadOnly = true;
+            _cmbMediaStoreDefault.ReadOnly = true;
 
             if (!fIsTerm) {
-                GetControl<IComboBox>("cmbChartWindowsShowMode").ReadOnly = true;
-                GetControl<IComboBox>("cmbTextEffect").ReadOnly = true;
+                _cmbChartWindowsShowMode.ReadOnly = true;
+                _cmbTextEffect.ReadOnly = true;
             }
 
-            GetControl<IComboBox>("cmbMatchPatternMethod").ReadOnly = true;
-            GetControl<IComboBox>("cmbAscendNumbering").ReadOnly = true;
-            GetControl<IComboBox>("cmbDescendNumbering").ReadOnly = true;
-            GetControl<IComboBox>("cmbGeocoder").ReadOnly = true;
+            _cmbMatchPatternMethod.ReadOnly = true;
+            _cmbAscendNumbering.ReadOnly = true;
+            _cmbDescendNumbering.ReadOnly = true;
+            _cmbGeocoder.ReadOnly = true;
         }
 
         public async void ChangeTab()
@@ -89,7 +289,7 @@ namespace GKCore.Controllers
 
         private void FillGeoSearchCountries()
         {
-            var combo = GetControl<IComboBox>("cmbGeoSearchCountry");
+            var combo = _cmbGeoSearchCountry;
 
             combo.Clear();
             foreach (var ci in GKUtils.GetCountries()) {
@@ -99,10 +299,9 @@ namespace GKCore.Controllers
 
         public void UpdateColumnsList()
         {
-            var listView = GetControl<IListView>("lstPersonColumns");
-            listView.SortColumn = 1;
-            listView.SortOrder = GKSortOrder.Ascending;
-            listView.UpdateContents();
+            _lstPersonColumns.SortColumn = 1;
+            _lstPersonColumns.SortOrder = GKSortOrder.Ascending;
+            _lstPersonColumns.UpdateContents();
         }
 
         public void ResetColumnsList()
@@ -113,16 +312,14 @@ namespace GKCore.Controllers
 
         public void MoveColumnUp()
         {
-            var listView = GetControl<IListView>("lstPersonColumns");
-            if (fTempColumns.MoveColumn(listView.SelectedIndex, true)) {
+            if (fTempColumns.MoveColumn(_lstPersonColumns.SelectedIndex, true)) {
                 UpdateColumnsList();
             }
         }
 
         public void MoveColumnDown()
         {
-            var listView = GetControl<IListView>("lstPersonColumns");
-            if (fTempColumns.MoveColumn(listView.SelectedIndex, false)) {
+            if (fTempColumns.MoveColumn(_lstPersonColumns.SelectedIndex, false)) {
                 UpdateColumnsList();
             }
         }
@@ -137,27 +334,27 @@ namespace GKCore.Controllers
             if (fIsTerm) return;
 
             var isMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
-            GetControl<IGroupBox>("grpInternet").Visible = !isMobile;
+            _grpInternet.Visible = !isMobile;
 
             var hasInternetProxy = AppHost.Instance.HasFeatureSupport(Feature.InternetProxy);
-            GetControl<IGroupBox>("grpInternet").Enabled = hasInternetProxy;
+            _grpInternet.Enabled = hasInternetProxy;
 
-            GetControl<ICheckBox>("chkUseProxy").Checked = fOptions.Proxy.UseProxy && hasInternetProxy;
-            GetControl<ITextBox>("txtProxyServer").Text = fOptions.Proxy.Server;
-            GetControl<ITextBox>("txtProxyPort").Text = fOptions.Proxy.Port;
-            GetControl<ITextBox>("txtProxyLogin").Text = fOptions.Proxy.Login;
-            GetControl<ITextBox>("txtProxyPass").Text = fOptions.Proxy.Password;
+            _chkUseProxy.Checked = fOptions.Proxy.UseProxy && hasInternetProxy;
+            _txtProxyServer.Text = fOptions.Proxy.Server;
+            _txtProxyPort.Text = fOptions.Proxy.Port;
+            _txtProxyLogin.Text = fOptions.Proxy.Login;
+            _txtProxyPass.Text = fOptions.Proxy.Password;
         }
 
         public void AcceptProxyOptions()
         {
             if (fIsTerm) return;
 
-            fOptions.Proxy.UseProxy = GetControl<ICheckBox>("chkUseProxy").Checked;
-            fOptions.Proxy.Server = GetControl<ITextBox>("txtProxyServer").Text;
-            fOptions.Proxy.Port = GetControl<ITextBox>("txtProxyPort").Text;
-            fOptions.Proxy.Login = GetControl<ITextBox>("txtProxyLogin").Text;
-            fOptions.Proxy.Password = GetControl<ITextBox>("txtProxyPass").Text;
+            fOptions.Proxy.UseProxy = _chkUseProxy.Checked;
+            fOptions.Proxy.Server = _txtProxyServer.Text;
+            fOptions.Proxy.Port = _txtProxyPort.Text;
+            fOptions.Proxy.Login = _txtProxyLogin.Text;
+            fOptions.Proxy.Password = _txtProxyPass.Text;
         }
 
         public void ResetCommonOptions()
@@ -170,27 +367,27 @@ namespace GKCore.Controllers
 
         public void UpdateOtherOptions()
         {
-            GetControl<ICheckBox>("chkShowOnStart").Checked = fOptions.ShowTips;
+            _chkShowOnStart.Checked = fOptions.ShowTips;
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkShowEventsOnlyAlive").Checked = fOptions.ShowTipsOnlyAlive;
             }
 
             var hasRecentFilesLoad = AppHost.Instance.HasFeatureSupport(Feature.RecentFilesLoad);
-            GetControl<ICheckBox>("chkLoadRecentFiles").Checked = fOptions.LoadRecentFiles && hasRecentFilesLoad;
-            GetControl<ICheckBox>("chkLoadRecentFiles").Enabled = hasRecentFilesLoad;
+            _chkLoadRecentFiles.Checked = fOptions.LoadRecentFiles && hasRecentFilesLoad;
+            _chkLoadRecentFiles.Enabled = hasRecentFilesLoad;
 
-            GetControl<ICheckBox>("chkAutoCheckUpdates").Checked = fOptions.AutoCheckUpdates;
-            GetControl<ICheckBox>("chkCharsetDetection").Checked = fOptions.CharsetDetection;
-            GetControl<ICheckBox>("chkDialogClosingWarn").Checked = fOptions.DialogClosingWarn;
+            _chkAutoCheckUpdates.Checked = fOptions.AutoCheckUpdates;
+            _chkCharsetDetection.Checked = fOptions.CharsetDetection;
+            _chkDialogClosingWarn.Checked = fOptions.DialogClosingWarn;
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ICheckBox>("chkDisplayFullFileName").Checked = fOptions.DisplayFullFileName;
             }
 
-            GetControl<IComboBox>("cmbGeocoder").Text = fOptions.Geocoder;
-            GetControl<IComboBox>("cmbGeoSearchCountry").Text = fOptions.GeoSearchCountry;
+            _cmbGeocoder.Text = fOptions.Geocoder;
+            _cmbGeoSearchCountry.Text = fOptions.GeoSearchCountry;
 
-            var combo = GetControl<IComboBox>("cmbLanguages");
+            var combo = _cmbLanguages;
             combo.Clear();
             combo.AddItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE);
             foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
@@ -200,12 +397,12 @@ namespace GKCore.Controllers
             }
             combo.SetSelectedTag(fOptions.InterfaceLang, true);
 
-            GetControl<IComboBox>("cmbCertaintyAlgorithm").SetSelectedTag(fOptions.CertaintyAlgorithm);
+            _cmbCertaintyAlgorithm.SetSelectedTag(fOptions.CertaintyAlgorithm);
         }
 
         public async Task AcceptLanguage()
         {
-            var item = GetControl<IComboBox>("cmbLanguages").SelectedItem as ComboItem<int>;
+            var item = _cmbLanguages.SelectedItem as ComboItem<int>;
             if (item != null) {
                 await AppHost.Instance.LoadLanguage(item.Tag, false);
             }
@@ -213,7 +410,7 @@ namespace GKCore.Controllers
 
         public void ChangeOtherOption()
         {
-            bool tips = GetControl<ICheckBox>("chkShowOnStart").Checked;
+            bool tips = _chkShowOnStart.Checked;
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkShowEventsOnlyAlive").Enabled = tips;
             }
@@ -221,26 +418,26 @@ namespace GKCore.Controllers
 
         public async void AcceptOtherOptions()
         {
-            fOptions.ShowTips = GetControl<ICheckBox>("chkShowOnStart").Checked;
+            fOptions.ShowTips = _chkShowOnStart.Checked;
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fOptions.ShowTipsOnlyAlive = GetControl<ICheckBox>("chkShowEventsOnlyAlive").Checked;
             }
 
-            fOptions.LoadRecentFiles = GetControl<ICheckBox>("chkLoadRecentFiles").Checked;
-            fOptions.AutoCheckUpdates = GetControl<ICheckBox>("chkAutoCheckUpdates").Checked;
-            fOptions.CharsetDetection = GetControl<ICheckBox>("chkCharsetDetection").Checked;
-            fOptions.DialogClosingWarn = GetControl<ICheckBox>("chkDialogClosingWarn").Checked;
+            fOptions.LoadRecentFiles = _chkLoadRecentFiles.Checked;
+            fOptions.AutoCheckUpdates = _chkAutoCheckUpdates.Checked;
+            fOptions.CharsetDetection = _chkCharsetDetection.Checked;
+            fOptions.DialogClosingWarn = _chkDialogClosingWarn.Checked;
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 fOptions.DisplayFullFileName = GetControl<ICheckBox>("chkDisplayFullFileName").Checked;
             }
 
-            fOptions.Geocoder = GetControl<IComboBox>("cmbGeocoder").Text;
-            fOptions.GeoSearchCountry = GetControl<IComboBox>("cmbGeoSearchCountry").Text;
+            fOptions.Geocoder = _cmbGeocoder.Text;
+            fOptions.GeoSearchCountry = _cmbGeoSearchCountry.Text;
 
             await AcceptLanguage();
 
-            fOptions.CertaintyAlgorithm = GetControl<IComboBox>("cmbCertaintyAlgorithm").GetSelectedTag<CertaintyAlgorithm>();
+            fOptions.CertaintyAlgorithm = _cmbCertaintyAlgorithm.GetSelectedTag<CertaintyAlgorithm>();
         }
 
         public void ResetPedigreesOptions()
@@ -249,9 +446,8 @@ namespace GKCore.Controllers
             UpdatePedigreesOptions();
         }
 
-        private void PrepareNumbCombo(string comboName, PedigreeType pedigreeType, PedigreeNumbering curValue)
+        private void PrepareNumbCombo(IComboBox combo, PedigreeType pedigreeType, PedigreeNumbering curValue)
         {
-            var combo = GetControl<IComboBox>(comboName);
             combo.Clear();
             for (PedigreeNumbering pn = PedigreeNumbering.Aboville; pn <= PedigreeNumbering.Sosa_Stradonitz; pn++) {
                 var pnStr = PedigreeData.Numberings[(int)pn];
@@ -264,13 +460,13 @@ namespace GKCore.Controllers
 
         public void UpdatePedigreesOptions()
         {
-            GetControl<ICheckBox>("chkAttributes").Checked = fOptions.PedigreeOptions.IncludeAttributes;
-            GetControl<ICheckBox>("chkNotes").Checked = fOptions.PedigreeOptions.IncludeNotes;
-            GetControl<ICheckBox>("chkSources").Checked = fOptions.PedigreeOptions.IncludeSources;
-            GetControl<ICheckBox>("chkSourcePages").Checked = fOptions.PedigreeOptions.IncludeSourcePages;
-            GetControl<ICheckBox>("chkSourceCitations").Checked = fOptions.PedigreeOptions.IncludeSourceCitations;
-            GetControl<ICheckBox>("chkGenerations").Checked = fOptions.PedigreeOptions.IncludeGenerations;
-            GetControl<ICheckBox>("chkPortraits").Checked = fOptions.PedigreeOptions.IncludePortraits;
+            _chkAttributes.Checked = fOptions.PedigreeOptions.IncludeAttributes;
+            _chkNotes.Checked = fOptions.PedigreeOptions.IncludeNotes;
+            _chkSources.Checked = fOptions.PedigreeOptions.IncludeSources;
+            _chkSourcePages.Checked = fOptions.PedigreeOptions.IncludeSourcePages;
+            _chkSourceCitations.Checked = fOptions.PedigreeOptions.IncludeSourceCitations;
+            _chkGenerations.Checked = fOptions.PedigreeOptions.IncludeGenerations;
+            _chkPortraits.Checked = fOptions.PedigreeOptions.IncludePortraits;
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkSortEvents").Checked = fOptions.PedigreeOptions.SortEvents;
@@ -278,39 +474,39 @@ namespace GKCore.Controllers
 
             switch (fOptions.PedigreeOptions.Format) {
                 case PedigreeFormat.Excess:
-                    GetControl<IRadioButton>("radExcess").Checked = true;
+                    _radExcess.Checked = true;
                     break;
                 case PedigreeFormat.Compact:
-                    GetControl<IRadioButton>("radCompact").Checked = true;
+                    _radCompact.Checked = true;
                     break;
             }
 
-            PrepareNumbCombo("cmbAscendNumbering", PedigreeType.Ascend, fOptions.PedigreeOptions.AscendNumbering);
-            PrepareNumbCombo("cmbDescendNumbering", PedigreeType.Descend, fOptions.PedigreeOptions.DescendNumbering);
+            PrepareNumbCombo(_cmbAscendNumbering, PedigreeType.Ascend, fOptions.PedigreeOptions.AscendNumbering);
+            PrepareNumbCombo(_cmbDescendNumbering, PedigreeType.Descend, fOptions.PedigreeOptions.DescendNumbering);
         }
 
         public void AcceptPedigreesOptions()
         {
-            fOptions.PedigreeOptions.IncludeAttributes = GetControl<ICheckBox>("chkAttributes").Checked;
-            fOptions.PedigreeOptions.IncludeNotes = GetControl<ICheckBox>("chkNotes").Checked;
-            fOptions.PedigreeOptions.IncludeSources = GetControl<ICheckBox>("chkSources").Checked;
-            fOptions.PedigreeOptions.IncludeSourcePages = GetControl<ICheckBox>("chkSourcePages").Checked;
-            fOptions.PedigreeOptions.IncludeSourceCitations = GetControl<ICheckBox>("chkSourceCitations").Checked;
-            fOptions.PedigreeOptions.IncludeGenerations = GetControl<ICheckBox>("chkGenerations").Checked;
-            fOptions.PedigreeOptions.IncludePortraits = GetControl<ICheckBox>("chkPortraits").Checked;
+            fOptions.PedigreeOptions.IncludeAttributes = _chkAttributes.Checked;
+            fOptions.PedigreeOptions.IncludeNotes = _chkNotes.Checked;
+            fOptions.PedigreeOptions.IncludeSources = _chkSources.Checked;
+            fOptions.PedigreeOptions.IncludeSourcePages = _chkSourcePages.Checked;
+            fOptions.PedigreeOptions.IncludeSourceCitations = _chkSourceCitations.Checked;
+            fOptions.PedigreeOptions.IncludeGenerations = _chkGenerations.Checked;
+            fOptions.PedigreeOptions.IncludePortraits = _chkPortraits.Checked;
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fOptions.PedigreeOptions.SortEvents = GetControl<ICheckBox>("chkSortEvents").Checked;
             }
 
-            if (GetControl<IRadioButton>("radExcess").Checked) {
+            if (_radExcess.Checked) {
                 fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
-            } else if (GetControl<IRadioButton>("radCompact").Checked) {
+            } else if (_radCompact.Checked) {
                 fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
             }
 
-            fOptions.PedigreeOptions.AscendNumbering = GetControl<IComboBox>("cmbAscendNumbering").GetSelectedTag<PedigreeNumbering>();
-            fOptions.PedigreeOptions.DescendNumbering = GetControl<IComboBox>("cmbDescendNumbering").GetSelectedTag<PedigreeNumbering>();
+            fOptions.PedigreeOptions.AscendNumbering = _cmbAscendNumbering.GetSelectedTag<PedigreeNumbering>();
+            fOptions.PedigreeOptions.DescendNumbering = _cmbDescendNumbering.GetSelectedTag<PedigreeNumbering>();
         }
 
         public void ResetFamilyBookOptions()
@@ -344,64 +540,64 @@ namespace GKCore.Controllers
             WomanSurnameFormat wsFmt = fOptions.WomanSurnameFormat;
             bool isExtend = wsFmt != WomanSurnameFormat.wsfNotExtend;
 
-            GetControl<ICheckBox>("chkExtendWomanSurnames").Checked = isExtend;
-            GetControl<IRadioButton>("radMaiden_Married").Enabled = isExtend;
-            GetControl<IRadioButton>("radMarried_Maiden").Enabled = isExtend;
-            GetControl<IRadioButton>("radMaiden").Enabled = isExtend;
-            GetControl<IRadioButton>("radMarried").Enabled = isExtend;
+            _chkExtendWomanSurnames.Checked = isExtend;
+            _radMaiden_Married.Enabled = isExtend;
+            _radMarried_Maiden.Enabled = isExtend;
+            _radMaiden.Enabled = isExtend;
+            _radMarried.Enabled = isExtend;
 
             switch (wsFmt) {
                 case WomanSurnameFormat.wsfMaiden_Married:
-                    GetControl<IRadioButton>("radMaiden_Married").Checked = true;
+                    _radMaiden_Married.Checked = true;
                     break;
 
                 case WomanSurnameFormat.wsfMarried_Maiden:
-                    GetControl<IRadioButton>("radMarried_Maiden").Checked = true;
+                    _radMarried_Maiden.Checked = true;
                     break;
 
                 case WomanSurnameFormat.wsfMaiden:
-                    GetControl<IRadioButton>("radMaiden").Checked = true;
+                    _radMaiden.Checked = true;
                     break;
 
                 case WomanSurnameFormat.wsfMarried:
-                    GetControl<IRadioButton>("radMarried").Checked = true;
+                    _radMarried.Checked = true;
                     break;
             }
 
-            GetControl<ICheckBox>("chkSimpleSingleSurnames").Checked = isExtend && fOptions.SimpleSingleSurnames;
-            GetControl<ICheckBox>("chkSimpleSingleSurnames").Enabled = isExtend;
+            _chkSimpleSingleSurnames.Checked = isExtend && fOptions.SimpleSingleSurnames;
+            _chkSimpleSingleSurnames.Enabled = isExtend;
         }
 
         public void ChangeExtendWomanSurnames()
         {
-            if (!GetControl<ICheckBox>("chkExtendWomanSurnames").Checked) {
+            if (!_chkExtendWomanSurnames.Checked) {
                 fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
                 UpdateWomanSurnameFormat();
             } else {
-                GetControl<IRadioButton>("radMaiden_Married").Enabled = true;
-                GetControl<IRadioButton>("radMarried_Maiden").Enabled = true;
-                GetControl<IRadioButton>("radMaiden").Enabled = true;
-                GetControl<IRadioButton>("radMarried").Enabled = true;
-                GetControl<ICheckBox>("chkSimpleSingleSurnames").Enabled = true;
+                _radMaiden_Married.Enabled = true;
+                _radMarried_Maiden.Enabled = true;
+                _radMaiden.Enabled = true;
+                _radMarried.Enabled = true;
+                _chkSimpleSingleSurnames.Enabled = true;
             }
         }
 
         public void AcceptWomanSurnameFormat()
         {
-            if (!GetControl<ICheckBox>("chkExtendWomanSurnames").Checked) {
+            if (!_chkExtendWomanSurnames.Checked) {
                 fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             } else {
-                if (GetControl<IRadioButton>("radMaiden_Married").Checked) {
+                if (_radMaiden_Married.Checked) {
                     fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden_Married;
-                } else if (GetControl<IRadioButton>("radMarried_Maiden").Checked) {
+                } else if (_radMarried_Maiden.Checked) {
                     fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried_Maiden;
-                } else if (GetControl<IRadioButton>("radMaiden").Checked) {
+                } else if (_radMaiden.Checked) {
                     fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMaiden;
-                } else if (GetControl<IRadioButton>("radMarried").Checked) {
+                } else if (_radMarried.Checked) {
                     fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
                 }
             }
-            fOptions.SimpleSingleSurnames = GetControl<ICheckBox>("chkSimpleSingleSurnames").Checked;
+            fOptions.SimpleSingleSurnames = _chkSimpleSingleSurnames.Checked;
         }
 
         public void ResetInterfaceOptions()
@@ -415,52 +611,52 @@ namespace GKCore.Controllers
         {
             switch (fOptions.DefNameFormat) {
                 case NameFormat.nfFNP:
-                    GetControl<IRadioButton>("radSNP").Checked = true;
+                    _radSNP.Checked = true;
                     break;
                 case NameFormat.nfF_NP:
-                    GetControl<IRadioButton>("radS_NP").Checked = true;
+                    _radS_NP.Checked = true;
                     break;
                 case NameFormat.nfF_N_P:
-                    GetControl<IRadioButton>("radS_N_P").Checked = true;
+                    _radS_N_P.Checked = true;
                     break;
             }
 
             switch (fOptions.DefDateFormat) {
                 case DateFormat.dfDD_MM_YYYY:
-                    GetControl<IRadioButton>("radDMY").Checked = true;
+                    _radDMY.Checked = true;
                     break;
                 case DateFormat.dfYYYY_MM_DD:
-                    GetControl<IRadioButton>("radYMD").Checked = true;
+                    _radYMD.Checked = true;
                     break;
             }
 
-            GetControl<ICheckBox>("chkShowDatesCalendar").Checked = fOptions.ShowDatesCalendar;
-            GetControl<ICheckBox>("chkShowDatesSigns").Checked = fOptions.ShowDatesSign;
-            GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Checked = fOptions.LocalizedCalendarSignatures;
+            _chkShowDatesCalendar.Checked = fOptions.ShowDatesCalendar;
+            _chkShowDatesSigns.Checked = fOptions.ShowDatesSign;
+            _chkLocalizedCalendarSignatures.Checked = fOptions.LocalizedCalendarSignatures;
 
-            GetControl<ICheckBox>("chkPlacesWithAddress").Checked = fOptions.PlacesWithAddress;
+            _chkPlacesWithAddress.Checked = fOptions.PlacesWithAddress;
 
             var hasGridCellFormat = AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat);
-            GetControl<ICheckBox>("chkHighlightUnparented").Checked = fOptions.ListHighlightUnparentedPersons && hasGridCellFormat;
-            GetControl<ICheckBox>("chkHighlightUnparented").Enabled = hasGridCellFormat;
-            GetControl<ICheckBox>("chkHighlightUnmarried").Checked = fOptions.ListHighlightUnmarriedPersons && hasGridCellFormat;
-            GetControl<ICheckBox>("chkHighlightUnmarried").Enabled = hasGridCellFormat;
+            _chkHighlightUnparented.Checked = fOptions.ListHighlightUnparentedPersons && hasGridCellFormat;
+            _chkHighlightUnparented.Enabled = hasGridCellFormat;
+            _chkHighlightUnmarried.Checked = fOptions.ListHighlightUnmarriedPersons && hasGridCellFormat;
+            _chkHighlightUnmarried.Enabled = hasGridCellFormat;
 
-            GetControl<ICheckBox>("chkAutoSortChildren").Checked = fOptions.AutoSortChildren;
-            GetControl<ICheckBox>("chkAutoSortSpouses").Checked = fOptions.AutoSortSpouses;
+            _chkAutoSortChildren.Checked = fOptions.AutoSortChildren;
+            _chkAutoSortSpouses.Checked = fOptions.AutoSortSpouses;
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkAutoSortEvents").Checked = fOptions.AutoSortEvents;
             }
-            GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Checked = fOptions.FirstCapitalLetterInNames;
+            _chkFirstCapitalLetterInNames.Checked = fOptions.FirstCapitalLetterInNames;
 
-            GetControl<ICheckBox>("chkShortKinshipForm").Checked = fOptions.ShortKinshipForm;
-            GetControl<ICheckBox>("chkSurnameFirstInOrder").Checked = fOptions.SurnameFirstInOrder;
-            GetControl<ICheckBox>("chkSurnameInCapitals").Checked = fOptions.SurnameInCapitals;
+            _chkShortKinshipForm.Checked = fOptions.ShortKinshipForm;
+            _chkSurnameFirstInOrder.Checked = fOptions.SurnameFirstInOrder;
+            _chkSurnameInCapitals.Checked = fOptions.SurnameInCapitals;
 
-            GetControl<ICheckBox>("chkUseSurnamesInPSF").Checked = fOptions.UseSurnamesInPersonSelectionFilter;
-            GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked = fOptions.UseBirthDatesInPersonSelectionFilter;
+            _chkUseSurnamesInPSF.Checked = fOptions.UseSurnamesInPersonSelectionFilter;
+            _chkUseBirthDatesInPSF.Checked = fOptions.UseBirthDatesInPersonSelectionFilter;
 
-            var combo = GetControl<IComboBox>("cmbMatchPatternMethod");
+            var combo = _cmbMatchPatternMethod;
             combo.Clear();
             for (MatchPatternMethod itm = MatchPatternMethod.RegEx; itm <= MatchPatternMethod.Fast; itm++) {
                 combo.AddItem(LangMan.LS(GKData.MatchPatterns[(int)itm].Name), itm);
@@ -481,11 +677,11 @@ namespace GKCore.Controllers
         public NameFormat GetSelectedNameFormat()
         {
             NameFormat result;
-            if (GetControl<IRadioButton>("radSNP").Checked) {
+            if (_radSNP.Checked) {
                 result = NameFormat.nfFNP;
-            } else if (GetControl<IRadioButton>("radS_NP").Checked) {
+            } else if (_radS_NP.Checked) {
                 result = NameFormat.nfF_NP;
-            } else if (GetControl<IRadioButton>("radS_N_P").Checked) {
+            } else if (_radS_N_P.Checked) {
                 result = NameFormat.nfF_N_P;
             } else {
                 result = NameFormat.nfFNP;
@@ -496,41 +692,41 @@ namespace GKCore.Controllers
         public void ChangeFNPFormat()
         {
             var defNameFormat = GetSelectedNameFormat();
-            GetControl<ICheckBox>("chkSurnameFirstInOrder").Enabled = (defNameFormat == NameFormat.nfFNP);
+            _chkSurnameFirstInOrder.Enabled = (defNameFormat == NameFormat.nfFNP);
         }
 
         public void AcceptInterfaceOptions()
         {
             fOptions.DefNameFormat = GetSelectedNameFormat();
 
-            if (GetControl<IRadioButton>("radDMY").Checked) {
+            if (_radDMY.Checked) {
                 fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
-            } else if (GetControl<IRadioButton>("radYMD").Checked) {
+            } else if (_radYMD.Checked) {
                 fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
             }
-            fOptions.ShowDatesCalendar = GetControl<ICheckBox>("chkShowDatesCalendar").Checked;
-            fOptions.ShowDatesSign = GetControl<ICheckBox>("chkShowDatesSigns").Checked;
-            fOptions.LocalizedCalendarSignatures = GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Checked;
+            fOptions.ShowDatesCalendar = _chkShowDatesCalendar.Checked;
+            fOptions.ShowDatesSign = _chkShowDatesSigns.Checked;
+            fOptions.LocalizedCalendarSignatures = _chkLocalizedCalendarSignatures.Checked;
 
-            fOptions.PlacesWithAddress = GetControl<ICheckBox>("chkPlacesWithAddress").Checked;
-            fOptions.ListHighlightUnparentedPersons = GetControl<ICheckBox>("chkHighlightUnparented").Checked;
-            fOptions.ListHighlightUnmarriedPersons = GetControl<ICheckBox>("chkHighlightUnmarried").Checked;
+            fOptions.PlacesWithAddress = _chkPlacesWithAddress.Checked;
+            fOptions.ListHighlightUnparentedPersons = _chkHighlightUnparented.Checked;
+            fOptions.ListHighlightUnmarriedPersons = _chkHighlightUnmarried.Checked;
 
-            fOptions.AutoSortChildren = GetControl<ICheckBox>("chkAutoSortChildren").Checked;
-            fOptions.AutoSortSpouses = GetControl<ICheckBox>("chkAutoSortSpouses").Checked;
+            fOptions.AutoSortChildren = _chkAutoSortChildren.Checked;
+            fOptions.AutoSortSpouses = _chkAutoSortSpouses.Checked;
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fOptions.AutoSortEvents = GetControl<ICheckBox>("chkAutoSortEvents").Checked;
             }
-            fOptions.FirstCapitalLetterInNames = GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Checked;
+            fOptions.FirstCapitalLetterInNames = _chkFirstCapitalLetterInNames.Checked;
 
-            fOptions.ShortKinshipForm = GetControl<ICheckBox>("chkShortKinshipForm").Checked;
-            fOptions.SurnameFirstInOrder = GetControl<ICheckBox>("chkSurnameFirstInOrder").Checked;
-            fOptions.SurnameInCapitals = GetControl<ICheckBox>("chkSurnameInCapitals").Checked;
+            fOptions.ShortKinshipForm = _chkShortKinshipForm.Checked;
+            fOptions.SurnameFirstInOrder = _chkSurnameFirstInOrder.Checked;
+            fOptions.SurnameInCapitals = _chkSurnameInCapitals.Checked;
 
-            fOptions.UseSurnamesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseSurnamesInPSF").Checked;
-            fOptions.UseBirthDatesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked;
+            fOptions.UseSurnamesInPersonSelectionFilter = _chkUseSurnamesInPSF.Checked;
+            fOptions.UseBirthDatesInPersonSelectionFilter = _chkUseBirthDatesInPSF.Checked;
 
-            fOptions.MatchPatternMethod = GetControl<IComboBox>("cmbMatchPatternMethod").GetSelectedTag<MatchPatternMethod>();
+            fOptions.MatchPatternMethod = _cmbMatchPatternMethod.GetSelectedTag<MatchPatternMethod>();
 
             if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 fOptions.OverrideThemesFont = GetControl<ICheckBox>("chkOverrideThemesFont").Checked;
@@ -550,69 +746,69 @@ namespace GKCore.Controllers
 
         public void UpdateSpecials()
         {
-            GetControl<ICheckBox>("chkDisableNonStdFeatures").Checked = fOptions.DisableNonStdFeatures;
-            GetControl<ICheckBox>("chkEnableStdValidation").Checked = fOptions.EnableStdValidation;
+            _chkDisableNonStdFeatures.Checked = fOptions.DisableNonStdFeatures;
+            _chkEnableStdValidation.Checked = fOptions.EnableStdValidation;
 
-            GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
-            GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
-            GetControl<ICheckBox>("chkExtendedKinships").Checked = fOptions.ExtendedKinships;
-            GetControl<ICheckBox>("chkSAFByAllNames").Checked = fOptions.SearchAndFilterByAllNames;
+            _chkUseInlineImagesInSvg.Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
+            _chkExtendedTree.Checked = fOptions.TreeChartOptions.ExtendedTree;
+            _chkExtendedKinships.Checked = fOptions.ExtendedKinships;
+            _chkSAFByAllNames.Checked = fOptions.SearchAndFilterByAllNames;
 
             var isMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
-            GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes && !isMobile;
-            GetControl<ICheckBox>("chkUseExtendedNotes").Visible = !isMobile;
-            GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames && !isMobile;
-            GetControl<ICheckBox>("chkKeepRichNames").Visible = !isMobile;
+            _chkUseExtendedNotes.Checked = fOptions.UseExtendedNotes && !isMobile;
+            _chkUseExtendedNotes.Visible = !isMobile;
+            _chkKeepRichNames.Checked = fOptions.KeepRichNames && !isMobile;
+            _chkKeepRichNames.Visible = !isMobile;
 
             if (!fIsTerm) {
                 var chartWinMode = !isMobile ? fOptions.ChartWindowsShowMode : ChartWindowsShowMode.Default;
-                GetControl<IComboBox>("cmbChartWindowsShowMode").SetSelectedTag(chartWinMode);
-                GetControl<IComboBox>("cmbChartWindowsShowMode").Visible = !isMobile;
-                GetControl<ILabel>("lblChartWindowsShowMode").Visible = !isMobile;
+                _cmbChartWindowsShowMode.SetSelectedTag(chartWinMode);
+                _cmbChartWindowsShowMode.Visible = !isMobile;
+                _lblChartWindowsShowMode.Visible = !isMobile;
             }
 
-            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize && !isMobile;
-            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Visible = !isMobile;
+            _chkKeepInfoPansOverallSize.Checked = fOptions.KeepInfoPansOverallSize && !isMobile;
+            _chkKeepInfoPansOverallSize.Visible = !isMobile;
 
             var hasOverwritePrompt = AppHost.Instance.HasFeatureSupport(Feature.OverwritePrompt);
-            GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
-            GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
+            _chkFilesOverwriteWarn.Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
+            _chkFilesOverwriteWarn.Enabled = hasOverwritePrompt;
 
-            GetControl<ICheckBox>("chkExtendedLocations").Checked = fOptions.ExtendedLocations;
-            GetControl<ICheckBox>("chkELAbbreviatedNames").Checked = fOptions.EL_AbbreviatedNames;
+            _chkExtendedLocations.Checked = fOptions.ExtendedLocations;
+            _chkELAbbreviatedNames.Checked = fOptions.EL_AbbreviatedNames;
 
-            GetControl<ICheckBox>("chkReversePlacesOrder").Checked = fOptions.ReversePlaceEntitiesOrder;
-            GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked = fOptions.ShowNumberOfSubstructures;
-            GetControl<ICheckBox>("chkSearchPlacesWithoutCoords").Checked = fOptions.SearchPlacesWithoutCoords;
+            _chkReversePlacesOrder.Checked = fOptions.ReversePlaceEntitiesOrder;
+            _chkShowNumberOfSubstructures.Checked = fOptions.ShowNumberOfSubstructures;
+            _chkSearchPlacesWithoutCoords.Checked = fOptions.SearchPlacesWithoutCoords;
         }
 
         public void AcceptSpecials()
         {
-            fOptions.DisableNonStdFeatures = GetControl<ICheckBox>("chkDisableNonStdFeatures").Checked;
-            fOptions.EnableStdValidation = GetControl<ICheckBox>("chkEnableStdValidation").Checked;
+            fOptions.DisableNonStdFeatures = _chkDisableNonStdFeatures.Checked;
+            fOptions.EnableStdValidation = _chkEnableStdValidation.Checked;
 
-            fOptions.TreeChartOptions.UseInlineImagesInSvg = GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked;
-            fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
-            fOptions.ExtendedKinships = GetControl<ICheckBox>("chkExtendedKinships").Checked;
-            fOptions.SearchAndFilterByAllNames = GetControl<ICheckBox>("chkSAFByAllNames").Checked;
+            fOptions.TreeChartOptions.UseInlineImagesInSvg = _chkUseInlineImagesInSvg.Checked;
+            fOptions.TreeChartOptions.ExtendedTree = _chkExtendedTree.Checked;
+            fOptions.ExtendedKinships = _chkExtendedKinships.Checked;
+            fOptions.SearchAndFilterByAllNames = _chkSAFByAllNames.Checked;
 
-            fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
-            fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
+            fOptions.UseExtendedNotes = _chkUseExtendedNotes.Checked;
+            fOptions.KeepRichNames = _chkKeepRichNames.Checked;
 
             if (!fIsTerm) {
-                fOptions.ChartWindowsShowMode = GetControl<IComboBox>("cmbChartWindowsShowMode").GetSelectedTag<ChartWindowsShowMode>();
+                fOptions.ChartWindowsShowMode = _cmbChartWindowsShowMode.GetSelectedTag<ChartWindowsShowMode>();
             }
 
-            fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
+            fOptions.KeepInfoPansOverallSize = _chkKeepInfoPansOverallSize.Checked;
 
-            fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
+            fOptions.FilesOverwriteWarn = _chkFilesOverwriteWarn.Checked;
 
-            fOptions.ExtendedLocations = GetControl<ICheckBox>("chkExtendedLocations").Checked;
-            fOptions.EL_AbbreviatedNames = GetControl<ICheckBox>("chkELAbbreviatedNames").Checked;
+            fOptions.ExtendedLocations = _chkExtendedLocations.Checked;
+            fOptions.EL_AbbreviatedNames = _chkELAbbreviatedNames.Checked;
 
-            fOptions.ReversePlaceEntitiesOrder = GetControl<ICheckBox>("chkReversePlacesOrder").Checked;
-            fOptions.ShowNumberOfSubstructures = GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked;
-            fOptions.SearchPlacesWithoutCoords = GetControl<ICheckBox>("chkSearchPlacesWithoutCoords").Checked;
+            fOptions.ReversePlaceEntitiesOrder = _chkReversePlacesOrder.Checked;
+            fOptions.ShowNumberOfSubstructures = _chkShowNumberOfSubstructures.Checked;
+            fOptions.SearchPlacesWithoutCoords = _chkSearchPlacesWithoutCoords.Checked;
         }
 
         private void UpdateEventTypes()
@@ -641,35 +837,35 @@ namespace GKCore.Controllers
 
         public void UpdateMediaOptions()
         {
-            GetControl<ICheckBox>("chkRemovableMediaWarning").Checked = fOptions.RemovableMediaWarning;
+            _chkRemovableMediaWarning.Checked = fOptions.RemovableMediaWarning;
 
             var hasMediaPlayer = AppHost.Instance.HasFeatureSupport(Feature.MediaPlayer);
-            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Checked = fOptions.EmbeddedMediaPlayer && hasMediaPlayer;
-            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Enabled = hasMediaPlayer;
+            _chkEmbeddedMediaPlayer.Checked = fOptions.EmbeddedMediaPlayer && hasMediaPlayer;
+            _chkEmbeddedMediaPlayer.Enabled = hasMediaPlayer;
 
-            GetControl<ICheckBox>("chkAllowMediaDirectRefs").Checked = fOptions.AllowMediaStoreReferences;
-            GetControl<ICheckBox>("chkAllowMediaStoreRelativeReferences").Checked = fOptions.AllowMediaStoreRelativeReferences;
-            GetControl<IComboBox>("cmbMediaStoreDefault").SetSelectedTag<MediaStoreType>(fOptions.MediaStoreDefault);
-            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Checked = fOptions.AllowDeleteMediaFileFromStgArc;
-            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Checked = fOptions.AllowDeleteMediaFileFromRefs;
-            GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Checked = fOptions.DeleteMediaFileWithoutConfirm;
+            _chkAllowMediaDirectRefs.Checked = fOptions.AllowMediaStoreReferences;
+            _chkAllowMediaStoreRelativeReferences.Checked = fOptions.AllowMediaStoreRelativeReferences;
+            _cmbMediaStoreDefault.SetSelectedTag<MediaStoreType>(fOptions.MediaStoreDefault);
+            _chkAllowDeleteMediaFileFromStgArc.Checked = fOptions.AllowDeleteMediaFileFromStgArc;
+            _chkAllowDeleteMediaFileFromRefs.Checked = fOptions.AllowDeleteMediaFileFromRefs;
+            _chkDeleteMediaFileWithoutConfirm.Checked = fOptions.DeleteMediaFileWithoutConfirm;
 
             var hasGridCellFormat = AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat);
-            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Checked = fOptions.HighlightInaccessibleFiles && hasGridCellFormat;
-            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Enabled = hasGridCellFormat;
+            _chkHighlightInaccessibleFiles.Checked = fOptions.HighlightInaccessibleFiles && hasGridCellFormat;
+            _chkHighlightInaccessibleFiles.Enabled = hasGridCellFormat;
         }
 
         public void AcceptMediaOptions()
         {
-            fOptions.RemovableMediaWarning = GetControl<ICheckBox>("chkRemovableMediaWarning").Checked;
-            fOptions.EmbeddedMediaPlayer = GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Checked;
-            fOptions.AllowMediaStoreReferences = GetControl<ICheckBox>("chkAllowMediaDirectRefs").Checked;
-            fOptions.AllowMediaStoreRelativeReferences = GetControl<ICheckBox>("chkAllowMediaStoreRelativeReferences").Checked;
-            fOptions.MediaStoreDefault = GetControl<IComboBox>("cmbMediaStoreDefault").GetSelectedTag<MediaStoreType>();
-            fOptions.AllowDeleteMediaFileFromStgArc = GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Checked;
-            fOptions.AllowDeleteMediaFileFromRefs = GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Checked;
-            fOptions.DeleteMediaFileWithoutConfirm = GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Checked;
-            fOptions.HighlightInaccessibleFiles = GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Checked;
+            fOptions.RemovableMediaWarning = _chkRemovableMediaWarning.Checked;
+            fOptions.EmbeddedMediaPlayer = _chkEmbeddedMediaPlayer.Checked;
+            fOptions.AllowMediaStoreReferences = _chkAllowMediaDirectRefs.Checked;
+            fOptions.AllowMediaStoreRelativeReferences = _chkAllowMediaStoreRelativeReferences.Checked;
+            fOptions.MediaStoreDefault = _cmbMediaStoreDefault.GetSelectedTag<MediaStoreType>();
+            fOptions.AllowDeleteMediaFileFromStgArc = _chkAllowDeleteMediaFileFromStgArc.Checked;
+            fOptions.AllowDeleteMediaFileFromRefs = _chkAllowDeleteMediaFileFromRefs.Checked;
+            fOptions.DeleteMediaFileWithoutConfirm = _chkDeleteMediaFileWithoutConfirm.Checked;
+            fOptions.HighlightInaccessibleFiles = _chkHighlightInaccessibleFiles.Checked;
         }
 
         public void UpdateBackupOptions()
@@ -678,19 +874,19 @@ namespace GKCore.Controllers
 
             switch (backupOpts.FileBackup) {
                 case FileBackup.fbNone:
-                    GetControl<IRadioButton>("radFBNone").Checked = true;
+                    _radFBNone.Checked = true;
                     break;
                 case FileBackup.fbOnlyPrev:
-                    GetControl<IRadioButton>("radFBOnlyPrev").Checked = true;
+                    _radFBOnlyPrev.Checked = true;
                     break;
                 case FileBackup.fbEachRevision:
-                    GetControl<IRadioButton>("radFBEachRevision").Checked = true;
+                    _radFBEachRevision.Checked = true;
                     break;
             }
 
-            GetControl<ICheckBox>("chkAutosave").Checked = backupOpts.Autosave;
-            GetControl<INumericBox>("numASMin").Value = backupOpts.AutosaveInterval;
-            GetControl<INumericBox>("numBackupRevisionsMaxCount").Value = backupOpts.FileBackupEachRevisionMaxCount;
+            _chkAutosave.Checked = backupOpts.Autosave;
+            _numASMin.Value = backupOpts.AutosaveInterval;
+            _numBackupRevisionsMaxCount.Value = backupOpts.FileBackupEachRevisionMaxCount;
 
             GetControl<ICheckBox>("chkExtBackupEnabled").Checked = backupOpts.ExtendedBackup;
             GetControl<ITextBox>("txtExtBackupFolder").Text = backupOpts.ExtendedFolder;
@@ -700,17 +896,17 @@ namespace GKCore.Controllers
         {
             var backupOpts = fOptions.Backups;
 
-            if (GetControl<IRadioButton>("radFBNone").Checked) {
+            if (_radFBNone.Checked) {
                 backupOpts.FileBackup = FileBackup.fbNone;
-            } else if (GetControl<IRadioButton>("radFBOnlyPrev").Checked) {
+            } else if (_radFBOnlyPrev.Checked) {
                 backupOpts.FileBackup = FileBackup.fbOnlyPrev;
-            } else if (GetControl<IRadioButton>("radFBEachRevision").Checked) {
+            } else if (_radFBEachRevision.Checked) {
                 backupOpts.FileBackup = FileBackup.fbEachRevision;
             }
 
-            backupOpts.Autosave = GetControl<ICheckBox>("chkAutosave").Checked;
-            backupOpts.AutosaveInterval = (int)GetControl<INumericBox>("numASMin").Value;
-            backupOpts.FileBackupEachRevisionMaxCount = (int)GetControl<INumericBox>("numBackupRevisionsMaxCount").Value;
+            backupOpts.Autosave = _chkAutosave.Checked;
+            backupOpts.AutosaveInterval = (int)_numASMin.Value;
+            backupOpts.FileBackupEachRevisionMaxCount = (int)_numBackupRevisionsMaxCount.Value;
 
             backupOpts.ExtendedBackup = GetControl<ICheckBox>("chkExtBackupEnabled").Checked;
             backupOpts.ExtendedFolder = GetControl<ITextBox>("txtExtBackupFolder").Text;
@@ -746,70 +942,70 @@ namespace GKCore.Controllers
 
         public void UpdateTreeChartsOptions()
         {
-            GetControl<ICheckBox>("chkSurname").Checked = fOptions.TreeChartOptions.FamilyVisible;
-            GetControl<ICheckBox>("chkName").Checked = fOptions.TreeChartOptions.NameVisible;
-            GetControl<ICheckBox>("chkPatronymic").Checked = fOptions.TreeChartOptions.PatronymicVisible;
-            GetControl<ICheckBox>("chkDiffLines").Checked = fOptions.TreeChartOptions.DiffLines;
-            GetControl<ICheckBox>("chkBirthDate").Checked = fOptions.TreeChartOptions.BirthDateVisible;
-            GetControl<ICheckBox>("chkDeathDate").Checked = fOptions.TreeChartOptions.DeathDateVisible;
-            GetControl<ICheckBox>("chkOnlyYears").Checked = fOptions.TreeChartOptions.OnlyYears;
-            GetControl<ICheckBox>("chkMarriagesDates").Checked = fOptions.TreeChartOptions.MarriagesDates;
-            GetControl<ICheckBox>("chkKinship").Checked = fOptions.TreeChartOptions.Kinship;
-            GetControl<ICheckBox>("chkSignsVisible").Checked = fOptions.TreeChartOptions.SignsVisible;
-            GetControl<ICheckBox>("chkTreeDecorative").Checked = fOptions.TreeChartOptions.Decorative;
-            GetControl<ICheckBox>("chkPortraitsVisible").Checked = fOptions.TreeChartOptions.PortraitsVisible;
-            GetControl<ICheckBox>("chkDefaultPortraits").Checked = fOptions.TreeChartOptions.DefaultPortraits;
-            GetControl<ICheckBox>("chkInvertedTree").Checked = fOptions.TreeChartOptions.InvertedTree;
-            GetControl<ICheckBox>("chkChildlessExclude").Checked = fOptions.TreeChartOptions.ChildlessExclude;
-            GetControl<ICheckBox>("chkShowPlaces").Checked = fOptions.TreeChartOptions.ShowPlaces;
-            GetControl<ICheckBox>("chkHideUnknownSpouses").Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
-            GetControl<ICheckBox>("chkCheckTreeSize").Checked = fOptions.CheckTreeSize;
-            GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
-            GetControl<ICheckBox>("chkDottedLinesOfDivorcedSpouses").Checked = fOptions.TreeChartOptions.DottedLinesOfCommonLawSpouses;
-            GetControl<ICheckBox>("chkSeparateDAPLines").Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
-            GetControl<ICheckBox>("chkOnlyLocality").Checked = fOptions.TreeChartOptions.OnlyLocality;
-            GetControl<ICheckBox>("chkBoldNames").Checked = fOptions.TreeChartOptions.BoldNames;
-            GetControl<ICheckBox>("chkMinimizingWidth").Checked = fOptions.TreeChartOptions.MinimizingWidth;
-            GetControl<ICheckBox>("chkShowAge").Checked = fOptions.TreeChartOptions.AgeVisible;
-            GetControl<ICheckBox>("chkTreeSurnameFirst").Checked = fOptions.TreeChartOptions.SurnameFirstInOrder;
-            GetControl<ICheckBox>("chkURNotesVisible").Checked = fOptions.TreeChartOptions.URNotesVisible;
-            GetControl<ICheckBox>("chkShortenDateRanges").Checked = fOptions.TreeChartOptions.ShortenDates;
-            GetControl<ICheckBox>("chkSameCardsWidth").Checked = fOptions.TreeChartOptions.SameCardsWidth;
-            GetControl<ICheckBox>("chkFullNameOnOneLine").Checked = fOptions.TreeChartOptions.FullNameOnOneLine;
-            GetControl<ICheckBox>("chkDateDesignations").Checked = fOptions.TreeChartOptions.DateDesignations;
-            GetControl<ICheckBox>("chkMourningEdges").Checked = fOptions.TreeChartOptions.MourningEdges;
-            GetControl<ICheckBox>("chkUseAdditionalDates").Checked = fOptions.TreeChartOptions.UseAdditionalDates;
+            _chkSurname.Checked = fOptions.TreeChartOptions.FamilyVisible;
+            _chkName.Checked = fOptions.TreeChartOptions.NameVisible;
+            _chkPatronymic.Checked = fOptions.TreeChartOptions.PatronymicVisible;
+            _chkDiffLines.Checked = fOptions.TreeChartOptions.DiffLines;
+            _chkBirthDate.Checked = fOptions.TreeChartOptions.BirthDateVisible;
+            _chkDeathDate.Checked = fOptions.TreeChartOptions.DeathDateVisible;
+            _chkOnlyYears.Checked = fOptions.TreeChartOptions.OnlyYears;
+            _chkMarriagesDates.Checked = fOptions.TreeChartOptions.MarriagesDates;
+            _chkKinship.Checked = fOptions.TreeChartOptions.Kinship;
+            _chkSignsVisible.Checked = fOptions.TreeChartOptions.SignsVisible;
+            _chkTreeDecorative.Checked = fOptions.TreeChartOptions.Decorative;
+            _chkPortraitsVisible.Checked = fOptions.TreeChartOptions.PortraitsVisible;
+            _chkDefaultPortraits.Checked = fOptions.TreeChartOptions.DefaultPortraits;
+            _chkInvertedTree.Checked = fOptions.TreeChartOptions.InvertedTree;
+            _chkChildlessExclude.Checked = fOptions.TreeChartOptions.ChildlessExclude;
+            _chkShowPlaces.Checked = fOptions.TreeChartOptions.ShowPlaces;
+            _chkHideUnknownSpouses.Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
+            _chkCheckTreeSize.Checked = fOptions.CheckTreeSize;
+            _chkDottedLinesOfAdoptedChildren.Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
+            _chkDottedLinesOfDivorcedSpouses.Checked = fOptions.TreeChartOptions.DottedLinesOfCommonLawSpouses;
+            _chkSeparateDAPLines.Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
+            _chkOnlyLocality.Checked = fOptions.TreeChartOptions.OnlyLocality;
+            _chkBoldNames.Checked = fOptions.TreeChartOptions.BoldNames;
+            _chkMinimizingWidth.Checked = fOptions.TreeChartOptions.MinimizingWidth;
+            _chkShowAge.Checked = fOptions.TreeChartOptions.AgeVisible;
+            _chkTreeSurnameFirst.Checked = fOptions.TreeChartOptions.SurnameFirstInOrder;
+            _chkURNotesVisible.Checked = fOptions.TreeChartOptions.URNotesVisible;
+            _chkShortenDateRanges.Checked = fOptions.TreeChartOptions.ShortenDates;
+            _chkSameCardsWidth.Checked = fOptions.TreeChartOptions.SameCardsWidth;
+            _chkFullNameOnOneLine.Checked = fOptions.TreeChartOptions.FullNameOnOneLine;
+            _chkDateDesignations.Checked = fOptions.TreeChartOptions.DateDesignations;
+            _chkMourningEdges.Checked = fOptions.TreeChartOptions.MourningEdges;
+            _chkUseAdditionalDates.Checked = fOptions.TreeChartOptions.UseAdditionalDates;
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkMultipleSpouseLines").Checked = fOptions.TreeChartOptions.MultipleSpouseLines;
             }
 
-            GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
-            GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
-            GetControl<ILabel>("lblUnkSexColor").BackColor = fOptions.TreeChartOptions.UnkSexColor;
-            GetControl<ILabel>("lblUnHusbandColor").BackColor = fOptions.TreeChartOptions.UnHusbandColor;
-            GetControl<ILabel>("lblUnWifeColor").BackColor = fOptions.TreeChartOptions.UnWifeColor;
+            _lblMaleColor.BackColor = fOptions.TreeChartOptions.MaleColor;
+            _lblFemaleColor.BackColor = fOptions.TreeChartOptions.FemaleColor;
+            _lblUnkSexColor.BackColor = fOptions.TreeChartOptions.UnkSexColor;
+            _lblUnHusbandColor.BackColor = fOptions.TreeChartOptions.UnHusbandColor;
+            _lblUnWifeColor.BackColor = fOptions.TreeChartOptions.UnWifeColor;
 
-            GetControl<INumericBox>("numMargins").Value = fOptions.TreeChartOptions.Margins;
-            GetControl<INumericBox>("numBranchDist").Value = fOptions.TreeChartOptions.BranchDistance;
-            GetControl<INumericBox>("numGenDist").Value = fOptions.TreeChartOptions.LevelDistance;
-            GetControl<INumericBox>("numSpouseDist").Value = fOptions.TreeChartOptions.SpouseDistance;
-            GetControl<INumericBox>("numPadding").Value = fOptions.TreeChartOptions.Padding;
+            _numMargins.Value = fOptions.TreeChartOptions.Margins;
+            _numBranchDist.Value = fOptions.TreeChartOptions.BranchDistance;
+            _numGenDist.Value = fOptions.TreeChartOptions.LevelDistance;
+            _numSpouseDist.Value = fOptions.TreeChartOptions.SpouseDistance;
+            _numPadding.Value = fOptions.TreeChartOptions.Padding;
 
-            GetControl<ICheckBox>("chkSeparateDepth").Checked = fOptions.TreeChartOptions.SeparateDepth;
+            _chkSeparateDepth.Checked = fOptions.TreeChartOptions.SeparateDepth;
 
-            GetControl<INumericBox>("numDefaultDepth").Value = fOptions.TreeChartOptions.DepthLimit;
-            GetControl<INumericBox>("numDefaultDepthAncestors").Value = fOptions.TreeChartOptions.DepthLimitAncestors;
-            GetControl<INumericBox>("numDefaultDepthDescendants").Value = fOptions.TreeChartOptions.DepthLimitDescendants;
+            _numDefaultDepth.Value = fOptions.TreeChartOptions.DepthLimit;
+            _numDefaultDepthAncestors.Value = fOptions.TreeChartOptions.DepthLimitAncestors;
+            _numDefaultDepthDescendants.Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
             if (!fIsTerm) {
                 var hasExtraControls = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
-                GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
-                GetControl<ICheckBox>("chkUseExtraControls").Visible = hasExtraControls;
+                _chkUseExtraControls.Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
+                _chkUseExtraControls.Visible = hasExtraControls;
 
                 UpdateTreeChartFont();
 
-                var cmbTextEffect = GetControl<IComboBox>("cmbTextEffect");
+                var cmbTextEffect = _cmbTextEffect;
                 cmbTextEffect.Clear();
                 for (TextEffect itm = TextEffect.First; itm <= TextEffect.Last; itm++) {
                     cmbTextEffect.AddItem(LangMan.LS(GKData.TextEffects[(int)itm]), itm);
@@ -828,7 +1024,7 @@ namespace GKCore.Controllers
         {
             if (!fIsTerm) {
                 var opts = fOptions.TreeChartOptions;
-                GetControl<ILabel>("lblChartFont").Text = $"{opts.DefFontName}, {opts.DefFontSize}";
+                _lblChartFont.Text = $"{opts.DefFontName}, {opts.DefFontSize}";
             }
         }
 
@@ -840,91 +1036,91 @@ namespace GKCore.Controllers
 
         public void ChangeSeparateDepth()
         {
-            bool sepDepth = GetControl<ICheckBox>("chkSeparateDepth").Checked;
+            bool sepDepth = _chkSeparateDepth.Checked;
 
-            GetControl<INumericBox>("numDefaultDepth").Enabled = !sepDepth;
-            GetControl<INumericBox>("numDefaultDepthAncestors").Enabled = sepDepth;
-            GetControl<INumericBox>("numDefaultDepthDescendants").Enabled = sepDepth;
+            _numDefaultDepth.Enabled = !sepDepth;
+            _numDefaultDepthAncestors.Enabled = sepDepth;
+            _numDefaultDepthDescendants.Enabled = sepDepth;
         }
 
         public void ChangeTreeChartOption()
         {
-            GetControl<ICheckBox>("chkSeparateDAPLines").Enabled = GetControl<ICheckBox>("chkShowPlaces").Checked;
-            GetControl<ICheckBox>("chkOnlyLocality").Enabled = GetControl<ICheckBox>("chkShowPlaces").Checked;
+            _chkSeparateDAPLines.Enabled = _chkShowPlaces.Checked;
+            _chkOnlyLocality.Enabled = _chkShowPlaces.Checked;
 
-            GetControl<ICheckBox>("chkDefaultPortraits").Enabled = GetControl<ICheckBox>("chkPortraitsVisible").Checked;
+            _chkDefaultPortraits.Enabled = _chkPortraitsVisible.Checked;
 
-            GetControl<ICheckBox>("chkDiffLines").Enabled = GetControl<ICheckBox>("chkName").Checked && GetControl<ICheckBox>("chkPatronymic").Checked;
+            _chkDiffLines.Enabled = _chkName.Checked && _chkPatronymic.Checked;
 
-            GetControl<ICheckBox>("chkOnlyYears").Enabled = GetControl<ICheckBox>("chkBirthDate").Checked && GetControl<ICheckBox>("chkDeathDate").Checked;
+            _chkOnlyYears.Enabled = _chkBirthDate.Checked && _chkDeathDate.Checked;
 
-            bool fullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
-            GetControl<ICheckBox>("chkSurname").Enabled = !fullNameOnOneLine;
-            GetControl<ICheckBox>("chkName").Enabled = !fullNameOnOneLine;
-            GetControl<ICheckBox>("chkPatronymic").Enabled = !fullNameOnOneLine;
-            GetControl<ICheckBox>("chkDiffLines").Enabled = !fullNameOnOneLine;
+            bool fullNameOnOneLine = _chkFullNameOnOneLine.Checked;
+            _chkSurname.Enabled = !fullNameOnOneLine;
+            _chkName.Enabled = !fullNameOnOneLine;
+            _chkPatronymic.Enabled = !fullNameOnOneLine;
+            _chkDiffLines.Enabled = !fullNameOnOneLine;
         }
 
         public void AcceptTreeChartsOptions()
         {
-            fOptions.TreeChartOptions.FamilyVisible = GetControl<ICheckBox>("chkSurname").Checked;
-            fOptions.TreeChartOptions.NameVisible = GetControl<ICheckBox>("chkName").Checked;
-            fOptions.TreeChartOptions.PatronymicVisible = GetControl<ICheckBox>("chkPatronymic").Checked;
-            fOptions.TreeChartOptions.DiffLines = GetControl<ICheckBox>("chkDiffLines").Checked;
-            fOptions.TreeChartOptions.BirthDateVisible = GetControl<ICheckBox>("chkBirthDate").Checked;
-            fOptions.TreeChartOptions.DeathDateVisible = GetControl<ICheckBox>("chkDeathDate").Checked;
-            fOptions.TreeChartOptions.OnlyYears = GetControl<ICheckBox>("chkOnlyYears").Checked;
-            fOptions.TreeChartOptions.MarriagesDates = GetControl<ICheckBox>("chkMarriagesDates").Checked;
-            fOptions.TreeChartOptions.Kinship = GetControl<ICheckBox>("chkKinship").Checked;
-            fOptions.TreeChartOptions.SignsVisible = GetControl<ICheckBox>("chkSignsVisible").Checked;
-            fOptions.TreeChartOptions.Decorative = GetControl<ICheckBox>("chkTreeDecorative").Checked;
-            fOptions.TreeChartOptions.PortraitsVisible = GetControl<ICheckBox>("chkPortraitsVisible").Checked;
-            fOptions.TreeChartOptions.DefaultPortraits = GetControl<ICheckBox>("chkDefaultPortraits").Checked;
-            fOptions.TreeChartOptions.InvertedTree = GetControl<ICheckBox>("chkInvertedTree").Checked;
-            fOptions.TreeChartOptions.ChildlessExclude = GetControl<ICheckBox>("chkChildlessExclude").Checked;
-            fOptions.TreeChartOptions.ShowPlaces = GetControl<ICheckBox>("chkShowPlaces").Checked;
-            fOptions.TreeChartOptions.HideUnknownSpouses = GetControl<ICheckBox>("chkHideUnknownSpouses").Checked;
-            fOptions.CheckTreeSize = GetControl<ICheckBox>("chkCheckTreeSize").Checked;
-            fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Checked;
-            fOptions.TreeChartOptions.DottedLinesOfCommonLawSpouses = GetControl<ICheckBox>("chkDottedLinesOfDivorcedSpouses").Checked;
-            fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = GetControl<ICheckBox>("chkSeparateDAPLines").Checked;
-            fOptions.TreeChartOptions.OnlyLocality = GetControl<ICheckBox>("chkOnlyLocality").Checked;
-            fOptions.TreeChartOptions.BoldNames = GetControl<ICheckBox>("chkBoldNames").Checked;
-            fOptions.TreeChartOptions.MinimizingWidth = GetControl<ICheckBox>("chkMinimizingWidth").Checked;
-            fOptions.TreeChartOptions.AgeVisible = GetControl<ICheckBox>("chkShowAge").Checked;
-            fOptions.TreeChartOptions.SurnameFirstInOrder = GetControl<ICheckBox>("chkTreeSurnameFirst").Checked;
-            fOptions.TreeChartOptions.URNotesVisible = GetControl<ICheckBox>("chkURNotesVisible").Checked;
-            fOptions.TreeChartOptions.ShortenDates = GetControl<ICheckBox>("chkShortenDateRanges").Checked;
-            fOptions.TreeChartOptions.SameCardsWidth = GetControl<ICheckBox>("chkSameCardsWidth").Checked;
-            fOptions.TreeChartOptions.FullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
-            fOptions.TreeChartOptions.DateDesignations = GetControl<ICheckBox>("chkDateDesignations").Checked;
-            fOptions.TreeChartOptions.MourningEdges = GetControl<ICheckBox>("chkMourningEdges").Checked;
-            fOptions.TreeChartOptions.UseAdditionalDates = GetControl<ICheckBox>("chkUseAdditionalDates").Checked;
+            fOptions.TreeChartOptions.FamilyVisible = _chkSurname.Checked;
+            fOptions.TreeChartOptions.NameVisible = _chkName.Checked;
+            fOptions.TreeChartOptions.PatronymicVisible = _chkPatronymic.Checked;
+            fOptions.TreeChartOptions.DiffLines = _chkDiffLines.Checked;
+            fOptions.TreeChartOptions.BirthDateVisible = _chkBirthDate.Checked;
+            fOptions.TreeChartOptions.DeathDateVisible = _chkDeathDate.Checked;
+            fOptions.TreeChartOptions.OnlyYears = _chkOnlyYears.Checked;
+            fOptions.TreeChartOptions.MarriagesDates = _chkMarriagesDates.Checked;
+            fOptions.TreeChartOptions.Kinship = _chkKinship.Checked;
+            fOptions.TreeChartOptions.SignsVisible = _chkSignsVisible.Checked;
+            fOptions.TreeChartOptions.Decorative = _chkTreeDecorative.Checked;
+            fOptions.TreeChartOptions.PortraitsVisible = _chkPortraitsVisible.Checked;
+            fOptions.TreeChartOptions.DefaultPortraits = _chkDefaultPortraits.Checked;
+            fOptions.TreeChartOptions.InvertedTree = _chkInvertedTree.Checked;
+            fOptions.TreeChartOptions.ChildlessExclude = _chkChildlessExclude.Checked;
+            fOptions.TreeChartOptions.ShowPlaces = _chkShowPlaces.Checked;
+            fOptions.TreeChartOptions.HideUnknownSpouses = _chkHideUnknownSpouses.Checked;
+            fOptions.CheckTreeSize = _chkCheckTreeSize.Checked;
+            fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = _chkDottedLinesOfAdoptedChildren.Checked;
+            fOptions.TreeChartOptions.DottedLinesOfCommonLawSpouses = _chkDottedLinesOfDivorcedSpouses.Checked;
+            fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = _chkSeparateDAPLines.Checked;
+            fOptions.TreeChartOptions.OnlyLocality = _chkOnlyLocality.Checked;
+            fOptions.TreeChartOptions.BoldNames = _chkBoldNames.Checked;
+            fOptions.TreeChartOptions.MinimizingWidth = _chkMinimizingWidth.Checked;
+            fOptions.TreeChartOptions.AgeVisible = _chkShowAge.Checked;
+            fOptions.TreeChartOptions.SurnameFirstInOrder = _chkTreeSurnameFirst.Checked;
+            fOptions.TreeChartOptions.URNotesVisible = _chkURNotesVisible.Checked;
+            fOptions.TreeChartOptions.ShortenDates = _chkShortenDateRanges.Checked;
+            fOptions.TreeChartOptions.SameCardsWidth = _chkSameCardsWidth.Checked;
+            fOptions.TreeChartOptions.FullNameOnOneLine = _chkFullNameOnOneLine.Checked;
+            fOptions.TreeChartOptions.DateDesignations = _chkDateDesignations.Checked;
+            fOptions.TreeChartOptions.MourningEdges = _chkMourningEdges.Checked;
+            fOptions.TreeChartOptions.UseAdditionalDates = _chkUseAdditionalDates.Checked;
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fOptions.TreeChartOptions.MultipleSpouseLines = GetControl<ICheckBox>("chkMultipleSpouseLines").Checked;
             }
 
-            fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
-            fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
-            fOptions.TreeChartOptions.UnkSexColor = GetControl<ILabel>("lblUnkSexColor").BackColor;
-            fOptions.TreeChartOptions.UnHusbandColor = GetControl<ILabel>("lblUnHusbandColor").BackColor;
-            fOptions.TreeChartOptions.UnWifeColor = GetControl<ILabel>("lblUnWifeColor").BackColor;
+            fOptions.TreeChartOptions.MaleColor = _lblMaleColor.BackColor;
+            fOptions.TreeChartOptions.FemaleColor = _lblFemaleColor.BackColor;
+            fOptions.TreeChartOptions.UnkSexColor = _lblUnkSexColor.BackColor;
+            fOptions.TreeChartOptions.UnHusbandColor = _lblUnHusbandColor.BackColor;
+            fOptions.TreeChartOptions.UnWifeColor = _lblUnWifeColor.BackColor;
 
-            fOptions.TreeChartOptions.Margins = (int)GetControl<INumericBox>("numMargins").Value;
-            fOptions.TreeChartOptions.BranchDistance = (int)GetControl<INumericBox>("numBranchDist").Value;
-            fOptions.TreeChartOptions.LevelDistance = (int)GetControl<INumericBox>("numGenDist").Value;
-            fOptions.TreeChartOptions.SpouseDistance = (int)GetControl<INumericBox>("numSpouseDist").Value;
-            fOptions.TreeChartOptions.Padding = (int)GetControl<INumericBox>("numPadding").Value;
+            fOptions.TreeChartOptions.Margins = (int)_numMargins.Value;
+            fOptions.TreeChartOptions.BranchDistance = (int)_numBranchDist.Value;
+            fOptions.TreeChartOptions.LevelDistance = (int)_numGenDist.Value;
+            fOptions.TreeChartOptions.SpouseDistance = (int)_numSpouseDist.Value;
+            fOptions.TreeChartOptions.Padding = (int)_numPadding.Value;
 
-            fOptions.TreeChartOptions.SeparateDepth = GetControl<ICheckBox>("chkSeparateDepth").Checked;
-            fOptions.TreeChartOptions.DepthLimit = (int)GetControl<INumericBox>("numDefaultDepth").Value;
-            fOptions.TreeChartOptions.DepthLimitAncestors = (int)GetControl<INumericBox>("numDefaultDepthAncestors").Value;
-            fOptions.TreeChartOptions.DepthLimitDescendants = (int)GetControl<INumericBox>("numDefaultDepthDescendants").Value;
+            fOptions.TreeChartOptions.SeparateDepth = _chkSeparateDepth.Checked;
+            fOptions.TreeChartOptions.DepthLimit = (int)_numDefaultDepth.Value;
+            fOptions.TreeChartOptions.DepthLimitAncestors = (int)_numDefaultDepthAncestors.Value;
+            fOptions.TreeChartOptions.DepthLimitDescendants = (int)_numDefaultDepthDescendants.Value;
 
             if (!fIsTerm) {
-                fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
-                fOptions.TreeChartOptions.TextEffect = GetControl<IComboBox>("cmbTextEffect").GetSelectedTag<TextEffect>();
+                fOptions.TreeChartOptions.UseExtraControls = _chkUseExtraControls.Checked;
+                fOptions.TreeChartOptions.TextEffect = _cmbTextEffect.GetSelectedTag<TextEffect>();
             }
         }
 
@@ -1010,11 +1206,11 @@ namespace GKCore.Controllers
 
             fView.SetTitle(LangMan.LS(LSID.MIOptions));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
 
             // Common
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
+            _pageCommon.Text = LangMan.LS(LSID.Common);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageComOther").Text = LangMan.LS(LSID.Common);
@@ -1026,208 +1222,208 @@ namespace GKCore.Controllers
             }
 
             if (!fIsTerm) {
-                GetControl<IGroupBox>("grpInternet").Text = LangMan.LS(LSID.Internet);
-                GetControl<ICheckBox>("chkUseProxy").Text = LangMan.LS(LSID.ProxyUse);
-                GetControl<ILabel>("lblProxyServer").Text = LangMan.LS(LSID.ProxyServer);
-                GetControl<ILabel>("lblProxyPort").Text = LangMan.LS(LSID.ProxyPort);
-                GetControl<ILabel>("lblProxyLogin").Text = LangMan.LS(LSID.ProxyLogin);
-                GetControl<ILabel>("lblProxyPassword").Text = LangMan.LS(LSID.Password);
+                _grpInternet.Text = LangMan.LS(LSID.Internet);
+                _chkUseProxy.Text = LangMan.LS(LSID.ProxyUse);
+                _lblProxyServer.Text = LangMan.LS(LSID.ProxyServer);
+                _lblProxyPort.Text = LangMan.LS(LSID.ProxyPort);
+                _lblProxyLogin.Text = LangMan.LS(LSID.ProxyLogin);
+                _lblProxyPassword.Text = LangMan.LS(LSID.Password);
             }
 
-            GetControl<IGroupBox>("grpFileBackup").Text = LangMan.LS(LSID.BackupOnSave);
-            GetControl<IRadioButton>("radFBNone").Text = LangMan.LS(LSID.Not);
-            GetControl<IRadioButton>("radFBOnlyPrev").Text = LangMan.LS(LSID.BackupOnlyPrev);
-            GetControl<IRadioButton>("radFBEachRevision").Text = LangMan.LS(LSID.BackupEachRevision);
+            _grpFileBackup.Text = LangMan.LS(LSID.BackupOnSave);
+            _radFBNone.Text = LangMan.LS(LSID.Not);
+            _radFBOnlyPrev.Text = LangMan.LS(LSID.BackupOnlyPrev);
+            _radFBEachRevision.Text = LangMan.LS(LSID.BackupEachRevision);
 
-            GetControl<ICheckBox>("chkAutosave").Text = LangMan.LS(LSID.Autosave);
-            GetControl<ILabel>("lblMinutes").Text = LangMan.LS(LSID.Minutes);
-            GetControl<ILabel>("lblBackupRevisionsMaxCount").Text = LangMan.LS(LSID.BackupRevisionsMaxCount);
+            _chkAutosave.Text = LangMan.LS(LSID.Autosave);
+            _lblMinutes.Text = LangMan.LS(LSID.Minutes);
+            _lblBackupRevisionsMaxCount.Text = LangMan.LS(LSID.BackupRevisionsMaxCount);
 
-            GetControl<IGroupBox>("grpOther").Text = LangMan.LS(LSID.Other);
+            _grpOther.Text = LangMan.LS(LSID.Other);
 
-            GetControl<ICheckBox>("chkShowOnStart").Text = LangMan.LS(LSID.StartupTips);
+            _chkShowOnStart.Text = LangMan.LS(LSID.StartupTips);
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkShowEventsOnlyAlive").Text = LangMan.LS(LSID.ShowEventsOnlyAlive);
             }
 
-            GetControl<ICheckBox>("chkLoadRecentFiles").Text = LangMan.LS(LSID.LoadRecentFiles);
-            GetControl<ICheckBox>("chkAutoCheckUpdates").Text = LangMan.LS(LSID.AutoCheckUpdates);
-            GetControl<ICheckBox>("chkCharsetDetection").Text = LangMan.LS(LSID.CharsetDetection);
-            GetControl<ICheckBox>("chkDialogClosingWarn").Text = LangMan.LS(LSID.WarnForClosingDialog);
+            _chkLoadRecentFiles.Text = LangMan.LS(LSID.LoadRecentFiles);
+            _chkAutoCheckUpdates.Text = LangMan.LS(LSID.AutoCheckUpdates);
+            _chkCharsetDetection.Text = LangMan.LS(LSID.CharsetDetection);
+            _chkDialogClosingWarn.Text = LangMan.LS(LSID.WarnForClosingDialog);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ICheckBox>("chkDisplayFullFileName").Text = LangMan.LS(LSID.DisplayFullFileName);
             }
 
-            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
-            GetControl<ILabel>("lblGeocoder").Text = LangMan.LS(LSID.Geocoder);
-            GetControl<ILabel>("lblGeoSearchCountry").Text = LangMan.LS(LSID.GeoSearchCountryRestriction);
+            _lblLanguage.Text = LangMan.LS(LSID.Language);
+            _lblGeocoder.Text = LangMan.LS(LSID.Geocoder);
+            _lblGeoSearchCountry.Text = LangMan.LS(LSID.GeoSearchCountryRestriction);
 
-            GetControl<ILabel>("lblCertaintyAlgorithm").Text = LangMan.LS(LSID.CertaintyAlgorithm);
-            var cmbCA = GetControl<IComboBox>("cmbCertaintyAlgorithm");
+            _lblCertaintyAlgorithm.Text = LangMan.LS(LSID.CertaintyAlgorithm);
+            var cmbCA = _cmbCertaintyAlgorithm;
             cmbCA.Clear();
             for (var ca = CertaintyAlgorithm.WeightedAverage; ca <= CertaintyAlgorithm.Maximum; ca++) {
                 cmbCA.AddItem(LangMan.LS(GKData.CertaintyAlgorithms[(int)ca].Name), ca);
             }
 
             // Multimedia
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
 
-            GetControl<ICheckBox>("chkRemovableMediaWarning").Text = LangMan.LS(LSID.RemovableMediaWarningOption);
-            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Text = LangMan.LS(LSID.EmbeddedMediaPlayer);
+            _chkRemovableMediaWarning.Text = LangMan.LS(LSID.RemovableMediaWarningOption);
+            _chkEmbeddedMediaPlayer.Text = LangMan.LS(LSID.EmbeddedMediaPlayer);
 
-            GetControl<ICheckBox>("chkAllowMediaDirectRefs").Text = LangMan.LS(LSID.AllowMediaDirectReferences);
-            GetControl<ICheckBox>("chkAllowMediaStoreRelativeReferences").Text = LangMan.LS(LSID.AllowMediaRelativeReferences);
+            _chkAllowMediaDirectRefs.Text = LangMan.LS(LSID.AllowMediaDirectReferences);
+            _chkAllowMediaStoreRelativeReferences.Text = LangMan.LS(LSID.AllowMediaRelativeReferences);
 
-            GetControl<ILabel>("lblMediaStoreDefault").Text = LangMan.LS(LSID.MediaStoreDefault);
+            _lblMediaStoreDefault.Text = LangMan.LS(LSID.MediaStoreDefault);
 
-            var combo = GetControl<IComboBox>("cmbMediaStoreDefault");
+            var combo = _cmbMediaStoreDefault;
             combo.Clear();
             for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
                 var storeType = GKData.GKStoreTypes[(int)mst];
                 combo.AddItem(LangMan.LS(storeType.Name), mst);
             }
 
-            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Text = LangMan.LS(LSID.AllowDeleteMediaFileFromStgArc);
-            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Text = LangMan.LS(LSID.AllowDeleteMediaFileFromRefs);
-            GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Text = LangMan.LS(LSID.DeleteMediaFileWithoutConfirm);
-            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Text = LangMan.LS(LSID.HighlightInaccessibleFiles);
+            _chkAllowDeleteMediaFileFromStgArc.Text = LangMan.LS(LSID.AllowDeleteMediaFileFromStgArc);
+            _chkAllowDeleteMediaFileFromRefs.Text = LangMan.LS(LSID.AllowDeleteMediaFileFromRefs);
+            _chkDeleteMediaFileWithoutConfirm.Text = LangMan.LS(LSID.DeleteMediaFileWithoutConfirm);
+            _chkHighlightInaccessibleFiles.Text = LangMan.LS(LSID.HighlightInaccessibleFiles);
 
             // Charts
-            GetControl<ITabPage>("pageCharts").Text = LangMan.LS(LSID.Charts);
+            _pageCharts.Text = LangMan.LS(LSID.Charts);
 
-            GetControl<ITabPage>("pageTreeChart").Text = LangMan.LS(LSID.Trees);
+            _pageTreeChart.Text = LangMan.LS(LSID.Trees);
 
-            GetControl<ITabPage>("pageTreePersons").Text = LangMan.LS(LSID.ViewTree);
-            GetControl<ITabPage>("pageTreeDesign").Text = LangMan.LS(LSID.Decor);
+            _pageTreePersons.Text = LangMan.LS(LSID.ViewTree);
+            _pageTreeDesign.Text = LangMan.LS(LSID.Decor);
 
-            GetControl<ICheckBox>("chkSurname").Text = LangMan.LS(LSID.Surname);
-            GetControl<ICheckBox>("chkName").Text = LangMan.LS(LSID.GivenName);
-            GetControl<ICheckBox>("chkPatronymic").Text = LangMan.LS(LSID.Patronymic);
-            GetControl<ICheckBox>("chkDiffLines").Text = LangMan.LS(LSID.DiffLines);
-            GetControl<ICheckBox>("chkBirthDate").Text = LangMan.LS(LSID.BirthDate);
-            GetControl<ICheckBox>("chkDeathDate").Text = LangMan.LS(LSID.DeathDate);
-            GetControl<ICheckBox>("chkOnlyYears").Text = LangMan.LS(LSID.OnlyYears);
-            GetControl<ICheckBox>("chkMarriagesDates").Text = LangMan.LS(LSID.MarriagesDates);
-            GetControl<ICheckBox>("chkKinship").Text = LangMan.LS(LSID.Kinship);
-            GetControl<ICheckBox>("chkSignsVisible").Text = LangMan.LS(LSID.SignsVisible);
-            GetControl<ICheckBox>("chkTreeDecorative").Text = LangMan.LS(LSID.TreeDecorative);
-            GetControl<ICheckBox>("chkPortraitsVisible").Text = LangMan.LS(LSID.PortraitsVisible);
-            GetControl<ICheckBox>("chkDefaultPortraits").Text = LangMan.LS(LSID.DefaultPortraits);
-            GetControl<ICheckBox>("chkInvertedTree").Text = LangMan.LS(LSID.InvertedTree);
-            GetControl<ICheckBox>("chkChildlessExclude").Text = LangMan.LS(LSID.ChildlessExclude);
-            GetControl<ICheckBox>("chkShowPlaces").Text = LangMan.LS(LSID.ShowPlaces);
-            GetControl<ICheckBox>("chkSeparateDAPLines").Text = LangMan.LS(LSID.SeparateDatesAndPlacesLines);
-            GetControl<ICheckBox>("chkOnlyLocality").Text = LangMan.LS(LSID.OnlyLocality);
-            GetControl<ICheckBox>("chkHideUnknownSpouses").Text = LangMan.LS(LSID.HideUnknownSpouses);
-            GetControl<ICheckBox>("chkCheckTreeSize").Text = LangMan.LS(LSID.CheckTreeSize);
-            GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Text = LangMan.LS(LSID.DottedLinesOfAdoptedChildren);
-            GetControl<ICheckBox>("chkDottedLinesOfDivorcedSpouses").Text = LangMan.LS(LSID.DottedLinesOfCommonLawSpouses);
-            GetControl<ICheckBox>("chkBoldNames").Text = LangMan.LS(LSID.BoldNames);
-            GetControl<ICheckBox>("chkMinimizingWidth").Text = LangMan.LS(LSID.MinimizingWidth);
-            GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.ShowAge);
-            GetControl<ICheckBox>("chkTreeSurnameFirst").Text = LangMan.LS(LSID.SurnameFirstInOrder);
-            GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.ShowTreeNotes);
-            GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.ShortenDates);
-            GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.SameCardsWidth);
-            GetControl<ICheckBox>("chkFullNameOnOneLine").Text = LangMan.LS(LSID.FullNameOnOneLine);
-            GetControl<ICheckBox>("chkDateDesignations").Text = LangMan.LS(LSID.DateDesignations);
-            GetControl<ICheckBox>("chkMourningEdges").Text = LangMan.LS(LSID.MourningEdges);
-            GetControl<ICheckBox>("chkUseAdditionalDates").Text = LangMan.LS(LSID.UseAdditionalDates);
+            _chkSurname.Text = LangMan.LS(LSID.Surname);
+            _chkName.Text = LangMan.LS(LSID.GivenName);
+            _chkPatronymic.Text = LangMan.LS(LSID.Patronymic);
+            _chkDiffLines.Text = LangMan.LS(LSID.DiffLines);
+            _chkBirthDate.Text = LangMan.LS(LSID.BirthDate);
+            _chkDeathDate.Text = LangMan.LS(LSID.DeathDate);
+            _chkOnlyYears.Text = LangMan.LS(LSID.OnlyYears);
+            _chkMarriagesDates.Text = LangMan.LS(LSID.MarriagesDates);
+            _chkKinship.Text = LangMan.LS(LSID.Kinship);
+            _chkSignsVisible.Text = LangMan.LS(LSID.SignsVisible);
+            _chkTreeDecorative.Text = LangMan.LS(LSID.TreeDecorative);
+            _chkPortraitsVisible.Text = LangMan.LS(LSID.PortraitsVisible);
+            _chkDefaultPortraits.Text = LangMan.LS(LSID.DefaultPortraits);
+            _chkInvertedTree.Text = LangMan.LS(LSID.InvertedTree);
+            _chkChildlessExclude.Text = LangMan.LS(LSID.ChildlessExclude);
+            _chkShowPlaces.Text = LangMan.LS(LSID.ShowPlaces);
+            _chkSeparateDAPLines.Text = LangMan.LS(LSID.SeparateDatesAndPlacesLines);
+            _chkOnlyLocality.Text = LangMan.LS(LSID.OnlyLocality);
+            _chkHideUnknownSpouses.Text = LangMan.LS(LSID.HideUnknownSpouses);
+            _chkCheckTreeSize.Text = LangMan.LS(LSID.CheckTreeSize);
+            _chkDottedLinesOfAdoptedChildren.Text = LangMan.LS(LSID.DottedLinesOfAdoptedChildren);
+            _chkDottedLinesOfDivorcedSpouses.Text = LangMan.LS(LSID.DottedLinesOfCommonLawSpouses);
+            _chkBoldNames.Text = LangMan.LS(LSID.BoldNames);
+            _chkMinimizingWidth.Text = LangMan.LS(LSID.MinimizingWidth);
+            _chkShowAge.Text = LangMan.LS(LSID.ShowAge);
+            _chkTreeSurnameFirst.Text = LangMan.LS(LSID.SurnameFirstInOrder);
+            _chkURNotesVisible.Text = LangMan.LS(LSID.ShowTreeNotes);
+            _chkShortenDateRanges.Text = LangMan.LS(LSID.ShortenDates);
+            _chkSameCardsWidth.Text = LangMan.LS(LSID.SameCardsWidth);
+            _chkFullNameOnOneLine.Text = LangMan.LS(LSID.FullNameOnOneLine);
+            _chkDateDesignations.Text = LangMan.LS(LSID.DateDesignations);
+            _chkMourningEdges.Text = LangMan.LS(LSID.MourningEdges);
+            _chkUseAdditionalDates.Text = LangMan.LS(LSID.UseAdditionalDates);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkMultipleSpouseLines").Text = LangMan.LS(LSID.MultipleSpouseLines);
             }
 
-            GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);
-            GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.Woman);
-            GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.UnkSex);
-            GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.UnHusband);
-            GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.UnWife);
+            _lblMaleColor.Text = LangMan.LS(LSID.Man);
+            _lblFemaleColor.Text = LangMan.LS(LSID.Woman);
+            _lblUnkSexColor.Text = LangMan.LS(LSID.UnkSex);
+            _lblUnHusbandColor.Text = LangMan.LS(LSID.UnHusband);
+            _lblUnWifeColor.Text = LangMan.LS(LSID.UnWife);
 
             if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ILabel>("lblChartFontTitle").Text = LangMan.LS(LSID.Font);
             }
 
-            GetControl<IGroupBox>("grpSpacings").Text = LangMan.LS(LSID.Spacings);
-            GetControl<ILabel>("lblMargins").Text = LangMan.LS(LSID.Margins);
-            GetControl<ILabel>("lblBranchDist").Text = LangMan.LS(LSID.BranchDist);
-            GetControl<ILabel>("lblGenDist").Text = LangMan.LS(LSID.GenDist);
-            GetControl<ILabel>("lblSpouseDist").Text = LangMan.LS(LSID.SpouseDist);
-            GetControl<ILabel>("lblPadding").Text = LangMan.LS(LSID.Padding);
+            _grpSpacings.Text = LangMan.LS(LSID.Spacings);
+            _lblMargins.Text = LangMan.LS(LSID.Margins);
+            _lblBranchDist.Text = LangMan.LS(LSID.BranchDist);
+            _lblGenDist.Text = LangMan.LS(LSID.GenDist);
+            _lblSpouseDist.Text = LangMan.LS(LSID.SpouseDist);
+            _lblPadding.Text = LangMan.LS(LSID.Padding);
 
-            GetControl<ICheckBox>("chkSeparateDepth").Text = LangMan.LS(LSID.SeparateDepth);
-            GetControl<ILabel>("lblDefaultDepth").Text = LangMan.LS(LSID.DefaultDepth);
-            GetControl<ILabel>("lblDefaultDepthAncestors").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Ancestors);
-            GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Descendants);
+            _chkSeparateDepth.Text = LangMan.LS(LSID.SeparateDepth);
+            _lblDefaultDepth.Text = LangMan.LS(LSID.DefaultDepth);
+            _lblDefaultDepthAncestors.Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Ancestors);
+            _lblDefaultDepthDescendants.Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Descendants);
 
             if (!fIsTerm) {
-                GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.UseExtraControls);
-                GetControl<ILabel>("lblTextEffect").Text = LangMan.LS(LSID.TextEffect);
+                _chkUseExtraControls.Text = LangMan.LS(LSID.UseExtraControls);
+                _lblTextEffect.Text = LangMan.LS(LSID.TextEffect);
 
-                GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.AncestorsCircle);
+                _pageAncCircle.Text = LangMan.LS(LSID.AncestorsCircle);
             }
 
             // UIView
-            GetControl<ITabPage>("pageUIView").Text = LangMan.LS(LSID.Interface);
+            _pageUIView.Text = LangMan.LS(LSID.Interface);
 
-            GetControl<ITabPage>("pageViewCommon").Text = LangMan.LS(LSID.ListsAll);
+            _pageViewCommon.Text = LangMan.LS(LSID.ListsAll);
             GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
 
-            GetControl<IGroupBox>("rgFNPFormat").Text = LangMan.LS(LSID.NamesFormat);
-            GetControl<IRadioButton>("radSNP").Text = LangMan.LS(LSID.NF1);
-            GetControl<IRadioButton>("radS_NP").Text = LangMan.LS(LSID.NF2);
-            GetControl<IRadioButton>("radS_N_P").Text = LangMan.LS(LSID.NF3);
+            _rgFNPFormat.Text = LangMan.LS(LSID.NamesFormat);
+            _radSNP.Text = LangMan.LS(LSID.NF1);
+            _radS_NP.Text = LangMan.LS(LSID.NF2);
+            _radS_N_P.Text = LangMan.LS(LSID.NF3);
 
-            GetControl<ICheckBox>("chkPlacesWithAddress").Text = LangMan.LS(LSID.PlacesWithAddress);
-            GetControl<ICheckBox>("chkHighlightUnparented").Text = LangMan.LS(LSID.HighlightUnparented);
-            GetControl<ICheckBox>("chkHighlightUnmarried").Text = LangMan.LS(LSID.HighlightUnmarried);
+            _chkPlacesWithAddress.Text = LangMan.LS(LSID.PlacesWithAddress);
+            _chkHighlightUnparented.Text = LangMan.LS(LSID.HighlightUnparented);
+            _chkHighlightUnmarried.Text = LangMan.LS(LSID.HighlightUnmarried);
 
-            GetControl<ICheckBox>("chkAutoSortChildren").Text = LangMan.LS(LSID.AutoSortChildren);
-            GetControl<ICheckBox>("chkAutoSortSpouses").Text = LangMan.LS(LSID.AutoSortSpouses);
+            _chkAutoSortChildren.Text = LangMan.LS(LSID.AutoSortChildren);
+            _chkAutoSortSpouses.Text = LangMan.LS(LSID.AutoSortSpouses);
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkAutoSortEvents").Text = LangMan.LS(LSID.AutoSortEvents);
             }
-            GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Text = LangMan.LS(LSID.FirstCapitalLetterInNames);
-            GetControl<ICheckBox>("chkShortKinshipForm").Text = LangMan.LS(LSID.ShortKinshipForm);
-            GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.SurnameFirstInOrder);
-            GetControl<ICheckBox>("chkSurnameInCapitals").Text = LangMan.LS(LSID.SurnameInCapitals);
+            _chkFirstCapitalLetterInNames.Text = LangMan.LS(LSID.FirstCapitalLetterInNames);
+            _chkShortKinshipForm.Text = LangMan.LS(LSID.ShortKinshipForm);
+            _chkSurnameFirstInOrder.Text = LangMan.LS(LSID.SurnameFirstInOrder);
+            _chkSurnameInCapitals.Text = LangMan.LS(LSID.SurnameInCapitals);
 
             if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ILabel>("lblUIFontTitle").Text = LangMan.LS(LSID.Font);
                 GetControl<ICheckBox>("chkOverrideThemesFont").Text = LangMan.LS(LSID.OverrideThemesFont);
             }
 
-            GetControl<ICheckBox>("chkUseSurnamesInPSF").Text = LangMan.LS(LSID.UseSurnamesInPersonSelectionFilter);
-            GetControl<ICheckBox>("chkUseBirthDatesInPSF").Text = LangMan.LS(LSID.UseBirthDatesInPersonSelectionFilter);
+            _chkUseSurnamesInPSF.Text = LangMan.LS(LSID.UseSurnamesInPersonSelectionFilter);
+            _chkUseBirthDatesInPSF.Text = LangMan.LS(LSID.UseBirthDatesInPersonSelectionFilter);
 
-            GetControl<IRadioButton>("radDMY").Text = LangMan.LS(LSID.DF_DD_MM_YYYY);
-            GetControl<IRadioButton>("radYMD").Text = LangMan.LS(LSID.DF_YYYY_MM_DD);
-            GetControl<IGroupBox>("grpDateFormat").Text = LangMan.LS(LSID.DateFormat);
-            GetControl<ICheckBox>("chkShowDatesCalendar").Text = LangMan.LS(LSID.ShowDatesCalendar);
-            GetControl<ICheckBox>("chkShowDatesSigns").Text = LangMan.LS(LSID.ShowDatesSigns);
-            GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Text = LangMan.LS(LSID.LocalizedCalendarSignaturesOptLabel);
+            _radDMY.Text = LangMan.LS(LSID.DF_DD_MM_YYYY);
+            _radYMD.Text = LangMan.LS(LSID.DF_YYYY_MM_DD);
+            _grpDateFormat.Text = LangMan.LS(LSID.DateFormat);
+            _chkShowDatesCalendar.Text = LangMan.LS(LSID.ShowDatesCalendar);
+            _chkShowDatesSigns.Text = LangMan.LS(LSID.ShowDatesSigns);
+            _chkLocalizedCalendarSignatures.Text = LangMan.LS(LSID.LocalizedCalendarSignaturesOptLabel);
 
-            GetControl<IGroupBox>("grpAdvancedNames").Text = LangMan.LS(LSID.AdditionalNames);
-            GetControl<ICheckBox>("chkExtendWomanSurnames").Text = LangMan.LS(LSID.ExtendedWomanSurnames);
-            GetControl<IRadioButton>("radMaiden_Married").Text = LangMan.LS(LSID.WSF_Maiden_Married);
-            GetControl<IRadioButton>("radMarried_Maiden").Text = LangMan.LS(LSID.WSF_Married_Maiden);
-            GetControl<IRadioButton>("radMaiden").Text = LangMan.LS(LSID.WSF_Maiden);
-            GetControl<IRadioButton>("radMarried").Text = LangMan.LS(LSID.WSF_Married);
-            GetControl<ICheckBox>("chkSimpleSingleSurnames").Text = LangMan.LS(LSID.SimpleSingleSurnames);
+            _grpAdvancedNames.Text = LangMan.LS(LSID.AdditionalNames);
+            _chkExtendWomanSurnames.Text = LangMan.LS(LSID.ExtendedWomanSurnames);
+            _radMaiden_Married.Text = LangMan.LS(LSID.WSF_Maiden_Married);
+            _radMarried_Maiden.Text = LangMan.LS(LSID.WSF_Married_Maiden);
+            _radMaiden.Text = LangMan.LS(LSID.WSF_Maiden);
+            _radMarried.Text = LangMan.LS(LSID.WSF_Married);
+            _chkSimpleSingleSurnames.Text = LangMan.LS(LSID.SimpleSingleSurnames);
 
-            GetControl<ITabPage>("pageViewPersons").Text = LangMan.LS(LSID.ListPersons);
-            GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.DefList);
+            _pageViewPersons.Text = LangMan.LS(LSID.ListPersons);
+            _btnResetDefaults.Text = LangMan.LS(LSID.DefList);
 
-            GetControl<ILabel>("lblMatchPatternMethod").Text = LangMan.LS(LSID.MatchPatternMethod);
+            _lblMatchPatternMethod.Text = LangMan.LS(LSID.MatchPatternMethod);
 
-            GetControl<ITabPage>("pageNavigation").Text = LangMan.LS(LSID.Navigation);
+            _pageNavigation.Text = LangMan.LS(LSID.Navigation);
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkSourceFilterChecksEvents").Text = LangMan.LS(LSID.SourceFilteringAlsoChecksEvents);
                 GetControl<ICheckBox>("chkConvenientSourcesFormat").Text = LangMan.LS(LSID.ConvenientSourcesFormat);
             }
 
-            GetControl<ITabPage>("pageGeo").Text = LangMan.LS(LSID.LocationsAndMaps);
+            _pageGeo.Text = LangMan.LS(LSID.LocationsAndMaps);
 
             // Reports
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
@@ -1241,58 +1437,58 @@ namespace GKCore.Controllers
             }
 
             // Pedigree
-            GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Pedigrees);
+            _pagePedigree.Text = LangMan.LS(LSID.Pedigrees);
 
-            GetControl<IGroupBox>("grpPedigree").Text = LangMan.LS(LSID.PedigreeGen);
-            GetControl<ICheckBox>("chkAttributes").Text = LangMan.LS(LSID.IncludeAttributes);
-            GetControl<ICheckBox>("chkNotes").Text = LangMan.LS(LSID.IncludeNotes);
-            GetControl<ICheckBox>("chkSources").Text = LangMan.LS(LSID.IncludeSources);
-            GetControl<ICheckBox>("chkSourcePages").Text = LangMan.LS(LSID.IncludeSourcePages);
-            GetControl<ICheckBox>("chkSourceCitations").Text = LangMan.LS(LSID.IncludeSourceCitations);
-            GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.IncludeGenerations);
-            GetControl<ICheckBox>("chkPortraits").Text = LangMan.LS(LSID.IncludePortraits);
+            _grpPedigree.Text = LangMan.LS(LSID.PedigreeGen);
+            _chkAttributes.Text = LangMan.LS(LSID.IncludeAttributes);
+            _chkNotes.Text = LangMan.LS(LSID.IncludeNotes);
+            _chkSources.Text = LangMan.LS(LSID.IncludeSources);
+            _chkSourcePages.Text = LangMan.LS(LSID.IncludeSourcePages);
+            _chkSourceCitations.Text = LangMan.LS(LSID.IncludeSourceCitations);
+            _chkGenerations.Text = LangMan.LS(LSID.IncludeGenerations);
+            _chkPortraits.Text = LangMan.LS(LSID.IncludePortraits);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkSortEvents").Text = LangMan.LS(LSID.SortEvents);
             }
 
-            GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.PedigreeFormat);
-            GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.PF1);
-            GetControl<IRadioButton>("radCompact").Text = LangMan.LS(LSID.PF2);
+            _grpPedigreeFormat.Text = LangMan.LS(LSID.PedigreeFormat);
+            _radExcess.Text = LangMan.LS(LSID.PF1);
+            _radCompact.Text = LangMan.LS(LSID.PF2);
 
-            GetControl<ILabel>("lblAscendNumbering").Text = LangMan.LS(LSID.AscendNumbering);
-            GetControl<ILabel>("lblDescendNumbering").Text = LangMan.LS(LSID.DescendNumbering);
+            _lblAscendNumbering.Text = LangMan.LS(LSID.AscendNumbering);
+            _lblDescendNumbering.Text = LangMan.LS(LSID.DescendNumbering);
 
             // Specials
-            GetControl<ITabPage>("pageSpecials").Text = LangMan.LS(LSID.Specials);
-            GetControl<ICheckBox>("chkDisableNonStdFeatures").Text = LangMan.LS(LSID.DisableNonStdFeatures);
-            GetControl<ICheckBox>("chkEnableStdValidation").Text = LangMan.LS(LSID.GEDCOMValidation);
-            GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.UseInlineImagesInSvg);
-            GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.UseExtendedNotes);
-            GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.KeepRichNames);
+            _pageSpecials.Text = LangMan.LS(LSID.Specials);
+            _chkDisableNonStdFeatures.Text = LangMan.LS(LSID.DisableNonStdFeatures);
+            _chkEnableStdValidation.Text = LangMan.LS(LSID.GEDCOMValidation);
+            _chkUseInlineImagesInSvg.Text = LangMan.LS(LSID.UseInlineImagesInSvg);
+            _chkUseExtendedNotes.Text = LangMan.LS(LSID.UseExtendedNotes);
+            _chkKeepRichNames.Text = LangMan.LS(LSID.KeepRichNames);
 
             if (!fIsTerm) {
-                GetControl<ILabel>("lblChartWindowsShowMode").Text = LangMan.LS(LSID.ChartWindowsShowMode);
-                combo = GetControl<IComboBox>("cmbChartWindowsShowMode");
+                _lblChartWindowsShowMode.Text = LangMan.LS(LSID.ChartWindowsShowMode);
+                combo = _cmbChartWindowsShowMode;
                 combo.Clear();
                 for (ChartWindowsShowMode cwsm = ChartWindowsShowMode.Default; cwsm <= ChartWindowsShowMode.RightHalf; cwsm++) {
                     combo.AddItem(LangMan.LS(GKData.ChartWindowsShowModes[(int)cwsm]), cwsm);
                 }
             }
 
-            GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.ExtendedTree);
-            GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.SearchAndFilterByAllNames);
-            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.KeepInfoPansOverallSize);
-            GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.FilesOverwriteWarn);
-            GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.ExtendedKinships);
-            GetControl<ICheckBox>("chkExtendedLocations").Text = LangMan.LS(LSID.ExtendedLocations);
-            GetControl<ICheckBox>("chkELAbbreviatedNames").Text = LangMan.LS(LSID.EL_AbbreviatedNames);
-            GetControl<ICheckBox>("chkReversePlacesOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
-            GetControl<ICheckBox>("chkShowNumberOfSubstructures").Text = LangMan.LS(LSID.ShowNumberOfSubstructures);
-            GetControl<ICheckBox>("chkSearchPlacesWithoutCoords").Text = LangMan.LS(LSID.SearchPlacesWithoutCoords);
+            _chkExtendedTree.Text = LangMan.LS(LSID.ExtendedTree);
+            _chkSAFByAllNames.Text = LangMan.LS(LSID.SearchAndFilterByAllNames);
+            _chkKeepInfoPansOverallSize.Text = LangMan.LS(LSID.KeepInfoPansOverallSize);
+            _chkFilesOverwriteWarn.Text = LangMan.LS(LSID.FilesOverwriteWarn);
+            _chkExtendedKinships.Text = LangMan.LS(LSID.ExtendedKinships);
+            _chkExtendedLocations.Text = LangMan.LS(LSID.ExtendedLocations);
+            _chkELAbbreviatedNames.Text = LangMan.LS(LSID.EL_AbbreviatedNames);
+            _chkReversePlacesOrder.Text = LangMan.LS(LSID.ReversePlacesOrder);
+            _chkShowNumberOfSubstructures.Text = LangMan.LS(LSID.ShowNumberOfSubstructures);
+            _chkSearchPlacesWithoutCoords.Text = LangMan.LS(LSID.SearchPlacesWithoutCoords);
 
             // event types
-            GetControl<ITabPage>("pageEventTypes").Text = LangMan.LS(LSID.EventTypes);
+            _pageEventTypes.Text = LangMan.LS(LSID.EventTypes);
 
             // Plugins
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
@@ -1304,11 +1500,11 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnColumnUp").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveUp, true);
-            GetControl<IButton>("btnColumnDown").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveDown, true);
+            _btnColumnUp.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveUp, true);
+            _btnColumnDown.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveDown, true);
         }
 
 

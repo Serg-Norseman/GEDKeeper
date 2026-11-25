@@ -9,7 +9,6 @@
 using System;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -20,35 +19,6 @@ namespace GKUI.Forms
         {
             get { return fController.Base; }
         }
-
-        #region View Interface
-
-        ILabel IRelationshipCalculatorDlg.Label1
-        {
-            get { return fController.GetControlHandler<ILabel>(Lab1); }
-        }
-
-        ILabel IRelationshipCalculatorDlg.Label2
-        {
-            get { return fController.GetControlHandler<ILabel>(Lab2); }
-        }
-
-        ITextBox IRelationshipCalculatorDlg.Person1
-        {
-            get { return fController.GetControlHandler<ITextBox>(Edit1); }
-        }
-
-        ITextBox IRelationshipCalculatorDlg.Person2
-        {
-            get { return fController.GetControlHandler<ITextBox>(Edit2); }
-        }
-
-        ITextBox IRelationshipCalculatorDlg.Result
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtResult); }
-        }
-
-        #endregion
 
         public RelationshipCalculatorDlg(IBaseWindow baseWin)
         {

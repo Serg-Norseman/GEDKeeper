@@ -9,27 +9,12 @@
 using System;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
     public sealed partial class TTPlacesManagerDlg : CommonDialog<IPlacesManagerDlg, PlacesManagerController>, IPlacesManagerDlg
     {
-        #region View Interface
-
-        ITextBox IPlacesManagerDlg.FilterBox
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFilter); }
-        }
-
-        IListView IPlacesManagerDlg.PlacesList
-        {
-            get { return ListPlaces; }
-        }
-
-        #endregion
-
         public TTPlacesManagerDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

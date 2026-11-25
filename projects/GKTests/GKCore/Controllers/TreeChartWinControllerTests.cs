@@ -31,21 +31,21 @@ namespace GKCore.Controllers
             SubstituteControl<IToolItem>(view, "tbGensDescendants");
             SubstituteControl<IToolItem>(view, "tbModes");
 
-            SubstituteControl<IToolItem>(view, "miEdit");
-            SubstituteControl<IToolItem>(view, "miFatherAdd");
-            SubstituteControl<IToolItem>(view, "miMotherAdd");
-            SubstituteControl<IToolItem>(view, "miFamilyAdd");
-            SubstituteControl<IToolItem>(view, "miSpouseAdd");
-            SubstituteControl<IToolItem>(view, "miSonAdd");
-            SubstituteControl<IToolItem>(view, "miDaughterAdd");
-            SubstituteControl<IToolItem>(view, "miDelete");
-            SubstituteControl<IToolItem>(view, "miGoToRecord");
-            SubstituteControl<IToolItem>(view, "miGoToPrimaryBranch");
-            SubstituteControl<IToolItem>(view, "miOpenInNewWindow");
-            SubstituteControl<IToolItem>(view, "miMergeDuplicates");
-            SubstituteControl<IToolItem>(view, "miRebuildTree");
-            SubstituteControl<IToolItem>(view, "miRebuildKinships");
-            SubstituteControl<IToolItem>(view, "miSelectColor");
+            SubstituteControl<IMenuItem>(view, "miEdit");
+            SubstituteControl<IMenuItem>(view, "miFatherAdd");
+            SubstituteControl<IMenuItem>(view, "miMotherAdd");
+            SubstituteControl<IMenuItem>(view, "miFamilyAdd");
+            SubstituteControl<IMenuItem>(view, "miSpouseAdd");
+            SubstituteControl<IMenuItem>(view, "miSonAdd");
+            SubstituteControl<IMenuItem>(view, "miDaughterAdd");
+            SubstituteControl<IMenuItem>(view, "miDelete");
+            SubstituteControl<IMenuItem>(view, "miGoToRecord");
+            SubstituteControl<IMenuItem>(view, "miGoToPrimaryBranch");
+            SubstituteControl<IMenuItem>(view, "miOpenInNewWindow");
+            SubstituteControl<IMenuItem>(view, "miMergeDuplicates");
+            SubstituteControl<IMenuItem>(view, "miRebuildTree");
+            SubstituteControl<IMenuItem>(view, "miRebuildKinships");
+            SubstituteControl<IMenuItem>(view, "miSelectColor");
 
             SubstituteControl<IToolItem>(view, "tbImageSave");
             SubstituteControl<IToolItem>(view, "tbPrev");
@@ -58,7 +58,6 @@ namespace GKCore.Controllers
             SubstituteControl<IToolItem>(view, "tbDocPrint");
             SubstituteControl<IToolItem>(view, "tbDocPreview");
             SubstituteControl<IMenuItem>(view, "miFillImage");
-
             SubstituteControl<IMenuItem>(view, "miGensInfAncestors");
             SubstituteControl<IMenuItem>(view, "miGensInfDescendants");
             SubstituteControl<IMenuItem>(view, "miModeBoth");

@@ -16,43 +16,50 @@ namespace GKCore.Controllers
     [TestFixture]
     public class MapsViewerWinControllerTests : ControllerTest
     {
+        private IComboBox _cmbPersons;
+        private ITreeView _tvPlaces;
+        private IButton _btnSelectPlaces;
+        private ICheckBox _chkBirth;
+        private ICheckBox _chkDeath;
+        private ICheckBox _chkResidence;
+        private ICheckBox _chkLinesVisible;
+        private IRadioButton _radTotal;
+        private IRadioButton _radSelected;
+
         [Test]
         public void Test_MapsViewerWinController()
         {
             IMapsViewerWin view = CreateMockView();
             var controller = new MapsViewerWinController(view, null);
             controller.InitView(fBaseWin);
+
+            controller.LoadPlaces();
+            controller.SelectPlaces();
         }
 
-        private static IMapsViewerWin CreateMockView()
+        private IMapsViewerWin CreateMockView()
         {
             var view = Substitute.For<IMapsViewerWin>();
             SubstituteControl<ITabPage>(view, "pagePlaces");
             SubstituteControl<IGroupBox>(view, "grpSelection");
-            SubstituteControl<IRadioButton>(view, "radTotal");
-            SubstituteControl<ICheckBox>(view, "chkBirth");
-            SubstituteControl<ICheckBox>(view, "chkDeath");
-            SubstituteControl<ICheckBox>(view, "chkResidence");
-            SubstituteControl<IRadioButton>(view, "radSelected");
-            SubstituteControl<IButton>(view, "btnSelectPlaces");
-            SubstituteControl<ICheckBox>(view, "chkLinesVisible");
+            SubstituteControl<ITabPage>(view, "pageCoordinates");
+
+            view.MapBrowser.Returns(Substitute.For<IMapBrowser>());
+            _cmbPersons = SubstCtl<IComboBox>(view, "cmbPersons");
+            _tvPlaces = SubstCtl<ITreeView>(view, "tvPlaces");
+            _btnSelectPlaces = SubstCtl<IButton>(view, "btnSelectPlaces");
+            _chkBirth = SubstCtl<ICheckBox>(view, "chkBirth");
+            _chkDeath = SubstCtl<ICheckBox>(view, "chkDeath");
+            _chkResidence = SubstCtl<ICheckBox>(view, "chkResidence");
+            _chkLinesVisible = SubstCtl<ICheckBox>(view, "chkLinesVisible");
+            _radTotal = SubstCtl<IRadioButton>(view, "radTotal");
+            _radSelected = SubstCtl<IRadioButton>(view, "radSelected");
+
             SubstituteControl<IToolItem>(view, "tbLoadPlaces");
             SubstituteControl<IToolItem>(view, "tbProviders");
-            SubstituteControl<ITabPage>(view, "pageCoordinates");
             SubstituteControl<IToolItem>(view, "tbClear");
             SubstituteControl<IButton>(view, "btnSearch");
             SubstituteControl<IToolItem>(view, "tbSaveSnapshot");
-
-            view.MapBrowser.Returns(Substitute.For<IMapBrowser>());
-            view.PersonsCombo.Returns(Substitute.For<IComboBox>());
-            view.PlacesTree.Returns(Substitute.For<ITreeView>());
-            view.SelectPlacesBtn.Returns(Substitute.For<IButton>());
-            view.BirthCheck.Returns(Substitute.For<ICheckBox>());
-            view.DeathCheck.Returns(Substitute.For<ICheckBox>());
-            view.ResidenceCheck.Returns(Substitute.For<ICheckBox>());
-            view.LinesVisibleCheck.Returns(Substitute.For<ICheckBox>());
-            view.TotalRadio.Returns(Substitute.For<IRadioButton>());
-            view.SelectedRadio.Returns(Substitute.For<IRadioButton>());
             return view;
         }
     }

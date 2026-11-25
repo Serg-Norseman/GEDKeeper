@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Plugins;
 
@@ -35,20 +34,12 @@ namespace GKUI.Forms
             get { return fController.WorkWindow; }
         }
 
-        #region View Interface
-
-        ITextBox IQuickSearchDlg.SearchPattern
-        {
-            get { return Controller?.GetControlHandler<ITextBox>(txtSearchPattern); }
-        }
-
-        #endregion
-
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             XamlReader.Load(this);
 
             fController = new QuickSearchDlgController(this, workWindow);
+            fController.InitView(null);
         }
 
         protected override void OnShown(EventArgs e)
@@ -90,7 +81,7 @@ namespace GKUI.Forms
             }
         }
 
-        public void SetLocale()
+        public override void SetLocale()
         {
             fController.SetLocale();
         }

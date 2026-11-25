@@ -24,30 +24,6 @@ namespace GKUI.Forms
         private readonly ZGraphControl fGraph;
         private readonly GKListView fListStats;
 
-        #region View Interface
-
-        IGraphControl IStatisticsWin.Graph
-        {
-            get { return fGraph; }
-        }
-
-        IListView IStatisticsWin.ListStats
-        {
-            get { return fListStats; }
-        }
-
-        IListView IStatisticsWin.Summary
-        {
-            get { return lvSummary; }
-        }
-
-        IComboBox IStatisticsWin.StatsType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cbType); }
-        }
-
-        #endregion
-
         public IWindow OwnerWindow
         {
             get { return fController.Base; }

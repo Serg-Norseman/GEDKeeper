@@ -7,21 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface ITaskEditDlg : ICommonDialog
     {
         GDMTaskRecord TaskRecord { get; set; }
-
-        ISheetList NotesList { get; }
-        IComboBox Priority { get; }
-        IDateBox StartDate { get; }
-        IDateBox StopDate { get; }
-        IComboBox GoalType { get; }
-        ITextBox Goal { get; }
-        IButton GoalSelect { get; }
     }
 }

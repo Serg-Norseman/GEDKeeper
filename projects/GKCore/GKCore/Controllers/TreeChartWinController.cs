@@ -27,6 +27,11 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class TreeChartWinController : FormController<ITreeChartWin>
     {
+        // Note: the TreeBox chart is a domain object of the window (accessed via the
+        // interface member). Toolbar/menu controls are accessed by string names - the
+        // sets of tb*/mi* controls in the TreeChartWin forms of GKv2/GKvX variants are
+        // reduced (BindControls would break them).
+
 
         public TreeChartWinController(ITreeChartWin view) : base(view)
         {

@@ -20,6 +20,16 @@ namespace GKCore.Controllers
     /// </summary>
     public class DayTipsDlgController : DialogController<IDayTipsDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ICheckBox _chkShow;
+        private IButton _btnNextTip;
+        private IButton _btnClose;
+        private ILabel _lblTitle;
+        private ITextContainer _txtTip;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly StringList fTips;
 
         public DayTipsDlgController(IDayTipsDlg view) : base(view)
@@ -35,24 +45,24 @@ namespace GKCore.Controllers
                 // processing "title's directives"
                 if (!string.IsNullOrEmpty(tip) && tip[0] == '#') {
                     tip = tip.Substring(1);
-                    fView.TitleLabel.Text = tip;
+                    _lblTitle.Text = tip;
 
                     fTips.Delete(0);
                     tip = fTips[0];
                 }
 
-                fView.TipText.Text = tip;
+                _txtTip.Text = tip;
                 fTips.Delete(0);
             }
-            fView.NextButton.Enabled = (fTips.Count > 0);
+            _btnNextTip.Enabled = (fTips.Count > 0);
         }
 
         public void InitTips(string caption, bool showTipsChecked, StringList tips)
         {
             fView.SetTitle(caption);
 
-            GetControl<ICheckBox>("chkShow").Checked = showTipsChecked;
-            GetControl<ILabel>("lblTitle").Text = caption;
+            _chkShow.Checked = showTipsChecked;
+            _lblTitle.Text = caption;
 
             fTips.Assign(tips);
 
@@ -65,17 +75,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
-            GetControl<ICheckBox>("chkShow").Text = LangMan.LS(LSID.StartupTips);
-            GetControl<IButton>("btnNextTip").Text = LangMan.LS(LSID.Next);
-            GetControl<ILabel>("lblTitle").Text = LangMan.LS(LSID.YouKnowWhat);
+            _btnClose.Text = LangMan.LS(LSID.DlgClose);
+            _chkShow.Text = LangMan.LS(LSID.StartupTips);
+            _btnNextTip.Text = LangMan.LS(LSID.Next);
+            _lblTitle.Text = LangMan.LS(LSID.YouKnowWhat);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

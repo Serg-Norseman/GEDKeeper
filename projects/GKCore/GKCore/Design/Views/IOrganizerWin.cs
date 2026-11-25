@@ -6,15 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Lists;
-
 namespace GKCore.Design.Views
 {
     public interface IOrganizerWin : ICommonDialog
     {
-        ISheetList AdrList { get; }
-        ISheetList PhonesList { get; }
-        ISheetList MailsList { get; }
-        ISheetList WebsList { get; }
     }
 }

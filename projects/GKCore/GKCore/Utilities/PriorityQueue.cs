@@ -1,4 +1,4 @@
-#if !NET6_0_OR_GREATER
+#if !NETCOREAPP
 
 namespace System.Collections.Generic
 {

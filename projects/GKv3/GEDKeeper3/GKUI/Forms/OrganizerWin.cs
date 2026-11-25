@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -32,30 +31,6 @@ namespace GKUI.Forms
         private GKSheetList fWebsList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        ISheetList IOrganizerWin.AdrList
-        {
-            get { return fAdrList; }
-        }
-
-        ISheetList IOrganizerWin.PhonesList
-        {
-            get { return fPhonesList; }
-        }
-
-        ISheetList IOrganizerWin.MailsList
-        {
-            get { return fMailsList; }
-        }
-
-        ISheetList IOrganizerWin.WebsList
-        {
-            get { return fWebsList; }
-        }
-
         #endregion
 
         public OrganizerWin(IBaseWindow baseWin)

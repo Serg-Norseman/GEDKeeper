@@ -26,6 +26,22 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeSplitController : DialogController<ITreeSplitDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageTreeSplit;
+        private IButton _btnClose;
+        private IListView _ListSelected;
+        private IListView _ListSkipped;
+        private IButton _btnSelectAll;
+        private IButton _btnSelectFamily;
+        private IButton _btnSelectAncestors;
+        private IButton _btnSelectDescendants;
+        private IButton _btnSelectList;
+        private IButton _btnDelete;
+        private IButton _btnSave;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private bool fIndiMode;
         private readonly List<GDMRecord> fSplitList;
 
@@ -45,14 +61,14 @@ namespace GKCore.Controllers
             fSelectedRecList = new List<GDMRecord>();
             var listModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.Record));
             listModel.DataSource = fSelectedRecList;
-            fView.SelectedList.ListMan = listModel;
-            fView.SelectedList.UpdateContents();
+            _ListSelected.ListMan = listModel;
+            _ListSelected.UpdateContents();
 
             fSkippedRecList = new List<GDMRecord>();
             listModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.Record));
             listModel.DataSource = fSkippedRecList;
-            fView.SkippedList.ListMan = listModel;
-            fView.SkippedList.UpdateContents();
+            _ListSkipped.ListMan = listModel;
+            _ListSkipped.UpdateContents();
         }
 
         public override void UpdateView()
@@ -83,8 +99,8 @@ namespace GKCore.Controllers
 
                 fView.SetTitle($@"{fSelectedRecList.Count} / {cnt}");
             } finally {
-                fView.SelectedList.UpdateContents();
-                fView.SkippedList.UpdateContents();
+                _ListSelected.UpdateContents();
+                _ListSkipped.UpdateContents();
             }
         }
 
@@ -159,24 +175,24 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.TreeSplit));
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.TreeSplit);
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                _pageTreeSplit.Text = LangMan.LS(LSID.TreeSplit);
+                _btnClose.Text = LangMan.LS(LSID.DlgClose);
             }
 
-            GetControl<IButton>("btnSelectAll").Text = LangMan.LS(LSID.SelAll);
-            GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.SelFamily);
-            GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.SelAncestors);
-            GetControl<IButton>("btnSelectDescendants").Text = LangMan.LS(LSID.SelDescendants);
-            GetControl<IButton>("btnSelectList").Text = LangMan.LS(LSID.SelList);
-            GetControl<IButton>("btnDelete").Text = LangMan.LS(LSID.DoDelete);
-            GetControl<IButton>("btnSave").Text = LangMan.LS(LSID.MIFileSaveAs);
+            _btnSelectAll.Text = LangMan.LS(LSID.SelAll);
+            _btnSelectFamily.Text = LangMan.LS(LSID.SelFamily);
+            _btnSelectAncestors.Text = LangMan.LS(LSID.SelAncestors);
+            _btnSelectDescendants.Text = LangMan.LS(LSID.SelDescendants);
+            _btnSelectList.Text = LangMan.LS(LSID.SelList);
+            _btnDelete.Text = LangMan.LS(LSID.DoDelete);
+            _btnSave.Text = LangMan.LS(LSID.MIFileSaveAs);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

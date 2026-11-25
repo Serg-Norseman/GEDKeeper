@@ -16,6 +16,18 @@ namespace GKCore.Controllers
     [TestFixture]
     public class FragmentSearchControllerTests : ControllerTest
     {
+        private IButton _btnClose;
+        private ITabPage _pageFamilyGroups;
+        private ITreeView _tvGroups;
+        private ILogChart _gkLogChart1;
+        private IButton _btnAnalyseGroups;
+        private IMenuItem _miDetails;
+        private IMenuItem _miGoToRecord;
+        private IMenuItem _miCopyXRef;
+        private ITabPage _pageDataQuality;
+        private IMenuItem _miDQRefresh;
+        private IMenuItem _miDQResetFilter;
+
         [Test]
         public void Test_FragmentSearchController()
         {
@@ -26,17 +38,20 @@ namespace GKCore.Controllers
             controller.CheckGroups();
         }
 
-        private static IFragmentSearchDlg CreateMockView()
+        private IFragmentSearchDlg CreateMockView()
         {
             var view = Substitute.For<IFragmentSearchDlg>();
-            SubstituteControl<IMenuItem>(view, "miDetails");
-            SubstituteControl<IMenuItem>(view, "miGoToRecord");
-            SubstituteControl<IMenuItem>(view, "miCopyXRef");
-            SubstituteControl<IMenuItem>(view, "miDQRefresh");
-            SubstituteControl<IMenuItem>(view, "miDQResetFilter");
-            SubstituteControl<ITabPage>(view, "pageFamilyGroups");
-            SubstituteControl<IButton>(view, "btnAnalyseGroups");
-            SubstituteControl<ITabPage>(view, "pageDataQuality");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _pageFamilyGroups = SubstCtl<ITabPage>(view, "pageFamilyGroups");
+            _tvGroups = SubstCtl<ITreeView>(view, "tvGroups");
+            _gkLogChart1 = SubstCtl<ILogChart>(view, "gkLogChart1");
+            _btnAnalyseGroups = SubstCtl<IButton>(view, "btnAnalyseGroups");
+            _miDetails = SubstCtl<IMenuItem>(view, "miDetails");
+            _miGoToRecord = SubstCtl<IMenuItem>(view, "miGoToRecord");
+            _miCopyXRef = SubstCtl<IMenuItem>(view, "miCopyXRef");
+            _pageDataQuality = SubstCtl<ITabPage>(view, "pageDataQuality");
+            _miDQRefresh = SubstCtl<IMenuItem>(view, "miDQRefresh");
+            _miDQResetFilter = SubstCtl<IMenuItem>(view, "miDQResetFilter");
             return view;
         }
     }

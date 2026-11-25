@@ -7,15 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface ISourceCallNumberEditDlg : ICommonDialog
     {
         GDMSourceCallNumber CallNumber { get; set; }
-
-        ITextBox CallNumberText { get; }
-        IComboBox MediaTypeCombo { get; }
     }
 }

@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -23,14 +22,11 @@ namespace GKUI.Forms
             set { fController.Record = value; }
         }
 
-        #region View Interface
-
-        IHyperView IRecordInfoDlg.HyperView
+        string IRecordInfoDlg.Text
         {
-            get { return hyperView1; }
+            get { return fController.Text; }
+            set { fController.Text = value; }
         }
-
-        #endregion
 
         public RecordInfoDlg(IBaseWindow baseWin)
         {

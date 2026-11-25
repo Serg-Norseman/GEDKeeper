@@ -6,7 +6,7 @@
 // Cancelled forever. Do not use!
 //#define IPC_SUPPORTS
 
-#if NETCOREAPP || NETSTANDARD2_0
+#if NETCOREAPP
 #undef IPC_SUPPORTS
 #endif
 

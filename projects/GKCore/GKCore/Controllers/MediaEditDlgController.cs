@@ -27,6 +27,32 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnView;
+        private IButton _btnFileSelect;
+        private ITabPage _pageNotes;
+        private ITabPage _pageSources;
+        private ITabPage _pageCommon;
+        private ITabPage _pageFiles;
+        private ITabPage _pageUserRefs;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblType;
+        private IComboBox _cmbMediaType;
+        private ILabel _lblStoreType;
+        private IComboBox _cmbStoreType;
+        private ILabel _lblFile;
+        private ITextBox _txtFile;
+        private ISheetList _fFilesList;
+        private ISheetList _fNotesList;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMMultimediaRecord fMultimediaRecord;
         private bool fIsNew;
 
@@ -50,29 +76,29 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.MediaType.ReadOnly = true;
-            fView.StoreType.ReadOnly = true;
+            _cmbMediaType.ReadOnly = true;
+            _cmbStoreType.ReadOnly = true;
 
             for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
-                fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
+                _cmbMediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
-            fView.Name.Activate();
+            _txtName.Activate();
 
-            fView.FilesList.ListModel = new MediaFilesListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            _fFilesList.ListModel = new MediaFilesListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fSourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            _fUserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
 
-            fView.FilesList.OnModify += ModifyFilesSheet;
+            _fFilesList.OnModify += ModifyFilesSheet;
         }
 
         public override void DoneView()
         {
-            fView.FilesList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.SourcesList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
+            _fFilesList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fSourcesList.ListModel.SaveSettings();
+            _fUserRefList.ListModel.SaveSettings();
         }
 
         private void ModifyFilesSheet(object sender, ModifyEventArgs eArgs)
@@ -86,13 +112,13 @@ namespace GKCore.Controllers
                 GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
 
                 if (fIsNew) {
-                    MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
+                    MediaStoreType gst = _cmbStoreType.GetSelectedTag<MediaStoreType>();
 
                     if ((gst == MediaStoreType.mstArchive) && !fBase.Context.CheckBasePath()) {
                         return false;
                     }
 
-                    string fileName = fView.File.Text;
+                    string fileName = _txtFile.Text;
                     if (string.IsNullOrEmpty(fileName) || (gst != MediaStoreType.mstURL && !File.Exists(fileName))) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.InvalidFileName));
                         return false;
@@ -105,8 +131,8 @@ namespace GKCore.Controllers
                     }
                 }
 
-                fileRef.MediaType = (GDMMediaType)fView.MediaType.SelectedIndex;
-                fileRef.Title = fView.Name.Text;
+                fileRef.MediaType = (GDMMediaType)_cmbMediaType.SelectedIndex;
+                fileRef.Title = _txtName.Text;
 
                 UpdateControls();
 
@@ -122,10 +148,10 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.FilesList.ListModel.DataOwner = fMultimediaRecord;
-            fView.NotesList.ListModel.DataOwner = fMultimediaRecord;
-            fView.SourcesList.ListModel.DataOwner = fMultimediaRecord;
-            fView.UserRefList.ListModel.DataOwner = fMultimediaRecord;
+            _fFilesList.ListModel.DataOwner = fMultimediaRecord;
+            _fNotesList.ListModel.DataOwner = fMultimediaRecord;
+            _fSourcesList.ListModel.DataOwner = fMultimediaRecord;
+            _fUserRefList.ListModel.DataOwner = fMultimediaRecord;
 
             UpdateControls();
         }
@@ -136,9 +162,9 @@ namespace GKCore.Controllers
 
             fIsNew = (fileRef.StringValue == "");
 
-            fView.Name.Text = fileRef.Title;
-            fView.MediaType.SelectedIndex = (int)fileRef.MediaType;
-            fView.File.Text = fileRef.StringValue;
+            _txtName.Text = fileRef.Title;
+            _cmbMediaType.SelectedIndex = (int)fileRef.MediaType;
+            _txtFile.Text = fileRef.StringValue;
 
             MediaStoreType storeType;
 
@@ -165,37 +191,37 @@ namespace GKCore.Controllers
 
         private void UpdateFileStore(bool isNew, MediaStoreType storeType)
         {
-            fView.FileSelectButton.Enabled = isNew && (storeType != MediaStoreType.mstURL);
+            _btnFileSelect.Enabled = isNew && (storeType != MediaStoreType.mstURL);
 
-            fView.File.Enabled = isNew && (storeType == MediaStoreType.mstURL);
-            fView.File.ReadOnly = !fView.File.Enabled;
+            _txtFile.Enabled = isNew && (storeType == MediaStoreType.mstURL);
+            _txtFile.ReadOnly = !_txtFile.Enabled;
 
-            fView.StoreType.Enabled = isNew;
+            _cmbStoreType.Enabled = isNew;
         }
 
         private void RefreshStoreTypes(bool allowAbsRef, bool allowArc, bool allowRelRef, MediaStoreType selectType)
         {
             bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
 
-            fView.StoreType.Clear();
+            _cmbStoreType.Clear();
 
             if (allowAbsRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name), MediaStoreType.mstReference);
+                _cmbStoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name), MediaStoreType.mstReference);
             }
 
             if (allowRelRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name), MediaStoreType.mstRelativeReference);
+                _cmbStoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name), MediaStoreType.mstRelativeReference);
             }
 
             if (allowArc) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name), MediaStoreType.mstArchive);
+                _cmbStoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name), MediaStoreType.mstArchive);
             }
 
             if (!disNoStd) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name), MediaStoreType.mstURL);
+                _cmbStoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name), MediaStoreType.mstURL);
             }
 
-            fView.StoreType.SetSelectedTag(selectType);
+            _cmbStoreType.SetSelectedTag(selectType);
         }
 
         public async Task SelectFile()
@@ -210,18 +236,18 @@ namespace GKCore.Controllers
                 }
             }
 
-            var storeType = fView.StoreType.GetSelectedTag<MediaStoreType>();
-            fView.File.Text = fileName;
+            var storeType = _cmbStoreType.GetSelectedTag<MediaStoreType>();
+            _txtFile.Text = fileName;
             bool canArc = GKUtils.FileCanBeArchived(fileName);
             RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc,
                               GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
                               storeType);
-            fView.StoreType.Enabled = true;
+            _cmbStoreType.Enabled = true;
         }
 
         public void ChangeStoreType()
         {
-            MediaStoreType storeType = fView.StoreType.GetSelectedTag<MediaStoreType>();
+            MediaStoreType storeType = _cmbStoreType.GetSelectedTag<MediaStoreType>();
             UpdateFileStore(true, storeType);
         }
 
@@ -239,26 +265,26 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.RPMultimedia));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageFiles").Text = LangMan.LS(LSID.MediaFiles);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
-            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
-            GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.StoreType);
-            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.File);
-            GetControl<IButton>("btnView").Text = LangMan.LS(LSID.View) + @"...";
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageCommon.Text = LangMan.LS(LSID.Common);
+            _pageFiles.Text = LangMan.LS(LSID.MediaFiles);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageSources.Text = LangMan.LS(LSID.RPSources);
+            _pageUserRefs.Text = LangMan.LS(LSID.UserRefs);
+            _lblName.Text = LangMan.LS(LSID.Title);
+            _lblType.Text = LangMan.LS(LSID.Type);
+            _lblStoreType.Text = LangMan.LS(LSID.StoreType);
+            _lblFile.Text = LangMan.LS(LSID.File);
+            _btnView.Text = LangMan.LS(LSID.View) + @"...";
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

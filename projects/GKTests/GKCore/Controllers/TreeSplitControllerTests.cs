@@ -18,6 +18,17 @@ namespace GKCore.Controllers
     [TestFixture]
     public class TreeSplitControllerTests : ControllerTest
     {
+        private ITabPage _pageTreeSplit;
+        private IButton _btnClose;
+        private IListView _ListSelected;
+        private IListView _ListSkipped;
+        private IButton _btnSelectAll;
+        private IButton _btnSelectFamily;
+        private IButton _btnSelectAncestors;
+        private IButton _btnSelectDescendants;
+        private IButton _btnSelectList;
+        private IButton _btnDelete;
+        private IButton _btnSave;
 
         [Test]
         public void Test_TreeSplitController()
@@ -54,18 +65,20 @@ namespace GKCore.Controllers
             controller.Delete(); // <<- ui.ShowMessage()
         }
 
-        private static ITreeSplitDlg CreateMockView()
+        private ITreeSplitDlg CreateMockView()
         {
             var view = Substitute.For<ITreeSplitDlg>();
-            SubstituteControl<ITabPage>(view, "pageTreeSplit");
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<IButton>(view, "btnSelectAll");
-            SubstituteControl<IButton>(view, "btnSelectFamily");
-            SubstituteControl<IButton>(view, "btnSelectAncestors");
-            SubstituteControl<IButton>(view, "btnSelectDescendants");
-            SubstituteControl<IButton>(view, "btnSelectList");
-            SubstituteControl<IButton>(view, "btnDelete");
-            SubstituteControl<IButton>(view, "btnSave");
+            _pageTreeSplit = SubstCtl<ITabPage>(view, "pageTreeSplit");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _ListSelected = SubstCtl<IListView>(view, "ListSelected");
+            _ListSkipped = SubstCtl<IListView>(view, "ListSkipped");
+            _btnSelectAll = SubstCtl<IButton>(view, "btnSelectAll");
+            _btnSelectFamily = SubstCtl<IButton>(view, "btnSelectFamily");
+            _btnSelectAncestors = SubstCtl<IButton>(view, "btnSelectAncestors");
+            _btnSelectDescendants = SubstCtl<IButton>(view, "btnSelectDescendants");
+            _btnSelectList = SubstCtl<IButton>(view, "btnSelectList");
+            _btnDelete = SubstCtl<IButton>(view, "btnDelete");
+            _btnSave = SubstCtl<IButton>(view, "btnSave");
             return view;
         }
     }

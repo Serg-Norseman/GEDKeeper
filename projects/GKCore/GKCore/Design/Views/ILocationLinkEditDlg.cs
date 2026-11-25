@@ -7,16 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface ILocationLinkEditDlg : ICommonDialog
     {
         GDMLocationLink LocationLink { get; set; }
-
-        ITextBox TopLevelText { get; }
-
-        IDateControl DateCtl { get; }
     }
 }

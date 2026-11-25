@@ -18,6 +18,17 @@ namespace GKCore.Controllers
     [TestFixture]
     public class RelationshipCalculatorDlgControllerTests : ControllerTest
     {
+        private ILabel _lblKinship;
+        private ITextBox _txtResult;
+        private IButton _btnRec2Select;
+        private IButton _btnRec1Select;
+        private ITextBox _Edit2;
+        private ITextBox _Edit1;
+        private ILabel _Lab2;
+        private ILabel _Lab1;
+        private IButton _btnSwap;
+        private IButton _btnClose;
+
         [Test]
         public void Test_RelationshipCalculatorDlgController()
         {
@@ -37,7 +48,7 @@ namespace GKCore.Controllers
             AppHost.TEST_MODE = true; // FIXME: dirty hack
             controller.SetRec1(iRec1);
             controller.SetRec2(iRec2);
-            Assert.AreEqual("Ivanov Ivan Ivanovich is husband of Ivanova Maria Petrovna", view.Result.Text); // :D
+            Assert.AreEqual("Ivanov Ivan Ivanovich is husband of Ivanova Maria Petrovna", _txtResult.Text); // :D
 
             var relRec1 = fBaseWin.Context.Tree.CreateIndividual();
             RecordSelectDialogStub.SetTestResult(relRec1);
@@ -52,21 +63,21 @@ namespace GKCore.Controllers
             controller.Swap();
         }
 
-        private static IRelationshipCalculatorDlg CreateMockView()
+        private IRelationshipCalculatorDlg CreateMockView()
         {
             var view = Substitute.For<IRelationshipCalculatorDlg>();
 
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<IButton>(view, "btnRec1Select");
-            SubstituteControl<IButton>(view, "btnRec2Select");
-            SubstituteControl<ILabel>(view, "lblKinship");
-            SubstituteControl<IButton>(view, "btnSwap");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _btnRec1Select = SubstCtl<IButton>(view, "btnRec1Select");
+            _btnRec2Select = SubstCtl<IButton>(view, "btnRec2Select");
+            _lblKinship = SubstCtl<ILabel>(view, "lblKinship");
+            _btnSwap = SubstCtl<IButton>(view, "btnSwap");
 
-            view.Label1.Returns(Substitute.For<ILabel>());
-            view.Label2.Returns(Substitute.For<ILabel>());
-            view.Person1.Returns(Substitute.For<ITextBox>());
-            view.Person2.Returns(Substitute.For<ITextBox>());
-            view.Result.Returns(Substitute.For<ITextBox>());
+            _Lab1 = SubstCtl<ILabel>(view, "Lab1");
+            _Lab2 = SubstCtl<ILabel>(view, "Lab2");
+            _Edit1 = SubstCtl<ITextBox>(view, "Edit1");
+            _Edit2 = SubstCtl<ITextBox>(view, "Edit2");
+            _txtResult = SubstCtl<ITextBox>(view, "txtResult");
             return view;
         }
     }

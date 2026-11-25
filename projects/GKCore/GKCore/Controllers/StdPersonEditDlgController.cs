@@ -19,6 +19,15 @@ namespace GKCore.Controllers
 {
     public class StdPersonEditDlgController : PersonEditDlgController<IStdPersonEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageChilds;
+        private ITabPage _pageDNATests;
+        private ISheetList _fChildrenList;
+        private ISheetList _fDNATestsList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         public StdPersonEditDlgController(IStdPersonEditDlg view) : base(view)
         {
         }
@@ -40,38 +49,38 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.ChildrenList.OnModify += ModifyChildrenSheet;
-            fView.ChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
+            _fChildrenList.OnModify += ModifyChildrenSheet;
+            _fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
 
-            fView.ChildrenList.ListModel = new IndividualChildrenListModel(fView, baseWin, fLocalUndoman);
-            fView.DNATestsList.ListModel = new DNATestsListModel(fView, baseWin, fLocalUndoman);
+            _fChildrenList.ListModel = new IndividualChildrenListModel(fView, baseWin, fLocalUndoman);
+            _fDNATestsList.ListModel = new DNATestsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
             base.DoneView();
 
-            fView.ChildrenList.ListModel.SaveSettings();
-            fView.DNATestsList.ListModel.SaveSettings();
+            _fChildrenList.ListModel.SaveSettings();
+            _fDNATestsList.ListModel.SaveSettings();
 
-            fView.ChildrenList.OnModify -= ModifyChildrenSheet;
-            fView.ChildrenList.OnItemValidating -= PersonEditDlg_ItemValidating;
+            _fChildrenList.OnModify -= ModifyChildrenSheet;
+            _fChildrenList.OnItemValidating -= PersonEditDlg_ItemValidating;
         }
 
         protected override void UpdateListModels(GDMIndividualRecord indiRec)
         {
             base.UpdateListModels(indiRec);
 
-            fView.ChildrenList.ListModel.DataOwner = indiRec;
-            fView.DNATestsList.ListModel.DataOwner = indiRec;
+            _fChildrenList.ListModel.DataOwner = indiRec;
+            _fDNATestsList.ListModel.DataOwner = indiRec;
         }
 
         protected override void UpdateLocked(bool locked)
         {
             base.UpdateLocked(locked);
 
-            fView.ChildrenList.ReadOnly = locked;
-            fView.DNATestsList.ReadOnly = locked;
+            _fChildrenList.ReadOnly = locked;
+            _fDNATestsList.ReadOnly = locked;
         }
 
         public override void UpdateNameControls(GDMPersonalName np)
@@ -88,8 +97,8 @@ namespace GKCore.Controllers
         {
             base.SetLocale();
 
-            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.Childs);
-            GetControl<ITabPage>("pageDNATests").Text = LangMan.LS(LSID.DNATests);
+            _pageChilds.Text = LangMan.LS(LSID.Childs);
+            _pageDNATests.Text = LangMan.LS(LSID.DNATests);
         }
 
         public override void ApplyTheme()
@@ -104,8 +113,7 @@ namespace GKCore.Controllers
             try {
                 bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
                 var tabs = GetControl<ITabControl>("tabsOther");
-                var tabDNA = GetControl<ITabPage>("pageDNATests");
-                tabs.SetTabVisible(tabDNA, !disNoStd);
+                tabs.SetTabVisible(_pageDNATests, !disNoStd);
             } catch (Exception ex) {
                 Logger.WriteError("StdPersonEditDlgController.UpdateView()", ex);
             }

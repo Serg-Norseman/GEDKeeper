@@ -26,6 +26,23 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeCheckController : DialogController<ITreeCheckDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnClose;
+        private ITabPage _pageTreeCheck;
+        private IButton _btnAnalyseBase;
+        private IButton _btnBaseRepair;
+        private IMenuItem _miDetails;
+        private IMenuItem _miGoToRecord;
+        private IMenuItem _miCopyXRef;
+        private IListView _ListChecks;
+        private ITabPage _pageOptions;
+        private ICheckBox _chkCheckPersonPlaces;
+        private ICheckBox _chkCheckCensuses;
+        private ICheckBox _chkCheckLinks;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly List<CheckObj> fChecksList;
         private readonly TreeInspectionOptions fOptions;
 
@@ -43,21 +60,21 @@ namespace GKCore.Controllers
 
             var listModel = new ProblemsListModel(fBase.Context);
             listModel.DataSource = fChecksList;
-            fView.ChecksList.ListMan = listModel;
-            fView.ChecksList.UpdateContents();
+            _ListChecks.ListMan = listModel;
+            _ListChecks.UpdateContents();
         }
 
         public void CheckBase()
         {
-            fOptions.CheckIndividualPlaces = GetControl<ICheckBox>("chkCheckPersonPlaces").Checked;
-            fOptions.CheckCensuses = GetControl<ICheckBox>("chkCheckCensuses").Checked;
-            fOptions.CheckLinks = GetControl<ICheckBox>("chkCheckLinks").Checked;
+            fOptions.CheckIndividualPlaces = _chkCheckPersonPlaces.Checked;
+            fOptions.CheckCensuses = _chkCheckCensuses.Checked;
+            fOptions.CheckLinks = _chkCheckLinks.Checked;
 
             AppHost.Instance.ExecuteWork((controller) => {
                 TreeInspector.CheckBase(fBase, fChecksList, controller, fOptions);
             });
 
-            fView.ChecksList.UpdateContents();
+            _ListChecks.UpdateContents();
         }
 
         public async Task Repair()
@@ -92,7 +109,7 @@ namespace GKCore.Controllers
 
         public GDMRecord GetSelectedRecord()
         {
-            var selData = fView.ChecksList.GetSelectedData() as CheckObj;
+            var selData = _ListChecks.GetSelectedData() as CheckObj;
             return (selData == null) ? null : selData.Rec;
         }
 
@@ -105,7 +122,7 @@ namespace GKCore.Controllers
 
         public void CopySelectedXRefs()
         {
-            var list = fView.ChecksList.GetSelectedItems();
+            var list = _ListChecks.GetSelectedItems();
 
             var text = new StringBuilder();
             foreach (var item in list) {
@@ -119,9 +136,9 @@ namespace GKCore.Controllers
         public void OpeningContextMenu()
         {
             var rec = GetSelectedRecord();
-            GetControl<IMenuItem>("miDetails").Enabled = (rec != null);
-            GetControl<IMenuItem>("miGoToRecord").Enabled = (rec != null);
-            GetControl<IMenuItem>("miCopyXRef").Enabled = (rec != null);
+            _miDetails.Enabled = (rec != null);
+            _miGoToRecord.Enabled = (rec != null);
+            _miCopyXRef.Enabled = (rec != null);
         }
 
         public override void SetLocale()
@@ -130,28 +147,28 @@ namespace GKCore.Controllers
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
-                    GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                    _btnClose.Text = LangMan.LS(LSID.DlgClose);
                 }
-                GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
-                GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
-                GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
+                _miDetails.Text = LangMan.LS(LSID.Details);
+                _miGoToRecord.Text = LangMan.LS(LSID.GoToPersonRecord);
+                _miCopyXRef.Text = LangMan.LS(LSID.CopyXRef);
             }
 
-            GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.TreeCheck);
-            GetControl<IButton>("btnAnalyseBase").Text = LangMan.LS(LSID.Analyze);
-            GetControl<IButton>("btnBaseRepair").Text = LangMan.LS(LSID.Repair);
+            _pageTreeCheck.Text = LangMan.LS(LSID.TreeCheck);
+            _btnAnalyseBase.Text = LangMan.LS(LSID.Analyze);
+            _btnBaseRepair.Text = LangMan.LS(LSID.Repair);
 
-            GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.MIOptions);
-            GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.CheckPersonPlaces);
-            GetControl<ICheckBox>("chkCheckCensuses").Text = LangMan.LS(LSID.CensusAnalysis);
-            GetControl<ICheckBox>("chkCheckLinks").Text = LangMan.LS(LSID.CheckLinks);
+            _pageOptions.Text = LangMan.LS(LSID.MIOptions);
+            _chkCheckPersonPlaces.Text = LangMan.LS(LSID.CheckPersonPlaces);
+            _chkCheckCensuses.Text = LangMan.LS(LSID.CensusAnalysis);
+            _chkCheckLinks.Text = LangMan.LS(LSID.CheckLinks);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
 
 

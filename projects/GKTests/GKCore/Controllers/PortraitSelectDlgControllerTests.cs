@@ -17,6 +17,10 @@ namespace GKCore.Controllers
     [TestFixture]
     public class PortraitSelectDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IImageView _imageView1;
+
         [Test]
         public void Test_PortraitSelectDlgController()
         {
@@ -30,13 +34,12 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static IPortraitSelectDlg CreateMockView()
+        private IPortraitSelectDlg CreateMockView()
         {
             var view = Substitute.For<IPortraitSelectDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-
-            view.ImageCtl.Returns(Substitute.For<IImageView>());
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _imageView1 = SubstCtl<IImageView>(view, "imageView1");
             return view;
         }
     }

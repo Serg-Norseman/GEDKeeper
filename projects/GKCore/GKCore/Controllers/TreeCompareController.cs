@@ -24,6 +24,22 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeCompareController : DialogController<ITreeCompareDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageTreeCompare;
+        private ITextBox _ListCompare;
+        private IButton _btnClose;
+        private IGroupBox _grpMatchType;
+        private IRadioButton _radMatchInternal;
+        private IRadioButton _radMathExternal;
+        private IRadioButton _radAnalysis;
+        private ILabel _lblFile;
+        private ITextBox _txtCompareFile;
+        private IButton _btnFileChoose;
+        private IButton _btnMatch;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private string fExternalFile;
 
         public TreeCompareController(ITreeCompareDlg view) : base(view)
@@ -40,7 +56,7 @@ namespace GKCore.Controllers
             if (string.IsNullOrEmpty(fileName)) return;
 
             fExternalFile = fileName;
-            fView.ExternalBase.Text = fileName;
+            _txtCompareFile.Text = fileName;
         }
 
         private IProgressController fProgressController;
@@ -48,8 +64,8 @@ namespace GKCore.Controllers
         private void DuplicateFoundFunc(GDMIndividualRecord indivA, GDMIndividualRecord indivB)
         {
             fProgressController.InvokeEx(() => {
-                fView.CompareOutput.AppendText("    * [" + GKUtils.GetNameString(indivA, false) + "]\r\n");
-                fView.CompareOutput.AppendText("      [" + GKUtils.GetNameString(indivB, false) + "]\r\n\r\n");
+                _ListCompare.AppendText("    * [" + GKUtils.GetNameString(indivA, false) + "]\r\n");
+                _ListCompare.AppendText("      [" + GKUtils.GetNameString(indivB, false) + "]\r\n\r\n");
             });
         }
 
@@ -57,7 +73,7 @@ namespace GKCore.Controllers
         {
             TreeMatchType type = GetTreeMatchType();
 
-            fView.CompareOutput.Clear();
+            _ListCompare.Clear();
             var tree = fBase.Context.Tree;
 
             switch (type) {
@@ -70,7 +86,7 @@ namespace GKCore.Controllers
                     break;
 
                 case TreeMatchType.tmtExternal:
-                    TreeTools.CompareTree(fBase.Context, fExternalFile, fView.CompareOutput);
+                    TreeTools.CompareTree(fBase.Context, fExternalFile, _ListCompare);
                     break;
 
                 case TreeMatchType.tmtAnalysis:
@@ -80,13 +96,13 @@ namespace GKCore.Controllers
                             uln = TreeTools.GetUnlinkedNamesakes(fBase, controller);
                         });
 
-                        fView.CompareOutput.AppendText("  " + LangMan.LS(LSID.SearchUnlinkedNamesakes) + ":\r\n");
+                        _ListCompare.AppendText("  " + LangMan.LS(LSID.SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0) {
                             foreach (TreeTools.ULIndividual indiv in uln) {
-                                fView.CompareOutput.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, false) + "\r\n");
+                                _ListCompare.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, false) + "\r\n");
                             }
                         } else {
-                            fView.CompareOutput.AppendText("    - not found.");
+                            _ListCompare.AppendText("    - not found.");
                         }
                         break;
                     }
@@ -96,9 +112,9 @@ namespace GKCore.Controllers
         public TreeMatchType GetTreeMatchType()
         {
             TreeMatchType type =
-                ((GetControl<IRadioButton>("radMatchInternal").Checked) ?
+                ((_radMatchInternal.Checked) ?
                  TreeMatchType.tmtInternal :
-                 ((GetControl<IRadioButton>("radMathExternal").Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
+                 ((_radMathExternal.Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
 
             return type;
         }
@@ -107,9 +123,9 @@ namespace GKCore.Controllers
         {
             TreeMatchType type = GetTreeMatchType();
 
-            GetControl<ILabel>("lblFile").Enabled = (type == TreeMatchType.tmtExternal);
-            GetControl<ITextBox>("txtCompareFile").Enabled = (type == TreeMatchType.tmtExternal);
-            GetControl<IButton>("btnFileChoose").Enabled = (type == TreeMatchType.tmtExternal);
+            _lblFile.Enabled = (type == TreeMatchType.tmtExternal);
+            _txtCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
+            _btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
         }
 
         public override void SetLocale()
@@ -117,24 +133,24 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.TreeCompare));
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.TreeCompare);
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                _pageTreeCompare.Text = LangMan.LS(LSID.TreeCompare);
+                _btnClose.Text = LangMan.LS(LSID.DlgClose);
             }
 
-            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
-            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.MIFile);
-            GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.MatchInternal);
-            GetControl<IRadioButton>("radMathExternal").Text = LangMan.LS(LSID.MathExternal);
-            GetControl<IRadioButton>("radAnalysis").Text = LangMan.LS(LSID.Analyze);
-            GetControl<IButton>("btnMatch").Text = LangMan.LS(LSID.Match);
+            _grpMatchType.Text = LangMan.LS(LSID.MatchType);
+            _lblFile.Text = LangMan.LS(LSID.MIFile);
+            _btnFileChoose.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            _radMatchInternal.Text = LangMan.LS(LSID.MatchInternal);
+            _radMathExternal.Text = LangMan.LS(LSID.MathExternal);
+            _radAnalysis.Text = LangMan.LS(LSID.Analyze);
+            _btnMatch.Text = LangMan.LS(LSID.Match);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

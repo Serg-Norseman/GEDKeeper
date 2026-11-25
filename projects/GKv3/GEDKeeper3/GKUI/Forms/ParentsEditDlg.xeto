@@ -21,7 +21,7 @@
     </TableRow>
 
     <TableRow>
-      <GroupBox x:Name="panCtlParents">
+      <GroupBox x:Name="GroupBox1">
         <TableLayout x:Name="parentsTab" Style="paddedTable">
           <TableRow>
             <TableCell>

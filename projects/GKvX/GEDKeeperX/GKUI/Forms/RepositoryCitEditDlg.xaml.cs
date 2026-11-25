@@ -10,9 +10,7 @@ using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 
 namespace GKUI.Forms
 {
@@ -23,20 +21,6 @@ namespace GKUI.Forms
             get { return fController.RepositoryCitation; }
             set { fController.RepositoryCitation = value; }
         }
-
-        #region View Interface
-
-        IComboBox IRepositoryCitEditDlg.RepositoryCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbRepository); }
-        }
-
-        ISheetList IRepositoryCitEditDlg.CallNumbersList
-        {
-            get { return fCallNumbersList; }
-        }
-
-        #endregion
 
         public RepositoryCitEditDlg(IBaseWindow baseWin)
         {

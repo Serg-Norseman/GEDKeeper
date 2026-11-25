@@ -24,6 +24,21 @@ namespace GKCore.Controllers
     /// </summary>
     public class FragmentSearchController : DialogController<IFragmentSearchDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageFamilyGroups;
+        private ITreeView _tvGroups;
+        private ILogChart _gkLogChart1;
+        private IButton _btnAnalyseGroups;
+        private IMenuItem _miDetails;
+        private IMenuItem _miGoToRecord;
+        private IMenuItem _miCopyXRef;
+        private ITabPage _pageDataQuality;
+        private IMenuItem _miDQRefresh;
+        private IMenuItem _miDQResetFilter;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         public const double ColdWavelength = 520.0;
 
         public class GroupMapItem : MapItem
@@ -56,11 +71,11 @@ namespace GKCore.Controllers
                 treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, controller);
             });
 
-            fView.LogChart.Clear();
+            _gkLogChart1.Clear();
 
-            fView.GroupsTree.BeginUpdate();
+            _tvGroups.BeginUpdate();
             try {
-                fView.GroupsTree.Clear();
+                _tvGroups.Clear();
 
                 int num = treeFragments.Count;
                 for (int i = 0; i < num; i++) {
@@ -68,7 +83,7 @@ namespace GKCore.Controllers
 
                     int cnt = groupRecords.Count;
                     int groupNum = (i + 1);
-                    ITVNode groupItem = fView.GroupsTree.AddNode(null,
+                    ITVNode groupItem = _tvGroups.AddNode(null,
                         groupNum.ToString() + " " + LangMan.LS(LSID.Group).ToLower() + " (" + cnt.ToString() + ")", null);
 
                     for (int j = 0; j < cnt; j++) {
@@ -80,22 +95,22 @@ namespace GKCore.Controllers
                         }
                         pn = string.Join(" ", pn, "[", iRec.XRef, "]");
 
-                        fView.GroupsTree.AddNode(groupItem, pn, iRec);
+                        _tvGroups.AddNode(groupItem, pn, iRec);
                     }
 
-                    fView.GroupsTree.Expand(groupItem);
+                    _tvGroups.Expand(groupItem);
 
-                    fView.LogChart.AddFragment(cnt);
+                    _gkLogChart1.AddFragment(cnt);
                 }
             } finally {
                 treeFragments.Clear();
-                fView.GroupsTree.EndUpdate();
+                _tvGroups.EndUpdate();
             }
         }
 
         public GDMIndividualRecord GetSelectedPerson()
         {
-            return fView.GroupsTree.GetSelectedData() as GDMIndividualRecord;
+            return _tvGroups.GetSelectedData() as GDMIndividualRecord;
         }
 
         public void SelectPerson()
@@ -127,21 +142,21 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.FragmentSearch));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
-                GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
-                GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
+                _miDetails.Text = LangMan.LS(LSID.Details);
+                _miGoToRecord.Text = LangMan.LS(LSID.GoToPersonRecord);
+                _miCopyXRef.Text = LangMan.LS(LSID.CopyXRef);
 
                 if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
-                    GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.Refresh);
-                    GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
+                    _miDQRefresh.Text = LangMan.LS(LSID.Refresh);
+                    _miDQResetFilter.Text = LangMan.LS(LSID.ResetFilter);
                 }
             }
 
-            GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.Analyze);
+            _btnAnalyseGroups.Text = LangMan.LS(LSID.Analyze);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
-                GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
-                GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.DataQuality);
+                _pageFamilyGroups.Text = LangMan.LS(LSID.FragmentSearch);
+                _pageDataQuality.Text = LangMan.LS(LSID.DataQuality);
             }
         }
 
@@ -153,9 +168,9 @@ namespace GKCore.Controllers
         public void OpeningContextMenu()
         {
             var iRec = GetSelectedPerson();
-            GetControl<IMenuItem>("miDetails").Enabled = (iRec != null);
-            GetControl<IMenuItem>("miGoToRecord").Enabled = (iRec != null);
-            GetControl<IMenuItem>("miCopyXRef").Enabled = (iRec != null);
+            _miDetails.Enabled = (iRec != null);
+            _miGoToRecord.Enabled = (iRec != null);
+            _miCopyXRef.Enabled = (iRec != null);
         }
 
         public void SetExternalFilter(ExternalFilterHandler handler)

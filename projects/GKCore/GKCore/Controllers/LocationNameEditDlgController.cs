@@ -21,6 +21,19 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class LocationNameEditDlgController : DialogController<ILocationNameEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblTitle;
+        private ITextBox _txtTitle;
+        private ILabel _lblShortTitle;
+        private ITextBox _txtShortTitle;
+        private ILabel _lblDate;
+        private IDateControl _dateCtl;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMLocationName fLocationName;
 
         public GDMLocationName LocationName
@@ -43,17 +56,17 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.NameText.Activate();
+            _txtTitle.Activate();
         }
 
         public override bool Accept()
         {
             try {
-                fLocationName.StringValue = fView.NameText.Text;
-                fLocationName.Abbreviation = fView.AbbrText.Text;
+                fLocationName.StringValue = _txtTitle.Text;
+                fLocationName.Abbreviation = _txtShortTitle.Text;
 
                 try {
-                    GDMCustomDate dt = fView.DateCtl.Date;
+                    GDMCustomDate dt = _dateCtl.Date;
                     if (dt == null) throw new ArgumentNullException("dt");
 
                     fLocationName.Date.ParseString(dt.StringValue);
@@ -73,30 +86,30 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.DateCtl.FixedDateType = GDMDateType.PeriodBetween;
+            _dateCtl.FixedDateType = GDMDateType.PeriodBetween;
 
-            fView.NameText.Text = fLocationName.StringValue;
-            fView.AbbrText.Text = fLocationName.Abbreviation;
-            fView.DateCtl.Date = fLocationName.Date.Value;
+            _txtTitle.Text = fLocationName.StringValue;
+            _txtShortTitle.Text = fLocationName.Abbreviation;
+            _dateCtl.Date = fLocationName.Date.Value;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.Location));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblTitle").Text = LangMan.LS(LSID.Title);
-            GetControl<ILabel>("lblShortTitle").Text = LangMan.LS(LSID.ShortTitle);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblTitle.Text = LangMan.LS(LSID.Title);
+            _lblShortTitle.Text = LangMan.LS(LSID.ShortTitle);
+            _lblDate.Text = LangMan.LS(LSID.Date);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

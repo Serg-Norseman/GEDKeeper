@@ -53,6 +53,30 @@ namespace GKCore.Controllers
 
     public class LocExpertDlgController: DialogController<ILocExpertDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnClose;
+        private ILabel _lblDate;
+        private IButton _btnAnalysis;
+        private ICheckBox _chkReverseOrder;
+        private ITextBox _txtPlace;
+        private ILabel _lblPlace;
+        private ILabel _lblLocName;
+        private IComboBox _cmbLocationSearch;
+        private IButton _btnLocNameAdd;
+        private IButton _btnLocNameEdit;
+        private ILabel _lblTopLink;
+        private IButton _btnTopLinkAdd;
+        private IButton _btnTopLinkEdit;
+        private ITextBox _txtGeneratedName;
+        private ILabel _lblGeneratedName;
+        private IComboBox _cmbEventDates;
+        private ILabel _lblEventDates;
+        private IDateControl _dtlPlaceDate;
+        private IListView _lvEntries;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private const float FIND_LOC_THRESHOLD = 0.85f;
         private const float FILTER_LOC_THRESHOLD = 0.85f;
 
@@ -71,29 +95,28 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            var lvEntries = GetControl<IListView>("lvEntries");
-            lvEntries.ListMan = fEntriesListModel;
-            lvEntries.UpdateContents();
+            _lvEntries.ListMan = fEntriesListModel;
+            _lvEntries.UpdateContents();
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.LocExpert));
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
-            GetControl<ILabel>("lblEventDates").Text = LangMan.LS(LSID.EventDates);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
-            GetControl<ILabel>("lblPlace").Text = LangMan.LS(LSID.Place);
-            GetControl<ICheckBox>("chkReverseOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
-            GetControl<ILabel>("lblGeneratedName").Text = "Generated Name";
-            GetControl<IButton>("btnAnalysis").Text = LangMan.LS(LSID.Analyze);
-            GetControl<ILabel>("lblLocName").Text = "Location name:";
-            GetControl<ILabel>("lblTopLink").Text = "Top link:";
+            _btnClose.Text = LangMan.LS(LSID.DlgClose);
+            _lblEventDates.Text = LangMan.LS(LSID.EventDates);
+            _lblDate.Text = LangMan.LS(LSID.Date);
+            _lblPlace.Text = LangMan.LS(LSID.Place);
+            _chkReverseOrder.Text = LangMan.LS(LSID.ReversePlacesOrder);
+            _lblGeneratedName.Text = "Generated Name";
+            _btnAnalysis.Text = LangMan.LS(LSID.Analyze);
+            _lblLocName.Text = "Location name:";
+            _lblTopLink.Text = "Top link:";
 
 #if NETCOREAPP
-            GetControl<IButton>("btnLocNameAdd").Text = LangMan.LS(LSID.DoAdd);
-            GetControl<IButton>("btnLocNameEdit").Text = LangMan.LS(LSID.DoEdit);
-            GetControl<IButton>("btnTopLinkAdd").Text = LangMan.LS(LSID.DoAdd);
-            GetControl<IButton>("btnTopLinkEdit").Text = LangMan.LS(LSID.DoEdit);
+            _btnLocNameAdd.Text = LangMan.LS(LSID.DoAdd);
+            _btnLocNameEdit.Text = LangMan.LS(LSID.DoEdit);
+            _btnTopLinkAdd.Text = LangMan.LS(LSID.DoAdd);
+            _btnTopLinkEdit.Text = LangMan.LS(LSID.DoEdit);
 #else
             GetControl<IToolItem>("btnLocNameAdd").Text = LangMan.LS(LSID.DoAdd);
             GetControl<IToolItem>("btnLocNameEdit").Text = LangMan.LS(LSID.DoEdit);
@@ -106,18 +129,17 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
 
         public void InitView(SortedSet<GDMCustomDate> eventDates, string placeName)
         {
-            var cmbEventDates = GetControl<IComboBox>("cmbEventDates");
             foreach (var cd in eventDates) {
-                cmbEventDates.AddItem(cd.GetDisplayString(DateFormat.dfDD_MM_YYYY, true, true), cd);
+                _cmbEventDates.AddItem(cd.GetDisplayString(DateFormat.dfDD_MM_YYYY, true, true), cd);
             }
 
-            GetControl<IDateControl>("dtlPlaceDate").Date = new GDMDate();
-            GetControl<ITextBox>("txtPlace").Text = placeName;
+            _dtlPlaceDate.Date = new GDMDate();
+            _txtPlace.Text = placeName;
         }
 
         public void SelectEntry()
@@ -126,10 +148,10 @@ namespace GKCore.Controllers
             if (entry == null) return;
 
 #if NETCOREAPP
-            GetControl<IButton>("btnLocNameAdd").Enabled = entry.Pair == null;
-            GetControl<IButton>("btnLocNameEdit").Enabled = entry.Pair != null;
-            GetControl<IButton>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;
-            GetControl<IButton>("btnTopLinkEdit").Enabled = entry.Pair != null && entry.TopLevelLink != null;
+            _btnLocNameAdd.Enabled = entry.Pair == null;
+            _btnLocNameEdit.Enabled = entry.Pair != null;
+            _btnTopLinkAdd.Enabled = entry.Pair != null && entry.TopLevelLink == null;
+            _btnTopLinkEdit.Enabled = entry.Pair != null && entry.TopLevelLink != null;
 #else
             GetControl<IToolItem>("btnLocNameAdd").Enabled = entry.Pair == null;
             GetControl<IToolItem>("btnLocNameEdit").Enabled = entry.Pair != null;
@@ -140,9 +162,9 @@ namespace GKCore.Controllers
 
         public void Analyze()
         {
-            bool reverseOrder = GetControl<ICheckBox>("chkReverseOrder").Checked;
-            string place = GetControl<ITextBox>("txtPlace").Text;
-            var date = GetControl<IDateControl>("dtlPlaceDate").Date;
+            bool reverseOrder = _chkReverseOrder.Checked;
+            string place = _txtPlace.Text;
+            var date = _dtlPlaceDate.Date;
 
             fEntries = SplitPlaceStr(place, reverseOrder);
 
@@ -250,21 +272,20 @@ namespace GKCore.Controllers
 
         public void RefreshLocCombo()
         {
-            var comboBox = GetControl<IComboBox>("cmbLocationSearch");
             var list = new StringList<GDMLocationRecord>();
 
-            GetLocationsList(list, comboBox.Text, false);
+            GetLocationsList(list, _cmbLocationSearch.Text, false);
 
-            comboBox.BeginUpdate();
+            _cmbLocationSearch.BeginUpdate();
             try {
-                comboBox.Clear();
+                _cmbLocationSearch.Clear();
 
                 for (int i = 0, num = list.Count; i < num; i++) {
                     string st = list[i];
-                    comboBox.AddItem(st, list.GetObject(i));
+                    _cmbLocationSearch.AddItem(st, list.GetObject(i));
                 }
             } finally {
-                comboBox.EndUpdate();
+                _cmbLocationSearch.EndUpdate();
             }
 
             //comboBox.SelectionStart = comboBox.Text.Length;
@@ -292,9 +313,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            var lvEntries = GetControl<IListView>("lvEntries");
-            var txtGeneratedName = GetControl<ITextBox>("txtGeneratedName");
-            var date = GetControl<IDateControl>("dtlPlaceDate").Date;
+            var date = _dtlPlaceDate.Date;
 
             GDMLocationRecord targetLoc = null;
             for (int i = 0; i < fEntries.Count; i++) {
@@ -305,11 +324,11 @@ namespace GKCore.Controllers
             }
 
             fEntriesListModel.DataSource = fEntries;
-            lvEntries.SortOrder = GKSortOrder.None;
-            lvEntries.UpdateContents();
+            _lvEntries.SortOrder = GKSortOrder.None;
+            _lvEntries.UpdateContents();
 
             if (targetLoc != null) {
-                txtGeneratedName.Text = targetLoc.GetNameByDate(date, true);
+                _txtGeneratedName.Text = targetLoc.GetNameByDate(date, true);
             }
         }
 
@@ -357,8 +376,7 @@ namespace GKCore.Controllers
 
         public LocEntry GetSelectedEntry()
         {
-            var lvEntries = GetControl<IListView>("lvEntries");
-            return lvEntries.GetSelectedData() as LocEntry;
+            return _lvEntries.GetSelectedData() as LocEntry;
         }
 
         public void AddLocName()

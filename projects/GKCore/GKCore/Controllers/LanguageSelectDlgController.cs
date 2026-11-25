@@ -23,6 +23,14 @@ namespace GKCore.Controllers
     /// </summary>
     public class LanguageSelectDlgController : DialogController<ILanguageSelectDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IListView _lstLanguages;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly LangRecord fDefLang;
         private readonly LangsListModel fLangsModel;
         private int fSelectedLanguage;
@@ -59,16 +67,16 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.LanguagesList.ListMan = fLangsModel;
-            fView.LanguagesList.UpdateContents();
-            fView.LanguagesList.Activate();
-            fView.LanguagesList.SelectItem(fDefLang);
+            _lstLanguages.ListMan = fLangsModel;
+            _lstLanguages.UpdateContents();
+            _lstLanguages.Activate();
+            _lstLanguages.SelectItem(fDefLang);
         }
 
         public override bool Accept()
         {
             try {
-                var lngRec = fView.LanguagesList.GetSelectedData() as LangRecord;
+                var lngRec = _lstLanguages.GetSelectedData() as LangRecord;
                 fSelectedLanguage = (lngRec != null) ? lngRec.Code : fDefLang.Code;
 
                 return true;
@@ -82,8 +90,8 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
 
 

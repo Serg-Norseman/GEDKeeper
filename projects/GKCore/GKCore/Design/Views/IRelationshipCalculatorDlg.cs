@@ -6,16 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-
 namespace GKCore.Design.Views
 {
     public interface IRelationshipCalculatorDlg : ICommonDialog
     {
-        ILabel Label1 { get; }
-        ILabel Label2 { get; }
-        ITextBox Person1 { get; }
-        ITextBox Person2 { get; }
-        ITextBox Result { get; }
     }
 }

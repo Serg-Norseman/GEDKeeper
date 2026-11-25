@@ -7,7 +7,6 @@
  */
 
 using BSLib;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
@@ -16,9 +15,5 @@ namespace GKCore.Design.Views
         bool ShowTipsChecked { get; set; }
 
         void Init(string caption, bool showTipsChecked, StringList tips);
-
-        ILabel TitleLabel { get; }
-        ITextContainer TipText { get; }
-        IButton NextButton { get; }
     }
 }

@@ -23,6 +23,42 @@ namespace GKCore.Controllers
     /// </summary>
     public class RecMergeController : DialogController<IRecMergeDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageMerge;
+        private IButton _btnAutoSearch;
+        private IButton _btnSkip;
+        private IProgressBar _ProgressBar1;
+        private ITabPage _pageMergeOptions;
+        private IGroupBox _rgMode;
+        private IGroupBox _grpSearchPersons;
+        private ILabel _lblNameAccuracy;
+        private ILabel _lblYearInaccuracy;
+        private INumericBox _edNameAccuracy;
+        private INumericBox _edYearInaccuracy;
+        private ICheckBox _chkBirthYear;
+        private IRadioButton _radPersons;
+        private IRadioButton _radNotes;
+        private IRadioButton _radFamilies;
+        private IRadioButton _radSources;
+        private ICheckBox _chkBookmarkMerged;
+        private IGroupBox _grpMergeOther;
+        private ICheckBox _chkIndistinctMatching;
+        private IButton _btnMergeToRight;
+        private IButton _btnMergeToLeft;
+        private IButton _btnRec2Select;
+        private IButton _btnRec1Select;
+        private IButton _btnEditLeft;
+        private IButton _btnEditRight;
+        private ITextBox _Edit2;
+        private ITextBox _Edit1;
+        private ILabel _Lab2;
+        private ILabel _Lab1;
+        private IHyperView _fView1;
+        private IHyperView _fView2;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private bool fBookmark;
         private List<GDMRecord> fFilteredRecords;
         private GDMRecordType fMergeMode;
@@ -87,21 +123,21 @@ namespace GKCore.Controllers
             SetRec2(null);
 
             MatchParams mParams;
-            //mParams.IndistinctNameMatching = fView.IndistinctMatchingCheck.Checked; // FIXME!
-            mParams.IndistinctThreshold = ((float)fView.NameAccuracyNum.Value) / 100.0f;
-            mParams.DatesCheck = fView.BirthYearChk.Checked;
-            mParams.YearsInaccuracy = (int)fView.YearInaccuracyNum.Value;
+            //mParams.IndistinctNameMatching = _chkIndistinctMatching.Checked; // FIXME!
+            mParams.IndistinctThreshold = ((float)_edNameAccuracy.Value) / 100.0f;
+            mParams.DatesCheck = _chkBirthYear.Checked;
+            mParams.YearsInaccuracy = (int)_edYearInaccuracy.Value;
             mParams.CheckEventPlaces = false;
 
             bool res = false;
-            fView.SkipBtn.Enabled = false;
+            _btnSkip.Enabled = false;
 
             try {
                 int recNum = fFilteredRecords.Count;
 
-                fView.ProgressBar.Minimum = 0;
-                fView.ProgressBar.Maximum = recNum;
-                fView.ProgressBar.Value = fRMIndex;
+                _ProgressBar1.Minimum = 0;
+                _ProgressBar1.Maximum = recNum;
+                _ProgressBar1.Value = fRMIndex;
 
                 for (int i = fRMIndex; i < recNum; i++) {
                     GDMRecord iRec = fFilteredRecords[i];
@@ -126,12 +162,12 @@ namespace GKCore.Controllers
                     }
 
                     fRMIndex = i;
-                    fView.ProgressBar.Increment(1);
+                    _ProgressBar1.Increment(1);
 
                     if (res) break;
                 }
             } finally {
-                fView.SkipBtn.Enabled = true;
+                _btnSkip.Enabled = true;
             }
         }
 
@@ -139,27 +175,27 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.MergeDuplicates));
 
-            GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
-            GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);
-            GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.RM_Records);
+            _grpSearchPersons.Text = LangMan.LS(LSID.RM_SearchPersons);
+            _grpMergeOther.Text = LangMan.LS(LSID.Other);
+            _rgMode.Text = LangMan.LS(LSID.RM_Records);
 
-            GetControl<ITabPage>("pageMerge").Text = LangMan.LS(LSID.RecMerge);
-            GetControl<ITabPage>("pageMergeOptions").Text = LangMan.LS(LSID.MIOptions);
-            GetControl<IButton>("btnAutoSearch").Text = LangMan.LS(LSID.RM_Search);
-            GetControl<IButton>("btnSkip").Text = LangMan.LS(LSID.RM_Skip);
-            GetControl<IRadioButton>("radPersons").Text = LangMan.LS(LSID.RPIndividuals);
-            GetControl<IRadioButton>("radNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<IRadioButton>("radFamilies").Text = LangMan.LS(LSID.RPFamilies);
-            GetControl<IRadioButton>("radSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<ICheckBox>("chkIndistinctMatching").Text = LangMan.LS(LSID.RM_IndistinctMatching);
-            GetControl<ICheckBox>("chkBirthYear").Text = LangMan.LS(LSID.RM_BirthYear);
-            GetControl<ILabel>("lblNameAccuracy").Text = LangMan.LS(LSID.RM_NameAccuracy);
-            GetControl<ILabel>("lblYearInaccuracy").Text = LangMan.LS(LSID.RM_YearInaccuracy);
-            GetControl<ICheckBox>("chkBookmarkMerged").Text = LangMan.LS(LSID.BookmarkMerged);
-            GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<IButton>("btnEditLeft").Text = LangMan.LS(LSID.DoEdit);
-            GetControl<IButton>("btnEditRight").Text = LangMan.LS(LSID.DoEdit);
+            _pageMerge.Text = LangMan.LS(LSID.RecMerge);
+            _pageMergeOptions.Text = LangMan.LS(LSID.MIOptions);
+            _btnAutoSearch.Text = LangMan.LS(LSID.RM_Search);
+            _btnSkip.Text = LangMan.LS(LSID.RM_Skip);
+            _radPersons.Text = LangMan.LS(LSID.RPIndividuals);
+            _radNotes.Text = LangMan.LS(LSID.RPNotes);
+            _radFamilies.Text = LangMan.LS(LSID.RPFamilies);
+            _radSources.Text = LangMan.LS(LSID.RPSources);
+            _chkIndistinctMatching.Text = LangMan.LS(LSID.RM_IndistinctMatching);
+            _chkBirthYear.Text = LangMan.LS(LSID.RM_BirthYear);
+            _lblNameAccuracy.Text = LangMan.LS(LSID.RM_NameAccuracy);
+            _lblYearInaccuracy.Text = LangMan.LS(LSID.RM_YearInaccuracy);
+            _chkBookmarkMerged.Text = LangMan.LS(LSID.BookmarkMerged);
+            _btnRec1Select.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            _btnRec2Select.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            _btnEditLeft.Text = LangMan.LS(LSID.DoEdit);
+            _btnEditRight.Text = LangMan.LS(LSID.DoEdit);
         }
 
         public override void ApplyTheme()
@@ -170,22 +206,22 @@ namespace GKCore.Controllers
         public void ChangeOption()
         {
             var mergeMode = GDMRecordType.rtNone;
-            if (GetControl<IRadioButton>("radPersons").Checked) mergeMode = GDMRecordType.rtIndividual;
-            if (GetControl<IRadioButton>("radNotes").Checked) mergeMode = GDMRecordType.rtNote;
-            if (GetControl<IRadioButton>("radFamilies").Checked) mergeMode = GDMRecordType.rtFamily;
-            if (GetControl<IRadioButton>("radSources").Checked) mergeMode = GDMRecordType.rtSource;
+            if (_radPersons.Checked) mergeMode = GDMRecordType.rtIndividual;
+            if (_radNotes.Checked) mergeMode = GDMRecordType.rtNote;
+            if (_radFamilies.Checked) mergeMode = GDMRecordType.rtFamily;
+            if (_radSources.Checked) mergeMode = GDMRecordType.rtSource;
             SetMergeMode(mergeMode);
 
-            fBookmark = GetControl<ICheckBox>("chkBookmarkMerged").Checked;
+            fBookmark = _chkBookmarkMerged.Checked;
         }
 
         private void UpdateMergeButtons()
         {
-            GetControl<IButton>("btnMergeToLeft").Enabled = (fRec1 != null && fRec2 != null);
-            GetControl<IButton>("btnMergeToRight").Enabled = (fRec1 != null && fRec2 != null);
+            _btnMergeToLeft.Enabled = (fRec1 != null && fRec2 != null);
+            _btnMergeToRight.Enabled = (fRec1 != null && fRec2 != null);
 
-            GetControl<IButton>("btnEditLeft").Enabled = GetControl<IButton>("btnMergeToLeft").Enabled;
-            GetControl<IButton>("btnEditRight").Enabled = GetControl<IButton>("btnMergeToRight").Enabled;
+            _btnEditLeft.Enabled = _btnMergeToLeft.Enabled;
+            _btnEditRight.Enabled = _btnMergeToRight.Enabled;
         }
 
         public void SetRec1(GDMRecord value)
@@ -194,13 +230,13 @@ namespace GKCore.Controllers
             UpdateMergeButtons();
 
             if (fRec1 == null) {
-                GetControl<ILabel>("Lab1").Text = @"XXX1";
-                GetControl<ITextBox>("Edit1").Text = "";
-                fView.View1.Lines.Clear();
+                _Lab1.Text = @"XXX1";
+                _Edit1.Text = "";
+                _fView1.Lines.Clear();
             } else {
-                GetControl<ILabel>("Lab1").Text = fRec1.XRef;
-                GetControl<ITextBox>("Edit1").Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec1, false);
-                fView.View1.Lines.Assign(fBase.GetRecordContent(fRec1, RecordContentType.Quick));
+                _Lab1.Text = fRec1.XRef;
+                _Edit1.Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec1, false);
+                _fView1.Lines.Assign(fBase.GetRecordContent(fRec1, RecordContentType.Quick));
             }
         }
 
@@ -210,13 +246,13 @@ namespace GKCore.Controllers
             UpdateMergeButtons();
 
             if (fRec2 == null) {
-                GetControl<ILabel>("Lab2").Text = @"XXX2";
-                GetControl<ITextBox>("Edit2").Text = "";
-                fView.View2.Lines.Clear();
+                _Lab2.Text = @"XXX2";
+                _Edit2.Text = "";
+                _fView2.Lines.Clear();
             } else {
-                GetControl<ILabel>("Lab2").Text = fRec2.XRef;
-                GetControl<ITextBox>("Edit2").Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec2, false);
-                fView.View2.Lines.Assign(fBase.GetRecordContent(fRec2, RecordContentType.Quick));
+                _Lab2.Text = fRec2.XRef;
+                _Edit2.Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec2, false);
+                _fView2.Lines.Assign(fBase.GetRecordContent(fRec2, RecordContentType.Quick));
             }
         }
 

@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -34,25 +33,6 @@ namespace GKUI.Forms
         private GKListView ListPatriarchs;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        INumericBox IPatriarchsSearchDlg.MinGensNum
-        {
-            get { return fController.GetControlHandler<INumericBox>(edMinGens); }
-        }
-
-        ICheckBox IPatriarchsSearchDlg.WithoutDatesCheck
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkWithoutDates); }
-        }
-
-        IListView IPatriarchsSearchDlg.PatriarchsList
-        {
-            get { return ListPatriarchs; }
-        }
-
         #endregion
 
         public TTPatSearchDlg(IBaseWindow baseWin)

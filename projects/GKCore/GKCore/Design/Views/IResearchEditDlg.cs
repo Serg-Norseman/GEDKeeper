@@ -7,25 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface IResearchEditDlg : ICommonDialog
     {
         GDMResearchRecord ResearchRecord { get; set; }
-
-        ISheetList TasksList { get; }
-        ISheetList CommunicationsList { get; }
-        ISheetList GroupsList { get; }
-        ISheetList NotesList { get; }
-
-        ITextBox Name { get; }
-        IComboBox Priority { get; }
-        IComboBox Status { get; }
-        IDateBox StartDate { get; }
-        IDateBox StopDate { get; }
-        INumericBox Percent { get; }
     }
 }

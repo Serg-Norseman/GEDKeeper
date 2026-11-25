@@ -10,7 +10,6 @@ using System;
 using CommunityToolkit.Maui.Behaviors;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
 
@@ -20,107 +19,6 @@ namespace GKUI.Forms
     {
         private readonly IBaseWindow fBase;
         private readonly IRecordsListModel fListMan;
-
-        #region View Interface
-
-        public IFilterGridView FilterGrid
-        {
-            get { return filterView; }
-        }
-
-        IComboBox IPersonsFilterDlg.SourceCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
-        }
-
-        IComboBox IPersonsFilterDlg.GroupCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbGroup); }
-        }
-
-        ITextBox IPersonsFilterDlg.AliveBeforeDate
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtAliveBeforeDate); }
-        }
-
-        ICheckBox IPersonsFilterDlg.OnlyPatriarchsCheck
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkOnlyPatriarchs); }
-        }
-
-        IComboBox IPersonsFilterDlg.EventValCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbEventVal); }
-        }
-
-        IComboBox IPersonsFilterDlg.ResidenceCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbResidence); }
-        }
-
-        IComboBox IPersonsFilterDlg.NameCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtName); }
-        }
-
-        void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
-        {
-            switch (lifeSel) {
-                case 0:
-                    rbAll.IsChecked = true;
-                    break;
-                case 1:
-                    rbOnlyLive.IsChecked = true;
-                    break;
-                case 2:
-                    rbOnlyDead.IsChecked = true;
-                    break;
-                case 3:
-                    rbAliveBefore.IsChecked = true;
-                    break;
-            }
-        }
-
-        void IPersonsFilterDlg.SetSexRadio(int sexSel)
-        {
-            switch (sexSel) {
-                case 0:
-                    rbSexAll.IsChecked = true;
-                    break;
-                case 1:
-                    rbSexMale.IsChecked = true;
-                    break;
-                case 2:
-                    rbSexFemale.IsChecked = true;
-                    break;
-            }
-        }
-
-        int IPersonsFilterDlg.GetLifeRadio()
-        {
-            int lifeSel = 0;
-            if (rbAll.IsChecked) lifeSel = 0;
-            if (rbOnlyLive.IsChecked) lifeSel = 1;
-            if (rbOnlyDead.IsChecked) lifeSel = 2;
-            if (rbAliveBefore.IsChecked) lifeSel = 3;
-            return lifeSel;
-        }
-
-        int IPersonsFilterDlg.GetSexRadio()
-        {
-            int sexSel = 0;
-            if (rbSexAll.IsChecked) sexSel = 0;
-            if (rbSexMale.IsChecked) sexSel = 1;
-            if (rbSexFemale.IsChecked) sexSel = 2;
-            return sexSel;
-        }
-
-        void IPersonsFilterDlg.SetLifeEnabled(bool value)
-        {
-            rgLife.IsEnabled = value;
-        }
-
-        #endregion
 
         public PersonsFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan)
         {

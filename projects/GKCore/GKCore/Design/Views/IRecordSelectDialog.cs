@@ -35,16 +35,13 @@ namespace GKCore.Design.Views
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public interface IRecordSelectDialog : ICommonDialog
     {
         GDMRecord ResultRecord { get; set; }
 
-        IComboBox FilterCombo { get; }
         ITextBox FilterText { get; }
-
-        IFilterControl FilterCtl { get; }
         IListView RecordsList { get; }
 
         void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*");

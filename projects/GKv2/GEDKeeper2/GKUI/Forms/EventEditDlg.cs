@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Utilities;
@@ -34,55 +33,6 @@ namespace GKUI.Forms
             get { return fController.Event; }
             set { fController.Event = value; }
         }
-
-        #region View Interface
-
-        ISheetList IEventEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IEventEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ISheetList IEventEditDlg.SourcesList
-        {
-            get { return fSourcesList; }
-        }
-
-        IComboBox IEventEditDlg.EventType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbEventType); }
-        }
-
-        IDateControl IEventEditDlg.Date
-        {
-            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
-        }
-
-        IComboBox IEventEditDlg.Attribute
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtAttribute); }
-        }
-
-        ITextBox IEventEditDlg.Place
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtEventPlace); }
-        }
-
-        IComboBox IEventEditDlg.Cause
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtEventCause); }
-        }
-
-        IComboBox IEventEditDlg.Agency
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtEventOrg); }
-        }
-
-        #endregion
 
         public EventEditDlg(IBaseWindow baseWin)
         {

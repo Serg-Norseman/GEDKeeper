@@ -27,6 +27,37 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class LocationEditDlgController : DialogController<ILocationEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageCommon;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblLatitude;
+        private ITextBox _txtLatitude;
+        private ILabel _lblLongitude;
+        private ITextBox _txtLongitude;
+        private IGroupBox _grpSearch;
+        private IListView _ListGeoCoords;
+        private IButton _btnSearch;
+        private IButton _btnSelect;
+        private IButton _btnSelectName;
+        private IButton _btnSelectCursor;
+        private IButton _btnShowOnMap;
+        private IMapBrowser _fMapBrowser;
+        private ISheetList _fMediaList;
+        private ISheetList _fNamesList;
+        private ISheetList _fLinksList;
+        private ISheetList _fNotesList;
+        private ITabPage _pageHistory;
+        private IGroupBox _pageHistNames;
+        private IGroupBox _pageHistLinks;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMLocationRecord fLocationRecord;
         private GPListModel fPointsModel;
 
@@ -50,51 +81,51 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.Name.Activate();
+            _txtName.Activate();
 
-            fView.NamesList.ListModel = new LocationNamesListModel(fView, baseWin, fLocalUndoman);
-            fView.LinksList.ListModel = new LocationLinksListModel(fView, baseWin, fLocalUndoman);
+            _fNamesList.ListModel = new LocationNamesListModel(fView, baseWin, fLocalUndoman);
+            _fLinksList.ListModel = new LocationLinksListModel(fView, baseWin, fLocalUndoman);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
 
-            fView.NamesList.OnModify += ModifyNamesSheet;
+            _fNamesList.OnModify += ModifyNamesSheet;
 
             fPointsModel = new GPListModel();
-            fView.GeoCoordsList.ListMan = fPointsModel;
-            fView.GeoCoordsList.UpdateContents();
+            _ListGeoCoords.ListMan = fPointsModel;
+            _ListGeoCoords.UpdateContents();
         }
 
         public override void DoneView()
         {
-            fView.NamesList.ListModel.SaveSettings();
-            fView.LinksList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
+            _fNamesList.ListModel.SaveSettings();
+            _fLinksList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
         }
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
-            fView.Name.Text = fLocationRecord.LocationName;
+            _txtName.Text = fLocationRecord.LocationName;
         }
 
         public void CheckPrimaryName()
         {
-            if (!string.IsNullOrEmpty(fView.Name.Text) && string.IsNullOrEmpty(fLocationRecord.LocationName)) {
+            if (!string.IsNullOrEmpty(_txtName.Text) && string.IsNullOrEmpty(fLocationRecord.LocationName)) {
                 // new record
-                fLocationRecord.LocationName = fView.Name.Text;
-                fView.NamesList.UpdateSheet();
+                fLocationRecord.LocationName = _txtName.Text;
+                _fNamesList.UpdateSheet();
             }
         }
 
         public override bool Accept()
         {
             try {
-                //bool isRenamed = (fLocationRecord.LocationName != fView.Name.Text);
+                //bool isRenamed = (fLocationRecord.LocationName != _txtName.Text);
 
-                fLocationRecord.LocationName = fView.Name.Text;
-                fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(fView.Latitude.Text, 0.0);
-                fLocationRecord.Map.Long = ConvertHelper.ParseFloat(fView.Longitude.Text, 0.0);
+                fLocationRecord.LocationName = _txtName.Text;
+                fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(_txtLatitude.Text, 0.0);
+                fLocationRecord.Map.Long = ConvertHelper.ParseFloat(_txtLongitude.Text, 0.0);
 
                 //bool isChanged = isRenamed || fLocalUndoman.HasChanges();
 
@@ -116,15 +147,15 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Name.Text = fLocationRecord.LocationName;
-            fView.Latitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Lati);
-            fView.Longitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Long);
+            _txtName.Text = fLocationRecord.LocationName;
+            _txtLatitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Lati);
+            _txtLongitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Long);
 
-            fView.NamesList.ListModel.DataOwner = fLocationRecord;
-            fView.LinksList.ListModel.DataOwner = fLocationRecord;
+            _fNamesList.ListModel.DataOwner = fLocationRecord;
+            _fLinksList.ListModel.DataOwner = fLocationRecord;
 
-            fView.NotesList.ListModel.DataOwner = fLocationRecord;
-            fView.MediaList.ListModel.DataOwner = fLocationRecord;
+            _fNotesList.ListModel.DataOwner = fLocationRecord;
+            _fMediaList.ListModel.DataOwner = fLocationRecord;
 
 #if !TERM
             ShowOnMap();
@@ -133,12 +164,12 @@ namespace GKCore.Controllers
 
         public GeoPoint GetSelectedGeoPoint()
         {
-            return fView.GeoCoordsList.GetSelectedData() as GeoPoint;
+            return _ListGeoCoords.GetSelectedData() as GeoPoint;
         }
 
         public void Search()
         {
-            string location = fView.Name.Text.Trim();
+            string location = _txtName.Text.Trim();
             if (string.IsNullOrEmpty(location)) {
                 return;
             }
@@ -146,24 +177,24 @@ namespace GKCore.Controllers
             var searchPoints = new List<GeoPoint>();
             AppHost.Instance.RequestGeoCoords(location, searchPoints);
             fPointsModel.DataSource = searchPoints;
-            fView.GeoCoordsList.UpdateContents();
+            _ListGeoCoords.UpdateContents();
 
 #if !TERM
-            fView.MapBrowser.BeginUpdate();
+            _fMapBrowser.BeginUpdate();
             try {
-                fView.MapBrowser.ClearPoints();
+                _fMapBrowser.ClearPoints();
 
                 for (int i = 0, num = searchPoints.Count; i < num; i++) {
                     GeoPoint pt = searchPoints[i];
 
-                    fView.MapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
+                    _fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 
                     if (i == 0) {
-                        fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+                        _fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
                 }
             } finally {
-                fView.MapBrowser.EndUpdate();
+                _fMapBrowser.EndUpdate();
             }
 #endif
         }
@@ -173,8 +204,8 @@ namespace GKCore.Controllers
             GeoPoint pt = GetSelectedGeoPoint();
             if (pt == null) return;
 
-            fView.Latitude.Text = GEDCOMUtils.CoordToStr(pt.Latitude);
-            fView.Longitude.Text = GEDCOMUtils.CoordToStr(pt.Longitude);
+            _txtLatitude.Text = GEDCOMUtils.CoordToStr(pt.Latitude);
+            _txtLongitude.Text = GEDCOMUtils.CoordToStr(pt.Longitude);
         }
 
         public void SelectName()
@@ -182,7 +213,7 @@ namespace GKCore.Controllers
             GeoPoint pt = GetSelectedGeoPoint();
             if (pt == null) return;
 
-            fView.Name.Text = pt.Hint;
+            _txtName.Text = pt.Hint;
         }
 
         public void SelectGeoPoint()
@@ -191,26 +222,26 @@ namespace GKCore.Controllers
             if (pt == null) return;
 
 #if !TERM
-            fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+            _fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
 #else
-            fView.Latitude.Text = GEDCOMUtils.CoordToStr(pt.Latitude);
-            fView.Longitude.Text = GEDCOMUtils.CoordToStr(pt.Longitude);
+            _txtLatitude.Text = GEDCOMUtils.CoordToStr(pt.Latitude);
+            _txtLongitude.Text = GEDCOMUtils.CoordToStr(pt.Longitude);
 #endif
         }
 
 #if !TERM
         public void SelectCursorCoords()
         {
-            var pos = fView.MapBrowser.TargetPosition;
+            var pos = _fMapBrowser.TargetPosition;
 
-            fView.Latitude.Text = GEDCOMUtils.CoordToStr(pos.Lat);
-            fView.Longitude.Text = GEDCOMUtils.CoordToStr(pos.Lng);
+            _txtLatitude.Text = GEDCOMUtils.CoordToStr(pos.Lat);
+            _txtLongitude.Text = GEDCOMUtils.CoordToStr(pos.Lng);
         }
 
         public void ShowOnMap()
         {
-            if (fView.Latitude.Text != "" && fView.Longitude.Text != "") {
-                fView.MapBrowser.SetCenter(ConvertHelper.ParseFloat(fView.Latitude.Text, 0), ConvertHelper.ParseFloat(fView.Longitude.Text, 0), -1);
+            if (_txtLatitude.Text != "" && _txtLongitude.Text != "") {
+                _fMapBrowser.SetCenter(ConvertHelper.ParseFloat(_txtLatitude.Text, 0), ConvertHelper.ParseFloat(_txtLongitude.Text, 0), -1);
             }
         }
 #endif
@@ -219,36 +250,36 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Location));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
-            GetControl<ILabel>("lblLatitude").Text = LangMan.LS(LSID.Latitude);
-            GetControl<ILabel>("lblLongitude").Text = LangMan.LS(LSID.Longitude);
-            GetControl<IGroupBox>("grpSearch").Text = LangMan.LS(LSID.SearchCoords);
-            GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
-            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.SelectCoords);
-            GetControl<IButton>("btnSelectName").Text = LangMan.LS(LSID.SelectName);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageCommon.Text = LangMan.LS(LSID.Common);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
+            _lblName.Text = LangMan.LS(LSID.Title);
+            _lblLatitude.Text = LangMan.LS(LSID.Latitude);
+            _lblLongitude.Text = LangMan.LS(LSID.Longitude);
+            _grpSearch.Text = LangMan.LS(LSID.SearchCoords);
+            _btnSearch.Text = LangMan.LS(LSID.Search);
+            _btnSelect.Text = LangMan.LS(LSID.SelectCoords);
+            _btnSelectName.Text = LangMan.LS(LSID.SelectName);
 
 #if !TERM
-            GetControl<IButton>("btnSelectCursor").Text = LangMan.LS(LSID.CursorCoords);
-            GetControl<IButton>("btnShowOnMap").Text = LangMan.LS(LSID.Show);
+            _btnSelectCursor.Text = LangMan.LS(LSID.CursorCoords);
+            _btnShowOnMap.Text = LangMan.LS(LSID.Show);
             SetToolTip("btnShowOnMap", LangMan.LS(LSID.ShowOnMapTip));
 #endif
 
-            GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
-            GetControl<IGroupBox>("pageHistNames").Text = LangMan.LS(LSID.Names);
-            GetControl<IGroupBox>("pageHistLinks").Text = LangMan.LS(LSID.TopLevelLinks);
+            _pageHistory.Text = LangMan.LS(LSID.History);
+            _pageHistNames.Text = LangMan.LS(LSID.Names);
+            _pageHistLinks.Text = LangMan.LS(LSID.TopLevelLinks);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
 
 

@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Plugins;
 
@@ -24,20 +23,12 @@ namespace GKUI.Forms
             get { return fController.WorkWindow; }
         }
 
-        #region View Interface
-
-        ITextBox IQuickSearchDlg.SearchPattern
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtSearchPattern); }
-        }
-
-        #endregion
-
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             InitializeComponent();
 
             fController = new QuickSearchDlgController(this, workWindow);
+            fController.InitView(null);
         }
 
         protected override void OnShown(EventArgs e)

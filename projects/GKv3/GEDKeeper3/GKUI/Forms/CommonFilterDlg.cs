@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
 using GKUI.Components;
@@ -46,15 +45,6 @@ namespace GKUI.Forms
         {
             get { return fListMan; }
         }
-
-        #region View Interface
-
-        public IFilterGridView FilterGrid
-        {
-            get { return filterView; }
-        }
-
-        #endregion
 
         public CommonFilterDlg()
         {

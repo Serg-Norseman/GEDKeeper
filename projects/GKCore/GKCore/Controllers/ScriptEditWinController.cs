@@ -25,6 +25,19 @@ namespace GKCore.Controllers
     /// </summary>
     public class ScriptEditWinController : DialogController<IScriptEditWin>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private ITextBox _txtScriptText;
+        private ITextBox _txtDebugOutput;
+        private IToolItem _tbNewScript;
+        private IToolItem _tbLoadScript;
+        private IToolItem _tbSaveScript;
+        private IToolItem _tbRun;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly ScriptEngine fScriptEngine;
 
 
@@ -41,7 +54,7 @@ namespace GKCore.Controllers
         {
             if (!fView.CheckModified()) return;
 
-            fView.ScriptText.Clear();
+            _txtScriptText.Clear();
             fView.FileName = "unknown.lua";
             fView.Modified = false;
         }
@@ -56,7 +69,7 @@ namespace GKCore.Controllers
             GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
 
             using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8)) {
-                fView.ScriptText.Text = strd.ReadToEnd();
+                _txtScriptText.Text = strd.ReadToEnd();
                 fView.FileName = fileName;
                 fView.Modified = false;
                 strd.Close();
@@ -71,7 +84,7 @@ namespace GKCore.Controllers
             GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
 
             using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8)) {
-                strd.Write(fView.ScriptText.Text);
+                strd.Write(_txtScriptText.Text);
                 fView.FileName = fileName;
                 fView.Modified = false;
                 strd.Close();
@@ -81,8 +94,8 @@ namespace GKCore.Controllers
         public void RunScript()
         {
             try {
-                fView.DebugOutput.Clear();
-                fScriptEngine.lua_run(fView.ScriptText.Text, fBase);
+                _txtDebugOutput.Clear();
+                fScriptEngine.lua_run(_txtScriptText.Text, fBase);
             } catch (Exception ex) {
                 Logger.WriteError("ScriptEditWin.Run()", ex);
             }
@@ -100,10 +113,10 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IToolItem>("tbNewScript").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileNew, true);
-            GetControl<IToolItem>("tbLoadScript").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileLoad, true);
-            GetControl<IToolItem>("tbSaveScript").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave, true);
-            GetControl<IToolItem>("tbRun").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
+            _tbNewScript.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileNew, true);
+            _tbLoadScript.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileLoad, true);
+            _tbSaveScript.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave, true);
+            _tbRun.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
         }
     }
 }

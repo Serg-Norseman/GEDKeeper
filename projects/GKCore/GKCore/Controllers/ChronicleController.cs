@@ -20,14 +20,21 @@ namespace GKCore.Controllers
 {
     public class ChronicleController : DialogController<IChronicleWin>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private IListView _lvEvents;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         public ChronicleController(IChronicleWin view) : base(view)
         {
         }
 
         public override void UpdateView()
         {
-            var lvEvents = GetControl<IListView>("lvEvents");
-            SetLVBase(lvEvents, fBase);
+            SetLVBase(_lvEvents, fBase);
         }
 
         public override void SetLocale()

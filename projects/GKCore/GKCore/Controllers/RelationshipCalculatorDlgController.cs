@@ -22,6 +22,21 @@ namespace GKCore.Controllers
     /// </summary>
     public class RelationshipCalculatorDlgController : DialogController<IRelationshipCalculatorDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ILabel _lblKinship;
+        private ITextBox _txtResult;
+        private IButton _btnRec2Select;
+        private IButton _btnRec1Select;
+        private ITextBox _Edit2;
+        private ITextBox _Edit1;
+        private ILabel _Lab2;
+        private ILabel _Lab1;
+        private IButton _btnClose;
+        private IButton _btnSwap;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMIndividualRecord fRec1;
         private GDMIndividualRecord fRec2;
         private string fResult;
@@ -85,40 +100,40 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             if (fRec1 == null) {
-                fView.Label1.Text = @"XXX1";
-                fView.Person1.Text = "";
+                _Lab1.Text = @"XXX1";
+                _Edit1.Text = "";
             } else {
-                fView.Label1.Text = fRec1.XRef;
-                fView.Person1.Text = GKUtils.GetNameString(fRec1, true, false);
+                _Lab1.Text = fRec1.XRef;
+                _Edit1.Text = GKUtils.GetNameString(fRec1, true, false);
             }
 
             if (fRec2 == null) {
-                fView.Label2.Text = @"XXX2";
-                fView.Person2.Text = "";
+                _Lab2.Text = @"XXX2";
+                _Edit2.Text = "";
             } else {
-                fView.Label2.Text = fRec2.XRef;
-                fView.Person2.Text = GKUtils.GetNameString(fRec2, true, false);
+                _Lab2.Text = fRec2.XRef;
+                _Edit2.Text = GKUtils.GetNameString(fRec2, true, false);
             }
 
-            fView.Result.Text = fResult;
+            _txtResult.Text = fResult;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.RelationshipCalculator));
 
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
-            GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<ILabel>("lblKinship").Text = LangMan.LS(LSID.Kinship);
-            GetControl<IButton>("btnSwap").Text = LangMan.LS(LSID.Swap);
+            _btnClose.Text = LangMan.LS(LSID.DlgClose);
+            _btnRec1Select.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            _btnRec2Select.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            _lblKinship.Text = LangMan.LS(LSID.Kinship);
+            _btnSwap.Text = LangMan.LS(LSID.Swap);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

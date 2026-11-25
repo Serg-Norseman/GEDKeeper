@@ -11,7 +11,6 @@ using BSLib;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -40,30 +39,12 @@ namespace GKUI.Forms
             set { chkShow.Checked = value; }
         }
 
-        #region View Interface
-
-        ILabel IDayTipsDlg.TitleLabel
-        {
-            get { return fController.GetControlHandler<ILabel>(lblTitle); }
-        }
-
-        ITextContainer IDayTipsDlg.TipText
-        {
-            get { return fController.GetControlHandler<ITextContainer>(txtTip); }
-        }
-
-        IButton IDayTipsDlg.NextButton
-        {
-            get { return fController.GetControlHandler<IButton>(btnNextTip); }
-        }
-
-        #endregion
-
         public DayTipsDlg()
         {
             XamlReader.Load(this);
 
             fController = new DayTipsDlgController(this);
+            fController.InitView(null);
         }
 
         private void btnNextTip_Click(object sender, EventArgs e)

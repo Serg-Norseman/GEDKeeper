@@ -19,7 +19,7 @@ namespace GKUI.Forms
 {
     public partial class FindAndReplaceDlg : CommonWindow<IFARDlg, FARDlgController>, IFARDlg
     {
-        #region View Interface
+        #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private Label lblPattern;

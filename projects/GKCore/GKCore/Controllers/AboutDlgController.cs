@@ -20,6 +20,16 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class AboutDlgController : DialogController<IAboutDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ILabel _lblVersion;
+        private ILabel _lblCopyright;
+        private IButton _btnClose;
+        private ILabel _lblForum;
+        private ILabel _lblChannel;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         public AboutDlgController(IAboutDlg view) : base(view)
         {
         }
@@ -30,25 +40,15 @@ namespace GKCore.Controllers
                 GetControl<ILabel>("lblProduct").Text = GKData.APP_TITLE;
             }
 
-            GetControl<ILabel>("lblVersion").Text = @"Version " + AppHost.GetAppVersion();
-            GetControl<ILabel>("lblCopyright").Text = AppHost.GetAppCopyright();
+            _lblVersion.Text = @"Version " + AppHost.GetAppVersion();
+            _lblCopyright.Text = AppHost.GetAppCopyright();
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
-                    GetControl<ILabel>("lblForum").Text = GKData.APP_FORUM_RU;
-                    GetControl<ILabel>("lblChannel").Text = GKData.APP_CHANNEL_RU;
-                } else {
-                    GetControl<ILabel>("lblForum").Text = GKData.APP_FORUM_EN;
-                    GetControl<ILabel>("lblChannel").Text = GKData.APP_CHANNEL_EN;
-                }
+            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
+                _lblForum.Text = GKData.APP_FORUM_RU;
+                _lblChannel.Text = GKData.APP_CHANNEL_RU;
             } else {
-                if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
-                    GetControl<IButton>("lblForum").Text = GKData.APP_FORUM_RU;
-                    GetControl<IButton>("lblChannel").Text = GKData.APP_CHANNEL_RU;
-                } else {
-                    GetControl<IButton>("lblForum").Text = GKData.APP_FORUM_EN;
-                    GetControl<IButton>("lblChannel").Text = GKData.APP_CHANNEL_EN;
-                }
+                _lblForum.Text = GKData.APP_FORUM_EN;
+                _lblChannel.Text = GKData.APP_CHANNEL_EN;
             }
         }
 
@@ -57,7 +57,7 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.MIAbout));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                _btnClose.Text = LangMan.LS(LSID.DlgClose);
             }
         }
 
@@ -65,7 +65,7 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
         }
     }
 }

@@ -16,6 +16,15 @@ namespace GKCore.Controllers
     [TestFixture]
     public class PlacesManagerControllerTests : ControllerTest
     {
+        private IButton _btnClose;
+        private ITabPage _pagePlaceManage;
+        private IButton _btnAnalysePlaces;
+        private IButton _btnLocExpert;
+        private IButton _btnIntoList;
+        private IListView _ListPlaces;
+        private ILabel _lblFilter;
+        private ITextBox _txtFilter;
+
         [Test]
         public void Test_PlacesManagerController()
         {
@@ -24,21 +33,20 @@ namespace GKCore.Controllers
             controller.InitView(fBaseWin);
 
             controller.CheckPlaces();
-            controller.CreateLocationRecord(view.PlacesList.GetSelectedItems());
+            controller.CreateLocationRecord(_ListPlaces.GetSelectedItems());
         }
 
-        private static IPlacesManagerDlg CreateMockView()
+        private IPlacesManagerDlg CreateMockView()
         {
             var view = Substitute.For<IPlacesManagerDlg>();
-            SubstituteControl<ITabPage>(view, "pagePlaceManage");
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<IButton>(view, "btnLocExpert");
-            SubstituteControl<IButton>(view, "btnIntoList");
-            SubstituteControl<IButton>(view, "btnAnalysePlaces");
-            SubstituteControl<ILabel>(view, "lblFilter");
-
-            view.FilterBox.Returns(Substitute.For<ITextBox>());
-            view.PlacesList.Returns(Substitute.For<IListView>());
+            _pagePlaceManage = SubstCtl<ITabPage>(view, "pagePlaceManage");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _btnLocExpert = SubstCtl<IButton>(view, "btnLocExpert");
+            _btnIntoList = SubstCtl<IButton>(view, "btnIntoList");
+            _btnAnalysePlaces = SubstCtl<IButton>(view, "btnAnalysePlaces");
+            _lblFilter = SubstCtl<ILabel>(view, "lblFilter");
+            _txtFilter = SubstCtl<ITextBox>(view, "txtFilter");
+            _ListPlaces = SubstCtl<IListView>(view, "ListPlaces");
             return view;
         }
     }

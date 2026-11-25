@@ -26,6 +26,19 @@ namespace GKCore.Controllers
     /// </summary>
     public class PlacesManagerController : DialogController<IPlacesManagerDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnClose;
+        private ITabPage _pagePlaceManage;
+        private IButton _btnAnalysePlaces;
+        private IButton _btnLocExpert;
+        private IButton _btnIntoList;
+        private IListView _ListPlaces;
+        private ILabel _lblFilter;
+        private ITextBox _txtFilter;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly FlatListModel fPlacesModel;
         private readonly StringList fPlaces;
 
@@ -46,7 +59,7 @@ namespace GKCore.Controllers
             fPlacesModel.ListColumns.AddColumn(LangMan.LS(LSID.LinksCount), DataType.dtInteger, 100, false);
             fPlacesModel.ListColumns.ResetDefaults();
 
-            fView.PlacesList.ListMan = fPlacesModel;
+            _ListPlaces.ListMan = fPlacesModel;
         }
 
         public override void UpdateView()
@@ -90,7 +103,7 @@ namespace GKCore.Controllers
 
         private PlaceObj GetSelectedPlace()
         {
-            var selObj = fView.PlacesList.GetSelectedData() as FlatItem;
+            var selObj = _ListPlaces.GetSelectedData() as FlatItem;
             if (selObj == null) return null;
 
             var placeObj = selObj.Tag as PlaceObj;
@@ -125,7 +138,7 @@ namespace GKCore.Controllers
         public void CheckPlaces()
         {
             try {
-                string fltText = fView.FilterBox.Text;
+                string fltText = _txtFilter.Text;
                 AppHost.Instance.ExecuteWork((controller) => {
                     TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller, fltText);
                 });
@@ -136,7 +149,7 @@ namespace GKCore.Controllers
                     fPlacesModel.AddItem(placeObj, new object[] { fPlaces[i], placeObj.Facts.Count });
                 }
             } finally {
-                fView.PlacesList.UpdateContents();
+                _ListPlaces.UpdateContents();
             }
         }
 
@@ -176,21 +189,21 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.PlacesManager));
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.PlacesManager);
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
-                GetControl<IButton>("btnLocExpert").Text = LangMan.LS(LSID.LocExpert);
+                _pagePlaceManage.Text = LangMan.LS(LSID.PlacesManager);
+                _btnClose.Text = LangMan.LS(LSID.DlgClose);
+                _btnLocExpert.Text = LangMan.LS(LSID.LocExpert);
             }
 
-            GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.InsertIntoBook);
-            GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.Analyze);
-            GetControl<ILabel>("lblFilter").Text = LangMan.LS(LSID.MIFilter);
+            _btnIntoList.Text = LangMan.LS(LSID.InsertIntoBook);
+            _btnAnalysePlaces.Text = LangMan.LS(LSID.Analyze);
+            _lblFilter.Text = LangMan.LS(LSID.MIFilter);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

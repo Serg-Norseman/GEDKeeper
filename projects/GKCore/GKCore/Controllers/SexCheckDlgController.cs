@@ -20,13 +20,25 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class SexCheckDlgController : DialogController<ISexCheckDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITextBox _txtName;
+        private IGroupBox _grpSex;
+        private IRadioButton _rbNone;
+        private IRadioButton _rbMale;
+        private IRadioButton _rbFemale;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         public GDMSex Sex
         {
             get {
-                if (GetControl<IRadioButton>("rbMale").Checked) {
+                if (_rbMale.Checked) {
                     return GDMSex.svMale;
                 }
-                if (GetControl<IRadioButton>("rbFemale").Checked) {
+                if (_rbFemale.Checked) {
                     return GDMSex.svFemale;
                 }
                 return GDMSex.svUnknown;
@@ -35,15 +47,15 @@ namespace GKCore.Controllers
                 switch (value) {
                     case GDMSex.svUnknown:
                     case GDMSex.svIntersex:
-                        GetControl<IRadioButton>("rbNone").Checked = true;
+                        _rbNone.Checked = true;
                         break;
 
                     case GDMSex.svMale:
-                        GetControl<IRadioButton>("rbMale").Checked = true;
+                        _rbMale.Checked = true;
                         break;
 
                     case GDMSex.svFemale:
-                        GetControl<IRadioButton>("rbFemale").Checked = true;
+                        _rbFemale.Checked = true;
                         break;
                 }
             }
@@ -62,21 +74,21 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.WinCheckSex));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
 
-            GetControl<IGroupBox>("grpSex").Text = LangMan.LS(LSID.Sex);
-            GetControl<IRadioButton>("rbNone").Text = " ? ";
-            GetControl<IRadioButton>("rbMale").Text = LangMan.LS(LSID.SexM);
-            GetControl<IRadioButton>("rbFemale").Text = LangMan.LS(LSID.SexF);
+            _grpSex.Text = LangMan.LS(LSID.Sex);
+            _rbNone.Text = " ? ";
+            _rbMale.Text = LangMan.LS(LSID.SexM);
+            _rbFemale.Text = LangMan.LS(LSID.SexF);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

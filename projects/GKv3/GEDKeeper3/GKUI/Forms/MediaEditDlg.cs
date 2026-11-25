@@ -12,9 +12,7 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
 
@@ -32,6 +30,8 @@ namespace GKUI.Forms
         private Button btnCancel;
         private Button btnView;
         private TabPage pageCommon;
+        private TabPage pageFiles;
+        private TabPage pageUserRefs;
         private Label lblName;
         private TextBox txtName;
         private Label lblType;
@@ -54,55 +54,6 @@ namespace GKUI.Forms
             get { return fController.MultimediaRecord; }
             set { fController.MultimediaRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList IMediaEditDlg.FilesList
-        {
-            get { return fFilesList; }
-        }
-
-        ISheetList IMediaEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IMediaEditDlg.SourcesList
-        {
-            get { return fSourcesList; }
-        }
-
-        ISheetList IMediaEditDlg.UserRefList
-        {
-            get { return fUserRefList; }
-        }
-
-        IComboBox IMediaEditDlg.MediaType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbMediaType); }
-        }
-
-        IComboBox IMediaEditDlg.StoreType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbStoreType); }
-        }
-
-        ITextBox IMediaEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        ITextBox IMediaEditDlg.File
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFile); }
-        }
-
-        IButton IMediaEditDlg.FileSelectButton
-        {
-            get { return fController.GetControlHandler<IButton>(btnFileSelect); }
-        }
-
-        #endregion
 
         public MediaEditDlg(IBaseWindow baseWin)
         {

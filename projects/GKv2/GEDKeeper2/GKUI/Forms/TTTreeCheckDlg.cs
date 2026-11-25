@@ -9,7 +9,6 @@
 using System;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -18,15 +17,6 @@ namespace GKUI.Forms
     public sealed partial class TTTreeCheckDlg : CommonDialog<ITreeCheckDlg, TreeCheckController>, ITreeCheckDlg
     {
         private GKListView ListChecks;
-
-        #region View Interface
-
-        IListView ITreeCheckDlg.ChecksList
-        {
-            get { return ListChecks; }
-        }
-
-        #endregion
 
         public TTTreeCheckDlg(IBaseWindow baseWin)
         {

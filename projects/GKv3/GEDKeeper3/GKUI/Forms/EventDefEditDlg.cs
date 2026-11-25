@@ -9,7 +9,6 @@
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Events;
 
@@ -40,35 +39,6 @@ namespace GKUI.Forms
             get { return fController.EventDef; }
             set { fController.EventDef = value; }
         }
-
-        #region View Interface
-
-        ITextBox IEventDefEditDlg.NameText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        IComboBox IEventDefEditDlg.TagCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbTag); }
-        }
-
-        ITextBox IEventDefEditDlg.TypeText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtType); }
-        }
-
-        ICheckBox IEventDefEditDlg.EnabledCheck
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkEnabled); }
-        }
-
-        ITextBox IEventDefEditDlg.DescText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtDesc); }
-        }
-
-        #endregion
 
         public EventDefEditDlg()
         {

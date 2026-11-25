@@ -9,7 +9,6 @@
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -21,20 +20,6 @@ namespace GKUI.Forms
             get { return fController.CallNumber; }
             set { fController.CallNumber = value; }
         }
-
-        #region View Interface
-
-        ITextBox ISourceCallNumberEditDlg.CallNumberText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtNumber); }
-        }
-
-        IComboBox ISourceCallNumberEditDlg.MediaTypeCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbMediaType); }
-        }
-
-        #endregion
 
         public SourceCallNumberEditDlg(IBaseWindow baseWin)
         {

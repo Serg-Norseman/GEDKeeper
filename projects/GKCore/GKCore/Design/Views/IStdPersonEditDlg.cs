@@ -6,13 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Lists;
-
 namespace GKCore.Design.Views
 {
     public interface IStdPersonEditDlg : IPersonEditDlg
     {
-        ISheetList ChildrenList { get; }
-        ISheetList DNATestsList { get; }
     }
 }

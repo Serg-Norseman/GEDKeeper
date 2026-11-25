@@ -23,6 +23,37 @@ namespace GKCore.Controllers
 {
     public sealed class DNATestEditDlgController : DialogController<IDNATestEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageCommon;
+        private ILabel _lblTestName;
+        private ITextBox _txtTestName;
+        private ILabel _lblAgency;
+        private IComboBox _cmbAgency;
+        private ILabel _lblDate;
+        private IDateBox _dateCtl;
+        private ILabel _lblFileRef;
+        private ITextBox _txtFileRef;
+        private ILabel _lblStoreType;
+        private IComboBox _cmbStoreType;
+        private IButton _btnFileSelect;
+        private ILabel _lblFileFormat;
+        private IComboBox _cmbFileFormat;
+        private ILabel _lblYHaplogroup;
+        private IComboBox _cmbYHaplogroup;
+        private ILabel _lblMHaplogroup;
+        private IComboBox _cmbMHaplogroup;
+        private ILabel _lblRestriction;
+        private IComboBox _cmbRestriction;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private const string LabKey = "_DLAB";
 
         private GDMDNATest fDNATest;
@@ -49,55 +80,55 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.Restriction.ReadOnly = true;
+            _cmbRestriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
-                fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+                _cmbRestriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
-            fView.StoreType.ReadOnly = true;
+            _cmbStoreType.ReadOnly = true;
             for (var mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
                 if (mst == MediaStoreType.mstArchive) continue;
 
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst);
+                _cmbStoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst);
             }
 
-            fView.FileFormat.ReadOnly = true;
+            _cmbFileFormat.ReadOnly = true;
             for (var dff = GDMDNAFileFormat.None; dff <= GDMDNAFileFormat.STR; dff++) {
-                fView.FileFormat.AddItem(dff.ToString(), dff);
+                _cmbFileFormat.AddItem(dff.ToString(), dff);
             }
 
-            fView.TestName.Activate();
+            _txtTestName.Activate();
 
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                fDNATest.TestName = fView.TestName.Text;
-                fDNATest.Date.Assign(GDMDate.CreateByFormattedStr(fView.Date.NormalizeDate, true));
+                fDNATest.TestName = _txtTestName.Text;
+                fDNATest.Date.Assign(GDMDate.CreateByFormattedStr(_dateCtl.NormalizeDate, true));
 
-                fDNATest.Agency = fView.Agency.Text;
+                fDNATest.Agency = _cmbAgency.Text;
                 fBase.Context.ValuesCollection.Add(LabKey, fDNATest.Agency);
 
-                fDNATest.MHaplogroup = fView.MHaplogroup.Text;
+                fDNATest.MHaplogroup = _cmbMHaplogroup.Text;
                 fBase.Context.ValuesCollection.Add(GEDCOMTagName._MHAP, fDNATest.MHaplogroup);
 
-                fDNATest.YHaplogroup = fView.YHaplogroup.Text;
+                fDNATest.YHaplogroup = _cmbYHaplogroup.Text;
                 fBase.Context.ValuesCollection.Add(GEDCOMTagName._YHAP, fDNATest.YHaplogroup);
 
-                fDNATest.FileFormat = fView.FileFormat.GetSelectedTag<GDMDNAFileFormat>();
+                fDNATest.FileFormat = _cmbFileFormat.GetSelectedTag<GDMDNAFileFormat>();
 
                 if (fIsNew) {
-                    MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
-                    string fileName = fView.File.Text;
+                    MediaStoreType gst = _cmbStoreType.GetSelectedTag<MediaStoreType>();
+                    string fileName = _txtFileRef.Text;
 
                     if (!fBase.Context.CheckNewMedia(fileName, gst)) {
                         return false;
@@ -112,7 +143,7 @@ namespace GKCore.Controllers
                     }
                 }
 
-                fDNATest.Restriction = (GDMRestriction)fView.Restriction.SelectedIndex;
+                fDNATest.Restriction = (GDMRestriction)_cmbRestriction.SelectedIndex;
 
                 CommitChanges();
 
@@ -125,49 +156,49 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.NotesList.ListModel.DataOwner = fDNATest;
-            fView.MediaList.ListModel.DataOwner = fDNATest;
+            _fNotesList.ListModel.DataOwner = fDNATest;
+            _fMediaList.ListModel.DataOwner = fDNATest;
 
-            fView.TestName.Text = fDNATest.TestName;
-            fView.Date.NormalizeDate = fDNATest.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+            _txtTestName.Text = fDNATest.TestName;
+            _dateCtl.NormalizeDate = fDNATest.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
-            BaseController.UpdateComboValues(fBase, fView.Agency, true, false, LabKey, fDNATest.Agency);
-            BaseController.UpdateComboValues(fBase, fView.MHaplogroup, true, false, GEDCOMTagName._MHAP, fDNATest.MHaplogroup);
-            BaseController.UpdateComboValues(fBase, fView.YHaplogroup, true, false, GEDCOMTagName._YHAP, fDNATest.YHaplogroup);
+            BaseController.UpdateComboValues(fBase, _cmbAgency, true, false, LabKey, fDNATest.Agency);
+            BaseController.UpdateComboValues(fBase, _cmbMHaplogroup, true, false, GEDCOMTagName._MHAP, fDNATest.MHaplogroup);
+            BaseController.UpdateComboValues(fBase, _cmbYHaplogroup, true, false, GEDCOMTagName._YHAP, fDNATest.YHaplogroup);
 
-            fView.FileFormat.SetSelectedTag(fDNATest.FileFormat);
+            _cmbFileFormat.SetSelectedTag(fDNATest.FileFormat);
 
             string fileRef = fDNATest.FileReference;
             fIsNew = string.IsNullOrEmpty(fileRef);
-            fView.File.Text = fileRef;
+            _txtFileRef.Text = fileRef;
 
             var storeType = fIsNew ? GlobalOptions.Instance.MediaStoreDefault : MediaStore.GetStoreType(fileRef);
             UpdateFileStore(fIsNew, storeType);
 
-            fView.Restriction.SelectedIndex = (int)fDNATest.Restriction;
+            _cmbRestriction.SelectedIndex = (int)fDNATest.Restriction;
         }
 
         private void UpdateFileStore(bool isNew, MediaStoreType storeType)
         {
-            fView.FileSelectButton.Enabled = isNew && (storeType != MediaStoreType.mstURL);
+            _btnFileSelect.Enabled = isNew && (storeType != MediaStoreType.mstURL);
 
-            fView.File.Enabled = isNew && (storeType == MediaStoreType.mstURL);
-            fView.File.ReadOnly = !fView.File.Enabled;
+            _txtFileRef.Enabled = isNew && (storeType == MediaStoreType.mstURL);
+            _txtFileRef.ReadOnly = !_txtFileRef.Enabled;
 
-            fView.StoreType.Enabled = isNew;
-            fView.StoreType.SetSelectedTag(storeType);
+            _cmbStoreType.Enabled = isNew;
+            _cmbStoreType.SetSelectedTag(storeType);
         }
 
         public void LockEditor(bool locked)
         {
-            fView.TestName.Enabled = !locked;
-            fView.Date.Enabled = !locked;
-            fView.Agency.Enabled = !locked;
-            fView.MHaplogroup.Enabled = !locked;
-            fView.YHaplogroup.Enabled = !locked;
+            _txtTestName.Enabled = !locked;
+            _dateCtl.Enabled = !locked;
+            _cmbAgency.Enabled = !locked;
+            _cmbMHaplogroup.Enabled = !locked;
+            _cmbYHaplogroup.Enabled = !locked;
 
-            fView.NotesList.ReadOnly = locked;
-            fView.MediaList.ReadOnly = locked;
+            _fNotesList.ReadOnly = locked;
+            _fMediaList.ReadOnly = locked;
         }
 
         public async void SelectFile()
@@ -182,37 +213,37 @@ namespace GKCore.Controllers
                 }
             }
 
-            fView.File.Text = fileName;
+            _txtFileRef.Text = fileName;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.DNATest));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
 
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            _pageCommon.Text = LangMan.LS(LSID.Common);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
 
-            GetControl<ILabel>("lblTestName").Text = LangMan.LS(LSID.DNATestName);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
-            GetControl<ILabel>("lblAgency").Text = LangMan.LS(LSID.DNALaboratory);
-            GetControl<ILabel>("lblFileRef").Text = LangMan.LS(LSID.File);
-            GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.StoreType);
-            GetControl<ILabel>("lblFileFormat").Text = LangMan.LS(LSID.DNAFileFormat);
-            GetControl<ILabel>("lblMHaplogroup").Text = LangMan.LS(LSID.MDNAHaplogroup);
-            GetControl<ILabel>("lblYHaplogroup").Text = LangMan.LS(LSID.YDNAHaplogroup);
-            GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
+            _lblTestName.Text = LangMan.LS(LSID.DNATestName);
+            _lblDate.Text = LangMan.LS(LSID.Date);
+            _lblAgency.Text = LangMan.LS(LSID.DNALaboratory);
+            _lblFileRef.Text = LangMan.LS(LSID.File);
+            _lblStoreType.Text = LangMan.LS(LSID.StoreType);
+            _lblFileFormat.Text = LangMan.LS(LSID.DNAFileFormat);
+            _lblMHaplogroup.Text = LangMan.LS(LSID.MDNAHaplogroup);
+            _lblYHaplogroup.Text = LangMan.LS(LSID.YDNAHaplogroup);
+            _lblRestriction.Text = LangMan.LS(LSID.Restriction);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

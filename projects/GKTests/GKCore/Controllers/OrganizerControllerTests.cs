@@ -17,6 +17,16 @@ namespace GKCore.Controllers
     [TestFixture]
     public class OrganizerControllerTests : ControllerTest
     {
+        private ITabPage _pageAddresses;
+        private ITabPage _pageTelephones;
+        private ITabPage _pageMails;
+        private ITabPage _pageWebs;
+
+        private ISheetList _fAdrList;
+        private ISheetList _fPhonesList;
+        private ISheetList _fMailsList;
+        private ISheetList _fWebsList;
+
         [Test]
         public void Test_OrganizerController()
         {
@@ -27,18 +37,18 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static IOrganizerWin CreateMockView()
+        private IOrganizerWin CreateMockView()
         {
             var view = Substitute.For<IOrganizerWin>();
-            SubstituteControl<ITabPage>(view, "pageAddresses");
-            SubstituteControl<ITabPage>(view, "pageTelephones");
-            SubstituteControl<ITabPage>(view, "pageMails");
-            SubstituteControl<ITabPage>(view, "pageWebs");
+            _pageAddresses = SubstCtl<ITabPage>(view, "pageAddresses");
+            _pageTelephones = SubstCtl<ITabPage>(view, "pageTelephones");
+            _pageMails = SubstCtl<ITabPage>(view, "pageMails");
+            _pageWebs = SubstCtl<ITabPage>(view, "pageWebs");
 
-            view.AdrList.Returns(Substitute.For<ISheetList>());
-            view.PhonesList.Returns(Substitute.For<ISheetList>());
-            view.MailsList.Returns(Substitute.For<ISheetList>());
-            view.WebsList.Returns(Substitute.For<ISheetList>());
+            _fAdrList = SubstCtl<ISheetList>(view, "fAdrList");
+            _fPhonesList = SubstCtl<ISheetList>(view, "fPhonesList");
+            _fMailsList = SubstCtl<ISheetList>(view, "fMailsList");
+            _fWebsList = SubstCtl<ISheetList>(view, "fWebsList");
             return view;
         }
     }

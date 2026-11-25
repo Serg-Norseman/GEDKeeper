@@ -11,7 +11,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -33,14 +32,11 @@ namespace GKUI.Forms
             set { fController.Record = value; }
         }
 
-        #region View Interface
-
-        IHyperView IRecordInfoDlg.HyperView
+        public string Text
         {
-            get { return hyperView1; }
+            get { return fController.Text; }
+            set { fController.Text = value; }
         }
-
-        #endregion
 
         public RecordInfoDlg(IBaseWindow baseWin)
         {

@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKUI.Components;
@@ -36,20 +35,6 @@ namespace GKUI.Forms
         private Button btnSave;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        IListView ITreeSplitDlg.SelectedList
-        {
-            get { return ListSelected; }
-        }
-
-        IListView ITreeSplitDlg.SkippedList
-        {
-            get { return ListSkipped; }
-        }
-
         #endregion
 
         public TTTreeSplitDlg(IBaseWindow baseWin)

@@ -23,6 +23,16 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RecordSelectDlgController : DialogController<IRecordSelectDialog>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnSelect;
+        private IButton _btnCreate;
+        private IButton _btnCancel;
+        private IComboBox _txtFastFilter;
+        private IFilterControl _fltCtl;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMRecordType fRecType;
         private readonly Target fTarget;
 
@@ -61,16 +71,16 @@ namespace GKCore.Controllers
                 var filters = GlobalOptions.Instance.GetRSFilters(fRecType);
                 filters.Sort();
 
-                fView.FilterCombo.Clear();
-                fView.FilterCombo.Add("*");
-                fView.FilterCombo.AddStrings(filters);
+                _txtFastFilter.Clear();
+                _txtFastFilter.Add("*");
+                _txtFastFilter.AddStrings(filters);
             }
         }
 
         private string GetFilter()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                return fView.FilterCombo.Text;
+                return _txtFastFilter.Text;
             } else {
                 return fView.FilterText.Text;
             }
@@ -79,7 +89,7 @@ namespace GKCore.Controllers
         private void SetFilter(string value)
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                fView.FilterCombo.Text = value;
+                _txtFastFilter.Text = value;
             } else {
                 fView.FilterText.Text = value;
             }
@@ -161,7 +171,7 @@ namespace GKCore.Controllers
 
             var quickFilter = ((IRecordsListModel)recordsList.ListMan).QuickFilter;
             quickFilter.Value = flt;
-            if (fView.FilterCtl != null) fView.FilterCtl.Params = quickFilter;
+            if (_fltCtl != null) _fltCtl.Params = quickFilter;
 
             switch (fRecType) {
                 case GDMRecordType.rtIndividual: {
@@ -200,16 +210,16 @@ namespace GKCore.Controllers
 
         private void UpdateButtons()
         {
-            GetControl<IButton>("btnSelect").Enabled = fView.RecordsList.ListMan.FilteredCount > 0;
+            _btnSelect.Enabled = fView.RecordsList.ListMan.FilteredCount > 0;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.WinRecordSelect));
 
-            GetControl<IButton>("btnCreate").Text = LangMan.LS(LSID.DlgAppend);
-            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.DlgSelect);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            _btnCreate.Text = LangMan.LS(LSID.DlgAppend);
+            _btnSelect.Text = LangMan.LS(LSID.DlgSelect);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
 
             SetToolTip("txtFastFilter", LangMan.LS(LSID.PressEnterToSaveFilter));
         }
@@ -218,9 +228,9 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnCreate").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd);
-            GetControl<IButton>("btnSelect").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnCreate.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd);
+            _btnSelect.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

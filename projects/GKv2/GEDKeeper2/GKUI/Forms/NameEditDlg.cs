@@ -8,7 +8,6 @@
 
 using System.Windows.Forms;
 using GKCore.Controllers;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Names;
 
@@ -21,30 +20,6 @@ namespace GKUI.Forms
             get { return fController.NameEntry; }
             set { fController.NameEntry = value; }
         }
-
-        #region View Interface
-
-        ITextBox INameEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        ITextBox INameEditDlg.FPatr
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFPatr); }
-        }
-
-        ITextBox INameEditDlg.MPatr
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtMPatr); }
-        }
-
-        IComboBox INameEditDlg.SexCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbSex); }
-        }
-
-        #endregion
 
         public NameEditDlg()
         {

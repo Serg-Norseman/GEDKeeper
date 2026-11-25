@@ -17,6 +17,12 @@ namespace GKCore.Controllers
     [TestFixture]
     public class RecordSelectDlgControllerTests : ControllerTest
     {
+        private IButton _btnSelect;
+        private IButton _btnCreate;
+        private IButton _btnCancel;
+        private IComboBox _txtFastFilter;
+        private IFilterControl _fltCtl;
+
         [Test]
         public void Test_RecordSelectDlgController()
         {
@@ -26,17 +32,16 @@ namespace GKCore.Controllers
             controller.RecType = GDMRecordType.rtIndividual;
         }
 
-        private static IRecordSelectDialog CreateMockView()
+        private IRecordSelectDialog CreateMockView()
         {
             var view = Substitute.For<IRecordSelectDialog>();
-            SubstituteControl<IButton>(view, "btnCreate");
-            SubstituteControl<IButton>(view, "btnSelect");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITextBox>(view, "txtFastFilter");
+            _btnSelect = SubstCtl<IButton>(view, "btnSelect");
+            _btnCreate = SubstCtl<IButton>(view, "btnCreate");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _txtFastFilter = SubstCtl<IComboBox>(view, "txtFastFilter");
+            _fltCtl = SubstCtl<IFilterControl>(view, "fltCtl");
 
-            view.FilterCombo.Returns(Substitute.For<IComboBox>());
             view.FilterText.Returns(Substitute.For<ITextBox>());
-            view.FilterCtl.Returns(Substitute.For<IFilterControl>());
             view.RecordsList.Returns(Substitute.For<IListView>());
             return view;
         }

@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
 using GKUI.Components;
@@ -39,15 +38,6 @@ namespace GKUI.Forms
             get { return fListMan; }
         }
 
-        #region View Interface
-
-        public IFilterGridView FilterGrid
-        {
-            get { return filterView; }
-        }
-
-        #endregion
-
         public CommonFilterDlg()
         {
             InitializeComponent();
@@ -64,12 +54,12 @@ namespace GKUI.Forms
             fBase = baseWin;
             fListMan = listMan;
 
-            fController = new CommonFilterDlgController(this, listMan);
-            fController.InitView(baseWin);
-
             filterView = new FilterGridView(fListMan);
             filterView.Dock = DockStyle.Fill;
             pageFieldsFilter.Controls.Add(filterView);
+
+            fController = new CommonFilterDlgController(this, listMan);
+            fController.InitView(baseWin);
 
             fController.UpdateView();
         }

@@ -21,6 +21,18 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class LocationLinkEditDlgController : DialogController<ILocationLinkEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnLocationAdd;
+        private ILabel _lblLocation;
+        private ITextBox _txtTopLevel;
+        private ILabel _lblDate;
+        private IDateControl _dateCtl;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMLocationLink fLocationLink;
         private GDMLocationRecord fTempLocation;
 
@@ -45,9 +57,9 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.TopLevelText.Activate();
+            _txtTopLevel.Activate();
 
-            fView.DateCtl.DateChanged += new EventHandler(OnDateChanged);
+            _dateCtl.DateChanged += new EventHandler(OnDateChanged);
         }
 
         public override bool Accept()
@@ -56,7 +68,7 @@ namespace GKCore.Controllers
                 fBase.Context.Tree.SetPtrValue(fLocationLink, fTempLocation);
 
                 try {
-                    GDMCustomDate dt = fView.DateCtl.Date;
+                    GDMCustomDate dt = _dateCtl.Date;
                     if (dt == null) throw new ArgumentNullException("dt");
 
                     fLocationLink.Date.ParseString(dt.StringValue);
@@ -76,8 +88,8 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.DateCtl.FixedDateType = GDMDateType.PeriodBetween;
-            fView.DateCtl.Date = fLocationLink.Date.Value;
+            _dateCtl.FixedDateType = GDMDateType.PeriodBetween;
+            _dateCtl.Date = fLocationLink.Date.Value;
             UpdateLocationName();
         }
 
@@ -89,7 +101,7 @@ namespace GKCore.Controllers
 
         public void UpdateLocationName()
         {
-            fView.TopLevelText.Text = (fTempLocation == null) ? "" : fTempLocation.GetNameByDate(fView.DateCtl.Date, true);
+            _txtTopLevel.Text = (fTempLocation == null) ? "" : fTempLocation.GetNameByDate(_dateCtl.Date, true);
         }
 
         private void OnDateChanged(object sender, EventArgs e)
@@ -101,20 +113,20 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Location));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblLocation").Text = LangMan.LS(LSID.Location);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblLocation.Text = LangMan.LS(LSID.Location);
+            _lblDate.Text = LangMan.LS(LSID.Date);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnLocationAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach);
+            _btnLocationAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach);
         }
     }
 }

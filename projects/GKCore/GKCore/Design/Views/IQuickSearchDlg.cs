@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Locales;
 using GKCore.Plugins;
 
@@ -14,6 +13,5 @@ namespace GKCore.Design.Views
 {
     public interface IQuickSearchDlg : IView, ILocalizable, IWidgetForm, IWindowDependent
     {
-        ITextBox SearchPattern { get; }
     }
 }

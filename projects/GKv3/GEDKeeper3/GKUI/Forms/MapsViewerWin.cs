@@ -74,51 +74,6 @@ namespace GKUI.Forms
             get { return fMapBrowser; }
         }
 
-        IComboBox IMapsViewerWin.PersonsCombo
-        {
-            get { return Controller?.GetControlHandler<IComboBox>(cmbPersons); }
-        }
-
-        ITreeView IMapsViewerWin.PlacesTree
-        {
-            get { return Controller?.GetControlHandler<ITreeView>(tvPlaces); }
-        }
-
-        IButton IMapsViewerWin.SelectPlacesBtn
-        {
-            get { return Controller?.GetControlHandler<IButton>(btnSelectPlaces); }
-        }
-
-        ICheckBox IMapsViewerWin.BirthCheck
-        {
-            get { return Controller?.GetControlHandler<ICheckBox>(chkBirth); }
-        }
-
-        ICheckBox IMapsViewerWin.DeathCheck
-        {
-            get { return Controller?.GetControlHandler<ICheckBox>(chkDeath); }
-        }
-
-        ICheckBox IMapsViewerWin.ResidenceCheck
-        {
-            get { return Controller?.GetControlHandler<ICheckBox>(chkResidence); }
-        }
-
-        ICheckBox IMapsViewerWin.LinesVisibleCheck
-        {
-            get { return Controller?.GetControlHandler<ICheckBox>(chkLinesVisible); }
-        }
-
-        IRadioButton IMapsViewerWin.TotalRadio
-        {
-            get { return Controller?.GetControlHandler<IRadioButton>(radTotal); }
-        }
-
-        IRadioButton IMapsViewerWin.SelectedRadio
-        {
-            get { return Controller?.GetControlHandler<IRadioButton>(radSelected); }
-        }
-
         #endregion
 
         public MapsViewerWin(IBaseWindow baseWin)

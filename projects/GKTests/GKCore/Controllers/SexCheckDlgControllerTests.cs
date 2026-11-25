@@ -17,6 +17,14 @@ namespace GKCore.Controllers
     [TestFixture]
     public class SexCheckDlgControllerTests : ControllerTest
     {
+        private ITextBox _txtName;
+        private IGroupBox _grpSex;
+        private IRadioButton _rbNone;
+        private IRadioButton _rbMale;
+        private IRadioButton _rbFemale;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+
         [Test]
         public void Test_SexCheckDlgController()
         {
@@ -33,16 +41,16 @@ namespace GKCore.Controllers
             Assert.AreEqual(GDMSex.svMale, controller.Sex);
         }
 
-        private static ISexCheckDlg CreateMockView()
+        private ISexCheckDlg CreateMockView()
         {
             var view = Substitute.For<ISexCheckDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<IGroupBox>(view, "grpSex");
-            SubstituteControl<IRadioButton>(view, "rbNone");
-            SubstituteControl<IRadioButton>(view, "rbMale");
-            SubstituteControl<IRadioButton>(view, "rbFemale");
-            SubstituteControl<ITextBox>(view, "txtName");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _grpSex = SubstCtl<IGroupBox>(view, "grpSex");
+            _rbNone = SubstCtl<IRadioButton>(view, "rbNone");
+            _rbMale = SubstCtl<IRadioButton>(view, "rbMale");
+            _rbFemale = SubstCtl<IRadioButton>(view, "rbFemale");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
             return view;
         }
     }

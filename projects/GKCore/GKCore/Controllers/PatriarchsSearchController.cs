@@ -25,6 +25,20 @@ namespace GKCore.Controllers
     /// </summary>
     public class PatriarchsSearchController : DialogController<IPatriarchsSearchDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnClose;
+        private ITabPage _pagePatSearch;
+        private IButton _btnPatSearch;
+        private ILabel _lblMinGenerations;
+        private INumericBox _edMinGens;
+        private IButton _btnSetPatriarch;
+        private IButton _btnPatriarchsDiagram;
+        private ICheckBox _chkWithoutDates;
+        private IListView _ListPatriarchs;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private IList<PatriarchObj> fPatriarches;
 
         public PatriarchsSearchController(IPatriarchsSearchDlg view) : base(view)
@@ -36,8 +50,8 @@ namespace GKCore.Controllers
             base.InitView(baseWin);
 
             var listModel = new PatriarchsListModel(fBase.Context);
-            fView.PatriarchsList.ListMan = listModel;
-            fView.PatriarchsList.UpdateContents();
+            _ListPatriarchs.ListMan = listModel;
+            _ListPatriarchs.UpdateContents();
         }
 
         public override void UpdateView()
@@ -51,7 +65,7 @@ namespace GKCore.Controllers
 
         public void SelectPatriarch()
         {
-            GDMIndividualRecord iRec = fView.PatriarchsList.GetSelectedData() as GDMIndividualRecord;
+            GDMIndividualRecord iRec = _ListPatriarchs.GetSelectedData() as GDMIndividualRecord;
             if (iRec == null) return;
 
             fBase.SelectRecordByXRef(iRec.XRef);
@@ -62,17 +76,17 @@ namespace GKCore.Controllers
         {
             fPatriarches = null;
             try {
-                var minGens = (int)fView.MinGensNum.Value;
-                var withoutDates = !fView.WithoutDatesCheck.Checked;
+                var minGens = (int)_edMinGens.Value;
+                var withoutDates = !_chkWithoutDates.Checked;
                 AppHost.Instance.ExecuteWork((controller) => {
                     fPatriarches = PatriarchsMan.GetPatriarchsList(fBase.Context, minGens, withoutDates, controller, true);
                 });
 
                 SortHelper.QuickSort(fPatriarches, PatriarchsCompare);
 
-                ((PatriarchsListModel)fView.PatriarchsList.ListMan).DataSource = fPatriarches;
+                ((PatriarchsListModel)_ListPatriarchs.ListMan).DataSource = fPatriarches;
             } finally {
-                fView.PatriarchsList.UpdateContents();
+                _ListPatriarchs.UpdateContents();
             }
         }
 
@@ -92,7 +106,7 @@ namespace GKCore.Controllers
 
         public void ShowPatriarchsDiagram()
         {
-            var wnd = AppHost.Container.Resolve<IPatriarchsViewer>(fBase, (int)fView.MinGensNum.Value);
+            var wnd = AppHost.Container.Resolve<IPatriarchsViewer>(fBase, (int)_edMinGens.Value);
             wnd.Show(false);
         }
 
@@ -102,24 +116,24 @@ namespace GKCore.Controllers
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
                 if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                    GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
-                    GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                    _pagePatSearch.Text = LangMan.LS(LSID.PatriarchsSearch);
+                    _btnClose.Text = LangMan.LS(LSID.DlgClose);
                 }
 
-                GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.PatriarchsDiagram);
+                _btnPatriarchsDiagram.Text = LangMan.LS(LSID.PatriarchsDiagram);
             }
 
-            GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.MinGenerations);
-            GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.SetPatFlag);
-            GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.Search);
-            GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.WithoutDates);
+            _lblMinGenerations.Text = LangMan.LS(LSID.MinGenerations);
+            _btnSetPatriarch.Text = LangMan.LS(LSID.SetPatFlag);
+            _btnPatSearch.Text = LangMan.LS(LSID.Search);
+            _chkWithoutDates.Text = LangMan.LS(LSID.WithoutDates);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
 
 

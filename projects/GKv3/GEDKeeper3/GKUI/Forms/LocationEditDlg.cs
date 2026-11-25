@@ -12,9 +12,7 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
 
@@ -59,55 +57,6 @@ namespace GKUI.Forms
             get { return fController.LocationRecord; }
             set { fController.LocationRecord = value; }
         }
-
-        #region View Interface
-
-        IMapBrowser ILocationEditDlg.MapBrowser
-        {
-            get { return fMapBrowser; }
-        }
-
-        ISheetList ILocationEditDlg.NamesList
-        {
-            get { return fNamesList; }
-        }
-
-        ISheetList ILocationEditDlg.LinksList
-        {
-            get { return fLinksList; }
-        }
-
-        ISheetList ILocationEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ISheetList ILocationEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        IListView ILocationEditDlg.GeoCoordsList
-        {
-            get { return ListGeoCoords; }
-        }
-
-        ITextBox ILocationEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        ITextBox ILocationEditDlg.Latitude
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtLatitude); }
-        }
-
-        ITextBox ILocationEditDlg.Longitude
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtLongitude); }
-        }
-
-        #endregion
 
         public LocationEditDlg(IBaseWindow baseWin)
         {

@@ -23,6 +23,16 @@ namespace GKCore.Controllers
     public class CommonFilterDlgController<T> : DialogController<T>
         where T : ICommonFilterDlg
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnReset;
+        private ITabPage _pageFieldsFilter;
+        private IFilterGridView _filterView;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly IRecordsListModel fListMan;
 
         public CommonFilterDlgController(T view, IRecordsListModel listMan) : base(view)
@@ -35,9 +45,9 @@ namespace GKCore.Controllers
             try {
                 fListMan.Filter.Clear();
 
-                int num = fView.FilterGrid.Count;
+                int num = _filterView.Count;
                 for (int r = 0; r < num; r++) {
-                    ColumnConditionExpression fcond = fView.FilterGrid[r];
+                    ColumnConditionExpression fcond = _filterView[r];
                     if (fcond != null) {
                         fListMan.AddCondition((byte)fcond.ColumnIndex, fcond.Operator, fcond.Value.ToString());
                     }
@@ -52,11 +62,11 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.FilterGrid.Clear();
+            _filterView.Clear();
             int num = fListMan.Filter.Conditions.Count;
             for (int i = 0; i < num; i++) {
                 ColumnConditionExpression fcond = fListMan.Filter.Conditions[i];
-                fView.FilterGrid.AddCondition(fcond);
+                _filterView.AddCondition(fcond);
             }
         }
 
@@ -75,18 +85,18 @@ namespace GKCore.Controllers
             GKData.CondSigns[8] = LangMan.LS(LSID.CondContainsMask);
             GKData.CondSigns[9] = LangMan.LS(LSID.CondNotContainsMask);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<IButton>("btnReset").Text = LangMan.LS(LSID.DlgReset);
-            GetControl<ITabPage>("pageFieldsFilter").Text = LangMan.LS(LSID.FieldsFilter);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _btnReset.Text = LangMan.LS(LSID.DlgReset);
+            _pageFieldsFilter.Text = LangMan.LS(LSID.FieldsFilter);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 

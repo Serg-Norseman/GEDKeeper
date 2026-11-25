@@ -13,7 +13,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -33,30 +32,6 @@ namespace GKUI.Forms
         private GKListView fListStats;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        IGraphControl IStatisticsWin.Graph
-        {
-            get { return fGraph; }
-        }
-
-        IListView IStatisticsWin.ListStats
-        {
-            get { return fListStats; }
-        }
-
-        IListView IStatisticsWin.Summary
-        {
-            get { return lvSummary; }
-        }
-
-        IComboBox IStatisticsWin.StatsType
-        {
-            get { return Controller?.GetControlHandler<IComboBox>(cbType); }
-        }
-
         #endregion
 
         public IWindow OwnerWindow

@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -45,35 +44,6 @@ namespace GKUI.Forms
             get { return fController.SourceCitation; }
             set { fController.SourceCitation = value; }
         }
-
-        #region View Interface
-
-        ITextBox ISourceCitEditDlg.Page
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtPage); }
-        }
-
-        IComboBox ISourceCitEditDlg.Certainty
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtCertainty); }
-        }
-
-        IComboBox ISourceCitEditDlg.Source
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
-        }
-
-        IDateControl ISourceCitEditDlg.DataDate
-        {
-            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
-        }
-
-        ITextBox ISourceCitEditDlg.DataText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtText); }
-        }
-
-        #endregion
 
         public SourceCitEditDlg(IBaseWindow baseWin)
         {

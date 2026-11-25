@@ -20,6 +20,20 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeMergeController : DialogController<ITreeMergeDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageTreeMerge;
+        private IButton _btnClose;
+        private ILabel _lblMasterBase;
+        private ITextBox _edMasterBase;
+        private ILabel _lblOtherBase;
+        private ITextBox _edUpdateBase;
+        private IButton _btnTreeMerge;
+        private ITextBox _mSyncRes;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
+
         public TreeMergeController(ITreeMergeDlg view) : base(view)
         {
         }
@@ -33,8 +47,8 @@ namespace GKCore.Controllers
             string fileName = await AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
-            fView.UpdateBase.Text = fileName;
-            TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, fView.SyncLog, true);
+            _edUpdateBase.Text = fileName;
+            TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, _mSyncRes, true);
             fBase.Context.SetModified();
             fBase.RefreshLists(false);
         }
@@ -44,21 +58,21 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.TreeMerge));
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.TreeMerge);
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                _pageTreeMerge.Text = LangMan.LS(LSID.TreeMerge);
+                _btnClose.Text = LangMan.LS(LSID.DlgClose);
             }
 
-            GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<ILabel>("lblMasterBase").Text = LangMan.LS(LSID.MasterBase);
-            GetControl<ILabel>("lblOtherBase").Text = LangMan.LS(LSID.OtherBase);
-            GetControl<ITextBox>("edMasterBase").Text = LangMan.LS(LSID.CurrentBase);
+            _btnTreeMerge.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            _lblMasterBase.Text = LangMan.LS(LSID.MasterBase);
+            _lblOtherBase.Text = LangMan.LS(LSID.OtherBase);
+            _edMasterBase.Text = LangMan.LS(LSID.CurrentBase);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnClose.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

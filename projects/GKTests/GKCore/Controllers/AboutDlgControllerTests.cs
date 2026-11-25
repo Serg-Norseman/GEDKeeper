@@ -16,24 +16,32 @@ namespace GKCore.Controllers
     [TestFixture]
     public class AboutDlgControllerTests : ControllerTest
     {
+        private ILabel _lblProduct;
+        private ILabel _lblVersion;
+        private ILabel _lblCopyright;
+        private IButton _btnClose;
+        private ILabel _lblForum;
+        private ILabel _lblChannel;
+
         [Test]
         public void Test_AboutDlgController()
         {
             IAboutDlg view = CreateMockView();
             var controller = new AboutDlgController(view);
+            controller.InitView(null);
             controller.SetLocale();
             controller.UpdateView();
         }
 
-        private static IAboutDlg CreateMockView()
+        private IAboutDlg CreateMockView()
         {
             var view = Substitute.For<IAboutDlg>();
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<ILabel>(view, "lblProduct");
-            SubstituteControl<ILabel>(view, "lblVersion");
-            SubstituteControl<ILabel>(view, "lblCopyright");
-            SubstituteControl<ILabel>(view, "lblForum");
-            SubstituteControl<ILabel>(view, "lblChannel");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _lblProduct = SubstCtl<ILabel>(view, "lblProduct");
+            _lblVersion = SubstCtl<ILabel>(view, "lblVersion");
+            _lblCopyright = SubstCtl<ILabel>(view, "lblCopyright");
+            _lblForum = SubstCtl<ILabel>(view, "lblForum");
+            _lblChannel = SubstCtl<ILabel>(view, "lblChannel");
             return view;
         }
     }

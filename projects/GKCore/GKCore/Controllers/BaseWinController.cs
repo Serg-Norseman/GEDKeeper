@@ -53,6 +53,17 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class BaseWinController : FormController<IBaseWindowView>
     {
+        // Note (special case): fields of toolbar/menu controls (mi*/tb*) are not created -
+        // this set of controls is absent in the GKvX form (BindControls would break it),
+        // they are accessed by string names. Dynamic names ("tab{N}", splitters) are also string-based.
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private ITabControl _tabsRecords;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly List<GDMRecord> fChangedRecords;
         private readonly BaseContext fContext;
         private GDMRecord fDelayedTransitionRecord;
@@ -497,9 +508,8 @@ namespace GKCore.Controllers
         {
             var strRecType = ((int)recType).ToString();
 
-            var tabs = GetControl<ITabControl>("tabsRecords");
             var tabLocs = GetControl<ITabPage>("tab" + strRecType);
-            tabs.SetTabVisible(tabLocs, visible);
+            _tabsRecords.SetTabVisible(tabLocs, visible);
         }
 
         /// <summary>
@@ -516,7 +526,7 @@ namespace GKCore.Controllers
                 int currentTab;
 
                 if (userChange) {
-                    currentTab = fView.RecordTabs.SelectedIndex + 1;
+                    currentTab = _tabsRecords.SelectedIndex + 1;
                     int splitterPos = GetControl<ISplitter>(fTabParts[currentTab].SplitterName).Position;
 
                     if (globOpts.KeepInfoPansOverallSize) {
@@ -568,7 +578,7 @@ namespace GKCore.Controllers
 
         public GDMRecordType GetSelectedRecordType()
         {
-            return (GDMRecordType)(fView.RecordTabs.SelectedIndex + 1);
+            return (GDMRecordType)(_tabsRecords.SelectedIndex + 1);
         }
 
         public IListView GetRecordsViewByType(GDMRecordType recType)
@@ -928,7 +938,7 @@ namespace GKCore.Controllers
             try {
                 bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
 
-                var tabControl = GetControl<ITabControl>("tabsRecords");
+                var tabControl = _tabsRecords;
                 if (tabControl.Pages.Count >= 11) {
                     tabControl.Pages[0].Text = LangMan.LS(LSID.RPIndividuals);
                     tabControl.Pages[1].Text = LangMan.LS(LSID.RPFamilies);
@@ -1573,8 +1583,11 @@ namespace GKCore.Controllers
         public void UpdatePluginsItems()
         {
             try {
-                fView.PluginsItem.ClearItems();
-                fView.ReportsItem.ClearItems();
+                var miPlugins = GetControl<IMenuItem>("miPlugins");
+                var miReports = GetControl<IMenuItem>("miReports");
+
+                miPlugins.ClearItems();
+                miReports.ClearItems();
 
                 AppHost.Instance.ActiveWidgets.Clear();
 
@@ -1586,7 +1599,7 @@ namespace GKCore.Controllers
                         continue;
                     }
 
-                    IMenuItem ownerItem = (plugin.Category == PluginCategory.Report) ? fView.ReportsItem : fView.PluginsItem;
+                    IMenuItem ownerItem = (plugin.Category == PluginCategory.Report) ? miReports : miPlugins;
                     IImage pluginIcon = PluginsMan.GetThemedPluginIcon(plugin);
                     IMenuItem mi = ownerItem.AddItem(plugin.DisplayName, plugin, pluginIcon, Plugin_Click);
 
@@ -1598,8 +1611,8 @@ namespace GKCore.Controllers
                     }
                 }
 
-                fView.ReportsItem.Enabled = (fView.ReportsItem.SubItems.Count > 0);
-                fView.PluginsItem.Enabled = (fView.PluginsItem.SubItems.Count > 0);
+                miReports.Enabled = (miReports.SubItems.Count > 0);
+                miPlugins.Enabled = (miPlugins.SubItems.Count > 0);
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.UpdatePluginsItems()", ex);
             }
@@ -1608,13 +1621,16 @@ namespace GKCore.Controllers
         public void UpdatePluginItemsTheme()
         {
             try {
-                for (int i = 0; i < fView.ReportsItem.SubItems.Count; i++) {
-                    IMenuItem mi = fView.ReportsItem.SubItems[i];
+                var miPlugins = GetControl<IMenuItem>("miPlugins");
+                var miReports = GetControl<IMenuItem>("miReports");
+
+                for (int i = 0; i < miReports.SubItems.Count; i++) {
+                    IMenuItem mi = miReports.SubItems[i];
                     mi.Glyph = PluginsMan.GetThemedPluginIcon(mi.Tag as IPlugin);
                 }
 
-                for (int i = 0; i < fView.PluginsItem.SubItems.Count; i++) {
-                    IMenuItem mi = fView.PluginsItem.SubItems[i];
+                for (int i = 0; i < miPlugins.SubItems.Count; i++) {
+                    IMenuItem mi = miPlugins.SubItems[i];
                     mi.Glyph = PluginsMan.GetThemedPluginIcon(mi.Tag as IPlugin);
                 }
             } catch (Exception ex) {

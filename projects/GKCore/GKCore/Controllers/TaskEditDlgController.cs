@@ -23,6 +23,25 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class TaskEditDlgController : DialogController<ITaskEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageNotes;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblGoal;
+        private IComboBox _cmbGoalType;
+        private ITextBox _txtGoal;
+        private IButton _btnGoalSelect;
+        private ILabel _lblPriority;
+        private IComboBox _txtPriority;
+        private ILabel _lblStartDate;
+        private IDateBox _txtStartDate;
+        private IDateBox _txtStopDate;
+        private ILabel _lblStopDate;
+        private ISheetList _fNotesList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMTaskRecord fTaskRecord;
         private GDMRecord fTempRec;
 
@@ -47,28 +66,28 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.Priority.ReadOnly = true;
+            _txtPriority.ReadOnly = true;
             for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
-                fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
+                _txtPriority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            fView.GoalType.ReadOnly = true;
+            _cmbGoalType.ReadOnly = true;
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
-                fView.GoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
+                _cmbGoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
 
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.NotesList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
+                GDMGoalType gt = (GDMGoalType)_cmbGoalType.SelectedIndex;
                 switch (gt) {
                     case GDMGoalType.gtIndividual:
                     case GDMGoalType.gtFamily:
@@ -82,13 +101,13 @@ namespace GKCore.Controllers
                         break;
 
                     case GDMGoalType.gtOther:
-                        fTaskRecord.Goal = fView.Goal.Text;
+                        fTaskRecord.Goal = _txtGoal.Text;
                         break;
                 }
 
-                fTaskRecord.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fTaskRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
-                fTaskRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
+                fTaskRecord.Priority = (GDMResearchPriority)_txtPriority.SelectedIndex;
+                fTaskRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(_txtStartDate.NormalizeDate, true));
+                fTaskRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(_txtStopDate.NormalizeDate, true));
 
                 fLocalUndoman.Commit();
 
@@ -104,55 +123,55 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             if (fTaskRecord == null) {
-                fView.Priority.SelectedIndex = -1;
-                fView.StartDate.Text = "";
-                fView.StopDate.Text = "";
-                fView.GoalType.SelectedIndex = 0;
-                fView.Goal.Text = "";
+                _txtPriority.SelectedIndex = -1;
+                _txtStartDate.Text = "";
+                _txtStopDate.Text = "";
+                _cmbGoalType.SelectedIndex = 0;
+                _txtGoal.Text = "";
             } else {
-                fView.Priority.SelectedIndex = (sbyte)fTaskRecord.Priority;
-                fView.StartDate.NormalizeDate = fTaskRecord.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.NormalizeDate = fTaskRecord.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                _txtPriority.SelectedIndex = (sbyte)fTaskRecord.Priority;
+                _txtStartDate.NormalizeDate = fTaskRecord.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                _txtStopDate.NormalizeDate = fTaskRecord.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
 
                 var goal = GKUtils.GetTaskGoal(fBase.Context.Tree, fTaskRecord);
                 fTempRec = goal.GoalRec;
-                fView.GoalType.SelectedIndex = (sbyte)goal.GoalType;
+                _cmbGoalType.SelectedIndex = (sbyte)goal.GoalType;
 
                 switch (goal.GoalType) {
                     case GDMGoalType.gtIndividual:
                     case GDMGoalType.gtFamily:
                     case GDMGoalType.gtSource:
-                        fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, goal.GoalType, fTempRec);
+                        _txtGoal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, goal.GoalType, fTempRec);
                         break;
 
                     case GDMGoalType.gtOther:
-                        fView.Goal.Text = fTaskRecord.Goal;
+                        _txtGoal.Text = fTaskRecord.Goal;
                         break;
                 }
             }
 
-            fView.NotesList.ListModel.DataOwner = fTaskRecord;
+            _fNotesList.ListModel.DataOwner = fTaskRecord;
 
             ChangeGoalType();
         }
 
         public async void SelectGoal()
         {
-            GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
+            GDMGoalType gt = (GDMGoalType)_cmbGoalType.SelectedIndex;
             switch (gt) {
                 case GDMGoalType.gtIndividual:
                     fTempRec = await BaseController.SelectPerson(fView, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
-                    fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
+                    _txtGoal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtFamily:
                     fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtFamily, Array.Empty<object>());
-                    fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
+                    _txtGoal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtSource:
                     fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtSource, Array.Empty<object>());
-                    fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
+                    _txtGoal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtOther:
@@ -162,18 +181,18 @@ namespace GKCore.Controllers
 
         public void ChangeGoalType()
         {
-            GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
+            GDMGoalType gt = (GDMGoalType)_cmbGoalType.SelectedIndex;
             switch (gt) {
                 case GDMGoalType.gtIndividual:
                 case GDMGoalType.gtFamily:
                 case GDMGoalType.gtSource:
-                    fView.GoalSelect.Enabled = true;
-                    fView.Goal.ReadOnly = true;
+                    _btnGoalSelect.Enabled = true;
+                    _txtGoal.ReadOnly = true;
                     break;
 
                 case GDMGoalType.gtOther:
-                    fView.GoalSelect.Enabled = false;
-                    fView.Goal.ReadOnly = false;
+                    _btnGoalSelect.Enabled = false;
+                    _txtGoal.ReadOnly = false;
                     break;
             }
         }
@@ -182,13 +201,13 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.WinTaskEdit));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ILabel>("lblGoal").Text = LangMan.LS(LSID.Goal);
-            GetControl<ILabel>("lblPriority").Text = LangMan.LS(LSID.Priority);
-            GetControl<ILabel>("lblStartDate").Text = LangMan.LS(LSID.StartDate);
-            GetControl<ILabel>("lblStopDate").Text = LangMan.LS(LSID.StopDate);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _lblGoal.Text = LangMan.LS(LSID.Goal);
+            _lblPriority.Text = LangMan.LS(LSID.Priority);
+            _lblStartDate.Text = LangMan.LS(LSID.StartDate);
+            _lblStopDate.Text = LangMan.LS(LSID.StopDate);
 
             SetToolTip("btnGoalSelect", LangMan.LS(LSID.GoalSelectTip));
         }
@@ -197,10 +216,10 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnGoalSelect").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnGoalSelect.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
         }
     }
 }

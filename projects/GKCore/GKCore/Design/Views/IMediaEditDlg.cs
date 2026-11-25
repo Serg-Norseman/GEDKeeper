@@ -7,18 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface IMediaFileDlg : ICommonDialog
     {
-        IComboBox MediaType { get; }
-        IComboBox StoreType { get; }
-        ITextBox Name { get; }
-        ITextBox File { get; }
-        IButton FileSelectButton { get; }
     }
 
 
@@ -31,16 +24,5 @@ namespace GKCore.Design.Views
     public interface IMediaEditDlg : ICommonDialog
     {
         GDMMultimediaRecord MultimediaRecord { get; set; }
-
-        ISheetList FilesList { get; }
-        ISheetList NotesList { get; }
-        ISheetList SourcesList { get; }
-        ISheetList UserRefList { get; }
-
-        IComboBox MediaType { get; }
-        IComboBox StoreType { get; }
-        ITextBox Name { get; }
-        ITextBox File { get; }
-        IButton FileSelectButton { get; }
     }
 }

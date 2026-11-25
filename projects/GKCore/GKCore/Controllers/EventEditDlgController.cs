@@ -26,6 +26,38 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class EventEditDlgController : DialogController<IEventEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnAddress;
+        private IButton _btnPlaceAdd;
+        private IButton _btnPlaceDelete;
+        private IButton _btnAge;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageSources;
+        private ITabPage _pageCommon;
+        private ILabel _lblEvent;
+        private ILabel _lblPlace;
+        private ILabel _lblDate;
+        private ILabel _lblCause;
+        private ILabel _lblOrg;
+        private ILabel _lblAttrValue;
+        private IComboBox _cmbEventType;
+        private ITextBox _txtEventPlace;
+        private IComboBox _txtEventCause;
+        private IComboBox _txtEventOrg;
+        private IComboBox _txtAttribute;
+        private IDateControl _dateCtl;
+        private ILabel _lblAge;
+        private ITextBox _txtAge;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+        private ISheetList _fSourcesList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMCustomEvent fEvent;
         private GDMLocationRecord fTempLocation;
 
@@ -52,34 +84,34 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.EventType.Activate();
-            fView.Date.DateChanged += new EventHandler(dateCtl_DateChanged);
+            _cmbEventType.Activate();
+            _dateCtl.DateChanged += new EventHandler(dateCtl_DateChanged);
 
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fSourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
-            fView.SourcesList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
+            _fSourcesList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                GDMCustomDate dt = fView.Date.Date;
+                GDMCustomDate dt = _dateCtl.Date;
                 if (dt == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
                     return false;
                 }
                 fEvent.Date.ParseString(dt.StringValue);
 
-                var eventDef = fView.EventType.GetSelectedTag<EventDef>();
+                var eventDef = _cmbEventType.GetSelectedTag<EventDef>();
                 if (eventDef.Kind == EventKind.ekFact) {
-                    var attrValue = fView.Attribute.Text;
+                    var attrValue = _txtAttribute.Text;
 
                     if (string.IsNullOrEmpty(attrValue) && !eventDef.AcceptableEmpty) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FactValueIsInvalid));
@@ -97,10 +129,10 @@ namespace GKCore.Controllers
                 string key = eventDef.Tag + ":" + eventDef.Type;
                 fBase.Context.EventStats.Increment(key);
 
-                fEvent.Place.StringValue = fView.Place.Text;
+                fEvent.Place.StringValue = _txtEventPlace.Text;
                 fBase.Context.Tree.SetPtrValue(fEvent.Place.Location, fTempLocation);
-                fEvent.Cause = fView.Cause.Text;
-                fEvent.Agency = fView.Agency.Text;
+                fEvent.Cause = _txtEventCause.Text;
+                fEvent.Agency = _txtEventOrg.Text;
 
                 if (fEvent is GDMIndividualEvent && eventDef.Kind == EventKind.ekFact) {
                     var attr = new GDMIndividualAttribute();
@@ -122,33 +154,33 @@ namespace GKCore.Controllers
         private void SetEventTypes(EventTarget target)
         {
             var freqList = BaseController.GetFrequencyEventTypes(fBase.Context, target);
-            FreqCollection<string>.PopulateCombo(fView.EventType, freqList, null);
+            FreqCollection<string>.PopulateCombo(_cmbEventType, freqList, null);
         }
 
         public override void UpdateView()
         {
-            fView.NotesList.ListModel.DataOwner = fEvent;
-            fView.MediaList.ListModel.DataOwner = fEvent;
-            fView.SourcesList.ListModel.DataOwner = fEvent;
+            _fNotesList.ListModel.DataOwner = fEvent;
+            _fMediaList.ListModel.DataOwner = fEvent;
+            _fSourcesList.ListModel.DataOwner = fEvent;
 
             EventTarget evtTarget = fEvent is GDMFamilyEvent ? EventTarget.etFamily : EventTarget.etIndividual;
             SetEventTypes(evtTarget);
 
             var evDef = AppHost.EventDefinitions.Find(fEvent);
-            fView.EventType.SetSelectedTag(evDef);
+            _cmbEventType.SetSelectedTag(evDef);
             if (evDef != null && evDef.Kind == EventKind.ekFact) {
-                fView.Attribute.Text = fEvent.StringValue;
+                _txtAttribute.Text = fEvent.StringValue;
             }
 
             ChangeEventType();
 
-            fView.Date.Date = fEvent.Date.Value;
+            _dateCtl.Date = fEvent.Date.Value;
 
             var causVals = fBase.Context.ValuesCollection.GetValues(GEDCOMTagName.CAUS);
-            UpdateCombo(fView.Cause, true, false, causVals, fEvent.Cause);
+            UpdateCombo(_txtEventCause, true, false, causVals, fEvent.Cause);
 
             var agncVals = fBase.Context.ValuesCollection.GetValues(GEDCOMTagName.AGNC);
-            UpdateCombo(fView.Agency, true, false, agncVals, fEvent.Agency);
+            UpdateCombo(_txtEventOrg, true, false, agncVals, fEvent.Agency);
 
             fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
             UpdatePlace(true);
@@ -159,10 +191,10 @@ namespace GKCore.Controllers
         private void UpdatePlace(bool forced)
         {
             if (fTempLocation != null) {
-                fView.Place.Text = GKUtils.GetLocationNameExt(fTempLocation, fView.Date.Date);
+                _txtEventPlace.Text = GKUtils.GetLocationNameExt(fTempLocation, _dateCtl.Date);
                 SetLocationMode(true);
             } else if (forced) {
-                fView.Place.Text = fEvent.Place.StringValue;
+                _txtEventPlace.Text = fEvent.Place.StringValue;
                 SetLocationMode(false);
             }
         }
@@ -172,19 +204,19 @@ namespace GKCore.Controllers
             bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
 
             if (active) {
-                fView.Place.ReadOnly = true;
-                GetControl<IButton>("btnPlaceAdd").Enabled = false;
-                GetControl<IButton>("btnPlaceDelete").Enabled = true && !disNoStd;
+                _txtEventPlace.ReadOnly = true;
+                _btnPlaceAdd.Enabled = false;
+                _btnPlaceDelete.Enabled = true && !disNoStd;
             } else {
-                fView.Place.ReadOnly = false;
-                GetControl<IButton>("btnPlaceAdd").Enabled = true && !disNoStd;
-                GetControl<IButton>("btnPlaceDelete").Enabled = false;
+                _txtEventPlace.ReadOnly = false;
+                _btnPlaceAdd.Enabled = true && !disNoStd;
+                _btnPlaceDelete.Enabled = false;
             }
         }
 
         public async void AddPlace()
         {
-            fTempLocation = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
+            fTempLocation = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { _txtEventPlace.Text }) as GDMLocationRecord;
             UpdatePlace(true);
         }
 
@@ -201,8 +233,8 @@ namespace GKCore.Controllers
 
         private void UpdateAge()
         {
-            GetControl<ITextBox>("txtAge").Enabled = false;
-            GetControl<ITextBox>("txtAge").Text = GKUtils.GetAgeDisplayStr(fEvent);
+            _txtAge.Enabled = false;
+            _txtAge.Text = GKUtils.GetAgeDisplayStr(fEvent);
         }
 
         public async void ModifyAge()
@@ -216,21 +248,21 @@ namespace GKCore.Controllers
         private void SetAttributeMode(bool active)
         {
             if (active) {
-                fView.Attribute.Enabled = true;
+                _txtAttribute.Enabled = true;
                 //txtAttribute.BackColor = SystemColors.Window;
             } else {
-                fView.Attribute.Enabled = false;
+                _txtAttribute.Enabled = false;
                 //txtAttribute.BackColor = SystemColors.Control;
-                fView.Attribute.Text = "";
+                _txtAttribute.Text = "";
             }
         }
 
         public void ChangeEventType()
         {
-            var evDef = fView.EventType.GetSelectedTag<EventDef>();
+            var evDef = _cmbEventType.GetSelectedTag<EventDef>();
             if (evDef == null) {
                 evDef = AppHost.EventDefinitions.Find(GEDCOMTagName.EVEN, "");
-                fView.EventType.SetSelectedTag(evDef);
+                _cmbEventType.SetSelectedTag(evDef);
             }
 
             string evTag = evDef.Tag;
@@ -249,7 +281,7 @@ namespace GKCore.Controllers
                 canbeSorted = true;
                 fixedList = false;
             }
-            UpdateCombo(fView.Attribute, canbeSorted, fixedList, vals, fView.Attribute.Text);
+            UpdateCombo(_txtAttribute, canbeSorted, fixedList, vals, _txtAttribute.Text);
         }
 
         private static void UpdateCombo(IComboBox combo, bool canbeSorted, bool readOnly, string[] values, string current)
@@ -265,8 +297,7 @@ namespace GKCore.Controllers
         public void SendData(string signature, string data)
         {
             if (signature == "event_year" && !string.IsNullOrEmpty(data)) {
-                var dateControl = fView.Date;
-                dateControl.PasteValue(data);
+                _dateCtl.PasteValue(data);
             }
         }
 
@@ -279,21 +310,21 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Event));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.Address) + @"...";
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<ILabel>("lblEvent").Text = LangMan.LS(LSID.Event);
-            GetControl<ILabel>("lblAttrValue").Text = LangMan.LS(LSID.Value);
-            GetControl<ILabel>("lblPlace").Text = LangMan.LS(LSID.Place);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
-            GetControl<ILabel>("lblCause").Text = LangMan.LS(LSID.Cause);
-            GetControl<ILabel>("lblOrg").Text = LangMan.LS(LSID.Agency);
-            GetControl<IButton>("btnAge").Text = LangMan.LS(LSID.Age);
-            GetControl<ILabel>("lblAge").Text = LangMan.LS(LSID.Age);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _btnAddress.Text = LangMan.LS(LSID.Address) + @"...";
+            _pageCommon.Text = LangMan.LS(LSID.Common);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
+            _pageSources.Text = LangMan.LS(LSID.RPSources);
+            _lblEvent.Text = LangMan.LS(LSID.Event);
+            _lblAttrValue.Text = LangMan.LS(LSID.Value);
+            _lblPlace.Text = LangMan.LS(LSID.Place);
+            _lblDate.Text = LangMan.LS(LSID.Date);
+            _lblCause.Text = LangMan.LS(LSID.Cause);
+            _lblOrg.Text = LangMan.LS(LSID.Agency);
+            _btnAge.Text = LangMan.LS(LSID.Age);
+            _lblAge.Text = LangMan.LS(LSID.Age);
 
             SetToolTip("btnPlaceAdd", LangMan.LS(LSID.PlaceAddTip));
             SetToolTip("btnPlaceDelete", LangMan.LS(LSID.PlaceDeleteTip));
@@ -303,11 +334,11 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnPlaceAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnPlaceDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnPlaceAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnPlaceDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
         }
     }
 }

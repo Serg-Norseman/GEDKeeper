@@ -15,7 +15,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 using GKUI.Components;
@@ -27,7 +26,6 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private Button btnClose;
         private TabPage pageFamilyGroups;
         private TreeView tvGroups;
         private GKUI.Components.LogChart gkLogChart1;
@@ -41,20 +39,6 @@ namespace GKUI.Forms
         private ButtonMenuItem miDQResetFilter;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        ITreeView IFragmentSearchDlg.GroupsTree
-        {
-            get { return Controller?.GetControlHandler<ITreeView>(tvGroups); }
-        }
-
-        ILogChart IFragmentSearchDlg.LogChart
-        {
-            get { return Controller?.GetControlHandler<ILogChart>(gkLogChart1); }
-        }
-
         #endregion
 
         public TTFamilyGroupsDlg(IBaseWindow baseWin)

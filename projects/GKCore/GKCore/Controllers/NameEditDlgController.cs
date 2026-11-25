@@ -22,6 +22,22 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class NameEditDlgController : DialogController<INameEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblSex;
+        private IComboBox _cmbSex;
+        private IGroupBox _grpPatronymics;
+        private ILabel _lblFemale;
+        private ITextBox _txtFPatr;
+        private ILabel _lblMale;
+        private ITextBox _txtMPatr;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private NameEntry fIName;
 
         public NameEntry NameEntry
@@ -44,19 +60,19 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.SexCombo.ReadOnly = true;
+            _cmbSex.ReadOnly = true;
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
-                fView.SexCombo.Add(GKUtils.SexStr(sx));
+                _cmbSex.Add(GKUtils.SexStr(sx));
             }
         }
 
         public override bool Accept()
         {
             try {
-                fIName.Name = fView.Name.Text;
-                fIName.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
-                fIName.F_Patronymic = fView.FPatr.Text;
-                fIName.M_Patronymic = fView.MPatr.Text;
+                fIName.Name = _txtName.Text;
+                fIName.Sex = (GDMSex)_cmbSex.SelectedIndex;
+                fIName.F_Patronymic = _txtFPatr.Text;
+                fIName.M_Patronymic = _txtMPatr.Text;
 
                 return true;
             } catch (Exception ex) {
@@ -68,15 +84,15 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             if (fIName == null) {
-                fView.Name.Text = "";
-                fView.SexCombo.SelectedIndex = 0;
-                fView.FPatr.Text = "";
-                fView.MPatr.Text = "";
+                _txtName.Text = "";
+                _cmbSex.SelectedIndex = 0;
+                _txtFPatr.Text = "";
+                _txtMPatr.Text = "";
             } else {
-                fView.Name.Text = fIName.Name;
-                fView.SexCombo.SelectedIndex = (sbyte)fIName.Sex;
-                fView.FPatr.Text = fIName.F_Patronymic;
-                fView.MPatr.Text = fIName.M_Patronymic;
+                _txtName.Text = fIName.Name;
+                _cmbSex.SelectedIndex = (sbyte)fIName.Sex;
+                _txtFPatr.Text = fIName.F_Patronymic;
+                _txtMPatr.Text = fIName.M_Patronymic;
             }
         }
 
@@ -84,21 +100,21 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.GivenName));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.GivenName);
-            GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.Sex);
-            GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.Patronymic);
-            GetControl<ILabel>("lblFemale").Text = LangMan.LS(LSID.PatFemale);
-            GetControl<ILabel>("lblMale").Text = LangMan.LS(LSID.PatMale);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblName.Text = LangMan.LS(LSID.GivenName);
+            _lblSex.Text = LangMan.LS(LSID.Sex);
+            _grpPatronymics.Text = LangMan.LS(LSID.Patronymic);
+            _lblFemale.Text = LangMan.LS(LSID.PatFemale);
+            _lblMale.Text = LangMan.LS(LSID.PatMale);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

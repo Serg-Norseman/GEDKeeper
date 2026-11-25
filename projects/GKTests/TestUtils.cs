@@ -27,7 +27,7 @@ namespace GKTests
     {
         public static void InitGEDCOMProviderTest()
         {
-#if NETCOREAPP3_1_OR_GREATER
+#if NETCOREAPP
             // support for legacy encodings
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 #endif

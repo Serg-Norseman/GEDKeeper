@@ -18,6 +18,27 @@ namespace GKCore.Controllers
     [TestFixture]
     public class PersonsFilterDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnReset;
+        private ITabPage _pageFieldsFilter;
+        private IFilterGridView _filterView;
+        private ITabPage _pageSpecificFilter;
+        private IComboBox _cmbEventVal;
+        private IComboBox _cmbSource;
+        private IComboBox _cmbGroup;
+        private IComboBox _cmbResidence;
+        private ITextBox _txtAliveBeforeDate;
+        private IRadioButton _rbSexMale;
+        private IRadioButton _rbSexAll;
+        private IRadioButton _rbSexFemale;
+        private IComboBox _txtName;
+        private IRadioButton _rbAll;
+        private IRadioButton _rbOnlyLive;
+        private IRadioButton _rbOnlyDead;
+        private IRadioButton _rbAliveBefore;
+        private ICheckBox _chkOnlyPatriarchs;
+
         [Test]
         public void Test_PersonsFilterDlgController()
         {
@@ -26,59 +47,59 @@ namespace GKCore.Controllers
             controller.InitView(fBaseWin);
             controller.UpdateView();
 
-            controller.GetControl<IRadioButton>("rbAliveBefore").Checked = true;
-            controller.GetControl<IRadioButton>("rbAll").Checked = true;
+            _rbAliveBefore.Checked = true;
+            _rbAll.Checked = true;
 
-            controller.GetControl<IRadioButton>("rbSexMale").Checked = true;
-            controller.GetControl<IRadioButton>("rbOnlyLive").Checked = true;
+            _rbSexMale.Checked = true;
+            _rbOnlyLive.Checked = true;
 
-            controller.GetControl<IComboBox>("txtName").Text = "*Ivan*";
+            _txtName.Text = "*Ivan*";
 
-            controller.GetControl<IComboBox>("cmbResidence").Text = "*test place*";
+            _cmbResidence.Text = "*test place*";
 
-            controller.GetControl<IComboBox>("cmbEventVal").Text = "*test event*";
+            _cmbEventVal.Text = "*test event*";
 
-            controller.GetControl<IComboBox>("cmbGroup").Text = "- any -";
+            _cmbGroup.Text = "- any -";
 
-            controller.GetControl<IComboBox>("cmbSource").Text = "- any -";
+            _cmbSource.Text = "- any -";
 
             controller.Accept();
         }
 
-        private static IPersonsFilterDlg CreateMockView()
+        private IPersonsFilterDlg CreateMockView()
         {
             var view = Substitute.For<IPersonsFilterDlg>();
 
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<IButton>(view, "btnReset");
-            SubstituteControl<ITabPage>(view, "pageFieldsFilter");
-            view.FilterGrid.Returns(Substitute.For<IFilterGridView>());
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _btnReset = SubstCtl<IButton>(view, "btnReset");
+            _pageFieldsFilter = SubstCtl<ITabPage>(view, "pageFieldsFilter");
+            _filterView = SubstCtl<IFilterGridView>(view, "filterView");
 
-            SubstituteControl<ITabPage>(view, "pageSpecificFilter");
-            SubstituteControl<IRadioButton>(view, "rbAll");
-            SubstituteControl<IRadioButton>(view, "rbOnlyLive");
-            SubstituteControl<IRadioButton>(view, "rbOnlyDead");
-            SubstituteControl<IRadioButton>(view, "rbAliveBefore");
-            SubstituteControl<IRadioButton>(view, "rbSexAll");
-            SubstituteControl<IRadioButton>(view, "rbSexMale");
-            SubstituteControl<IRadioButton>(view, "rbSexFemale");
-            SubstituteControl<ILabel>(view, "lblNameMask");
-            SubstituteControl<ILabel>(view, "lblPlaceMask");
-            SubstituteControl<ILabel>(view, "lblEventsMask");
-            SubstituteControl<ILabel>(view, "lblGroups");
-            SubstituteControl<ILabel>(view, "lblSources");
-            SubstituteControl<ICheckBox>(view, "chkOnlyPatriarchs");
+            _pageSpecificFilter = SubstCtl<ITabPage>(view, "pageSpecificFilter");
+            _rbAll = SubstCtl<IRadioButton>(view, "rbAll");
+            _rbOnlyLive = SubstCtl<IRadioButton>(view, "rbOnlyLive");
+            _rbOnlyDead = SubstCtl<IRadioButton>(view, "rbOnlyDead");
+            _rbAliveBefore = SubstCtl<IRadioButton>(view, "rbAliveBefore");
+            _rbSexAll = SubstCtl<IRadioButton>(view, "rbSexAll");
+            _rbSexMale = SubstCtl<IRadioButton>(view, "rbSexMale");
+            _rbSexFemale = SubstCtl<IRadioButton>(view, "rbSexFemale");
+            SubstCtl<ILabel>(view, "lblNameMask");
+            SubstCtl<ILabel>(view, "lblPlaceMask");
+            SubstCtl<ILabel>(view, "lblEventsMask");
+            SubstCtl<ILabel>(view, "lblGroups");
+            SubstCtl<ILabel>(view, "lblSources");
+            _chkOnlyPatriarchs = SubstCtl<ICheckBox>(view, "chkOnlyPatriarchs");
 
-            SubstituteControl<IRadioButton>(view, "rbAliveBefore");
-            SubstituteControl<IRadioButton>(view, "rbAll");
-            SubstituteControl<IRadioButton>(view, "rbSexMale");
-            SubstituteControl<IRadioButton>(view, "rbOnlyLive");
-            SubstituteControl<IComboBox>(view, "txtName");
-            SubstituteControl<IComboBox>(view, "cmbResidence");
-            SubstituteControl<IComboBox>(view, "cmbEventVal");
-            SubstituteControl<IComboBox>(view, "cmbGroup");
-            SubstituteControl<IComboBox>(view, "cmbSource");
+            _txtName = SubstCtl<IComboBox>(view, "txtName");
+            _cmbResidence = SubstCtl<IComboBox>(view, "cmbResidence");
+            _cmbEventVal = SubstCtl<IComboBox>(view, "cmbEventVal");
+            _cmbGroup = SubstCtl<IComboBox>(view, "cmbGroup");
+            _cmbSource = SubstCtl<IComboBox>(view, "cmbSource");
+
+            SubstCtl<ITextBox>(view, "txtAliveBeforeDate");
+            SubstCtl<IGroupBox>(view, "rgSex");
+            SubstCtl<IGroupBox>(view, "rgLife");
 
             return view;
         }

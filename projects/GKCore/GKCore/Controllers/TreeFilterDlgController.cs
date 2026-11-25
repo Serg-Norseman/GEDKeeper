@@ -26,6 +26,24 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class TreeFilterDlgController : DialogController<ITreeFilterDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IGroupBox _rgBranchCut;
+        private IRadioButton _rbCutNone;
+        private IRadioButton _rbCutYears;
+        private IRadioButton _rbCutPersons;
+        private ILabel _lblYear;
+        private INumericBox _edYear;
+        private ISheetList _fPersonsList;
+        private ILabel _lblRPSources;
+        private IComboBox _cmbSource;
+        private ICheckBox _chkHideDatesAfterBoundary;
+        private ITextBox _txtDateBoundary;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private ChartFilter fFilter;
         private RecsListModel fPersonModel;
         private string fTemp;
@@ -44,13 +62,13 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.SourceCombo.ReadOnly = true;
+            _cmbSource.ReadOnly = true;
 
-            fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
-            fView.PersonsList.OnModify += ListModify;
+            _fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
+            _fPersonsList.OnModify += ListModify;
 
             fPersonModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.RPIndividuals), false);
-            fView.PersonsList.ListView.ListMan = fPersonModel;
+            _fPersonsList.ListView.ListMan = fPersonModel;
         }
 
         private async void ListModify(object sender, ModifyEventArgs eArgs)
@@ -63,17 +81,17 @@ namespace GKCore.Controllers
             try {
                 fFilter.BranchCut = GetCutModeRadio();
                 if (fFilter.BranchCut == ChartFilter.BranchCutType.Years) {
-                    fFilter.BranchYear = (int)fView.YearNum.Value;
+                    fFilter.BranchYear = (int)_edYear.Value;
                 } else if (fFilter.BranchCut == ChartFilter.BranchCutType.Persons) {
                     fFilter.BranchPersons = fTemp;
                 }
 
-                int selectedIndex = fView.SourceCombo.SelectedIndex;
+                int selectedIndex = _cmbSource.SelectedIndex;
                 if (selectedIndex >= 0 && selectedIndex < 3) {
-                    fFilter.SourceMode = (FilterGroupMode)fView.SourceCombo.SelectedIndex;
+                    fFilter.SourceMode = (FilterGroupMode)_cmbSource.SelectedIndex;
                     fFilter.SourceRef = "";
                 } else {
-                    GDMRecord rec = fView.SourceCombo.GetSelectedTag<GDMRecord>();
+                    GDMRecord rec = _cmbSource.GetSelectedTag<GDMRecord>();
                     if (rec != null) {
                         fFilter.SourceMode = FilterGroupMode.Selected;
                         fFilter.SourceRef = rec.XRef;
@@ -84,15 +102,15 @@ namespace GKCore.Controllers
                 }
 
                 if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                    fFilter.HideDatesAfterBoundary = fView.HideDatesAfterBoundaryCheck.Checked;
+                    fFilter.HideDatesAfterBoundary = _chkHideDatesAfterBoundary.Checked;
                     if (fFilter.HideDatesAfterBoundary) {
                         try {
-                            DateTime.Parse(fView.DateBoundary.Text);
+                            DateTime.Parse(_txtDateBoundary.Text);
                         } catch {
                             AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
                             return false;
                         }
-                        fFilter.DateBoundary = GDMDate.GetUDNByFormattedStr(fView.DateBoundary.Text, GDMCalendar.dcGregorian);
+                        fFilter.DateBoundary = GDMDate.GetUDNByFormattedStr(_txtDateBoundary.Text, GDMCalendar.dcGregorian);
                     }
                 }
 
@@ -114,22 +132,22 @@ namespace GKCore.Controllers
             GDMTree tree = fBase.Context.Tree;
             fTemp = fFilter.BranchPersons;
 
-            fView.SourceCombo.Clear();
-            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAll), null);
-            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcNot), null);
-            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAny), null);
+            _cmbSource.Clear();
+            _cmbSource.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAll), null);
+            _cmbSource.AddItem<GDMRecord>(LangMan.LS(LSID.SrcNot), null);
+            _cmbSource.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAny), null);
             var sources = GKUtils.GetSources(tree);
             foreach (var item in sources) {
-                fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
+                _cmbSource.AddItem<GDMRecord>(item.ShortTitle, item);
             }
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                fView.HideDatesAfterBoundaryCheck.Checked = fFilter.HideDatesAfterBoundary;
-                fView.DateBoundary.Enabled = fFilter.HideDatesAfterBoundary;
+                _chkHideDatesAfterBoundary.Checked = fFilter.HideDatesAfterBoundary;
+                _txtDateBoundary.Enabled = fFilter.HideDatesAfterBoundary;
                 if (fFilter.HideDatesAfterBoundary) {
-                    fView.DateBoundary.Text = PatchDateFormatSimple(fFilter.DateBoundary.ToString());
+                    _txtDateBoundary.Text = PatchDateFormatSimple(fFilter.DateBoundary.ToString());
                 } else {
-                    fView.DateBoundary.Text = string.Empty;
+                    _txtDateBoundary.Text = string.Empty;
                 }
             }
 
@@ -150,9 +168,9 @@ namespace GKCore.Controllers
         public void UpdateControls()
         {
             SetCutModeRadio(fFilter.BranchCut);
-            fView.YearNum.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
-            fView.PersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
-            fView.YearNum.Value = fFilter.BranchYear;
+            _edYear.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
+            _fPersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
+            _edYear.Value = fFilter.BranchYear;
 
             var persList = new List<GDMRecord>();
             if (!string.IsNullOrEmpty(fTemp)) {
@@ -163,13 +181,13 @@ namespace GKCore.Controllers
                 }
             }
             fPersonModel.DataSource = persList;
-            fView.PersonsList.ListView.UpdateContents();
+            _fPersonsList.ListView.UpdateContents();
 
             if (fFilter.SourceMode != FilterGroupMode.Selected) {
-                fView.SourceCombo.SelectedIndex = (sbyte)fFilter.SourceMode;
+                _cmbSource.SelectedIndex = (sbyte)fFilter.SourceMode;
             } else {
                 var srcRec = fBase.Context.Tree.FindXRef<GDMSourceRecord>(fFilter.SourceRef);
-                if (srcRec != null) fView.SourceCombo.Text = srcRec.ShortTitle;
+                if (srcRec != null) _cmbSource.Text = srcRec.ShortTitle;
             }
         }
 
@@ -200,13 +218,13 @@ namespace GKCore.Controllers
         {
             switch (cutMode) {
                 case ChartFilter.BranchCutType.None:
-                    GetControl<IRadioButton>("rbCutNone").Checked = true;
+                    _rbCutNone.Checked = true;
                     break;
                 case ChartFilter.BranchCutType.Years:
-                    GetControl<IRadioButton>("rbCutYears").Checked = true;
+                    _rbCutYears.Checked = true;
                     break;
                 case ChartFilter.BranchCutType.Persons:
-                    GetControl<IRadioButton>("rbCutPersons").Checked = true;
+                    _rbCutPersons.Checked = true;
                     break;
             }
         }
@@ -214,11 +232,11 @@ namespace GKCore.Controllers
         private ChartFilter.BranchCutType GetCutModeRadio()
         {
             var cutMode = ChartFilter.BranchCutType.None;
-            if (GetControl<IRadioButton>("rbCutNone").Checked)
+            if (_rbCutNone.Checked)
                 cutMode = ChartFilter.BranchCutType.None;
-            if (GetControl<IRadioButton>("rbCutYears").Checked)
+            if (_rbCutYears.Checked)
                 cutMode = ChartFilter.BranchCutType.Years;
-            if (GetControl<IRadioButton>("rbCutPersons").Checked)
+            if (_rbCutPersons.Checked)
                 cutMode = ChartFilter.BranchCutType.Persons;
             return cutMode;
         }
@@ -233,17 +251,17 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.MIFilter));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<IGroupBox>("rgBranchCut").Text = LangMan.LS(LSID.BranchCut);
-            GetControl<IRadioButton>("rbCutNone").Text = LangMan.LS(LSID.Not);
-            GetControl<IRadioButton>("rbCutYears").Text = LangMan.LS(LSID.BCut_Years);
-            GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.Year);
-            GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.BCut_Persons);
-            GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.RPSources);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _rgBranchCut.Text = LangMan.LS(LSID.BranchCut);
+            _rbCutNone.Text = LangMan.LS(LSID.Not);
+            _rbCutYears.Text = LangMan.LS(LSID.BCut_Years);
+            _lblYear.Text = LangMan.LS(LSID.Year);
+            _rbCutPersons.Text = LangMan.LS(LSID.BCut_Persons);
+            _lblRPSources.Text = LangMan.LS(LSID.RPSources);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                GetControl<ICheckBox>("chkHideDatesAfterBoundary").Text = LangMan.LS(LSID.HideDatesAfterBoundary);
+                _chkHideDatesAfterBoundary.Text = LangMan.LS(LSID.HideDatesAfterBoundary);
             }
         }
 
@@ -251,8 +269,8 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

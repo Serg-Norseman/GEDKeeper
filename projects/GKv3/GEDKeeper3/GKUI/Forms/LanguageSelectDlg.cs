@@ -9,7 +9,6 @@
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -32,15 +31,6 @@ namespace GKUI.Forms
             get { return fController.SelectedLanguage; }
             set { fController.SelectedLanguage = value; }
         }
-
-        #region View Interface
-
-        IListView ILanguageSelectDlg.LanguagesList
-        {
-            get { return lstLanguages; }
-        }
-
-        #endregion
 
         public LanguageSelectDlg()
         {

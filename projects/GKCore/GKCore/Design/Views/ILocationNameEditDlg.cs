@@ -7,17 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface ILocationNameEditDlg : ICommonDialog
     {
         GDMLocationName LocationName { get; set; }
-
-        ITextBox NameText { get; }
-        ITextBox AbbrText { get; }
-
-        IDateControl DateCtl { get; }
     }
 }

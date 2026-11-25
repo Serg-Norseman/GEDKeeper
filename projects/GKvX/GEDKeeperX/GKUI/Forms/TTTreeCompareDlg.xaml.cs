@@ -9,27 +9,12 @@
 using System;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
     public sealed partial class TTTreeCompareDlg : CommonDialog<ITreeCompareDlg, TreeCompareController>, ITreeCompareDlg
     {
-        #region View Interface
-
-        ITextBox ITreeCompareDlg.ExternalBase
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtCompareFile); }
-        }
-
-        ITextBox ITreeCompareDlg.CompareOutput
-        {
-            get { return fController.GetControlHandler<ITextBox>(ListCompare); }
-        }
-
-        #endregion
-
         public TTTreeCompareDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

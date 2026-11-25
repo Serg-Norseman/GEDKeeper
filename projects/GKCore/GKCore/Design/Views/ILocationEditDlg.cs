@@ -7,23 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface ILocationEditDlg : ICommonDialog
     {
         GDMLocationRecord LocationRecord { get; set; }
-
-        IMapBrowser MapBrowser { get; }
-        ISheetList MediaList { get; }
-        ISheetList NotesList { get; }
-        ISheetList NamesList { get; }
-        ISheetList LinksList { get; }
-        IListView GeoCoordsList { get; }
-        ITextBox Name { get; }
-        ITextBox Latitude { get; }
-        ITextBox Longitude { get; }
     }
 }

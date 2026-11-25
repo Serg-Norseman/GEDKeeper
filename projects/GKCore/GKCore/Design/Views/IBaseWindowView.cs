@@ -6,16 +6,10 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-
 namespace GKCore.Design.Views
 {
     public interface IBaseWindowView : IBaseWindow
     {
-        ITabControl RecordTabs { get; }
-        IMenuItem ReportsItem { get; }
-        IMenuItem PluginsItem { get; }
-
         void LoadBase(string fileName);
 
         void EnableSplitterEvent(object control, bool enable);

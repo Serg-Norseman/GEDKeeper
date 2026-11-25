@@ -26,6 +26,69 @@ namespace GKCore.Controllers
     /// </summary>
     public class PersonEditDlgController<T> : DialogController<T> where T : IPersonEditDlg
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabControl _tabsOther;
+        private ITabPage _pageEvents;
+        private ITabPage _pageSpouses;
+        private ITabPage _pageAssociations;
+        private ITabPage _pageGroups;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageSources;
+        private ITabPage _pageUserRefs;
+        private ITabPage _pageNames;
+        private ITabPage _pageParents;
+        private ITabPage _pageOther;
+        private ITabPage _pageFamily;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnPortraitAdd;
+        private IButton _btnPortraitDelete;
+        private IButton _btnParentsAdd;
+        private IButton _btnParentsEdit;
+        private IButton _btnParentsDelete;
+        private IButton _btnFatherAdd;
+        private IButton _btnFatherDelete;
+        private IButton _btnFatherSel;
+        private IButton _btnMotherAdd;
+        private IButton _btnMotherDelete;
+        private IButton _btnMotherSel;
+        private IButton _btnNameCopy;
+        private ILabel _lblSurname;
+        private ILabel _lblMarriedSurname;
+        private ILabel _lblName;
+        private ILabel _lblPatronymic;
+        private ILabel _lblSex;
+        private ILabel _lblNickname;
+        private ILabel _lblParents;
+        private ILabel _lblMother;
+        private ILabel _lblFather;
+        private ILabel _lblRestriction;
+        private ITextBox _txtSurname;
+        private ITextBox _txtName;
+        private IComboBox _cmbPatronymic;
+        private IComboBox _cmbSex;
+        private ITextBox _txtNickname;
+        private ITextBox _txtFather;
+        private ITextBox _txtMother;
+        private ITextBox _txtMarriedSurname;
+        private IComboBox _cmbRestriction;
+        private ICheckBox _chkPatriarch;
+        private ICheckBox _chkBookmark;
+        private ISheetList _fEventsList;
+        private ISheetList _fSpousesList;
+        private ISheetList _fAssociationsList;
+        private ISheetList _fGroupsList;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+        private ISheetList _fNamesList;
+        private ISheetList _fParentsList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMIndividualRecord fIndividualRecord;
         private IImage fPortraitImg;
         private GDMIndividualRecord fTarget;
@@ -63,12 +126,12 @@ namespace GKCore.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fView.NamesList.OnModify -= ModifyNamesSheet;
-                fView.SpousesList.OnModify -= ModifySpousesSheet;
-                fView.SpousesList.OnBeforeChange -= BeforeChangeSpousesSheet;
-                fView.AssociationsList.OnModify -= ModifyAssociationsSheet;
-                fView.GroupsList.OnModify -= ModifyGroupsSheet;
-                fView.ParentsList.OnModify -= ModifyParentsSheet;
+                _fNamesList.OnModify -= ModifyNamesSheet;
+                _fSpousesList.OnModify -= ModifySpousesSheet;
+                _fSpousesList.OnBeforeChange -= BeforeChangeSpousesSheet;
+                _fAssociationsList.OnModify -= ModifyAssociationsSheet;
+                _fGroupsList.OnModify -= ModifyGroupsSheet;
+                _fParentsList.OnModify -= ModifyParentsSheet;
 
                 if (fPortraitImg != null) fPortraitImg.Dispose();
             }
@@ -134,65 +197,65 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.NamesList.OnModify += ModifyNamesSheet;
-            fView.SpousesList.OnModify += ModifySpousesSheet;
-            fView.SpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
-            fView.AssociationsList.OnModify += ModifyAssociationsSheet;
-            fView.GroupsList.OnModify += ModifyGroupsSheet;
-            fView.ParentsList.OnModify += ModifyParentsSheet;
+            _fNamesList.OnModify += ModifyNamesSheet;
+            _fSpousesList.OnModify += ModifySpousesSheet;
+            _fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
+            _fAssociationsList.OnModify += ModifyAssociationsSheet;
+            _fGroupsList.OnModify += ModifyGroupsSheet;
+            _fParentsList.OnModify += ModifyParentsSheet;
 
-            fView.RestrictionCombo.ReadOnly = true;
+            _cmbRestriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnPrivacy; res++) {
-                fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+                _cmbRestriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
-            fView.SexCombo.ReadOnly = true;
+            _cmbSex.ReadOnly = true;
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
                 IImage image = GetSexImage(sx);
-                fView.SexCombo.AddItem(name, sx, image);
+                _cmbSex.AddItem(name, sx, image);
             }
 
-            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
-            fView.AssociationsList.ListModel = new AssociationsListModel(fView, baseWin, fLocalUndoman);
-            fView.GroupsList.ListModel = new IndiGroupsListModel(fView, baseWin, fLocalUndoman);
-            fView.NamesList.ListModel = new IndiNamesListModel(fView, baseWin, fLocalUndoman);
-            fView.SpousesList.ListModel = new IndiSpousesListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
-            fView.ParentsList.ListModel = new IndiParentsListModel(fView, baseWin, fLocalUndoman);
+            _fEventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fMediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            _fSourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            _fAssociationsList.ListModel = new AssociationsListModel(fView, baseWin, fLocalUndoman);
+            _fGroupsList.ListModel = new IndiGroupsListModel(fView, baseWin, fLocalUndoman);
+            _fNamesList.ListModel = new IndiNamesListModel(fView, baseWin, fLocalUndoman);
+            _fSpousesList.ListModel = new IndiSpousesListModel(fView, baseWin, fLocalUndoman);
+            _fUserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            _fParentsList.ListModel = new IndiParentsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.EventsList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.MediaList.ListModel.SaveSettings();
-            fView.SourcesList.ListModel.SaveSettings();
-            fView.AssociationsList.ListModel.SaveSettings();
-            fView.GroupsList.ListModel.SaveSettings();
-            fView.NamesList.ListModel.SaveSettings();
-            fView.SpousesList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
-            fView.ParentsList.ListModel.SaveSettings();
+            _fEventsList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
+            _fMediaList.ListModel.SaveSettings();
+            _fSourcesList.ListModel.SaveSettings();
+            _fAssociationsList.ListModel.SaveSettings();
+            _fGroupsList.ListModel.SaveSettings();
+            _fNamesList.ListModel.SaveSettings();
+            _fSpousesList.ListModel.SaveSettings();
+            _fUserRefList.ListModel.SaveSettings();
+            _fParentsList.ListModel.SaveSettings();
         }
 
         private bool IsExtendedWomanSurname()
         {
-            var selectedSex = fView.SexCombo.GetSelectedTag<GDMSex>();
+            var selectedSex = _cmbSex.GetSelectedTag<GDMSex>();
             return GlobalOptions.Instance.CanExtendedSurname(selectedSex);
         }
 
         public void ChangeSex()
         {
             if (!IsExtendedWomanSurname()) {
-                fView.SurnameLabel.Text = LangMan.LS(LSID.Surname);
-                fView.MarriedSurname.Enabled = false;
+                _lblSurname.Text = LangMan.LS(LSID.Surname);
+                _txtMarriedSurname.Enabled = false;
             } else {
-                fView.SurnameLabel.Text = LangMan.LS(LSID.MaidenSurname);
-                fView.MarriedSurname.Enabled = true;
+                _lblSurname.Text = LangMan.LS(LSID.MaidenSurname);
+                _txtMarriedSurname.Enabled = true;
             }
 
             UpdatePortrait(true);
@@ -204,15 +267,15 @@ namespace GKCore.Controllers
             // For the sample: we need to have gender's value on time of call AddSpouse (for define husband/wife)
             // And we need to have actual name's value for visible it in FamilyEditDlg
 
-            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fIndividualRecord, (GDMSex)fView.SexCombo.SelectedIndex);
-            fLocalUndoman.DoIndividualNameChange(fIndividualRecord, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text, fView.MarriedSurname.Text, fView.Nickname.Text);
+            fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualSexChange, fIndividualRecord, (GDMSex)_cmbSex.SelectedIndex);
+            fLocalUndoman.DoIndividualNameChange(fIndividualRecord, _txtSurname.Text, _txtName.Text, _cmbPatronymic.Text, _txtMarriedSurname.Text, _txtNickname.Text);
         }
 
         protected virtual void AcceptNameParts(GDMPersonalName persName)
         {
-            persName.Nickname = fView.Nickname.Text;
+            persName.Nickname = _txtNickname.Text;
             if (IsExtendedWomanSurname()) {
-                persName.MarriedName = fView.MarriedSurname.Text;
+                persName.MarriedName = _txtMarriedSurname.Text;
             }
         }
 
@@ -227,13 +290,13 @@ namespace GKCore.Controllers
                     fIndividualRecord.PersonalNames.Add(persName);
                 }
 
-                GKUtils.SetNameParts(persName, fView.Surname.Text, fView.Name.Text, fView.Patronymic.Text);
+                GKUtils.SetNameParts(persName, _txtSurname.Text, _txtName.Text, _cmbPatronymic.Text);
                 AcceptNameParts(persName);
 
-                fIndividualRecord.Sex = (GDMSex)fView.SexCombo.SelectedIndex;
-                fIndividualRecord.Patriarch = fView.Patriarch.Checked;
-                fIndividualRecord.Bookmark = fView.Bookmark.Checked;
-                fIndividualRecord.Restriction = (GDMRestriction)fView.RestrictionCombo.SelectedIndex;
+                fIndividualRecord.Sex = (GDMSex)_cmbSex.SelectedIndex;
+                fIndividualRecord.Patriarch = _chkPatriarch.Checked;
+                fIndividualRecord.Bookmark = _chkBookmark.Checked;
+                fIndividualRecord.Restriction = (GDMRestriction)_cmbRestriction.SelectedIndex;
 
                 fBase.Context.ProcessIndividual(fIndividualRecord);
 
@@ -250,34 +313,32 @@ namespace GKCore.Controllers
 
         protected virtual void UpdateListModels(GDMIndividualRecord indiRec)
         {
-            fView.EventsList.ListModel.DataOwner = indiRec;
-            fView.NotesList.ListModel.DataOwner = indiRec;
-            fView.MediaList.ListModel.DataOwner = indiRec;
-            fView.SourcesList.ListModel.DataOwner = indiRec;
-            fView.AssociationsList.ListModel.DataOwner = indiRec;
+            _fEventsList.ListModel.DataOwner = indiRec;
+            _fNotesList.ListModel.DataOwner = indiRec;
+            _fMediaList.ListModel.DataOwner = indiRec;
+            _fSourcesList.ListModel.DataOwner = indiRec;
+            _fAssociationsList.ListModel.DataOwner = indiRec;
 
-            fView.GroupsList.ListModel.DataOwner = indiRec;
-            fView.NamesList.ListModel.DataOwner = indiRec;
-            fView.SpousesList.ListModel.DataOwner = indiRec;
-            fView.UserRefList.ListModel.DataOwner = indiRec;
-            fView.ParentsList.ListModel.DataOwner = indiRec;
+            _fGroupsList.ListModel.DataOwner = indiRec;
+            _fNamesList.ListModel.DataOwner = indiRec;
+            _fSpousesList.ListModel.DataOwner = indiRec;
+            _fUserRefList.ListModel.DataOwner = indiRec;
+            _fParentsList.ListModel.DataOwner = indiRec;
         }
 
         public override void UpdateView()
         {
             try {
                 bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
-                var tabs = GetControl<ITabControl>("tabsOther");
-                var tabGrp = GetControl<ITabPage>("pageGroups");
-                tabs.SetTabVisible(tabGrp, !disNoStd);
+                _tabsOther.SetTabVisible(_pageGroups, !disNoStd);
 
-                fView.Patriarch.Visible = !disNoStd;
-                fView.Bookmark.Visible = !disNoStd;
+                _chkPatriarch.Visible = !disNoStd;
+                _chkBookmark.Visible = !disNoStd;
 
-                fView.SexCombo.SelectedIndex = (sbyte)fIndividualRecord.Sex;
-                fView.Patriarch.Checked = fIndividualRecord.Patriarch;
-                fView.Bookmark.Checked = fIndividualRecord.Bookmark;
-                fView.RestrictionCombo.SelectedIndex = (sbyte)fIndividualRecord.Restriction;
+                _cmbSex.SelectedIndex = (sbyte)fIndividualRecord.Sex;
+                _chkPatriarch.Checked = fIndividualRecord.Patriarch;
+                _chkBookmark.Checked = fIndividualRecord.Bookmark;
+                _cmbRestriction.SelectedIndex = (sbyte)fIndividualRecord.Restriction;
 
                 UpdateControls(true);
             } catch (Exception ex) {
@@ -287,7 +348,7 @@ namespace GKCore.Controllers
 
         public void UpdateParents()
         {
-            bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
+            bool locked = (_cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
 
             if (fIndividualRecord.ChildToFamilyLinks.Count != 0) {
                 GDMFamilyRecord family = fBase.Context.Tree.GetPtrValue(fIndividualRecord.ChildToFamilyLinks[0]);
@@ -298,26 +359,26 @@ namespace GKCore.Controllers
 
                 if (father != null) {
                     fView.SetFatherAvl(true, locked);
-                    fView.Father.Text = GKUtils.GetNameString(father, false);
+                    _txtFather.Text = GKUtils.GetNameString(father, false);
                 } else {
                     fView.SetFatherAvl(false, locked);
-                    fView.Father.Text = "";
+                    _txtFather.Text = "";
                 }
 
                 if (mother != null) {
                     fView.SetMotherAvl(true, locked);
-                    fView.Mother.Text = GKUtils.GetNameString(mother, false);
+                    _txtMother.Text = GKUtils.GetNameString(mother, false);
                 } else {
                     fView.SetMotherAvl(false, locked);
-                    fView.Mother.Text = "";
+                    _txtMother.Text = "";
                 }
             } else {
                 fView.SetParentsAvl(false, locked);
                 fView.SetFatherAvl(false, locked);
                 fView.SetMotherAvl(false, locked);
 
-                fView.Father.Text = "";
-                fView.Mother.Text = "";
+                _txtFather.Text = "";
+                _txtMother.Text = "";
             }
         }
 
@@ -329,31 +390,31 @@ namespace GKCore.Controllers
 
             UpdatePortrait(totalUpdate);
 
-            bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
+            bool locked = (_cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
             UpdateLocked(locked);
         }
 
         protected virtual void UpdateLocked(bool locked)
         {
             // controls lock
-            fView.Name.Enabled = !locked;
+            _txtName.Enabled = !locked;
 
-            fView.SexCombo.Enabled = !locked;
-            fView.Patriarch.Enabled = !locked;
-            fView.Bookmark.Enabled = !locked;
+            _cmbSex.Enabled = !locked;
+            _chkPatriarch.Enabled = !locked;
+            _chkBookmark.Enabled = !locked;
 
-            fView.Nickname.Enabled = !locked;
+            _txtNickname.Enabled = !locked;
 
-            fView.EventsList.ReadOnly = locked;
-            fView.NamesList.ReadOnly = locked;
-            fView.NotesList.ReadOnly = locked;
-            fView.MediaList.ReadOnly = locked;
-            fView.SourcesList.ReadOnly = locked;
-            fView.SpousesList.ReadOnly = locked;
-            fView.AssociationsList.ReadOnly = locked;
-            fView.GroupsList.ReadOnly = locked;
-            fView.UserRefList.ReadOnly = locked;
-            fView.ParentsList.ReadOnly = locked;
+            _fEventsList.ReadOnly = locked;
+            _fNamesList.ReadOnly = locked;
+            _fNotesList.ReadOnly = locked;
+            _fMediaList.ReadOnly = locked;
+            _fSourcesList.ReadOnly = locked;
+            _fSpousesList.ReadOnly = locked;
+            _fAssociationsList.ReadOnly = locked;
+            _fGroupsList.ReadOnly = locked;
+            _fUserRefList.ReadOnly = locked;
+            _fParentsList.ReadOnly = locked;
         }
 
         public virtual void UpdateNameControls(GDMPersonalName np)
@@ -363,24 +424,24 @@ namespace GKCore.Controllers
                 var parts = GKUtils.GetNameParts(fBase.Context.Tree, fIndividualRecord, np, false);
                 culture = parts.Culture;
 
-                fView.Surname.Text = parts.Surname;
-                fView.Name.Text = parts.Name;
-                fView.Patronymic.Text = parts.Patronymic;
-                fView.Nickname.Text = np.Nickname;
-                fView.MarriedSurname.Text = np.MarriedName;
+                _txtSurname.Text = parts.Surname;
+                _txtName.Text = parts.Name;
+                _cmbPatronymic.Text = parts.Patronymic;
+                _txtNickname.Text = np.Nickname;
+                _txtMarriedSurname.Text = np.MarriedName;
             } else {
                 culture = fBase.Context.Culture;
 
-                fView.Surname.Text = "";
-                fView.Name.Text = "";
-                fView.Patronymic.Text = "";
-                fView.Nickname.Text = "";
-                fView.MarriedSurname.Text = "";
+                _txtSurname.Text = "";
+                _txtName.Text = "";
+                _cmbPatronymic.Text = "";
+                _txtNickname.Text = "";
+                _txtMarriedSurname.Text = "";
             }
 
-            var locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
-            fView.Patronymic.Enabled = !locked && culture.HasPatronymic;
-            fView.Surname.Enabled = !locked && culture.HasSurname;
+            var locked = (_cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
+            _cmbPatronymic.Enabled = !locked && culture.HasPatronymic;
+            _txtSurname.Enabled = !locked && culture.HasSurname;
         }
 
         public void UpdatePortrait(bool totalUpdate)
@@ -392,7 +453,7 @@ namespace GKCore.Controllers
             IImage img = fPortraitImg;
             if (img == null) {
                 // using avatar's image
-                GDMSex curSex = (GDMSex)fView.SexCombo.SelectedIndex;
+                GDMSex curSex = (GDMSex)_cmbSex.SelectedIndex;
                 string resImage = GKData.SexData[(int)curSex].DefPortraitImage;
 
                 // HACK: on GKvX portrait's control on base ImageBox (SkiaSharp)
@@ -407,12 +468,12 @@ namespace GKCore.Controllers
             }
             fView.SetPortrait(img);
 
-            bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
+            bool locked = (_cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
             bool avail = (fPortraitImg != null);
 
             bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
-            GetControl<IButton>("btnPortraitAdd").Enabled = !disNoStd && !avail && !locked;
-            GetControl<IButton>("btnPortraitDelete").Enabled = !disNoStd && avail && !locked;
+            _btnPortraitAdd.Enabled = !disNoStd && !avail && !locked;
+            _btnPortraitDelete.Enabled = !disNoStd && avail && !locked;
         }
 
         private void SetTarget(GDMIndividualRecord value)
@@ -425,28 +486,28 @@ namespace GKCore.Controllers
 
                     var parts = GKUtils.GetNameParts(fBase.Context.Tree, fTarget, false);
                     ICulture culture = parts.Culture;
-                    GDMSex sx = (GDMSex)fView.SexCombo.SelectedIndex;
+                    GDMSex sx = (GDMSex)_cmbSex.SelectedIndex;
 
                     switch (fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GDMSex.svFemale) {
-                                fView.Surname.Text = culture.GetMarriedSurname(parts.Surname);
+                                _txtSurname.Text = culture.GetMarriedSurname(parts.Surname);
                             } else {
-                                fView.Surname.Text = parts.Surname;
+                                _txtSurname.Text = parts.Surname;
                             }
                             if (culture.HasPatronymic) {
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svMale));
                                 AddPatronymic(namesTable.GetPatronymicByName(parts.Name, GDMSex.svFemale));
-                                fView.Patronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
+                                _cmbPatronymic.Text = namesTable.GetPatronymicByName(parts.Name, sx);
                             }
                             break;
 
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GDMSex.svMale:
-                                    fView.Surname.Text = parts.Surname;
+                                    _txtSurname.Text = parts.Surname;
                                     if (culture.HasPatronymic) {
-                                        fView.Name.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
+                                        _txtName.Text = namesTable.GetNameByPatronymic(parts.Patronymic);
                                     }
                                     break;
 
@@ -471,7 +532,7 @@ namespace GKCore.Controllers
         private void AddPatronymic(string patronymic)
         {
             if (!string.IsNullOrEmpty(patronymic)) {
-                fView.Patronymic.Add(patronymic);
+                _cmbPatronymic.Add(patronymic);
             }
         }
 
@@ -479,16 +540,16 @@ namespace GKCore.Controllers
         {
             string surname = culture.GetMarriedSurname(husbSurname);
             if (IsExtendedWomanSurname()) {
-                fView.MarriedSurname.Text = surname;
+                _txtMarriedSurname.Text = surname;
             } else {
-                fView.Surname.Text = "(" + surname + ")";
+                _txtSurname.Text = "(" + surname + ")";
             }
         }
 
         public async void AddPortrait()
         {
             if (await BaseController.AddIndividualPortrait(fView, fBase, fLocalUndoman, fIndividualRecord)) {
-                fView.MediaList.UpdateSheet();
+                _fMediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
         }
@@ -617,34 +678,34 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.WinPersonEdit));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.Surname);
-            GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.MarriedSurname);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.GivenName);
-            GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.Patronymic);
-            GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.Sex);
-            GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.Nickname);
-            GetControl<ICheckBox>("chkPatriarch").Text = LangMan.LS(LSID.Patriarch);
-            GetControl<ICheckBox>("chkBookmark").Text = LangMan.LS(LSID.Bookmark);
-            GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.Parents);
-            GetControl<ILabel>("lblMother").Text = LangMan.LS(LSID.Mother);
-            GetControl<ILabel>("lblFather").Text = LangMan.LS(LSID.Father);
-            GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.Events);
-            GetControl<ITabPage>("pageSpouses").Text = LangMan.LS(LSID.Spouses);
-            GetControl<ITabPage>("pageAssociations").Text = LangMan.LS(LSID.Associations);
-            GetControl<ITabPage>("pageGroups").Text = LangMan.LS(LSID.RPGroups);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
-            GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
-            GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
-            GetControl<ITabPage>("pageParents").Text = LangMan.LS(LSID.Parents);
-            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblSurname.Text = LangMan.LS(LSID.Surname);
+            _lblMarriedSurname.Text = LangMan.LS(LSID.MarriedSurname);
+            _lblName.Text = LangMan.LS(LSID.GivenName);
+            _lblPatronymic.Text = LangMan.LS(LSID.Patronymic);
+            _lblSex.Text = LangMan.LS(LSID.Sex);
+            _lblNickname.Text = LangMan.LS(LSID.Nickname);
+            _chkPatriarch.Text = LangMan.LS(LSID.Patriarch);
+            _chkBookmark.Text = LangMan.LS(LSID.Bookmark);
+            _lblParents.Text = LangMan.LS(LSID.Parents);
+            _lblMother.Text = LangMan.LS(LSID.Mother);
+            _lblFather.Text = LangMan.LS(LSID.Father);
+            _pageEvents.Text = LangMan.LS(LSID.Events);
+            _pageSpouses.Text = LangMan.LS(LSID.Spouses);
+            _pageAssociations.Text = LangMan.LS(LSID.Associations);
+            _pageGroups.Text = LangMan.LS(LSID.RPGroups);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _pageMultimedia.Text = LangMan.LS(LSID.RPMultimedia);
+            _pageSources.Text = LangMan.LS(LSID.RPSources);
+            _pageUserRefs.Text = LangMan.LS(LSID.UserRefs);
+            _lblRestriction.Text = LangMan.LS(LSID.Restriction);
+            _pageNames.Text = LangMan.LS(LSID.Names);
+            _pageParents.Text = LangMan.LS(LSID.Parents);
+            _pageOther.Text = LangMan.LS(LSID.Other);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pageFamily").Text = LangMan.LS(LSID.Family);
+                _pageFamily.Text = LangMan.LS(LSID.Family);
             }
 
             SetToolTip("btnPortraitAdd", LangMan.LS(LSID.PortraitAddTip));
@@ -665,25 +726,25 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnPortraitAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnPortraitDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnPortraitAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnPortraitDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
 
-            GetControl<IButton>("btnParentsAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnParentsEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit, true);
-            GetControl<IButton>("btnParentsDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnParentsAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnParentsEdit.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit, true);
+            _btnParentsDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
 
-            GetControl<IButton>("btnFatherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnFatherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
-            GetControl<IButton>("btnFatherSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+            _btnFatherAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnFatherDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnFatherSel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
 
-            GetControl<IButton>("btnMotherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
-            GetControl<IButton>("btnMotherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
-            GetControl<IButton>("btnMotherSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+            _btnMotherAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnMotherDelete.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
+            _btnMotherSel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
 
-            GetControl<IButton>("btnNameCopy").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CopyName, true);
+            _btnNameCopy.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CopyName, true);
         }
     }
 }

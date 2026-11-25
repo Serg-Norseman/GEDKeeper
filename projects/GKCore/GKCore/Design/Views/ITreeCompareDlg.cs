@@ -6,13 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
-
 namespace GKCore.Design.Views
 {
     public interface ITreeCompareDlg : ICommonDialog
     {
-        ITextBox ExternalBase { get; }
-        ITextBox CompareOutput { get; }
     }
 }

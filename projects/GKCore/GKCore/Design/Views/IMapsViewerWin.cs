@@ -17,15 +17,6 @@ namespace GKCore.Design.Views
     public interface IMapsViewerWin : IWindow
     {
         IMapBrowser MapBrowser { get; }
-        IComboBox PersonsCombo { get; }
-        ITreeView PlacesTree { get; }
-        IButton SelectPlacesBtn { get; }
-        ICheckBox BirthCheck { get; }
-        ICheckBox DeathCheck { get; }
-        ICheckBox ResidenceCheck { get; }
-        ICheckBox LinesVisibleCheck { get; }
-        IRadioButton TotalRadio { get; }
-        IRadioButton SelectedRadio { get; }
 
         ITVNode FindTreeNode(string place);
 

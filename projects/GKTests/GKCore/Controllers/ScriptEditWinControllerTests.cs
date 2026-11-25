@@ -16,6 +16,9 @@ namespace GKCore.Controllers
     [TestFixture]
     public class ScriptEditWinControllerTests : ControllerTest
     {
+        private ITextBox _txtScriptText;
+        private ITextBox _txtDebugOutput;
+
         [Test]
         public void Test_ScriptEditWinController()
         {
@@ -25,25 +28,25 @@ namespace GKCore.Controllers
 
             controller.NewScript();
 
-            view.ScriptText.Text = ("gk_print(\"Hello\")");
+            _txtScriptText.Text = ("gk_print(\"Hello\")");
             controller.RunScript();
 
-            view.ScriptText.Text = ("R = gt_get_records_count()");
+            _txtScriptText.Text = ("R = gt_get_records_count()");
             controller.RunScript();
 
-            view.ScriptText.Text = ("R = gt_get_record(0); rt = gt_get_record_type(R); " +
+            _txtScriptText.Text = ("R = gt_get_record(0); rt = gt_get_record_type(R); " +
                                 "xref = gt_get_record_xref(R); uid = gt_get_record_uid(R);" +
                                 "isf = gt_record_is_filtered(R); tn = gt_get_record_type_name(rt);" +
                                 "num = gt_get_records_count();");
             controller.RunScript();
 
-            view.ScriptText.Text = ("gk_progress_init(1, \"Hello\"); gk_progress_step(); gk_progress_done(); gk_update_view()");
+            _txtScriptText.Text = ("gk_progress_init(1, \"Hello\"); gk_progress_step(); gk_progress_done(); gk_update_view()");
             controller.RunScript();
 
-            view.ScriptText.Text = ("x = gk_strpos(\"test\", \"alpha test\");");
+            _txtScriptText.Text = ("x = gk_strpos(\"test\", \"alpha test\");");
             controller.RunScript();
 
-            view.ScriptText.Text = ("indi = gt_create_person(\"Ivan\", \"Ivanovich\", \"Ivanov\", \"M\");" +
+            _txtScriptText.Text = ("indi = gt_create_person(\"Ivan\", \"Ivanovich\", \"Ivanov\", \"M\");" +
                                 "gt_set_person_sex(indi, \"M\"); name = gt_get_person_name(indi);" +
                                 "gt_add_person_association(indi, \"rel\", indi);" +
                                 "assoNum = gt_get_person_associations_count(indi);" +
@@ -57,7 +60,7 @@ namespace GKCore.Controllers
                                 "evt2 = gt_get_person_event_ex(indi, \"BIRT\");");
             controller.RunScript();
 
-            view.ScriptText.Text = ("indi = gt_create_person(\"John\", \"\", \"Smith\", \"M\");" +
+            _txtScriptText.Text = ("indi = gt_create_person(\"John\", \"\", \"Smith\", \"M\");" +
                                 "evt = gt_create_event(indi, \"FACT\");" +
                                 "gt_set_event_date(evt, \"08 MAR 1990\");" +
                                 "gt_set_event_place(evt, \"sample place\");" +
@@ -69,7 +72,7 @@ namespace GKCore.Controllers
                                 "ey = gt_get_event_year(evt);");
             controller.RunScript();
 
-            view.ScriptText.Text = ("fam = gt_create_family(); evt = gt_create_event(fam, \"MARR\");" +
+            _txtScriptText.Text = ("fam = gt_create_family(); evt = gt_create_event(fam, \"MARR\");" +
                                 "R = gt_get_record(0); gt_bind_family_spouse(fam, R); " +
                                 "R2 = gt_get_record(1); gt_bind_family_child(fam, R2); " +
                                 "chNum = gt_get_family_childs_count(fam); chl = gt_get_family_child(fam, 0);" +
@@ -78,27 +81,27 @@ namespace GKCore.Controllers
                                 "fam2 = gt_get_person_spouse_family(R, 0);");
             controller.RunScript();
 
-            view.ScriptText.Text = ("note = gt_create_note(); gt_add_note_text(note, \"test\");" +
+            _txtScriptText.Text = ("note = gt_create_note(); gt_add_note_text(note, \"test\");" +
                                 "R = gt_get_record(0); gt_bind_record_note(R, note); " +
                                 "ntNum = gt_get_record_notes_count(R);");
             controller.RunScript();
 
-            view.ScriptText.Text = ("src = gt_create_source(\"source\");" +
+            _txtScriptText.Text = ("src = gt_create_source(\"source\");" +
                                 "R = gt_get_record(0); gt_bind_record_source(R, src, \"p1\", 1); " +
                                 "src = gt_find_source(\"source\");");
             controller.RunScript();
 
-            view.ScriptText.Text = ("grp = gt_create_group(\"group\");" +
+            _txtScriptText.Text = ("grp = gt_create_group(\"group\");" +
                                 "R = gt_get_record(0); gt_bind_group_member(grp, R); " +
                                 "gname = gt_get_group_name(grp);" +
                                 "gNum = gt_get_person_groups_count(R); grp1 = gt_get_person_group(R, 0);" +
                                 "gt_delete_record(grp);");
             controller.RunScript();
 
-            view.ScriptText.Text = ("x = gt_get_location_usages(loc);"); // -1
+            _txtScriptText.Text = ("x = gt_get_location_usages(loc);"); // -1
             controller.RunScript();
 
-            view.ScriptText.Text = ("con = ado_open(\"test\"); qr = ado_query_open(con, \"select * from X\"); " +
+            _txtScriptText.Text = ("con = ado_open(\"test\"); qr = ado_query_open(con, \"select * from X\"); " +
                                 "ado_query_first(con); ado_query_prev(con);" +
                                 "ado_query_next(con); ado_query_last(con);" +
                                 "x = ado_get_query_field(con, \"field\");" +
@@ -106,11 +109,11 @@ namespace GKCore.Controllers
             controller.RunScript();
 
             //StdDialogsStub.SetOpenedFile(...);
-            view.ScriptText.Text = ("file = gk_select_file();");
+            _txtScriptText.Text = ("file = gk_select_file();");
             controller.RunScript();
 
             //StdDialogsStub.SetOpenedFile(...);
-            view.ScriptText.Text = ("R = gt_select_record(rtIndividual);");
+            _txtScriptText.Text = ("R = gt_select_record(rtIndividual);");
             controller.RunScript();
 
             /*SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
@@ -120,7 +123,7 @@ namespace GKCore.Controllers
             ClickToolStripButton("tbSaveScript", form);*/
         }
 
-        private static IScriptEditWin CreateMockView()
+        private IScriptEditWin CreateMockView()
         {
             var view = Substitute.For<IScriptEditWin>();
             SubstituteControl<IToolItem>(view, "tbNewScript");
@@ -128,8 +131,8 @@ namespace GKCore.Controllers
             SubstituteControl<IToolItem>(view, "tbSaveScript");
             SubstituteControl<IToolItem>(view, "tbRun");
 
-            view.ScriptText.Returns(Substitute.For<ITextBox>());
-            view.DebugOutput.Returns(Substitute.For<ITextBox>());
+            _txtScriptText = SubstCtl<ITextBox>(view, "txtScriptText");
+            _txtDebugOutput = SubstCtl<ITextBox>(view, "txtDebugOutput");
             return view;
         }
     }

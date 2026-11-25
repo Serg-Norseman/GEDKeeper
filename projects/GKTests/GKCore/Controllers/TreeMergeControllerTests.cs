@@ -16,6 +16,15 @@ namespace GKCore.Controllers
     [TestFixture]
     public class TreeMergeControllerTests : ControllerTest
     {
+        private ITabPage _pageTreeMerge;
+        private IButton _btnClose;
+        private ILabel _lblMasterBase;
+        private ITextBox _edMasterBase;
+        private ILabel _lblOtherBase;
+        private ITextBox _edUpdateBase;
+        private IButton _btnTreeMerge;
+        private ITextBox _mSyncRes;
+
         [Test]
         public void Test_TreeMergeController()
         {
@@ -29,18 +38,17 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static ITreeMergeDlg CreateMockView()
+        private ITreeMergeDlg CreateMockView()
         {
             var view = Substitute.For<ITreeMergeDlg>();
-            SubstituteControl<ITabPage>(view, "pageTreeMerge");
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<IButton>(view, "btnTreeMerge");
-            SubstituteControl<ILabel>(view, "lblMasterBase");
-            SubstituteControl<ILabel>(view, "lblOtherBase");
-            SubstituteControl<ITextBox>(view, "edMasterBase");
-
-            view.UpdateBase.Returns(Substitute.For<ITextBox>());
-            view.SyncLog.Returns(Substitute.For<ITextBox>());
+            _pageTreeMerge = SubstCtl<ITabPage>(view, "pageTreeMerge");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _lblMasterBase = SubstCtl<ILabel>(view, "lblMasterBase");
+            _edMasterBase = SubstCtl<ITextBox>(view, "edMasterBase");
+            _lblOtherBase = SubstCtl<ILabel>(view, "lblOtherBase");
+            _edUpdateBase = SubstCtl<ITextBox>(view, "edUpdateBase");
+            _btnTreeMerge = SubstCtl<IButton>(view, "btnTreeMerge");
+            _mSyncRes = SubstCtl<ITextBox>(view, "mSyncRes");
             return view;
         }
     }

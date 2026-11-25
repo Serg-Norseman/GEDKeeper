@@ -8,6 +8,7 @@
 
 using GDModel;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 
@@ -18,6 +19,12 @@ namespace GKCore.Controllers
     /// </summary>
     public class RecordInfoDlgController : DialogController<IRecordInfoDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IHyperView _hyperView1;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMRecord fRecord;
 
         public GDMRecord Record
@@ -31,6 +38,12 @@ namespace GKCore.Controllers
             }
         }
 
+        public string Text
+        {
+            get { return _hyperView1.Lines.Text; }
+            set { _hyperView1.Lines.Text = value; }
+        }
+
 
         public RecordInfoDlgController(IRecordInfoDlg view) : base(view)
         {
@@ -38,7 +51,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.HyperView.Lines.Assign(fBase.GetRecordContent(fRecord, RecordContentType.Quick));
+            _hyperView1.Lines.Assign(fBase.GetRecordContent(fRecord, RecordContentType.Quick));
         }
 
         public void SelectLink(string linkName)
@@ -52,7 +65,7 @@ namespace GKCore.Controllers
                 fBase.ShowMedia(linkName, false);
             } else {
                 var record = Base.Context.Tree.FindXRef<GDMRecord>(linkName);
-                fView.HyperView.Lines.Assign(fBase.GetRecordContent(record, RecordContentType.Quick));
+                _hyperView1.Lines.Assign(fBase.GetRecordContent(record, RecordContentType.Quick));
             }
         }
 

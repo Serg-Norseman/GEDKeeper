@@ -18,6 +18,12 @@ namespace GKCore.Controllers
     [TestFixture]
     public class DayTipsDlgControllerTests : ControllerTest
     {
+        private ICheckBox _chkShow;
+        private IButton _btnNextTip;
+        private IButton _btnClose;
+        private ILabel _lblTitle;
+        private ITextContainer _txtTip;
+
         [Test]
         public void Test_DayTipsDlgController()
         {
@@ -27,23 +33,21 @@ namespace GKCore.Controllers
             TipsCollector.Collect(fBaseWin.Context, tips);
 
             var controller = new DayTipsDlgController(view);
+            controller.InitView(null);
             controller.InitTips("birth days", true, tips);
 
             controller.GetNextTip();
             controller.UpdateView();
         }
 
-        private static IDayTipsDlg CreateMockView()
+        private IDayTipsDlg CreateMockView()
         {
             var view = Substitute.For<IDayTipsDlg>();
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<IButton>(view, "btnNextTip");
-            SubstituteControl<ICheckBox>(view, "chkShow");
-            SubstituteControl<ILabel>(view, "lblTitle");
-
-            view.TitleLabel.Returns(Substitute.For<ILabel>());
-            view.TipText.Returns(Substitute.For<ITextContainer>());
-            view.NextButton.Returns(Substitute.For<IButton>());
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _btnNextTip = SubstCtl<IButton>(view, "btnNextTip");
+            _chkShow = SubstCtl<ICheckBox>(view, "chkShow");
+            _lblTitle = SubstCtl<ILabel>(view, "lblTitle");
+            _txtTip = SubstCtl<ITextContainer>(view, "txtTip");
             return view;
         }
     }

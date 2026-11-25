@@ -7,19 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface ISourceCitEditDlg : ICommonDialog
     {
         GDMSourceCitation SourceCitation { get; set; }
-
-        ITextBox Page { get; }
-        IComboBox Certainty { get; }
-        IComboBox Source { get; }
-
-        IDateControl DataDate { get; }
-        ITextBox DataText { get; }
     }
 }

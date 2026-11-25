@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Events;
 
 namespace GKCore.Design.Views
@@ -14,11 +13,5 @@ namespace GKCore.Design.Views
     public interface IEventDefEditDlg : ICommonDialog
     {
         EventDef EventDef { get; set; }
-
-        ITextBox NameText { get; }
-        IComboBox TagCombo { get; }
-        ITextBox TypeText { get; }
-        ICheckBox EnabledCheck { get; }
-        ITextBox DescText { get; }
     }
 }

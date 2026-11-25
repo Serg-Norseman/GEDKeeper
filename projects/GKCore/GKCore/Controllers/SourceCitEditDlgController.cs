@@ -22,6 +22,24 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class SourceCitEditDlgController : DialogController<ISourceCitEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageCommon;
+        private ITabPage _pageOther;
+        private ILabel _lblSource;
+        private IComboBox _cmbSource;
+        private IButton _btnSourceAdd;
+        private ILabel _lblPage;
+        private ITextBox _txtPage;
+        private ILabel _lblCertainty;
+        private IComboBox _txtCertainty;
+        private IDateControl _dateCtl;
+        private ITextBox _txtText;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMSourceCitation fSourceCitation;
         private readonly StringList fSourcesList;
 
@@ -45,7 +63,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                int idx = fSourcesList.IndexOf(fView.Source.Text);
+                int idx = fSourcesList.IndexOf(_cmbSource.Text);
                 GDMSourceRecord sourceRec = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
 
                 if (sourceRec == null) {
@@ -54,12 +72,12 @@ namespace GKCore.Controllers
                     return false;
                 } else {
                     fSourceCitation.XRef = sourceRec.XRef;
-                    fSourceCitation.Page = fView.Page.Text;
-                    fSourceCitation.CertaintyAssessment = fView.Certainty.SelectedIndex;
+                    fSourceCitation.Page = _txtPage.Text;
+                    fSourceCitation.CertaintyAssessment = _txtCertainty.SelectedIndex;
 
-                    fSourceCitation.Data.Date.ParseString(fView.DataDate.Date.StringValue);
+                    fSourceCitation.Data.Date.ParseString(_dateCtl.Date.StringValue);
                     fSourceCitation.Data.Text.Clear();
-                    fSourceCitation.Data.Text.Lines.Text = fView.DataText.Text;
+                    fSourceCitation.Data.Text.Lines.Text = _txtText.Text;
 
                     return true;
                 }
@@ -72,13 +90,13 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             var src = fBase.Context.Tree.GetPtrValue<GDMSourceRecord>(fSourceCitation);
-            if (src != null) fView.Source.Text = src.ShortTitle;
+            if (src != null) _cmbSource.Text = src.ShortTitle;
 
-            fView.Page.Text = fSourceCitation.Page;
-            fView.Certainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
+            _txtPage.Text = fSourceCitation.Page;
+            _txtCertainty.SelectedIndex = fSourceCitation.CertaintyAssessment;
 
-            fView.DataDate.Date = fSourceCitation.Data.Date.Value;
-            fView.DataText.Text = fSourceCitation.Data.Text.Lines.Text.Trim();
+            _dateCtl.Date = fSourceCitation.Data.Date.Value;
+            _txtText.Text = fSourceCitation.Data.Text.Lines.Text.Trim();
         }
 
         public async void AddSource()
@@ -89,29 +107,29 @@ namespace GKCore.Controllers
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
-            fView.Source.Text = src.ShortTitle;
+            _cmbSource.Text = src.ShortTitle;
         }
 
         public override void InitView(IBaseWindow baseWin)
         {
             base.InitView(baseWin);
 
-            fView.Certainty.ReadOnly = true;
+            _txtCertainty.ReadOnly = true;
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
-                fView.Certainty.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
+                _txtCertainty.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }
 
             fBase.Context.GetSourcesList(fSourcesList);
             RefreshSourcesList("");
 
-            fView.Source.Activate();
+            _cmbSource.Activate();
         }
 
         public void RefreshSourcesList(string filter)
         {
-            fView.Source.BeginUpdate();
+            _cmbSource.BeginUpdate();
             try {
-                fView.Source.Clear();
+                _cmbSource.Clear();
 
                 string flt = "*" + filter + "*";
 
@@ -120,11 +138,11 @@ namespace GKCore.Controllers
                     string st = fSourcesList[i];
 
                     if (filter == "" || GKUtils.MatchesMask(st, flt)) {
-                        fView.Source.AddItem(st, fSourcesList.GetObject(i));
+                        _cmbSource.AddItem(st, fSourcesList.GetObject(i));
                     }
                 }
             } finally {
-                fView.Source.EndUpdate();
+                _cmbSource.EndUpdate();
             }
         }
 
@@ -132,13 +150,13 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.SourceCit));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
-            GetControl<ILabel>("lblSource").Text = LangMan.LS(LSID.Source);
-            GetControl<ILabel>("lblPage").Text = LangMan.LS(LSID.Page);
-            GetControl<ILabel>("lblCertainty").Text = LangMan.LS(LSID.Certainty);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageCommon.Text = LangMan.LS(LSID.Common);
+            _pageOther.Text = LangMan.LS(LSID.Other);
+            _lblSource.Text = LangMan.LS(LSID.Source);
+            _lblPage.Text = LangMan.LS(LSID.Page);
+            _lblCertainty.Text = LangMan.LS(LSID.Certainty);
 
             SetToolTip("btnSourceAdd", LangMan.LS(LSID.SourceAddTip));
         }
@@ -147,10 +165,10 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnSourceAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
+            _btnSourceAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
         }
     }
 }

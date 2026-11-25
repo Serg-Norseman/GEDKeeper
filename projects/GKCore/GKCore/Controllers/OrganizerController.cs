@@ -23,6 +23,22 @@ namespace GKCore.Controllers
     /// </summary>
     public class OrganizerController : DialogController<IOrganizerWin>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private ITabPage _pageAddresses;
+        private ITabPage _pageTelephones;
+        private ITabPage _pageMails;
+        private ITabPage _pageWebs;
+
+        private ISheetList _fAdrList;
+        private ISheetList _fPhonesList;
+        private ISheetList _fMailsList;
+        private ISheetList _fWebsList;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly List<OrgItem> fAdrList;
         private readonly List<OrgItem> fPhonesList;
         private readonly List<OrgItem> fMailsList;
@@ -40,22 +56,22 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.AdrList.Buttons = EnumSet<SheetButton>.Create();
-            fView.PhonesList.Buttons = EnumSet<SheetButton>.Create();
-            fView.MailsList.Buttons = EnumSet<SheetButton>.Create();
-            fView.WebsList.Buttons = EnumSet<SheetButton>.Create();
+            _fAdrList.Buttons = EnumSet<SheetButton>.Create();
+            _fPhonesList.Buttons = EnumSet<SheetButton>.Create();
+            _fMailsList.Buttons = EnumSet<SheetButton>.Create();
+            _fWebsList.Buttons = EnumSet<SheetButton>.Create();
 
-            fView.AdrList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Address));
-            fView.AdrList.ListView.UpdateContents();
+            _fAdrList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Address));
+            _fAdrList.ListView.UpdateContents();
 
-            fView.PhonesList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Telephone));
-            fView.PhonesList.ListView.UpdateContents();
+            _fPhonesList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Telephone));
+            _fPhonesList.ListView.UpdateContents();
 
-            fView.MailsList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Mail));
-            fView.MailsList.ListView.UpdateContents();
+            _fMailsList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Mail));
+            _fMailsList.ListView.UpdateContents();
 
-            fView.WebsList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.WebSite));
-            fView.WebsList.ListView.UpdateContents();
+            _fWebsList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.WebSite));
+            _fWebsList.ListView.UpdateContents();
         }
 
         public override void UpdateView()
@@ -73,17 +89,17 @@ namespace GKCore.Controllers
                 }
             }
 
-            ((ItemsListModel)fView.AdrList.ListView.ListMan).DataSource = fAdrList;
-            fView.AdrList.ListView.UpdateContents();
+            ((ItemsListModel)_fAdrList.ListView.ListMan).DataSource = fAdrList;
+            _fAdrList.ListView.UpdateContents();
 
-            ((ItemsListModel)fView.PhonesList.ListView.ListMan).DataSource = fPhonesList;
-            fView.PhonesList.ListView.UpdateContents();
+            ((ItemsListModel)_fPhonesList.ListView.ListMan).DataSource = fPhonesList;
+            _fPhonesList.ListView.UpdateContents();
 
-            ((ItemsListModel)fView.MailsList.ListView.ListMan).DataSource = fMailsList;
-            fView.MailsList.ListView.UpdateContents();
+            ((ItemsListModel)_fMailsList.ListView.ListMan).DataSource = fMailsList;
+            _fMailsList.ListView.UpdateContents();
 
-            ((ItemsListModel)fView.WebsList.ListView.ListMan).DataSource = fWebsList;
-            fView.WebsList.ListView.UpdateContents();
+            ((ItemsListModel)_fWebsList.ListView.ListMan).DataSource = fWebsList;
+            _fWebsList.ListView.UpdateContents();
         }
 
         private void PrepareEvent(string iName, GDMCustomEvent ev)
@@ -117,10 +133,10 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.MIOrganizer));
 
-            GetControl<ITabPage>("pageAddresses").Text = LangMan.LS(LSID.Addresses);
-            GetControl<ITabPage>("pageTelephones").Text = LangMan.LS(LSID.Telephones);
-            GetControl<ITabPage>("pageMails").Text = LangMan.LS(LSID.Mails);
-            GetControl<ITabPage>("pageWebs").Text = LangMan.LS(LSID.Webs);
+            _pageAddresses.Text = LangMan.LS(LSID.Addresses);
+            _pageTelephones.Text = LangMan.LS(LSID.Telephones);
+            _pageMails.Text = LangMan.LS(LSID.Mails);
+            _pageWebs.Text = LangMan.LS(LSID.Webs);
         }
 
         public override void ApplyTheme()

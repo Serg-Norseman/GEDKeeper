@@ -20,6 +20,60 @@ namespace GKCore.Controllers
     [TestFixture]
     public class PersonEditDlgControllerTests : ControllerTest
     {
+        private ITabControl _tabsOther;
+        private ITabPage _pageEvents;
+        private ITabPage _pageSpouses;
+        private ITabPage _pageAssociations;
+        private ITabPage _pageGroups;
+        private ITabPage _pageNotes;
+        private ITabPage _pageMultimedia;
+        private ITabPage _pageSources;
+        private ITabPage _pageUserRefs;
+        private ITabPage _pageNames;
+        private ITabPage _pageParents;
+        private ITabPage _pageOther;
+        private ITabPage _pageFamily;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnPortraitAdd;
+        private IButton _btnPortraitDelete;
+        private IButton _btnParentsAdd;
+        private IButton _btnParentsEdit;
+        private IButton _btnParentsDelete;
+        private IButton _btnFatherAdd;
+        private IButton _btnFatherDelete;
+        private IButton _btnFatherSel;
+        private IButton _btnMotherAdd;
+        private IButton _btnMotherDelete;
+        private IButton _btnMotherSel;
+        private IButton _btnNameCopy;
+        private ILabel _lblSurname;
+        private ILabel _lblName;
+        private ILabel _lblRestriction;
+        private ITextBox _txtSurname;
+        private ITextBox _txtName;
+        private IComboBox _cmbPatronymic;
+        private IComboBox _cmbSex;
+        private ITextBox _txtNickname;
+        private ITextBox _txtFather;
+        private ITextBox _txtMother;
+        private ITextBox _txtMarriedSurname;
+        private IComboBox _cmbRestriction;
+        private ICheckBox _chkPatriarch;
+        private ICheckBox _chkBookmark;
+        private ISheetList _fEventsList;
+        private ISheetList _fSpousesList;
+        private ISheetList _fAssociationsList;
+        private ISheetList _fGroupsList;
+        private ISheetList _fNotesList;
+        private ISheetList _fMediaList;
+        private ISheetList _fSourcesList;
+        private ISheetList _fUserRefList;
+        private ISheetList _fNamesList;
+        private ISheetList _fParentsList;
+        private ISheetList _fChildrenList;
+        private ISheetList _fDNATestsList;
+
         [Test]
         public async Task Test_PersonEditDlgController()
         {
@@ -30,13 +84,12 @@ namespace GKCore.Controllers
             var indiRec = fBaseWin.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
             controller.IndividualRecord = indiRec;
 
-            view.SexCombo.SelectedIndex = 1; // male
+            _cmbSex.SelectedIndex = 1; // male
 
-            var cmbRestriction = view.RestrictionCombo;
-            cmbRestriction.SelectedIndex = (3);
-            cmbRestriction.SelectedIndex = (2);
-            cmbRestriction.SelectedIndex = (1);
-            cmbRestriction.SelectedIndex = (0);
+            _cmbRestriction.SelectedIndex = (3);
+            _cmbRestriction.SelectedIndex = (2);
+            _cmbRestriction.SelectedIndex = (1);
+            _cmbRestriction.SelectedIndex = (0);
 
             // on all messages
             StdDialogsStub.SetQuestionResult(true);
@@ -126,10 +179,10 @@ namespace GKCore.Controllers
             var grpRec = fBaseWin.Context.Tree.CreateGroup();
             grpRec.GroupName = "sample group";
             RecordSelectDialogStub.SetTestResult(grpRec);
-            await ModifySheetList<IndiGroupsListModel>(view.GroupsList, RecordAction.raAdd, null);
+            await ModifySheetList<IndiGroupsListModel>(_fGroupsList, RecordAction.raAdd, null);
             Assert.AreEqual(1, indiRec.Groups.Count);
             Assert.AreEqual("sample group", fBaseWin.Context.Tree.GetPtrValue<GDMGroupRecord>(indiRec.Groups[0]).GroupName);
-            await ModifySheetList<IndiGroupsListModel>(view.GroupsList, RecordAction.raDelete, indiRec.Groups[0]);
+            await ModifySheetList<IndiGroupsListModel>(_fGroupsList, RecordAction.raDelete, indiRec.Groups[0]);
             Assert.AreEqual(0, indiRec.Groups.Count);
 
             // userrefs
@@ -148,76 +201,73 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static IStdPersonEditDlg CreateMockView()
+        private IStdPersonEditDlg CreateMockView()
         {
             var view = Substitute.For<IStdPersonEditDlg>();
 
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblSurname");
-            SubstituteControl<ILabel>(view, "lblMarriedSurname");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ILabel>(view, "lblPatronymic");
-            SubstituteControl<ILabel>(view, "lblSex");
-            SubstituteControl<ILabel>(view, "lblNickname");
-            SubstituteControl<ICheckBox>(view, "chkPatriarch");
-            SubstituteControl<ICheckBox>(view, "chkBookmark");
-            SubstituteControl<ILabel>(view, "lblParents");
-            SubstituteControl<ILabel>(view, "lblMother");
-            SubstituteControl<ILabel>(view, "lblFather");
-            SubstituteControl<ITabPage>(view, "pageEvents");
-            SubstituteControl<ITabPage>(view, "pageSpouses");
-            SubstituteControl<ITabPage>(view, "pageAssociations");
-            SubstituteControl<ITabPage>(view, "pageGroups");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ITabPage>(view, "pageMultimedia");
-            SubstituteControl<ITabPage>(view, "pageSources");
-            SubstituteControl<ITabPage>(view, "pageUserRefs");
-            SubstituteControl<ILabel>(view, "lblRestriction");
-            SubstituteControl<ITabPage>(view, "pageNames");
-            SubstituteControl<ITabPage>(view, "pageParents");
-            SubstituteControl<ITabPage>(view, "pageOther");
-            SubstituteControl<ITabPage>(view, "pageFamily");
-            SubstituteControl<IButton>(view, "btnPortraitAdd");
-            SubstituteControl<IButton>(view, "btnPortraitDelete");
-            SubstituteControl<IButton>(view, "btnParentsAdd");
-            SubstituteControl<IButton>(view, "btnParentsEdit");
-            SubstituteControl<IButton>(view, "btnParentsDelete");
-            SubstituteControl<IButton>(view, "btnFatherAdd");
-            SubstituteControl<IButton>(view, "btnFatherDelete");
-            SubstituteControl<IButton>(view, "btnFatherSel");
-            SubstituteControl<IButton>(view, "btnMotherAdd");
-            SubstituteControl<IButton>(view, "btnMotherDelete");
-            SubstituteControl<IButton>(view, "btnMotherSel");
-            SubstituteControl<IButton>(view, "btnNameCopy");
-            SubstituteControl<ITabPage>(view, "pageChilds");
-            SubstituteControl<ITabPage>(view, "pageDNATests");
+            _tabsOther = SubstCtl<ITabControl>(view, "tabsOther");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _lblSurname = SubstCtl<ILabel>(view, "lblSurname");
+            SubstCtl<ILabel>(view, "lblMarriedSurname");
+            SubstCtl<ILabel>(view, "lblName");
+            SubstCtl<ILabel>(view, "lblPatronymic");
+            SubstCtl<ILabel>(view, "lblSex");
+            SubstCtl<ILabel>(view, "lblNickname");
+            _chkPatriarch = SubstCtl<ICheckBox>(view, "chkPatriarch");
+            _chkBookmark = SubstCtl<ICheckBox>(view, "chkBookmark");
+            SubstCtl<ILabel>(view, "lblParents");
+            SubstCtl<ILabel>(view, "lblMother");
+            SubstCtl<ILabel>(view, "lblFather");
+            _pageEvents = SubstCtl<ITabPage>(view, "pageEvents");
+            _pageSpouses = SubstCtl<ITabPage>(view, "pageSpouses");
+            _pageAssociations = SubstCtl<ITabPage>(view, "pageAssociations");
+            _pageGroups = SubstCtl<ITabPage>(view, "pageGroups");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _pageMultimedia = SubstCtl<ITabPage>(view, "pageMultimedia");
+            _pageSources = SubstCtl<ITabPage>(view, "pageSources");
+            _pageUserRefs = SubstCtl<ITabPage>(view, "pageUserRefs");
+            _lblRestriction = SubstCtl<ILabel>(view, "lblRestriction");
+            _pageNames = SubstCtl<ITabPage>(view, "pageNames");
+            _pageParents = SubstCtl<ITabPage>(view, "pageParents");
+            _pageOther = SubstCtl<ITabPage>(view, "pageOther");
+            _pageFamily = SubstCtl<ITabPage>(view, "pageFamily");
+            _btnPortraitAdd = SubstCtl<IButton>(view, "btnPortraitAdd");
+            _btnPortraitDelete = SubstCtl<IButton>(view, "btnPortraitDelete");
+            SubstCtl<IButton>(view, "btnParentsAdd");
+            SubstCtl<IButton>(view, "btnParentsEdit");
+            SubstCtl<IButton>(view, "btnParentsDelete");
+            SubstCtl<IButton>(view, "btnFatherAdd");
+            SubstCtl<IButton>(view, "btnFatherDelete");
+            SubstCtl<IButton>(view, "btnFatherSel");
+            SubstCtl<IButton>(view, "btnMotherAdd");
+            SubstCtl<IButton>(view, "btnMotherDelete");
+            SubstCtl<IButton>(view, "btnMotherSel");
+            SubstCtl<IButton>(view, "btnNameCopy");
+            SubstCtl<ITabPage>(view, "pageChilds");
+            SubstCtl<ITabPage>(view, "pageDNATests");
 
-            view.EventsList.Returns(Substitute.For<ISheetList>());
-            view.SpousesList.Returns(Substitute.For<ISheetList>());
-            view.AssociationsList.Returns(Substitute.For<ISheetList>());
-            view.GroupsList.Returns(Substitute.For<ISheetList>());
-            view.UserRefList.Returns(Substitute.For<ISheetList>());
-            view.NamesList.Returns(Substitute.For<ISheetList>());
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.MediaList.Returns(Substitute.For<ISheetList>());
-            view.SourcesList.Returns(Substitute.For<ISheetList>());
-            view.ParentsList.Returns(Substitute.For<ISheetList>());
-            view.Portrait.Returns(Substitute.For<IPortraitControl>());
-            view.Father.Returns(Substitute.For<ITextBox>());
-            view.Mother.Returns(Substitute.For<ITextBox>());
-            view.Surname.Returns(Substitute.For<ITextBox>());
-            view.Name.Returns(Substitute.For<ITextBox>());
-            view.Patronymic.Returns(Substitute.For<IComboBox>());
-            view.Nickname.Returns(Substitute.For<ITextBox>());
-            view.MarriedSurname.Returns(Substitute.For<ITextBox>());
-            view.SurnameLabel.Returns(Substitute.For<ILabel>());
-            view.RestrictionCombo.Returns(Substitute.For<IComboBox>());
-            view.SexCombo.Returns(Substitute.For<IComboBox>());
-            view.Patriarch.Returns(Substitute.For<ICheckBox>());
-            view.Bookmark.Returns(Substitute.For<ICheckBox>());
-            view.ChildrenList.Returns(Substitute.For<ISheetList>());
-            view.DNATestsList.Returns(Substitute.For<ISheetList>());
+            _fEventsList = SubstCtl<ISheetList>(view, "fEventsList");
+            _fSpousesList = SubstCtl<ISheetList>(view, "fSpousesList");
+            _fAssociationsList = SubstCtl<ISheetList>(view, "fAssociationsList");
+            _fGroupsList = SubstCtl<ISheetList>(view, "fGroupsList");
+            _fUserRefList = SubstCtl<ISheetList>(view, "fUserRefList");
+            _fNamesList = SubstCtl<ISheetList>(view, "fNamesList");
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _fMediaList = SubstCtl<ISheetList>(view, "fMediaList");
+            _fSourcesList = SubstCtl<ISheetList>(view, "fSourcesList");
+            _fParentsList = SubstCtl<ISheetList>(view, "fParentsList");
+            _txtFather = SubstCtl<ITextBox>(view, "txtFather");
+            _txtMother = SubstCtl<ITextBox>(view, "txtMother");
+            _txtSurname = SubstCtl<ITextBox>(view, "txtSurname");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _cmbPatronymic = SubstCtl<IComboBox>(view, "cmbPatronymic");
+            _txtNickname = SubstCtl<ITextBox>(view, "txtNickname");
+            _txtMarriedSurname = SubstCtl<ITextBox>(view, "txtMarriedSurname");
+            _cmbRestriction = SubstCtl<IComboBox>(view, "cmbRestriction");
+            _cmbSex = SubstCtl<IComboBox>(view, "cmbSex");
+            _fChildrenList = SubstCtl<ISheetList>(view, "fChildrenList");
+            _fDNATestsList = SubstCtl<ISheetList>(view, "fDNATestsList");
             return view;
         }
     }

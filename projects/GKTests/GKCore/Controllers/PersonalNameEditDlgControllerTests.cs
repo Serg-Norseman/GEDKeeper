@@ -17,6 +17,20 @@ namespace GKCore.Controllers
     [TestFixture]
     public class PersonalNameEditDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITextBox _txtMarriedSurname;
+        private ILabel _lblMarriedSurname;
+        private IComboBox _cmbNameType;
+        private ITextBox _txtNickname;
+        private ITextBox _txtNameSuffix;
+        private ITextBox _txtNamePrefix;
+        private ITextBox _txtSurnamePrefix;
+        private ITextBox _txtPatronymic;
+        private ITextBox _txtName;
+        private ITextBox _txtSurname;
+        private IComboBox _cmbLanguage;
+
         [Test]
         public void Test_PersonalNameEditDlgController()
         {
@@ -30,7 +44,7 @@ namespace GKCore.Controllers
             controller.IndividualRecord = person;
             controller.PersonalName = personalName;
 
-            view.Surname.Text = "sample text";
+            _txtSurname.Text = "sample text";
 
             controller.Accept();
 
@@ -39,33 +53,32 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static IPersonalNameEditDlg CreateMockView()
+        private IPersonalNameEditDlg CreateMockView()
         {
             var view = Substitute.For<IPersonalNameEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblSurname");
-            SubstituteControl<ILabel>(view, "lblMarriedSurname");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ILabel>(view, "lblPatronymic");
-            SubstituteControl<ILabel>(view, "lblNickname");
-            SubstituteControl<ILabel>(view, "lblSurnamePrefix");
-            SubstituteControl<ILabel>(view, "lblNamePrefix");
-            SubstituteControl<ILabel>(view, "lblNameSuffix");
-            SubstituteControl<ILabel>(view, "lblType");
-            SubstituteControl<ILabel>(view, "lblLanguage");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            SubstCtl<ILabel>(view, "lblSurname");
+            _lblMarriedSurname = SubstCtl<ILabel>(view, "lblMarriedSurname");
+            SubstCtl<ILabel>(view, "lblName");
+            SubstCtl<ILabel>(view, "lblPatronymic");
+            SubstCtl<ILabel>(view, "lblNickname");
+            SubstCtl<ILabel>(view, "lblSurnamePrefix");
+            SubstCtl<ILabel>(view, "lblNamePrefix");
+            SubstCtl<ILabel>(view, "lblNameSuffix");
+            SubstCtl<ILabel>(view, "lblType");
+            SubstCtl<ILabel>(view, "lblLanguage");
 
-            view.SurnameLabel.Returns(Substitute.For<ILabel>());
-            view.Surname.Returns(Substitute.For<ITextBox>());
-            view.Name.Returns(Substitute.For<ITextBox>());
-            view.Patronymic.Returns(Substitute.For<ITextBox>());
-            view.NameType.Returns(Substitute.For<IComboBox>());
-            view.NamePrefix.Returns(Substitute.For<ITextBox>());
-            view.Nickname.Returns(Substitute.For<ITextBox>());
-            view.SurnamePrefix.Returns(Substitute.For<ITextBox>());
-            view.NameSuffix.Returns(Substitute.For<ITextBox>());
-            view.MarriedSurname.Returns(Substitute.For<ITextBox>());
-            view.Language.Returns(Substitute.For<IComboBox>());
+            _txtMarriedSurname = SubstCtl<ITextBox>(view, "txtMarriedSurname");
+            _cmbNameType = SubstCtl<IComboBox>(view, "cmbNameType");
+            _txtNickname = SubstCtl<ITextBox>(view, "txtNickname");
+            _txtNameSuffix = SubstCtl<ITextBox>(view, "txtNameSuffix");
+            _txtNamePrefix = SubstCtl<ITextBox>(view, "txtNamePrefix");
+            _txtSurnamePrefix = SubstCtl<ITextBox>(view, "txtSurnamePrefix");
+            _txtPatronymic = SubstCtl<ITextBox>(view, "txtPatronymic");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _txtSurname = SubstCtl<ITextBox>(view, "txtSurname");
+            _cmbLanguage = SubstCtl<IComboBox>(view, "cmbLanguage");
             return view;
         }
     }

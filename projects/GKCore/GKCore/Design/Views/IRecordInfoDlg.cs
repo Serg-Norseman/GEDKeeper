@@ -7,7 +7,6 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
@@ -15,6 +14,6 @@ namespace GKCore.Design.Views
     {
         GDMRecord Record { get; set; }
 
-        IHyperView HyperView { get; }
+        string Text { get; set; }
     }
 }

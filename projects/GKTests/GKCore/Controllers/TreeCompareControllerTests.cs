@@ -16,6 +16,18 @@ namespace GKCore.Controllers
     [TestFixture]
     public class TreeCompareControllerTests : ControllerTest
     {
+        private ITabPage _pageTreeCompare;
+        private ITextBox _ListCompare;
+        private IButton _btnClose;
+        private IGroupBox _grpMatchType;
+        private IRadioButton _radMatchInternal;
+        private IRadioButton _radMathExternal;
+        private IRadioButton _radAnalysis;
+        private ILabel _lblFile;
+        private ITextBox _txtCompareFile;
+        private IButton _btnFileChoose;
+        private IButton _btnMatch;
+
         [Test]
         public void Test_TreeCompareController()
         {
@@ -23,13 +35,13 @@ namespace GKCore.Controllers
             var controller = new TreeCompareController(view);
             controller.InitView(fBaseWin);
 
-            controller.GetControl<IRadioButton>("radMatchInternal").Checked = true;
+            _radMatchInternal.Checked = true;
             controller.Match();
 
-            controller.GetControl<IRadioButton>("radAnalysis").Checked = true;
+            _radAnalysis.Checked = true;
             controller.Match();
 
-            controller.GetControl<IRadioButton>("radMathExternal").Checked = true;
+            _radMathExternal.Checked = true;
 
             //SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
             controller.SelectExternalFile();
@@ -38,21 +50,20 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static ITreeCompareDlg CreateMockView()
+        private ITreeCompareDlg CreateMockView()
         {
             var view = Substitute.For<ITreeCompareDlg>();
-            SubstituteControl<ITabPage>(view, "pageTreeCompare");
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<ILabel>(view, "lblFile");
-            SubstituteControl<IButton>(view, "btnFileChoose");
-            SubstituteControl<IGroupBox>(view, "grpMatchType");
-            SubstituteControl<IRadioButton>(view, "radMatchInternal");
-            SubstituteControl<IRadioButton>(view, "radMathExternal");
-            SubstituteControl<IRadioButton>(view, "radAnalysis");
-            SubstituteControl<IButton>(view, "btnMatch");
-
-            view.ExternalBase.Returns(Substitute.For<ITextBox>());
-            view.CompareOutput.Returns(Substitute.For<ITextBox>());
+            _pageTreeCompare = SubstCtl<ITabPage>(view, "pageTreeCompare");
+            _ListCompare = SubstCtl<ITextBox>(view, "ListCompare");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _lblFile = SubstCtl<ILabel>(view, "lblFile");
+            _txtCompareFile = SubstCtl<ITextBox>(view, "txtCompareFile");
+            _btnFileChoose = SubstCtl<IButton>(view, "btnFileChoose");
+            _grpMatchType = SubstCtl<IGroupBox>(view, "grpMatchType");
+            _radMatchInternal = SubstCtl<IRadioButton>(view, "radMatchInternal");
+            _radMathExternal = SubstCtl<IRadioButton>(view, "radMathExternal");
+            _radAnalysis = SubstCtl<IRadioButton>(view, "radAnalysis");
+            _btnMatch = SubstCtl<IButton>(view, "btnMatch");
             return view;
         }
     }

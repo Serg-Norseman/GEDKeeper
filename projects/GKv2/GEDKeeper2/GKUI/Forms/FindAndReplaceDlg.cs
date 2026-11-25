@@ -18,9 +18,6 @@ namespace GKUI.Forms
 {
     public partial class FindAndReplaceDlg : CommonWindow<IFARDlg, FARDlgController>, IFARDlg
     {
-        #region View Interface
-        #endregion
-
         public IWindow OwnerWindow
         {
             get { return fController.Base; }

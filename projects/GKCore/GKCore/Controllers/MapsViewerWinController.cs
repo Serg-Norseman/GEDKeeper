@@ -30,6 +30,30 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class MapsViewerWinController : FormController<IMapsViewerWin>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private ITabPage _pagePlaces;
+        private IGroupBox _grpSelection;
+        private ITreeView _tvPlaces;
+        private IComboBox _cmbPersons;
+        private ICheckBox _chkResidence;
+        private ICheckBox _chkDeath;
+        private ICheckBox _chkBirth;
+        private IButton _btnSelectPlaces;
+        private IRadioButton _radTotal;
+        private IRadioButton _radSelected;
+        private ICheckBox _chkLinesVisible;
+        private IToolItem _tbLoadPlaces;
+        private IToolItem _tbSaveSnapshot;
+        private IToolItem _tbProviders;
+        private IToolItem _tbClear;
+        private ITabPage _pageCoordinates;
+        private IButton _btnSearch;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly List<GeoPoint> fMapPoints;
         private readonly List<GDMRecord> fSelectedPersons;
         private readonly Dictionary<string, MapPlace> fPlaces;
@@ -144,11 +168,11 @@ namespace GKCore.Controllers
         {
             try {
                 PlacesCache.Instance.Load();
-                fView.PersonsCombo.BeginUpdate();
-                fView.PlacesTree.BeginUpdate();
-                fView.PlacesTree.Clear();
+                _cmbPersons.BeginUpdate();
+                _tvPlaces.BeginUpdate();
+                _tvPlaces.Clear();
                 StringList personValues = new StringList();
-                fBaseRoot = fView.PlacesTree.AddNode(null, LangMan.LS(LSID.RPLocations), null);
+                fBaseRoot = _tvPlaces.AddNode(null, LangMan.LS(LSID.RPLocations), null);
 
                 AppHost.Instance.ExecuteWork((controller) => {
                     LoadPlacesInt(personValues, controller);
@@ -160,30 +184,30 @@ namespace GKCore.Controllers
 
                     ITVNode node = fView.FindTreeNode(placeName);
                     if (node == null) {
-                        node = fView.PlacesTree.AddNode(fBaseRoot, placeName, mapPlace);
+                        node = _tvPlaces.AddNode(fBaseRoot, placeName, mapPlace);
 
                         int num = mapPlace.Points.Count;
                         for (int i = 0; i < num; i++) {
                             GeoPoint pt = mapPlace.Points[i];
                             string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-                            fView.PlacesTree.AddNode(node, ptTitle, pt);
+                            _tvPlaces.AddNode(node, ptTitle, pt);
                         }
                     }
                 }
 
-                fView.PlacesTree.Expand(fBaseRoot);
+                _tvPlaces.Expand(fBaseRoot);
 
                 personValues.Sort();
-                fView.PersonsCombo.Clear();
-                fView.PersonsCombo.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.NotSelected), null);
+                _cmbPersons.Clear();
+                _cmbPersons.AddItem<GDMIndividualRecord>(LangMan.LS(LSID.NotSelected), null);
                 for (int i = 0; i < personValues.Count; i++) {
-                    fView.PersonsCombo.AddItem(personValues[i], personValues.GetObject(i) as GDMIndividualRecord);
+                    _cmbPersons.AddItem(personValues[i], personValues.GetObject(i) as GDMIndividualRecord);
                 }
 
-                fView.SelectPlacesBtn.Enabled = true;
+                _btnSelectPlaces.Enabled = true;
 
-                fView.PlacesTree.EndUpdate();
-                fView.PersonsCombo.EndUpdate();
+                _tvPlaces.EndUpdate();
+                _cmbPersons.EndUpdate();
                 PlacesCache.Instance.Save();
             } catch (Exception ex) {
                 Logger.WriteError("MapsViewerWinController.LoadPlaces()", ex);
@@ -226,7 +250,7 @@ namespace GKCore.Controllers
 
         public void SetCenter()
         {
-            GeoPoint pt = fView.PlacesTree.GetSelectedData() as GeoPoint;
+            GeoPoint pt = _tvPlaces.GetSelectedData() as GeoPoint;
             if (pt == null) return;
 
             fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
@@ -240,15 +264,15 @@ namespace GKCore.Controllers
             bool condDeath = false;
             bool condResidence = false;
 
-            if (fView.TotalRadio.Checked) {
-                condBirth = fView.BirthCheck.Checked;
-                condDeath = fView.DeathCheck.Checked;
-                condResidence = fView.ResidenceCheck.Checked;
-            } else if (fView.SelectedRadio.Checked && (fView.PersonsCombo.SelectedIndex >= 0)) {
-                ind = (fView.PersonsCombo.GetSelectedTag<GDMIndividualRecord>());
+            if (_radTotal.Checked) {
+                condBirth = _chkBirth.Checked;
+                condDeath = _chkDeath.Checked;
+                condResidence = _chkResidence.Checked;
+            } else if (_radSelected.Checked && (_cmbPersons.SelectedIndex >= 0)) {
+                ind = (_cmbPersons.GetSelectedTag<GDMIndividualRecord>());
             }
 
-            fView.MapBrowser.ShowLines = (ind != null && fView.LinesVisibleCheck.Checked);
+            fView.MapBrowser.ShowLines = (ind != null && _chkLinesVisible.Checked);
             fMapPoints.Clear();
 
             foreach (var kvp in fPlaces) {
@@ -300,20 +324,20 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.MIMap));
 
-            GetControl<ITabPage>("pagePlaces").Text = LangMan.LS(LSID.RPLocations);
-            GetControl<IGroupBox>("grpSelection").Text = LangMan.LS(LSID.MapSelection);
-            GetControl<IRadioButton>("radTotal").Text = LangMan.LS(LSID.MapSelOnAll);
-            GetControl<ICheckBox>("chkBirth").Text = LangMan.LS(LSID.MSBirthPlaces);
-            GetControl<ICheckBox>("chkDeath").Text = LangMan.LS(LSID.MSDeathPlaces);
-            GetControl<ICheckBox>("chkResidence").Text = LangMan.LS(LSID.MSResiPlace);
-            GetControl<IRadioButton>("radSelected").Text = LangMan.LS(LSID.MapSelOnSelected);
-            GetControl<IButton>("btnSelectPlaces").Text = LangMan.LS(LSID.Show);
-            GetControl<ICheckBox>("chkLinesVisible").Text = LangMan.LS(LSID.LinesVisible);
-            GetControl<IToolItem>("tbLoadPlaces").Text = LangMan.LS(LSID.LoadPlaces);
-            GetControl<IToolItem>("tbProviders").Text = LangMan.LS(LSID.Providers);
-            GetControl<ITabPage>("pageCoordinates").Text = LangMan.LS(LSID.Coordinates);
-            GetControl<IToolItem>("tbClear").Text = LangMan.LS(LSID.Clear);
-            GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
+            _pagePlaces.Text = LangMan.LS(LSID.RPLocations);
+            _grpSelection.Text = LangMan.LS(LSID.MapSelection);
+            _radTotal.Text = LangMan.LS(LSID.MapSelOnAll);
+            _chkBirth.Text = LangMan.LS(LSID.MSBirthPlaces);
+            _chkDeath.Text = LangMan.LS(LSID.MSDeathPlaces);
+            _chkResidence.Text = LangMan.LS(LSID.MSResiPlace);
+            _radSelected.Text = LangMan.LS(LSID.MapSelOnSelected);
+            _btnSelectPlaces.Text = LangMan.LS(LSID.Show);
+            _chkLinesVisible.Text = LangMan.LS(LSID.LinesVisible);
+            _tbLoadPlaces.Text = LangMan.LS(LSID.LoadPlaces);
+            _tbProviders.Text = LangMan.LS(LSID.Providers);
+            _pageCoordinates.Text = LangMan.LS(LSID.Coordinates);
+            _tbClear.Text = LangMan.LS(LSID.Clear);
+            _btnSearch.Text = LangMan.LS(LSID.Search);
 
             SetToolTip("tbSaveSnapshot", LangMan.LS(LSID.ImageSaveTip));
         }
@@ -322,7 +346,7 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IToolItem>("tbSaveSnapshot").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ImageSave, true);
+            _tbSaveSnapshot.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ImageSave, true);
         }
     }
 }

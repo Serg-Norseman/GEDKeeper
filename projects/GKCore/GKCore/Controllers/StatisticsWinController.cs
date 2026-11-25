@@ -26,6 +26,24 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class StatisticsWinController : FormController<IStatisticsWin>
     {
+        // Note: _grpSummary field is not created - this control is absent in the GKvX form,
+        // it is accessed by string name.
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private IComboBox _cbType;
+        private IListView _lvSummary;
+#if NETCOREAPP
+        private IButton _tbExcelExport;
+#else
+        private IToolItem _tbExcelExport;
+#endif
+        private IGraphControl _fGraph;
+        private IListView _fListStats;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly List<StatsItem> fCurrentValues;
         private readonly List<GDMRecord> fSelectedRecords;
         private readonly List<SummaryItem> fSummaryValues;
@@ -52,17 +70,17 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.StatsType.ReadOnly = true;
+            _cbType.ReadOnly = true;
 
             var listModel = new StatItemsListModel("-");
             listModel.DataSource = fCurrentValues;
-            fView.ListStats.ListMan = listModel;
-            fView.ListStats.UpdateContents();
+            _fListStats.ListMan = listModel;
+            _fListStats.UpdateContents();
 
             var sumModel = new SummaryListModel();
             sumModel.DataSource = fSummaryValues;
-            fView.Summary.ListMan = sumModel;
-            fView.Summary.UpdateContents();
+            _lvSummary.ListMan = sumModel;
+            _lvSummary.UpdateContents();
 
             fTreeStats = new TreeStats(fBase.Context, fSelectedRecords);
         }
@@ -73,12 +91,12 @@ namespace GKCore.Controllers
 
         public void CalcStats()
         {
-            fCurrentMode = fView.StatsType.GetSelectedTag<StatsMode>();
+            fCurrentMode = _cbType.GetSelectedTag<StatsMode>();
 
             fTreeStats.GetSpecStats(fCurrentMode, fCurrentValues);
 
-            fView.ListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap));
-            fView.ListStats.UpdateContents();
+            _fListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap));
+            _fListStats.UpdateContents();
 
             fChartTitle = LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Title);
 
@@ -86,13 +104,13 @@ namespace GKCore.Controllers
                 case StatsMode.smAge:
                     fChartXTitle = LangMan.LS(LSID.Age);
                     fChartYTitle = LangMan.LS(LSID.People);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
                     break;
 
                 case StatsMode.smLifeExpectancy:
                     fChartXTitle = LangMan.LS(LSID.LifeExpectancy);
                     fChartYTitle = LangMan.LS(LSID.People);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
                     break;
 
                 case StatsMode.smBirthYears:
@@ -123,42 +141,42 @@ namespace GKCore.Controllers
                                 break;
                         }
 
-                        fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
+                        _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
                         break;
                     }
 
                 case StatsMode.smChildsDistribution:
                     fChartXTitle = LangMan.LS(LSID.Childs);
                     fChartYTitle = LangMan.LS(LSID.Parents);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smCertaintyIndex:
                     fChartXTitle = LangMan.LS(LSID.CertaintyIndex);
                     fChartYTitle = LangMan.LS(LSID.People);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smBirthByMonth:
                     fChartXTitle = LangMan.LS(LSID.Month);
                     fChartYTitle = LangMan.LS(LSID.People);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smDemography:
                     fChartXTitle = LangMan.LS(LSID.LifeExpectancy);
                     fChartYTitle = LangMan.LS(LSID.People);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smParentsAge:
                     fChartXTitle = LangMan.LS(LSID.ParentsAge);
                     fChartYTitle = LangMan.LS(LSID.People);
-                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
+                    _fGraph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
                     break;
 
                 default:
-                    fView.Graph.Clear();
+                    _fGraph.Clear();
                     break;
             }
         }
@@ -167,15 +185,15 @@ namespace GKCore.Controllers
         {
             bool hasPatronymic = fBase != null && fBase.Context.Culture.HasPatronymic;
 
-            fView.StatsType.BeginUpdate();
-            fView.StatsType.Clear();
+            _cbType.BeginUpdate();
+            _cbType.Clear();
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
                 if (sm == StatsMode.smPatronymics && !hasPatronymic) continue;
 
                 GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)sm];
-                fView.StatsType.AddItem(LangMan.LS(tr.Title), sm);
+                _cbType.AddItem(LangMan.LS(tr.Title), sm);
             }
-            fView.StatsType.EndUpdate();
+            _cbType.EndUpdate();
         }
 
         private static string GetPercent(int dividend, int divisor)
@@ -213,8 +231,8 @@ namespace GKCore.Controllers
                 AddSummaryItem(LSID.AvgMarriagesAge, stats.mage);
                 AddSummaryItem(LSID.CertaintyIndex, stats.cIndex);
             } finally {
-                fView.Summary.SortOrder = GKSortOrder.None;
-                fView.Summary.UpdateContents();
+                _lvSummary.SortOrder = GKSortOrder.None;
+                _lvSummary.UpdateContents();
             }
         }
 
@@ -250,20 +268,16 @@ namespace GKCore.Controllers
 
             SetToolTip("tbExcelExport", LangMan.LS(LSID.ExportTable));
 
-            int oldIndex = fView.StatsType.SelectedIndex;
+            int oldIndex = _cbType.SelectedIndex;
             UpdateStatsTypes();
-            fView.StatsType.SelectedIndex = oldIndex;
+            _cbType.SelectedIndex = oldIndex;
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-#if NETCOREAPP
-            GetControl<IButton>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
-#else
-            GetControl<IToolItem>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
-#endif
+            _tbExcelExport.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
         }
 
 

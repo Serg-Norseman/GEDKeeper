@@ -23,6 +23,18 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class RepositoryCitDlgController : DialogController<IRepositoryCitEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnRepositoryAdd;
+        private ILabel _lblRepository;
+        private IComboBox _cmbRepository;
+        private ITabPage _pageCallNumbers;
+        private ISheetList _fCallNumbersList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly StringList fRepositoriesList;
         private GDMRepositoryCitation fRepositoryCitation;
 
@@ -50,20 +62,20 @@ namespace GKCore.Controllers
             fBase.Context.GetRepositoriesList(fRepositoriesList);
             RefreshRepositoriesList("");
 
-            fView.RepositoryCombo.Activate();
+            _cmbRepository.Activate();
 
-            fView.CallNumbersList.ListModel = new CallNumbersListModel(fView, baseWin, fLocalUndoman);
+            _fCallNumbersList.ListModel = new CallNumbersListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.CallNumbersList.ListModel.SaveSettings();
+            _fCallNumbersList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                int idx = fRepositoriesList.IndexOf(fView.RepositoryCombo.Text);
+                int idx = fRepositoriesList.IndexOf(_cmbRepository.Text);
                 GDMRepositoryRecord repoRec = ((idx < 0) ? null : (fRepositoriesList.GetObject(idx) as GDMRepositoryRecord));
 
                 if (repoRec == null) {
@@ -86,9 +98,9 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             var repoRec = fBase.Context.Tree.GetPtrValue<GDMRepositoryRecord>(fRepositoryCitation);
-            if (repoRec != null) fView.RepositoryCombo.Text = repoRec.RepositoryName;
+            if (repoRec != null) _cmbRepository.Text = repoRec.RepositoryName;
 
-            fView.CallNumbersList.ListModel.DataOwner = fRepositoryCitation;
+            _fCallNumbersList.ListModel.DataOwner = fRepositoryCitation;
         }
 
         public async void AddRepository()
@@ -98,14 +110,14 @@ namespace GKCore.Controllers
 
             fBase.Context.GetRepositoriesList(fRepositoriesList);
             RefreshRepositoriesList("");
-            fView.RepositoryCombo.Text = repo.RepositoryName;
+            _cmbRepository.Text = repo.RepositoryName;
         }
 
         public void RefreshRepositoriesList(string filter)
         {
-            fView.RepositoryCombo.BeginUpdate();
+            _cmbRepository.BeginUpdate();
             try {
-                fView.RepositoryCombo.Clear();
+                _cmbRepository.Clear();
 
                 string flt = "*" + filter + "*";
 
@@ -114,31 +126,31 @@ namespace GKCore.Controllers
                     string st = fRepositoriesList[i];
 
                     if (filter == "" || GKUtils.MatchesMask(st, flt)) {
-                        fView.RepositoryCombo.AddItem(st, fRepositoriesList.GetObject(i));
+                        _cmbRepository.AddItem(st, fRepositoriesList.GetObject(i));
                     }
                 }
             } finally {
-                fView.RepositoryCombo.EndUpdate();
+                _cmbRepository.EndUpdate();
             }
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.Repository));
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblRepository").Text = LangMan.LS(LSID.Repository);
-            GetControl<ITabPage>("pageCallNumbers").Text = LangMan.LS(LSID.CallNumbers);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblRepository.Text = LangMan.LS(LSID.Repository);
+            _pageCallNumbers.Text = LangMan.LS(LSID.CallNumbers);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
 
-            GetControl<IButton>("btnRepositoryAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach);
+            _btnRepositoryAdd.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach);
         }
     }
 }

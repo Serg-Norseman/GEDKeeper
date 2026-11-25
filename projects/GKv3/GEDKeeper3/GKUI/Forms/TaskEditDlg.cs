@@ -12,9 +12,7 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -48,45 +46,6 @@ namespace GKUI.Forms
             get { return fController.TaskRecord; }
             set { fController.TaskRecord = value; }
         }
-
-        #region View Interface
-
-        ISheetList ITaskEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        IComboBox ITaskEditDlg.Priority
-        {
-            get { return fController.GetControlHandler<IComboBox>(txtPriority); }
-        }
-
-        IDateBox ITaskEditDlg.StartDate
-        {
-            get { return fController.GetControlHandler<IDateBox>(txtStartDate); }
-        }
-
-        IDateBox ITaskEditDlg.StopDate
-        {
-            get { return fController.GetControlHandler<IDateBox>(txtStopDate); }
-        }
-
-        IComboBox ITaskEditDlg.GoalType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbGoalType); }
-        }
-
-        ITextBox ITaskEditDlg.Goal
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtGoal); }
-        }
-
-        IButton ITaskEditDlg.GoalSelect
-        {
-            get { return fController.GetControlHandler<IButton>(btnGoalSelect); }
-        }
-
-        #endregion
 
         public TaskEditDlg(IBaseWindow baseWin)
         {

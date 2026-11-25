@@ -16,6 +16,16 @@ namespace GKCore.Controllers
     [TestFixture]
     public class PatriarchsSearchControllerTests : ControllerTest
     {
+        private IButton _btnClose;
+        private ITabPage _pagePatSearch;
+        private IButton _btnPatSearch;
+        private ILabel _lblMinGenerations;
+        private INumericBox _edMinGens;
+        private IButton _btnSetPatriarch;
+        private IButton _btnPatriarchsDiagram;
+        private ICheckBox _chkWithoutDates;
+        private IListView _ListPatriarchs;
+
         [Test]
         public void Test_PatriarchsSearchController()
         {
@@ -23,7 +33,7 @@ namespace GKCore.Controllers
             var controller = new PatriarchsSearchController(view);
             controller.InitView(fBaseWin);
 
-            view.MinGensNum.Value = 1;
+            _edMinGens.Value = 1;
             controller.Search();
             controller.SetPatriarch();
 
@@ -32,20 +42,18 @@ namespace GKCore.Controllers
             //pvWin.Close();
         }
 
-        private static IPatriarchsSearchDlg CreateMockView()
+        private IPatriarchsSearchDlg CreateMockView()
         {
             var view = Substitute.For<IPatriarchsSearchDlg>();
-            SubstituteControl<ITabPage>(view, "pagePatSearch");
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<ILabel>(view, "lblMinGenerations");
-            SubstituteControl<IButton>(view, "btnSetPatriarch");
-            SubstituteControl<IButton>(view, "btnPatSearch");
-            SubstituteControl<ICheckBox>(view, "chkWithoutDates");
-            SubstituteControl<IButton>(view, "btnPatriarchsDiagram");
-
-            view.MinGensNum.Returns(Substitute.For<INumericBox>());
-            view.WithoutDatesCheck.Returns(Substitute.For<ICheckBox>());
-            view.PatriarchsList.Returns(Substitute.For<IListView>());
+            _pagePatSearch = SubstCtl<ITabPage>(view, "pagePatSearch");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _btnPatSearch = SubstCtl<IButton>(view, "btnPatSearch");
+            _lblMinGenerations = SubstCtl<ILabel>(view, "lblMinGenerations");
+            _edMinGens = SubstCtl<INumericBox>(view, "edMinGens");
+            _btnSetPatriarch = SubstCtl<IButton>(view, "btnSetPatriarch");
+            _btnPatriarchsDiagram = SubstCtl<IButton>(view, "btnPatriarchsDiagram");
+            _chkWithoutDates = SubstCtl<ICheckBox>(view, "chkWithoutDates");
+            _ListPatriarchs = SubstCtl<IListView>(view, "ListPatriarchs");
             return view;
         }
     }

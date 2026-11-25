@@ -10,7 +10,6 @@ using System;
 using System.Windows.Forms;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 using GKUI.Components;
@@ -21,20 +20,6 @@ namespace GKUI.Forms
     {
         private GKListView ListPlaces;
         private ContextMenuStrip contextMenu;
-
-        #region View Interface
-
-        ITextBox IPlacesManagerDlg.FilterBox
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFilter); }
-        }
-
-        IListView IPlacesManagerDlg.PlacesList
-        {
-            get { return ListPlaces; }
-        }
-
-        #endregion
 
         public TTPlacesManagerDlg(IBaseWindow baseWin)
         {

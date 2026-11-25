@@ -71,13 +71,26 @@ namespace GKCore.Design
             base.Dispose(disposing);
         }
 
+        private static IEnumerable<FieldInfo> GetAllFields(Type type)
+        {
+            while (type != null && type != typeof(ControlsManager) && type != typeof(object)) {
+                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic/* | BindingFlags.Public*/ | BindingFlags.DeclaredOnly);
+
+                foreach (var field in fields) {
+                    yield return field;
+                }
+
+                type = type.BaseType;
+            }
+        }
+
         protected void BindControls()
         {
             /*
              * Looking ahead: if forms are opened frequently and in large numbers, the result of `GetFields` can be cached
              * in a `static ConcurrentDictionary<Type, FieldInfo[]>` — this will reduce the overhead to the microseconds.
              */
-            var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic/* | BindingFlags.Public*/ | BindingFlags.DeclaredOnly);
+            var fields = GetAllFields(GetType());
 
             foreach (var field in fields) {
                 if (!typeof(IControl).IsAssignableFrom(field.FieldType))

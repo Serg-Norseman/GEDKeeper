@@ -10,7 +10,6 @@ using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -22,20 +21,6 @@ namespace GKUI.Forms
             get { return fController.LocationLink; }
             set { fController.LocationLink = value; }
         }
-
-        #region View Interface
-
-        ITextBox ILocationLinkEditDlg.TopLevelText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtTopLevel); }
-        }
-
-        IDateControl ILocationLinkEditDlg.DateCtl
-        {
-            get { return fController.GetControlHandler<IDateControl>(dateCtl); }
-        }
-
-        #endregion
 
         public LocationLinkEditDlg(IBaseWindow baseWin)
         {

@@ -20,6 +20,16 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class QuickSearchDlgController : FormController<IQuickSearchDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private ITextBox _txtSearchPattern;
+        private IButton _btnPrev;
+        private IButton _btnNext;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private readonly IWorkWindow fWorkWindow;
         private SearchStrategy fStrategy;
 
@@ -40,7 +50,7 @@ namespace GKCore.Controllers
 
         public void ChangeText()
         {
-            fStrategy = new WorkSearchStrategy(fWorkWindow, fView.SearchPattern.Text);
+            fStrategy = new WorkSearchStrategy(fWorkWindow, _txtSearchPattern.Text);
         }
 
         private void SelectResult(SearchResult result)
@@ -92,8 +102,8 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
-            GetControl<IButton>("btnNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
+            _btnPrev.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
+            _btnNext.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
         }
     }
 }

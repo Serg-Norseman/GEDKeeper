@@ -7,7 +7,6 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
@@ -15,17 +14,5 @@ namespace GKCore.Design.Views
     {
         GDMIndividualRecord IndividualRecord { get; set; }
         GDMPersonalName PersonalName { get; set; }
-
-        ILabel SurnameLabel { get; }
-        ITextBox Surname { get; }
-        ITextBox Name { get; }
-        ITextBox Patronymic { get; }
-        IComboBox NameType { get; }
-        ITextBox NamePrefix { get; }
-        ITextBox Nickname { get; }
-        ITextBox SurnamePrefix { get; }
-        ITextBox NameSuffix { get; }
-        ITextBox MarriedSurname { get; }
-        IComboBox Language { get; }
     }
 }

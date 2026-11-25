@@ -18,6 +18,16 @@ namespace GKCore.Controllers
     [TestFixture]
     public class StatisticsWinControllerTests : ControllerTest
     {
+        private IComboBox _cbType;
+        private IListView _lvSummary;
+#if NETCOREAPP
+        private IButton _tbExcelExport;
+#else
+        private IToolItem _tbExcelExport;
+#endif
+        private IGraphControl _fGraph;
+        private IListView _fListStats;
+
         [Test]
         public async Task Test_StatisticsWinController()
         {
@@ -27,25 +37,28 @@ namespace GKCore.Controllers
             controller.UpdateStatsTypes();
 
             for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
-                view.StatsType.SelectedIndex = (int)sm;
+                _cbType.SelectedIndex = (int)sm;
             }
 
             controller.UpdateView();
 
-            view.StatsType.SelectedIndex = 0;
+            _cbType.SelectedIndex = 0;
             await controller.ExportToExcel();
         }
 
-        private static IStatisticsWin CreateMockView()
+        private IStatisticsWin CreateMockView()
         {
             var view = Substitute.For<IStatisticsWin>();
             SubstituteControl<IGroupBox>(view, "grpSummary");
-            SubstituteControl<IButton>(view, "tbExcelExport");
-
-            view.Graph.Returns(Substitute.For<IGraphControl>());
-            view.ListStats.Returns(Substitute.For<IListView>());
-            view.Summary.Returns(Substitute.For<IListView>());
-            view.StatsType.Returns(Substitute.For<IComboBox>());
+            _cbType = SubstCtl<IComboBox>(view, "cbType");
+            _lvSummary = SubstCtl<IListView>(view, "lvSummary");
+#if NETCOREAPP
+            _tbExcelExport = SubstCtl<IButton>(view, "tbExcelExport");
+#else
+            _tbExcelExport = SubstCtl<IToolItem>(view, "tbExcelExport");
+#endif
+            _fGraph = SubstCtl<IGraphControl>(view, "fGraph");
+            _fListStats = SubstCtl<IListView>(view, "fListStats");
             return view;
         }
     }

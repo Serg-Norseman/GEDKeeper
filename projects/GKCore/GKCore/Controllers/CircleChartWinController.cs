@@ -22,6 +22,11 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class CircleChartWinController : FormController<ICircleChartWin>
     {
+        // Note: the CircleChart chart is a domain object of the window (accessed via the
+        // interface member). Toolbar/menu controls are accessed by string names - the sets
+        // of tb*/mi* controls in the CircleChartWin forms of GKv2/GKvX variants are reduced
+        // (BindControls would break them).
+
 
         public CircleChartWinController(ICircleChartWin view) : base(view)
         {

@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Names;
 
 namespace GKCore.Design.Views
@@ -14,10 +13,5 @@ namespace GKCore.Design.Views
     public interface INameEditDlg : ICommonDialog
     {
         NameEntry IName { get; set; }
-
-        ITextBox Name { get; }
-        ITextBox FPatr { get; }
-        ITextBox MPatr { get; }
-        IComboBox SexCombo { get; }
     }
 }

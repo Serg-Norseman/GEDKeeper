@@ -13,10 +13,8 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
@@ -108,135 +106,6 @@ namespace GKUI.Forms
             set { fController.TargetMode = value; }
         }
 
-
-        #region View Interface
-
-        ISheetList IPersonEditDlg.EventsList
-        {
-            get { return fEventsList; }
-        }
-
-        ISheetList IPersonEditDlg.SpousesList
-        {
-            get { return fSpousesList; }
-        }
-
-        ISheetList IPersonEditDlg.AssociationsList
-        {
-            get { return fAssociationsList; }
-        }
-
-        ISheetList IPersonEditDlg.GroupsList
-        {
-            get { return fGroupsList; }
-        }
-
-        ISheetList IPersonEditDlg.UserRefList
-        {
-            get { return fUserRefList; }
-        }
-
-        ISheetList IPersonEditDlg.NamesList
-        {
-            get { return fNamesList; }
-        }
-
-        ISheetList IPersonEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IPersonEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ISheetList IPersonEditDlg.SourcesList
-        {
-            get { return fSourcesList; }
-        }
-
-        ISheetList IPersonEditDlg.ParentsList
-        {
-            get { return fParentsList; }
-        }
-
-        ISheetList IStdPersonEditDlg.ChildrenList
-        {
-            get { return fChildrenList; }
-        }
-
-        ISheetList IStdPersonEditDlg.DNATestsList
-        {
-            get { return fDNATestsList; }
-        }
-
-        IPortraitControl IPersonEditDlg.Portrait
-        {
-            get { return imgPortrait; }
-        }
-
-        ITextBox IPersonEditDlg.Father
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFather); }
-        }
-
-        ITextBox IPersonEditDlg.Mother
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtMother); }
-        }
-
-        ILabel IPersonEditDlg.SurnameLabel
-        {
-            get { return fController.GetControlHandler<ILabel>(lblSurname); }
-        }
-
-        ITextBox IPersonEditDlg.Surname
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtSurname); }
-        }
-
-        ITextBox IPersonEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        IComboBox IPersonEditDlg.Patronymic
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbPatronymic); }
-        }
-
-        ITextBox IPersonEditDlg.Nickname
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtNickname); }
-        }
-
-        ITextBox IPersonEditDlg.MarriedSurname
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtMarriedSurname); }
-        }
-
-        IComboBox IPersonEditDlg.RestrictionCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbRestriction); }
-        }
-
-        IComboBox IPersonEditDlg.SexCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbSex); }
-        }
-
-        ICheckBox IPersonEditDlg.Patriarch
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkPatriarch); }
-        }
-
-        ICheckBox IPersonEditDlg.Bookmark
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkBookmark); }
-        }
-
-        #endregion
 
         public PersonEditDlg(IBaseWindow baseWin)
         {

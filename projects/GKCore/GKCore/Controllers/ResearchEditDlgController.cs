@@ -22,6 +22,33 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class ResearchEditDlgController : DialogController<IResearchEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private ITabPage _pageTasks;
+        private ITabPage _pageCommunications;
+        private ITabPage _pageGroups;
+        private ITabPage _pageNotes;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITextBox _txtName;
+        private ILabel _lblName;
+        private ILabel _lblPriority;
+        private IComboBox _cmbPriority;
+        private ILabel _lblStatus;
+        private IComboBox _cmbStatus;
+        private ILabel _lblStartDate;
+        private IDateBox _txtStartDate;
+        private ILabel _lblStopDate;
+        private IDateBox _txtStopDate;
+        private ILabel _lblPercent;
+        private INumericBox _nudPercent;
+        private ISheetList _fTasksList;
+        private ISheetList _fCommunicationsList;
+        private ISheetList _fGroupsList;
+        private ISheetList _fNotesList;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMResearchRecord fResearchRecord;
 
         public GDMResearchRecord ResearchRecord
@@ -51,43 +78,43 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.TasksList.OnModify += ListJumpHandler;
-            fView.CommunicationsList.OnModify += ListJumpHandler;
-            fView.GroupsList.OnModify += ListJumpHandler;
+            _fTasksList.OnModify += ListJumpHandler;
+            _fCommunicationsList.OnModify += ListJumpHandler;
+            _fGroupsList.OnModify += ListJumpHandler;
 
-            fView.Priority.ReadOnly = true;
+            _cmbPriority.ReadOnly = true;
             for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
-                fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
+                _cmbPriority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
-            fView.Status.ReadOnly = true;
+            _cmbStatus.ReadOnly = true;
             for (GDMResearchStatus rs = GDMResearchStatus.rsDefined; rs <= GDMResearchStatus.rsWithdrawn; rs++) {
-                fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
+                _cmbStatus.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
 
-            fView.TasksList.ListModel = new ResTasksListModel(fView, baseWin, fLocalUndoman);
-            fView.CommunicationsList.ListModel = new ResCommunicationsListModel(fView, baseWin, fLocalUndoman);
-            fView.GroupsList.ListModel = new ResGroupsListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            _fTasksList.ListModel = new ResTasksListModel(fView, baseWin, fLocalUndoman);
+            _fCommunicationsList.ListModel = new ResCommunicationsListModel(fView, baseWin, fLocalUndoman);
+            _fGroupsList.ListModel = new ResGroupsListModel(fView, baseWin, fLocalUndoman);
+            _fNotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void DoneView()
         {
-            fView.TasksList.ListModel.SaveSettings();
-            fView.CommunicationsList.ListModel.SaveSettings();
-            fView.GroupsList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
+            _fTasksList.ListModel.SaveSettings();
+            _fCommunicationsList.ListModel.SaveSettings();
+            _fGroupsList.ListModel.SaveSettings();
+            _fNotesList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
         {
             try {
-                fResearchRecord.ResearchName = fView.Name.Text;
-                fResearchRecord.Priority = (GDMResearchPriority)fView.Priority.SelectedIndex;
-                fResearchRecord.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
-                fResearchRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
-                fResearchRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
-                fResearchRecord.Percent = (int)fView.Percent.Value;
+                fResearchRecord.ResearchName = _txtName.Text;
+                fResearchRecord.Priority = (GDMResearchPriority)_cmbPriority.SelectedIndex;
+                fResearchRecord.Status = (GDMResearchStatus)_cmbStatus.SelectedIndex;
+                fResearchRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(_txtStartDate.NormalizeDate, true));
+                fResearchRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(_txtStopDate.NormalizeDate, true));
+                fResearchRecord.Percent = (int)_nudPercent.Value;
 
                 fLocalUndoman.Commit();
 
@@ -103,51 +130,51 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             if (fResearchRecord == null) {
-                fView.Name.Text = "";
-                fView.Priority.SelectedIndex = -1;
-                fView.Status.SelectedIndex = -1;
-                fView.StartDate.Text = "";
-                fView.StopDate.Text = "";
-                fView.Percent.Value = 0;
+                _txtName.Text = "";
+                _cmbPriority.SelectedIndex = -1;
+                _cmbStatus.SelectedIndex = -1;
+                _txtStartDate.Text = "";
+                _txtStopDate.Text = "";
+                _nudPercent.Value = 0;
             } else {
-                fView.Name.Text = fResearchRecord.ResearchName;
-                fView.Priority.SelectedIndex = (int)fResearchRecord.Priority;
-                fView.Status.SelectedIndex = (int)fResearchRecord.Status;
-                fView.StartDate.NormalizeDate = fResearchRecord.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.StopDate.NormalizeDate = fResearchRecord.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
-                fView.Percent.Value = fResearchRecord.Percent;
+                _txtName.Text = fResearchRecord.ResearchName;
+                _cmbPriority.SelectedIndex = (int)fResearchRecord.Priority;
+                _cmbStatus.SelectedIndex = (int)fResearchRecord.Status;
+                _txtStartDate.NormalizeDate = fResearchRecord.StartDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                _txtStopDate.NormalizeDate = fResearchRecord.StopDate.GetDisplayString(DateFormat.dfDD_MM_YYYY);
+                _nudPercent.Value = fResearchRecord.Percent;
             }
 
-            fView.NotesList.ListModel.DataOwner = fResearchRecord;
-            fView.TasksList.ListModel.DataOwner = fResearchRecord;
-            fView.CommunicationsList.ListModel.DataOwner = fResearchRecord;
-            fView.GroupsList.ListModel.DataOwner = fResearchRecord;
+            _fNotesList.ListModel.DataOwner = fResearchRecord;
+            _fTasksList.ListModel.DataOwner = fResearchRecord;
+            _fCommunicationsList.ListModel.DataOwner = fResearchRecord;
+            _fGroupsList.ListModel.DataOwner = fResearchRecord;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.WinResearchEdit));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageTasks").Text = LangMan.LS(LSID.RPTasks);
-            GetControl<ITabPage>("pageCommunications").Text = LangMan.LS(LSID.RPCommunications);
-            GetControl<ITabPage>("pageGroups").Text = LangMan.LS(LSID.RPGroups);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
-            GetControl<ILabel>("lblPriority").Text = LangMan.LS(LSID.Priority);
-            GetControl<ILabel>("lblStatus").Text = LangMan.LS(LSID.Status);
-            GetControl<ILabel>("lblPercent").Text = LangMan.LS(LSID.Percent);
-            GetControl<ILabel>("lblStartDate").Text = LangMan.LS(LSID.StartDate);
-            GetControl<ILabel>("lblStopDate").Text = LangMan.LS(LSID.StopDate);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _pageTasks.Text = LangMan.LS(LSID.RPTasks);
+            _pageCommunications.Text = LangMan.LS(LSID.RPCommunications);
+            _pageGroups.Text = LangMan.LS(LSID.RPGroups);
+            _pageNotes.Text = LangMan.LS(LSID.RPNotes);
+            _lblName.Text = LangMan.LS(LSID.Title);
+            _lblPriority.Text = LangMan.LS(LSID.Priority);
+            _lblStatus.Text = LangMan.LS(LSID.Status);
+            _lblPercent.Text = LangMan.LS(LSID.Percent);
+            _lblStartDate.Text = LangMan.LS(LSID.StartDate);
+            _lblStopDate.Text = LangMan.LS(LSID.StopDate);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

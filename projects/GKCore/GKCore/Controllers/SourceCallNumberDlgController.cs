@@ -21,6 +21,17 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class SourceCallNumberDlgController : DialogController<ISourceCallNumberEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblCallNumber;
+        private ITextBox _txtNumber;
+        private ILabel _lblMediaType;
+        private IComboBox _cmbMediaType;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private GDMSourceCallNumber fCallNumber;
 
         public GDMSourceCallNumber CallNumber
@@ -43,18 +54,18 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.MediaTypeCombo.ReadOnly = true;
+            _cmbMediaType.ReadOnly = true;
             for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
-                fView.MediaTypeCombo.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
+                _cmbMediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
-            fView.CallNumberText.Activate();
+            _txtNumber.Activate();
         }
 
         public override bool Accept()
         {
             try {
-                fCallNumber.StringValue = fView.CallNumberText.Text;
-                fCallNumber.MediaType = (GDMMediaType)fView.MediaTypeCombo.SelectedIndex;
+                fCallNumber.StringValue = _txtNumber.Text;
+                fCallNumber.MediaType = (GDMMediaType)_cmbMediaType.SelectedIndex;
 
                 if (!Validate(fCallNumber)) return false;
 
@@ -67,25 +78,25 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.CallNumberText.Text = fCallNumber.StringValue;
-            fView.MediaTypeCombo.SelectedIndex = (int)fCallNumber.MediaType;
+            _txtNumber.Text = fCallNumber.StringValue;
+            _cmbMediaType.SelectedIndex = (int)fCallNumber.MediaType;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.CallNumber));
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblCallNumber").Text = LangMan.LS(LSID.CallNumber);
-            GetControl<ILabel>("lblMediaType").Text = LangMan.LS(LSID.Type);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblCallNumber.Text = LangMan.LS(LSID.CallNumber);
+            _lblMediaType.Text = LangMan.LS(LSID.Type);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

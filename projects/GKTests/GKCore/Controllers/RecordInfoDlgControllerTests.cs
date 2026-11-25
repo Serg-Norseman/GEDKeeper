@@ -17,13 +17,13 @@ namespace GKCore.Controllers
     [TestFixture]
     public class RecordInfoDlgControllerTests : ControllerTest
     {
+        private IHyperView _hyperView1;
+
         [Test]
         public void Test_RecordInfoDlgController()
         {
-            var view = Substitute.For<IRecordInfoDlg>();
-            SubstituteControl<IHyperView>(view, "HyperView");
-
-            view.HyperView.Lines.Returns(new StringList());
+            IRecordInfoDlg view = CreateMockView();
+            _hyperView1.Lines.Returns(new StringList());
 
             var controller = new RecordInfoDlgController(view);
             controller.InitView(fBaseWin);
@@ -32,6 +32,13 @@ namespace GKCore.Controllers
             controller.Record = iRec;
 
             controller.UpdateView();
+        }
+
+        private IRecordInfoDlg CreateMockView()
+        {
+            var view = Substitute.For<IRecordInfoDlg>();
+            _hyperView1 = SubstCtl<IHyperView>(view, "hyperView1");
+            return view;
         }
     }
 }

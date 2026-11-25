@@ -25,6 +25,16 @@ namespace GKCore.Controllers
     /// </summary>
     public class SlideshowController : FormController<ISlideshowWin>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+
+        private IToolItem _tbStart;
+        private IToolItem _tbPrev;
+        private IToolItem _tbNext;
+
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private sealed class ImageRef
         {
             public GDMMultimediaRecord MediaRec;
@@ -98,9 +108,9 @@ namespace GKCore.Controllers
         {
             fView.StatusLines[0] = string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
 
-            GetControl<IToolItem>("tbStart").Enabled = (fFileRefs.Count > 0);
-            GetControl<IToolItem>("tbPrev").Enabled = (fCurrentIndex > 0);
-            GetControl<IToolItem>("tbNext").Enabled = (fCurrentIndex < fFileRefs.Count - 1);
+            _tbStart.Enabled = (fFileRefs.Count > 0);
+            _tbPrev.Enabled = (fCurrentIndex > 0);
+            _tbNext.Enabled = (fCurrentIndex < fFileRefs.Count - 1);
         }
 
         private void SetFileRef()
@@ -145,12 +155,12 @@ namespace GKCore.Controllers
         public bool SwitchActive()
         {
             if (!fActive) {
-                GetControl<IToolItem>("tbStart").Text = LangMan.LS(LSID.Stop);
-                GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stop, true);
+                _tbStart.Text = LangMan.LS(LSID.Stop);
+                _tbStart.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stop, true);
                 fTimer.Start();
             } else {
-                GetControl<IToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
-                GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
+                _tbStart.Text = LangMan.LS(LSID.Start);
+                _tbStart.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
                 fTimer.Stop();
             }
 
@@ -163,7 +173,7 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Slideshow));
 
-            GetControl<IToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
+            _tbStart.Text = LangMan.LS(LSID.Start);
 
             SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
             SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
@@ -173,9 +183,9 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
-            GetControl<IToolItem>("tbPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
-            GetControl<IToolItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
+            _tbStart.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
+            _tbPrev.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
+            _tbNext.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
         }
     }
 }

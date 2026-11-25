@@ -13,9 +13,7 @@ using Eto.Serialization.Xaml;
 using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -47,35 +45,6 @@ namespace GKUI.Forms
             get { return fController.Filter; }
             set { fController.Filter = value; }
         }
-
-        #region View Interface
-
-        ISheetList ITreeFilterDlg.PersonsList
-        {
-            get { return fPersonsList; }
-        }
-
-        INumericBox ITreeFilterDlg.YearNum
-        {
-            get { return fController.GetControlHandler<INumericBox>(edYear); }
-        }
-
-        IComboBox ITreeFilterDlg.SourceCombo
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbSource); }
-        }
-
-        ICheckBox ITreeFilterDlg.HideDatesAfterBoundaryCheck
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkHideDatesAfterBoundary); }
-        }
-
-        ITextBox ITreeFilterDlg.DateBoundary
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtDateBoundary); }
-        }
-
-        #endregion
 
         public TreeFilterDlg(IBaseWindow baseWin)
         {

@@ -19,6 +19,21 @@ namespace GKCore.Controllers
     [TestFixture]
     public class TaskEditDlgControllerTests : ControllerTest
     {
+        private ITabPage _pageNotes;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblGoal;
+        private IComboBox _cmbGoalType;
+        private ITextBox _txtGoal;
+        private IButton _btnGoalSelect;
+        private ILabel _lblPriority;
+        private IComboBox _txtPriority;
+        private ILabel _lblStartDate;
+        private IDateBox _txtStartDate;
+        private IDateBox _txtStopDate;
+        private ILabel _lblStopDate;
+        private ISheetList _fNotesList;
+
         [Test]
         public void Test_TaskEditDlgController()
         {
@@ -30,9 +45,9 @@ namespace GKCore.Controllers
             controller.TaskRecord = taskRecord;
 
 
-            view.Priority.SelectedIndex = 1;
+            _txtPriority.SelectedIndex = 1;
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
-                view.GoalType.SelectedIndex = (int)gt;
+                _cmbGoalType.SelectedIndex = (int)gt;
             }
             controller.Accept();
             Assert.AreEqual(GDMResearchPriority.rpLow, taskRecord.Priority);
@@ -40,11 +55,11 @@ namespace GKCore.Controllers
             Assert.AreEqual("", taskRecord.StopDate.StringValue);
 
 
-            view.Priority.SelectedIndex = 1;
-            view.StartDate.NormalizeDate = "01.01.2000";
-            view.StopDate.NormalizeDate = "02.02.2000";
+            _txtPriority.SelectedIndex = 1;
+            _txtStartDate.NormalizeDate = "01.01.2000";
+            _txtStopDate.NormalizeDate = "02.02.2000";
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
-                view.GoalType.SelectedIndex = (int)gt;
+                _cmbGoalType.SelectedIndex = (int)gt;
             }
             controller.Accept();
             Assert.AreEqual(GDMResearchPriority.rpLow, taskRecord.Priority);
@@ -52,20 +67,20 @@ namespace GKCore.Controllers
             Assert.AreEqual("02 FEB 2000", taskRecord.StopDate.StringValue);
 
 
-            view.GoalType.SelectedIndex = 3;
+            _cmbGoalType.SelectedIndex = 3;
             controller.SelectGoal();
 
-            view.GoalType.SelectedIndex = 2;
+            _cmbGoalType.SelectedIndex = 2;
             var src = fBaseWin.Context.Tree.CreateSource();
             RecordSelectDialogStub.SetTestResult(src);
             controller.SelectGoal();
 
-            view.GoalType.SelectedIndex = 1;
+            _cmbGoalType.SelectedIndex = 1;
             var fam = fBaseWin.Context.Tree.CreateFamily();
             RecordSelectDialogStub.SetTestResult(fam);
             controller.SelectGoal();
 
-            view.GoalType.SelectedIndex = 0;
+            _cmbGoalType.SelectedIndex = 0;
             var indi = fBaseWin.Context.Tree.CreateIndividual();
             RecordSelectDialogStub.SetTestResult(indi);
             controller.SelectGoal();
@@ -74,25 +89,24 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static ITaskEditDlg CreateMockView()
+        private ITaskEditDlg CreateMockView()
         {
             var view = Substitute.For<ITaskEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageNotes");
-            SubstituteControl<ILabel>(view, "lblGoal");
-            SubstituteControl<ILabel>(view, "lblPriority");
-            SubstituteControl<ILabel>(view, "lblStartDate");
-            SubstituteControl<ILabel>(view, "lblStopDate");
-            SubstituteControl<IButton>(view, "btnGoalSelect");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _pageNotes = SubstCtl<ITabPage>(view, "pageNotes");
+            _lblGoal = SubstCtl<ILabel>(view, "lblGoal");
+            _lblPriority = SubstCtl<ILabel>(view, "lblPriority");
+            _lblStartDate = SubstCtl<ILabel>(view, "lblStartDate");
+            _lblStopDate = SubstCtl<ILabel>(view, "lblStopDate");
+            _btnGoalSelect = SubstCtl<IButton>(view, "btnGoalSelect");
 
-            view.NotesList.Returns(Substitute.For<ISheetList>());
-            view.Priority.Returns(Substitute.For<IComboBox>());
-            view.StartDate.Returns(Substitute.For<IDateBox>());
-            view.StopDate.Returns(Substitute.For<IDateBox>());
-            view.GoalType.Returns(Substitute.For<IComboBox>());
-            view.Goal.Returns(Substitute.For<ITextBox>());
-            view.GoalSelect.Returns(Substitute.For<IButton>());
+            _fNotesList = SubstCtl<ISheetList>(view, "fNotesList");
+            _txtPriority = SubstCtl<IComboBox>(view, "txtPriority");
+            _txtStartDate = SubstCtl<IDateBox>(view, "txtStartDate");
+            _txtStopDate = SubstCtl<IDateBox>(view, "txtStopDate");
+            _cmbGoalType = SubstCtl<IComboBox>(view, "cmbGoalType");
+            _txtGoal = SubstCtl<ITextBox>(view, "txtGoal");
             return view;
         }
     }

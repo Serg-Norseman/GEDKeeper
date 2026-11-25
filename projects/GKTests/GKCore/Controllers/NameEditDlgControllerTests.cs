@@ -18,6 +18,18 @@ namespace GKCore.Controllers
     [TestFixture]
     public class NameEditDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblSex;
+        private IComboBox _cmbSex;
+        private IGroupBox _grpPatronymics;
+        private ILabel _lblFemale;
+        private ITextBox _txtFPatr;
+        private ILabel _lblMale;
+        private ITextBox _txtMPatr;
+
         [Test]
         public void Test_NameEditDlgController()
         {
@@ -28,10 +40,10 @@ namespace GKCore.Controllers
             var nameEntry = new NameEntry();
             controller.NameEntry = nameEntry;
 
-            view.SexCombo.SelectedIndex = 1; // male
-            view.Name.Text = "Ivan";
-            view.FPatr.Text = "Ivanovna";
-            view.MPatr.Text = "Ivanovich";
+            _cmbSex.SelectedIndex = 1; // male
+            _txtName.Text = "Ivan";
+            _txtFPatr.Text = "Ivanovna";
+            _txtMPatr.Text = "Ivanovich";
 
             controller.Accept();
             controller.UpdateView();
@@ -42,21 +54,20 @@ namespace GKCore.Controllers
             Assert.AreEqual(GDMSex.svMale, nameEntry.Sex);
         }
 
-        private static INameEditDlg CreateMockView()
+        private INameEditDlg CreateMockView()
         {
             var view = Substitute.For<INameEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblName");
-            SubstituteControl<ILabel>(view, "lblSex");
-            SubstituteControl<IGroupBox>(view, "grpPatronymics");
-            SubstituteControl<ILabel>(view, "lblFemale");
-            SubstituteControl<ILabel>(view, "lblMale");
-
-            view.Name.Returns(Substitute.For<ITextBox>());
-            view.FPatr.Returns(Substitute.For<ITextBox>());
-            view.MPatr.Returns(Substitute.For<ITextBox>());
-            view.SexCombo.Returns(Substitute.For<IComboBox>());
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _lblName = SubstCtl<ILabel>(view, "lblName");
+            _txtName = SubstCtl<ITextBox>(view, "txtName");
+            _lblSex = SubstCtl<ILabel>(view, "lblSex");
+            _cmbSex = SubstCtl<IComboBox>(view, "cmbSex");
+            _grpPatronymics = SubstCtl<IGroupBox>(view, "grpPatronymics");
+            _lblFemale = SubstCtl<ILabel>(view, "lblFemale");
+            _txtFPatr = SubstCtl<ITextBox>(view, "txtFPatr");
+            _lblMale = SubstCtl<ILabel>(view, "lblMale");
+            _txtMPatr = SubstCtl<ITextBox>(view, "txtMPatr");
             return view;
         }
     }

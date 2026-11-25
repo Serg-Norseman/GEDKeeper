@@ -12,9 +12,7 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -61,70 +59,6 @@ namespace GKUI.Forms
             get { return fController.DNATest; }
             set { fController.DNATest = value; }
         }
-
-        #region View Interface
-
-        ISheetList IDNATestEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IDNATestEditDlg.MediaList
-        {
-            get { return fMediaList; }
-        }
-
-        ITextBox IDNATestEditDlg.TestName
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtTestName); }
-        }
-
-        IDateBox IDNATestEditDlg.Date
-        {
-            get { return fController.GetControlHandler<IDateBox>(dateCtl); }
-        }
-
-        IComboBox IDNATestEditDlg.Agency
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbAgency); }
-        }
-
-        IComboBox IDNATestEditDlg.MHaplogroup
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbMHaplogroup); }
-        }
-
-        IComboBox IDNATestEditDlg.YHaplogroup
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbYHaplogroup); }
-        }
-
-        IComboBox IDNATestEditDlg.StoreType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbStoreType); }
-        }
-
-        ITextBox IDNATestEditDlg.File
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFileRef); }
-        }
-
-        IButton IDNATestEditDlg.FileSelectButton
-        {
-            get { return fController.GetControlHandler<IButton>(btnFileSelect); }
-        }
-
-        IComboBox IDNATestEditDlg.FileFormat
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbFileFormat); }
-        }
-
-        IComboBox IDNATestEditDlg.Restriction
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbRestriction); }
-        }
-
-        #endregion
 
         public DNATestEditDlg(IBaseWindow baseWin)
         {

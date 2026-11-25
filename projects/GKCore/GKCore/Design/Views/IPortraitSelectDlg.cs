@@ -7,14 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
     public interface IPortraitSelectDlg : ICommonDialog
     {
         GDMMultimediaLink MultimediaLink { get; set; }
-
-        IImageView ImageCtl { get; }
     }
 }

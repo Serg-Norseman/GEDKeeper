@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 
@@ -44,35 +43,6 @@ namespace GKUI.Forms
             get { return fController.FileRef; }
             set { fController.FileRef = value; }
         }
-
-        #region View Interface
-
-        IComboBox IMediaFileDlg.MediaType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbMediaType); }
-        }
-
-        IComboBox IMediaFileDlg.StoreType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbStoreType); }
-        }
-
-        ITextBox IMediaFileDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        ITextBox IMediaFileDlg.File
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFile); }
-        }
-
-        IButton IMediaFileDlg.FileSelectButton
-        {
-            get { return fController.GetControlHandler<IButton>(btnFileSelect); }
-        }
-
-        #endregion
 
         public MediaFileEditDlg(IBaseWindow baseWin)
         {

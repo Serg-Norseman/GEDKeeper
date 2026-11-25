@@ -7,17 +7,11 @@
  */
 
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
     public interface IRepositoryCitEditDlg : ICommonDialog
     {
         GDMRepositoryCitation RepositoryCitation { get; set; }
-
-        IComboBox RepositoryCombo { get; }
-
-        ISheetList CallNumbersList { get; }
     }
 }

@@ -14,7 +14,6 @@ using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 
@@ -62,18 +61,6 @@ namespace GKUI.Forms
             }
         }
 
-        #region View Interface
-
-        ITextBox IScriptEditWin.ScriptText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtScriptText); }
-        }
-
-        ITextBox IScriptEditWin.DebugOutput
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtDebugOutput); }
-        }
-
         void IScriptConsole.print(string text)
         {
             try {
@@ -85,8 +72,6 @@ namespace GKUI.Forms
                 // dummy
             }
         }
-
-        #endregion
 
         public bool CheckModified()
         {

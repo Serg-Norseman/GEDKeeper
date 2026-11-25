@@ -20,7 +20,6 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private Label lblProduct;
         private Label lblVersion;
         private Label lblCopyright;
         private LinkButton lblMail;
@@ -37,6 +36,7 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             fController = new AboutDlgController(this);
+            fController.InitView(null);
             fController.SetLocale();
             fController.UpdateView();
         }
@@ -55,7 +55,7 @@ namespace GKUI.Forms
 
         public override bool SkipTheme(IDisposable component)
         {
-            if (component == lblProduct || component == lblVersion || component == lblCopyright ||
+            if (component == lblVersion || component == lblCopyright ||
                 component == lblMail || component == lblProjSite || component == lblForum || component == lblChannel) {
                 return true;
             }

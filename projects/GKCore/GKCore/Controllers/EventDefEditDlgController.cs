@@ -22,6 +22,22 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class EventDefEditDlgController : DialogController<IEventDefEditDlg>
     {
+        #region Design components
+#pragma warning disable CS0649, IDE0044
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ILabel _lblName;
+        private ITextBox _txtName;
+        private ILabel _lblTag;
+        private IComboBox _cmbTag;
+        private ILabel _lblType;
+        private ITextBox _txtType;
+        private ICheckBox _chkEnabled;
+        private ILabel _lblDesc;
+        private ITextBox _txtDesc;
+#pragma warning restore CS0649, IDE0044
+        #endregion
+
         private EventDef fEventDef;
 
         public EventDef EventDef
@@ -44,19 +60,19 @@ namespace GKCore.Controllers
         {
             base.InitView(baseWin);
 
-            fView.TagCombo.ReadOnly = true;
+            _cmbTag.ReadOnly = true;
         }
 
         public override bool Accept()
         {
             try {
                 if (!fEventDef.Protected) {
-                    fEventDef.DisplayName = fView.NameText.Text;
-                    fEventDef.Tag = fView.TagCombo.Text;
-                    fEventDef.Type = fView.TypeText.Text;
-                    fEventDef.Description = fView.DescText.Text;
+                    fEventDef.DisplayName = _txtName.Text;
+                    fEventDef.Tag = _cmbTag.Text;
+                    fEventDef.Type = _txtType.Text;
+                    fEventDef.Description = _txtDesc.Text;
                 }
-                fEventDef.Enabled = fView.EnabledCheck.Checked;
+                fEventDef.Enabled = _chkEnabled.Checked;
 
                 bool isCustom = (fEventDef.Tag == GEDCOMTagName.EVEN) || (fEventDef.Tag == GEDCOMTagName.FACT);
                 if (isCustom && string.IsNullOrEmpty(fEventDef.Type)) {
@@ -73,49 +89,49 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.NameText.Text = fEventDef.DisplayName;
-            fView.TypeText.Text = fEventDef.Type;
-            fView.EnabledCheck.Checked = fEventDef.Enabled;
-            fView.DescText.Text = fEventDef.Description;
+            _txtName.Text = fEventDef.DisplayName;
+            _txtType.Text = fEventDef.Type;
+            _chkEnabled.Checked = fEventDef.Enabled;
+            _txtDesc.Text = fEventDef.Description;
 
             string tag = fEventDef.Tag;
             bool isCustom = string.IsNullOrEmpty(tag) || (tag == GEDCOMTagName.EVEN) || (tag == GEDCOMTagName.FACT);
 
             if (isCustom) {
                 // new event/fact tag
-                fView.TagCombo.AddRange(new string[] { GEDCOMTagName.EVEN, GEDCOMTagName.FACT });
-                fView.TagCombo.Text = string.IsNullOrEmpty(tag) ? GEDCOMTagName.FACT : tag;
+                _cmbTag.AddRange(new string[] { GEDCOMTagName.EVEN, GEDCOMTagName.FACT });
+                _cmbTag.Text = string.IsNullOrEmpty(tag) ? GEDCOMTagName.FACT : tag;
             } else {
                 // exists event/fact tag
-                fView.TagCombo.AddRange(new string[] { fEventDef.Tag });
-                fView.TagCombo.Text = fEventDef.Tag;
+                _cmbTag.AddRange(new string[] { fEventDef.Tag });
+                _cmbTag.Text = fEventDef.Tag;
             }
 
-            fView.NameText.Enabled = !fEventDef.Protected;
-            fView.TagCombo.Enabled = !fEventDef.Protected;
-            fView.TypeText.Enabled = !fEventDef.Protected;
-            fView.DescText.Enabled = !fEventDef.Protected;
+            _txtName.Enabled = !fEventDef.Protected;
+            _cmbTag.Enabled = !fEventDef.Protected;
+            _txtType.Enabled = !fEventDef.Protected;
+            _txtDesc.Enabled = !fEventDef.Protected;
         }
 
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.EventDefinition));
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.GeneralName);
-            GetControl<ILabel>("lblTag").Text = LangMan.LS(LSID.Tag);
-            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
-            GetControl<ICheckBox>("chkEnabled").Text = LangMan.LS(LSID.Enabled);
-            GetControl<ILabel>("lblDesc").Text = LangMan.LS(LSID.Description);
+            _btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            _lblName.Text = LangMan.LS(LSID.GeneralName);
+            _lblTag.Text = LangMan.LS(LSID.Tag);
+            _lblType.Text = LangMan.LS(LSID.Type);
+            _chkEnabled.Text = LangMan.LS(LSID.Enabled);
+            _lblDesc.Text = LangMan.LS(LSID.Description);
         }
 
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
-            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+            _btnAccept.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            _btnCancel.Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

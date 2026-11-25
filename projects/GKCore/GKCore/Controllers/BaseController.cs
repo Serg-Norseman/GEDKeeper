@@ -63,7 +63,7 @@ namespace GKCore.Controllers
             if (string.IsNullOrEmpty(text)) return;
 
             using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
-                dlg.HyperView.Lines.Text = text;
+                dlg.Text = text;
                 await AppHost.Instance.ShowModalAsync(dlg, owner, false);
             }
         }

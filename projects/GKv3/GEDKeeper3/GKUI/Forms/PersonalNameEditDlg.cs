@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -60,65 +59,6 @@ namespace GKUI.Forms
             get { return fController.PersonalName; }
             set { fController.PersonalName = value; }
         }
-
-        #region View Interface
-
-        ILabel IPersonalNameEditDlg.SurnameLabel
-        {
-            get { return fController.GetControlHandler<ILabel>(lblSurname); }
-        }
-
-        ITextBox IPersonalNameEditDlg.Surname
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtSurname); }
-        }
-
-        ITextBox IPersonalNameEditDlg.Name
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtName); }
-        }
-
-        ITextBox IPersonalNameEditDlg.Patronymic
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtPatronymic); }
-        }
-
-        IComboBox IPersonalNameEditDlg.NameType
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbNameType); }
-        }
-
-        ITextBox IPersonalNameEditDlg.NamePrefix
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtNamePrefix); }
-        }
-
-        ITextBox IPersonalNameEditDlg.Nickname
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtNickname); }
-        }
-
-        ITextBox IPersonalNameEditDlg.SurnamePrefix
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtSurnamePrefix); }
-        }
-
-        ITextBox IPersonalNameEditDlg.NameSuffix
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtNameSuffix); }
-        }
-
-        ITextBox IPersonalNameEditDlg.MarriedSurname
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtMarriedSurname); }
-        }
-
-        IComboBox IPersonalNameEditDlg.Language
-        {
-            get { return fController.GetControlHandler<IComboBox>(cmbLanguage); }
-        }
-
-        #endregion
 
         public PersonalNameEditDlg(IBaseWindow baseWin)
         {

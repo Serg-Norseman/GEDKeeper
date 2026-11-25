@@ -21,6 +21,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fController = new AboutDlgController(this);
+            fController.InitView(null);
             fController.SetLocale();
             fController.UpdateView();
         }

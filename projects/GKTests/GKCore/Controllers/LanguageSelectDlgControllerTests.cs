@@ -16,15 +16,27 @@ namespace GKCore.Controllers
     [TestFixture]
     public class LanguageSelectDlgControllerTests : ControllerTest
     {
+        private IListView _lstLanguages;
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+
         [Test]
         public void Test_LanguageSelectDlgController()
         {
-            var view = Substitute.For<ILanguageSelectDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-
+            ILanguageSelectDlg view = CreateMockView();
             var controller = new LanguageSelectDlgController(view);
             controller.InitView(null);
+
+            controller.Accept();
+        }
+
+        private ILanguageSelectDlg CreateMockView()
+        {
+            var view = Substitute.For<ILanguageSelectDlg>();
+            _lstLanguages = SubstCtl<IListView>(view, "lstLanguages");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            return view;
         }
     }
 }

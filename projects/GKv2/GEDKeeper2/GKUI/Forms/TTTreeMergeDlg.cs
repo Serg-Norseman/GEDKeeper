@@ -9,27 +9,12 @@
 using System;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
     public sealed partial class TTTreeMergeDlg : CommonDialog<ITreeMergeDlg, TreeMergeController>, ITreeMergeDlg
     {
-        #region View Interface
-
-        ITextBox ITreeMergeDlg.UpdateBase
-        {
-            get { return fController.GetControlHandler<ITextBox>(edUpdateBase); }
-        }
-
-        ITextBox ITreeMergeDlg.SyncLog
-        {
-            get { return fController.GetControlHandler<ITextBox>(mSyncRes); }
-        }
-
-        #endregion
-
         public TTTreeMergeDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 using GKUI.Components;
@@ -35,20 +34,6 @@ namespace GKUI.Forms
         private ContextMenu contextMenu;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        ITextBox IPlacesManagerDlg.FilterBox
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtFilter); }
-        }
-
-        IListView IPlacesManagerDlg.PlacesList
-        {
-            get { return ListPlaces; }
-        }
-
         #endregion
 
         public TTPlacesManagerDlg(IBaseWindow baseWin)

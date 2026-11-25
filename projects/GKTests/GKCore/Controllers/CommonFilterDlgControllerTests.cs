@@ -17,27 +17,33 @@ namespace GKCore.Controllers
     [TestFixture]
     public class CommonFilterDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private IButton _btnReset;
+        private ITabPage _pageFieldsFilter;
+        private IFilterGridView _filterView;
+
         [Test]
         public void Test_CommonFilterDlgController()
         {
             ICommonFilterDlg view = CreateMockView();
             var listMan = new NoteListModel(fBaseWin.Context);
             var controller = new CommonFilterDlgController(view, listMan);
+            controller.InitView(null);
 
             controller.Accept();
             controller.UpdateView();
             controller.Reset();
         }
 
-        private static ICommonFilterDlg CreateMockView()
+        private ICommonFilterDlg CreateMockView()
         {
             var view = Substitute.For<ICommonFilterDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<IButton>(view, "btnReset");
-            SubstituteControl<ITabPage>(view, "pageFieldsFilter");
-
-            view.FilterGrid.Returns(Substitute.For<IFilterGridView>());
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _btnReset = SubstCtl<IButton>(view, "btnReset");
+            _pageFieldsFilter = SubstCtl<ITabPage>(view, "pageFieldsFilter");
+            _filterView = SubstCtl<IFilterGridView>(view, "filterView");
             return view;
         }
     }

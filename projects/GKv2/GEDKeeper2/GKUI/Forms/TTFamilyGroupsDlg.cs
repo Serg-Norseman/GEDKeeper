@@ -12,7 +12,6 @@ using System.Windows.Forms;
 using BSLib.DataViz.TreeMap;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 
@@ -21,20 +20,6 @@ namespace GKUI.Forms
     public sealed partial class TTFamilyGroupsDlg : CommonWindow<IFragmentSearchDlg, FragmentSearchController>, IFragmentSearchDlg
     {
         private TreeMapViewer fDataMap;
-
-        #region View Interface
-
-        ITreeView IFragmentSearchDlg.GroupsTree
-        {
-            get { return fController.GetControlHandler<ITreeView>(tvGroups); }
-        }
-
-        ILogChart IFragmentSearchDlg.LogChart
-        {
-            get { return fController.GetControlHandler<ILogChart>(gkLogChart1); }
-        }
-
-        #endregion
 
         public TTFamilyGroupsDlg(IBaseWindow baseWin)
         {

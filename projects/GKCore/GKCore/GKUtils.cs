@@ -2006,7 +2006,7 @@ namespace GKCore
 
         public static string GetBinPath()
         {
-#if NET6_0_OR_GREATER
+#if NETCOREAPP
             string fn = Environment.ProcessPath;
 #else
             var asm = SysUtils.GetExecutingAssembly();

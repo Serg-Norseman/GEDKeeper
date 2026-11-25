@@ -12,7 +12,6 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
 
@@ -57,50 +56,6 @@ namespace GKUI.Forms
         private Panel pan2;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        IHyperView IRecMergeDlg.View1
-        {
-            get { return fView1; }
-        }
-
-        IHyperView IRecMergeDlg.View2
-        {
-            get { return fView2; }
-        }
-
-        IButton IRecMergeDlg.SkipBtn
-        {
-            get { return fController.GetControlHandler<IButton>(btnSkip); }
-        }
-
-        IProgressBar IRecMergeDlg.ProgressBar
-        {
-            get { return fController.GetControlHandler<IProgressBar>(ProgressBar1); }
-        }
-
-        ICheckBox IRecMergeDlg.IndistinctMatchingChk
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkIndistinctMatching); }
-        }
-
-        INumericBox IRecMergeDlg.NameAccuracyNum
-        {
-            get { return fController.GetControlHandler<INumericBox>(edNameAccuracy); }
-        }
-
-        ICheckBox IRecMergeDlg.BirthYearChk
-        {
-            get { return fController.GetControlHandler<ICheckBox>(chkBirthYear); }
-        }
-
-        INumericBox IRecMergeDlg.YearInaccuracyNum
-        {
-            get { return fController.GetControlHandler<INumericBox>(edYearInaccuracy); }
-        }
-
         #endregion
 
         public TTRecMergeDlg(IBaseWindow baseWin)

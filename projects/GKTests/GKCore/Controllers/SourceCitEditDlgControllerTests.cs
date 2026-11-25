@@ -17,6 +17,20 @@ namespace GKCore.Controllers
     [TestFixture]
     public class SourceCitEditDlgControllerTests : ControllerTest
     {
+        private IButton _btnAccept;
+        private IButton _btnCancel;
+        private ITabPage _pageCommon;
+        private ITabPage _pageOther;
+        private ILabel _lblSource;
+        private IComboBox _cmbSource;
+        private IButton _btnSourceAdd;
+        private ILabel _lblPage;
+        private ITextBox _txtPage;
+        private ILabel _lblCertainty;
+        private IComboBox _txtCertainty;
+        private IDateControl _dateCtl;
+        private ITextBox _txtText;
+
         [Test]
         public void Test_SourceCitEditDlgController()
         {
@@ -32,24 +46,24 @@ namespace GKCore.Controllers
             controller.UpdateView();
         }
 
-        private static ISourceCitEditDlg CreateMockView()
+        private ISourceCitEditDlg CreateMockView()
         {
             var view = Substitute.For<ISourceCitEditDlg>();
 
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ITabPage>(view, "pageCommon");
-            SubstituteControl<ITabPage>(view, "pageOther");
-            SubstituteControl<ILabel>(view, "lblSource");
-            SubstituteControl<ILabel>(view, "lblPage");
-            SubstituteControl<ILabel>(view, "lblCertainty");
-            SubstituteControl<IButton>(view, "btnSourceAdd");
+            _btnAccept = SubstCtl<IButton>(view, "btnAccept");
+            _btnCancel = SubstCtl<IButton>(view, "btnCancel");
+            _pageCommon = SubstCtl<ITabPage>(view, "pageCommon");
+            _pageOther = SubstCtl<ITabPage>(view, "pageOther");
+            _lblSource = SubstCtl<ILabel>(view, "lblSource");
+            _cmbSource = SubstCtl<IComboBox>(view, "cmbSource");
+            _btnSourceAdd = SubstCtl<IButton>(view, "btnSourceAdd");
+            _lblPage = SubstCtl<ILabel>(view, "lblPage");
+            _txtPage = SubstCtl<ITextBox>(view, "txtPage");
+            _lblCertainty = SubstCtl<ILabel>(view, "lblCertainty");
+            _txtCertainty = SubstCtl<IComboBox>(view, "txtCertainty");
+            _dateCtl = SubstCtl<IDateControl>(view, "dateCtl");
+            _txtText = SubstCtl<ITextBox>(view, "txtText");
 
-            view.Page.Returns(Substitute.For<ITextBox>());
-            view.Certainty.Returns(Substitute.For<IComboBox>());
-            view.Source.Returns(Substitute.For<IComboBox>());
-            view.DataDate.Returns(Substitute.For<IDateControl>());
-            view.DataText.Returns(Substitute.For<ITextBox>());
             return view;
         }
     }

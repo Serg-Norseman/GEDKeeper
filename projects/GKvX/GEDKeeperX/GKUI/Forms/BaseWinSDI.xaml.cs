@@ -60,25 +60,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        #region View Interface
-
-        ITabControl IBaseWindowView.RecordTabs
-        {
-            get { return fController.GetControlHandler<ITabControl>(tabsRecords); }
-        }
-
-        IMenuItem IBaseWindowView.ReportsItem
-        {
-            get { return null; }
-        }
-
-        IMenuItem IBaseWindowView.PluginsItem
-        {
-            get { return null; }
-        }
-
-        #endregion
-
         #region Instance control
 
         public BaseWinSDI()
@@ -88,6 +69,7 @@ namespace GKUI.Forms
             tabsRecords.PositionChanged += tabsRecords_SelectedIndexChanged;
 
             fController = new BaseWinController(this, true);
+            fController.InitView(null);
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 

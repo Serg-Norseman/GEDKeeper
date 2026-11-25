@@ -11,7 +11,6 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -31,20 +30,6 @@ namespace GKUI.Forms
         private TextArea mSyncRes;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
-        #region View Interface
-
-        ITextBox ITreeMergeDlg.UpdateBase
-        {
-            get { return fController.GetControlHandler<ITextBox>(edUpdateBase); }
-        }
-
-        ITextBox ITreeMergeDlg.SyncLog
-        {
-            get { return fController.GetControlHandler<ITextBox>(mSyncRes); }
-        }
-
         #endregion
 
         public TTTreeMergeDlg(IBaseWindow baseWin)

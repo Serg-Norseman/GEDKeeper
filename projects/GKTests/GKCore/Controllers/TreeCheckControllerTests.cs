@@ -17,6 +17,19 @@ namespace GKCore.Controllers
     [TestFixture]
     public class TreeCheckControllerTests : ControllerTest
     {
+        private IButton _btnClose;
+        private ITabPage _pageTreeCheck;
+        private IButton _btnAnalyseBase;
+        private IButton _btnBaseRepair;
+        private IMenuItem _miDetails;
+        private IMenuItem _miGoToRecord;
+        private IMenuItem _miCopyXRef;
+        private IListView _ListChecks;
+        private ITabPage _pageOptions;
+        private ICheckBox _chkCheckPersonPlaces;
+        private ICheckBox _chkCheckCensuses;
+        private ICheckBox _chkCheckLinks;
+
         [Test]
         public async Task Test_TreeCheckController()
         {
@@ -30,23 +43,23 @@ namespace GKCore.Controllers
             await controller.Repair();
         }
 
-        private static ITreeCheckDlg CreateMockView()
+        private ITreeCheckDlg CreateMockView()
         {
             var view = Substitute.For<ITreeCheckDlg>();
-            SubstituteControl<ITabPage>(view, "pageTreeCheck");
-            SubstituteControl<IButton>(view, "btnClose");
-            SubstituteControl<IButton>(view, "btnAnalyseBase");
-            SubstituteControl<IButton>(view, "btnBaseRepair");
-            SubstituteControl<IMenuItem>(view, "miDetails");
-            SubstituteControl<IMenuItem>(view, "miGoToRecord");
-            SubstituteControl<IMenuItem>(view, "miCopyXRef");
+            _btnClose = SubstCtl<IButton>(view, "btnClose");
+            _pageTreeCheck = SubstCtl<ITabPage>(view, "pageTreeCheck");
+            _btnAnalyseBase = SubstCtl<IButton>(view, "btnAnalyseBase");
+            _btnBaseRepair = SubstCtl<IButton>(view, "btnBaseRepair");
+            _miDetails = SubstCtl<IMenuItem>(view, "miDetails");
+            _miGoToRecord = SubstCtl<IMenuItem>(view, "miGoToRecord");
+            _miCopyXRef = SubstCtl<IMenuItem>(view, "miCopyXRef");
+            _ListChecks = SubstCtl<IListView>(view, "ListChecks");
 
-            SubstituteControl<ITabPage>(view, "pageOptions");
-            SubstituteControl<ICheckBox>(view, "chkCheckPersonPlaces");
-            SubstituteControl<ICheckBox>(view, "chkCheckCensuses");
-            SubstituteControl<ICheckBox>(view, "chkCheckLinks");
+            _pageOptions = SubstCtl<ITabPage>(view, "pageOptions");
+            _chkCheckPersonPlaces = SubstCtl<ICheckBox>(view, "chkCheckPersonPlaces");
+            _chkCheckCensuses = SubstCtl<ICheckBox>(view, "chkCheckCensuses");
+            _chkCheckLinks = SubstCtl<ICheckBox>(view, "chkCheckLinks");
 
-            view.ChecksList.Returns(Substitute.For<IListView>());
             return view;
         }
     }

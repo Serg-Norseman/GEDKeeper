@@ -13,7 +13,6 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
 
@@ -46,18 +45,6 @@ namespace GKUI.Forms
             }
         }
 
-        #region View Interface
-
-        ITextBox IScriptEditWin.ScriptText
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtScriptText); }
-        }
-
-        ITextBox IScriptEditWin.DebugOutput
-        {
-            get { return fController.GetControlHandler<ITextBox>(txtDebugOutput); }
-        }
-
         void IScriptConsole.print(string text)
         {
             MethodInvoker invoker = delegate () {
@@ -75,8 +62,6 @@ namespace GKUI.Forms
                 // dummy
             }
         }
-
-        #endregion
 
         public bool CheckModified()
         {
