@@ -174,6 +174,9 @@ namespace GKUI.Themes
 
                 ThemeElementType.Image, // ThemeElement.Glyph_Calculator
                 ThemeElementType.Image, // ThemeElement.Glyph_Calendar
+
+                ThemeElementType.Image, // ThemeElement.Glyph_SlideExpand
+                ThemeElementType.Image, // ThemeElement.Glyph_SlideCollapse
             };
         }
 

@@ -29,31 +29,38 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private TabControl PageControl1;
-        private TabPage pageCommon;
-        private Scrollable panMaleColor;
-        private Scrollable panFemaleColor;
-        private Scrollable panUnkSexColor;
-        private Scrollable panUnHusbandColor;
-        private Scrollable panUnWifeColor;
-        private TabPage pageUIView;
-        private TabControl PageControl2;
+        private GKAccordion accCategories;
+        private WizardPages wizPages;
+        private WizardPage pageComOther;
+        private WizardPage pageComBackup;
+        private WizardPage pageGEDCOM;
+        private WizardPage pageMultimedia;
+        private WizardPage pageTreePersons;
+        private WizardPage pageTreeDesign;
+        private WizardPage pageAncCircle;
+        private WizardPage pageViewCommon;
+        private WizardPage pageNames;
+        private WizardPage pageViewPersons;
+        private WizardPage pageNavigation;
+        private WizardPage pageGeo;
+        private WizardPage pagePedigree;
+        private WizardPage pageFamilyBook;
+        private WizardPage pageSpecials;
+        private WizardPage pageEventTypes;
+        private WizardPage pagePlugins;
+        private GKSwatchPanel panMaleColor;
+        private GKSwatchPanel panFemaleColor;
+        private GKSwatchPanel panUnkSexColor;
+        private GKSwatchPanel panUnHusbandColor;
+        private GKSwatchPanel panUnWifeColor;
         private Button btnResetDefaults;
         private GroupBox rgFNPFormat;
         private GroupBox grpDateFormat;
-        private TabPage pagePedigree;
         private GroupBox grpPedigreeFormat;
-        private TabControl tabsCharts;
-        private TabPage pageCharts;
         private GroupBox grpFileBackup;
-        private GKUI.Components.ACOptionsControl ancOptionsControl1;
         private GroupBox grpAdvancedNames;
-        private TabPage pageMultimedia;
-        private TabPage pageEventTypes;
+        private GKUI.Components.ACOptionsControl ancOptionsControl1;
         private GKSheetList slEventTypes;
-        private TabControl PageControlRep;
-        private TabPage pageReports;
-        private TabPage pageFamilyBook;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -73,28 +80,76 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            PageControl1.SelectedIndexChanged += PageControl_SelectedIndexChanged;
-
             UIHelper.FixRadioButtons(this, grpFileBackup);
             UIHelper.FixRadioButtons(this, rgFNPFormat);
             UIHelper.FixRadioButtons(this, grpDateFormat);
             UIHelper.FixRadioButtons(this, grpAdvancedNames);
             UIHelper.FixRadioButtons(this, grpPedigreeFormat);
 
+            wizPages.SelectedIndexChanged += PageControl_SelectedIndexChanged;
+            accCategories.SelectedItemChanged += AccCategories_SelectedItemChanged;
+
             fController = new OptionsDlgController(this);
             fController.InitView(null);
             fController.UpdateView();
 
+            BuildAccordion();
+
             chkSeparateDepth_CheckedChanged(null, null);
+        }
+
+        private void BuildAccordion()
+        {
+            // the header texts of the pages are localized by the controller in SetLocale() before this
+
+            accCategories.AddGroup(LangMan.LS(LSID.Common));
+            accCategories.AddItem(pageComOther.Text, pageComOther);
+            accCategories.AddItem(pageComBackup.Text, pageComBackup);
+            accCategories.AddItem(pageGEDCOM.Text, pageGEDCOM);
+            accCategories.AddItem(pageMultimedia.Text, pageMultimedia);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Charts));
+            accCategories.AddItem(pageTreePersons.Text, pageTreePersons);
+            accCategories.AddItem(pageTreeDesign.Text, pageTreeDesign);
+            accCategories.AddItem(pageAncCircle.Text, pageAncCircle);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Interface));
+            accCategories.AddItem(pageViewCommon.Text, pageViewCommon);
+            accCategories.AddItem(pageNames.Text, pageNames);
+            accCategories.AddItem(pageViewPersons.Text, pageViewPersons);
+            accCategories.AddItem(pageNavigation.Text, pageNavigation);
+            accCategories.AddItem(pageGeo.Text, pageGeo);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Reports));
+            accCategories.AddItem(pagePedigree.Text, pagePedigree);
+            accCategories.AddItem(pageFamilyBook.Text, pageFamilyBook);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Other));
+            accCategories.AddItem(pageSpecials.Text, pageSpecials);
+            accCategories.AddItem(pageEventTypes.Text, pageEventTypes);
+            accCategories.AddItem(pagePlugins.Text, pagePlugins);
+
+            accCategories.SelectItem(pageComOther);
+            wizPages.SelectedPage = pageComOther;
+        }
+
+        private void AccCategories_SelectedItemChanged(object sender, EventArgs e)
+        {
+            var page = accCategories.SelectedItem?.Data as WizardPage;
+            if (page != null && wizPages.SelectedPage != page) {
+                wizPages.SelectedPage = page;
+            }
         }
 
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PageControl1.SelectedPage == pageEventTypes) {
+            var page = wizPages.SelectedPage;
+
+            if (page == pageEventTypes) {
                 fController.ChangeTab();
             }
 
-            btnResetDefaults.Enabled = PageControl1.SelectedIndex < 7;
+            btnResetDefaults.Enabled = page != pageEventTypes && page != pagePlugins;
         }
 
         void IOptionsDlg.UpdateCircleChartsOptions()
@@ -115,7 +170,8 @@ namespace GKUI.Forms
 
         private void PanColor_Click(object sender, EventArgs e)
         {
-            fController.SelectLabColor(fController.GetControlHandler<ILabel>(sender as Label));
+            var swatch = (GKSwatchPanel)sender;
+            fController.SelectLabColor(fController.GetControlHandler<ILabel>(swatch.Label));
         }
 
         private async void panChartFont_Click(object sender, EventArgs e)
@@ -153,102 +209,75 @@ namespace GKUI.Forms
 
         private void btnResetDefaults_Click(object sender, EventArgs e)
         {
-            switch (PageControl1.SelectedIndex) {
-                case 0:
-                    // common
-                    fController.ResetCommonOptions();
-                    break;
+            var page = wizPages.SelectedPage;
 
-                case 1:
-                    // multimedia
-                    fController.ResetMediaOptions();
-                    break;
-
-                case 2:
-                    // charts
-                    switch (tabsCharts.SelectedIndex) {
-                        case 0:
-                            // tree
-                            fController.ResetTreeChartsOptions();
-                            break;
-                        case 1:
-                            // circle
-                            fController.ResetCircleChartsOptions();
-                            break;
-                    }
-                    break;
-
-                case 3:
-                    // interface
-                    switch (PageControl2.SelectedIndex) {
-                        case 0:
-                            // all lists
-                            fController.ResetInterfaceOptions();
-                            break;
-                        case 1:
-                            // individuals
-                            fController.ResetColumnsList();
-                            break;
-                    }
-                    break;
-
-                case 4:
-                    // reports
-                    switch (PageControlRep.SelectedIndex) {
-                        case 0:
-                            fController.ResetPedigreesOptions();
-                            break;
-                        case 1:
-                            fController.ResetFamilyBookOptions();
-                            break;
-                    }
-                    break;
-
-                case 5:
-                case 6:
-                    // specials and gedcom
-                    fController.ResetSpecialsOptions();
-                    break;
-
-                case 7:
-                    // event types
-                    break;
-
-                case 8:
-                    // plugins
-                    break;
+            if (page == pageComOther || page == pageComBackup) {
+                // common, backup
+                fController.ResetCommonOptions();
+            } else if (page == pageGEDCOM || page == pageSpecials) {
+                // gedcom, specials
+                fController.ResetSpecialsOptions();
+            } else if (page == pageMultimedia) {
+                // multimedia
+                fController.ResetMediaOptions();
+            } else if (page == pageTreePersons || page == pageTreeDesign) {
+                // tree charts
+                fController.ResetTreeChartsOptions();
+            } else if (page == pageAncCircle) {
+                // circle
+                fController.ResetCircleChartsOptions();
+            } else if (page == pageViewCommon || page == pageNames || page == pageNavigation || page == pageGeo) {
+                // interface
+                fController.ResetInterfaceOptions();
+            } else if (page == pageViewPersons) {
+                // individuals
+                fController.ResetColumnsList();
+            } else if (page == pagePedigree) {
+                // pedigrees
+                fController.ResetPedigreesOptions();
+            } else if (page == pageFamilyBook) {
+                // family book
+                fController.ResetFamilyBookOptions();
             }
         }
 
         public void SetPage(OptionsPage page)
         {
+            WizardPage target;
+
             switch (page) {
                 case OptionsPage.opCommon:
-                    PageControl1.SelectedPage = pageCommon;
+                    target = pageComOther;
                     break;
 
                 case OptionsPage.opTreeChart:
-                    PageControl1.SelectedPage = pageCharts;
-                    tabsCharts.SelectedIndex = 0;
+                    target = pageTreePersons;
                     break;
 
                 case OptionsPage.opCircleChart:
-                    PageControl1.SelectedPage = pageCharts;
-                    tabsCharts.SelectedIndex = 1;
+                    target = pageAncCircle;
                     break;
 
                 case OptionsPage.opInterface:
-                    PageControl1.SelectedPage = pageUIView;
+                    target = pageViewCommon;
                     break;
 
                 case OptionsPage.opPedigree:
-                    PageControl1.SelectedPage = pageReports;
-                    PageControlRep.SelectedPage = pagePedigree;
+                    target = pagePedigree;
                     break;
 
                 case OptionsPage.opMultimedia:
-                    PageControl1.SelectedPage = pageMultimedia;
+                    target = pageMultimedia;
                     break;
+
+                default:
+                    target = null;
+                    break;
+            }
+
+            if (target != null) {
+                wizPages.SelectedPage = target;
+                accCategories.SelectItem(target);
             }
         }
 
@@ -282,6 +311,10 @@ namespace GKUI.Forms
 
         public override bool SkipTheme(IDisposable component)
         {
+            if (component == accCategories) {
+                return true;
+            }
+
             if (component == panMaleColor || component == panFemaleColor || component == panUnkSexColor || component == panUnHusbandColor || component == panUnWifeColor) {
                 return true;
             }

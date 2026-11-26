@@ -12,7 +12,6 @@
 
 using System;
 using System.Drawing;
-using System.Resources;
 using System.Windows.Forms;
 
 namespace GKUI.Components
@@ -90,8 +89,7 @@ namespace GKUI.Components
             leftRightImages = new ImageList();
             //leftRightImages.ImageSize = new Size(16, 16); // default
 
-            ResourceManager resources = new ResourceManager(typeof(GKTabControl));
-            Bitmap updownImage = ((Bitmap)(resources.GetObject("TabIcons.bmp")));
+            Bitmap updownImage = UIHelper.LoadResourceImage("Resources.btn_tab_updown.png");
 
             if (updownImage != null) {
                 updownImage.MakeTransparent(Color.White);

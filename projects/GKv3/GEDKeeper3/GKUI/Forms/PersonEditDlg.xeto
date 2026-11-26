@@ -33,14 +33,14 @@
                     <TableRow>
                       <Label x:Name="lblName" />
                       <TextBox x:Name="txtName" TabIndex="3" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
-                      <Label x:Name="dummy1">   </Label>
+                      <TableCell />
                       <CheckBox x:Name="chkBookmark" TabIndex="10" />
                     </TableRow>
 
                     <TableRow>
                       <Label x:Name="lblPatronymic" />
                       <ComboBox x:Name="cmbPatronymic" TabIndex="4" Width="180" KeyDown="txtXName_KeyDown" LostFocus="txtXName_Leave" TextChanged="Names_TextChanged" />
-                      <Label x:Name="dummy2">   </Label>
+                      <TableCell />
                       <CheckBox x:Name="chkPatriarch" TabIndex="11" />
                     </TableRow>
 
@@ -200,8 +200,8 @@
         <ComboBox x:Name="cmbRestriction" ReadOnly="True" Width="140" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
         <StackLayoutItem Expand="True" />
         <Button x:Name="btnNameCopy" Style="iconBtn" Image="{Resource Resources.btn_copy.gif, GKCore}" Click="btnNameCopy_Click" />
-        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
-        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        <Button x:Name="btnAccept" Style="dlgBtnAccept" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtnCancel" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

@@ -35,6 +35,11 @@
         <EmbeddedResource Include="Resources\btn_save_image.gif" />
         <EmbeddedResource Include="Resources\btn_scroll.gif" />
         <EmbeddedResource Include="Resources\btn_size_to_fit.png" />
+        <EmbeddedResource Include="Resources\btn_slide_expand.png" />
+        <EmbeddedResource Include="Resources\btn_slide_collapse.png" />
+        <EmbeddedResource Include="Resources\btn_slide_expand_white.png" />
+        <EmbeddedResource Include="Resources\btn_slide_collapse_white.png" />
+        <EmbeddedResource Include="Resources\btn_tab_updown.png" />
         <EmbeddedResource Include="Resources\btn_start.gif" />
         <EmbeddedResource Include="Resources\btn_stop.gif" />
         <EmbeddedResource Include="Resources\btn_table.gif" />

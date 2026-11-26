@@ -151,6 +151,9 @@ namespace GKUI.Themes
 
         Glyph_Calculator,
         Glyph_Calendar,
+
+        Glyph_SlideExpand,
+        Glyph_SlideCollapse,
     }
 
 

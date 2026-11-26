@@ -168,6 +168,9 @@ namespace GKUI.Themes
 
                 { ThemeElement.Glyph_Calculator, "" },
                 { ThemeElement.Glyph_Calendar, "" },
+
+                { ThemeElement.Glyph_SlideExpand, "Resources.btn_slide_expand.png" },
+                { ThemeElement.Glyph_SlideCollapse, "Resources.btn_slide_collapse.png" },
             }, true);
         }
 
@@ -300,6 +303,13 @@ namespace GKUI.Themes
                     ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.ButtonFace);
                 }
             }
+        }
+
+        private static void ThemeAccordionHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            var ctl = (GKAccordion)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.RefreshTheme();
         }
 
         private static void ThemeCheckBoxHandler(IThemedView view, IDisposable component, Theme theme)
@@ -602,6 +612,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(MenuItemEx), ThemeEmptyHandler);
             RegisterControlHandler(typeof(ArborViewer), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(FilterGridView), ThemeFilterGridViewHandler);
+            RegisterControlHandler(typeof(GKAccordion), ThemeAccordionHandler);
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
             RegisterControlHandler(typeof(GKMenuBar), ThemeMenuBarHandler);
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);

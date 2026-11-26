@@ -32,22 +32,20 @@ namespace GKCore.Controllers
         //   only GKv3 (Feature.DesktopV3): chkAutoSortEvents, chkConvenientSourcesFormat, chkFBIncludeEvents,
         //   chkFBIncludeFamilyEvents, chkFBIncludeNotes, chkFBMergeNotes, chkMultipleSpouseLines,
         //   chkShowEventsOnlyAlive, chkSortEvents, chkSourceFilterChecksEvents, pageFamilyBook, pageReports
+        //   absent in GKv3 (groups are dissolved into the left category list): pageCommon, pageUIView,
+        //   pageCharts, pageTreeChart
         //   absent in GKvX: btnExtBackupFolderChoose, chkDisplayFullFileName, chkExtBackupEnabled,
         //   chkOverrideThemesFont, lblChartFontTitle, lblExtBackupFolder, lblUIFont, lblUIFontTitle,
         //   lvPlugins, pageComBackup, pageComOther, pageNames, pagePlugins, txtExtBackupFolder
         #region Design components
 #pragma warning disable CS0649, IDE0044
 
-        private ITabPage _pageCommon;
-        private ITabPage _pageUIView;
-        private ITabPage _pageCharts;
         private ITabPage _pageMultimedia;
         private ITabPage _pageEventTypes;
         private ITabPage _pagePedigree;
         private ITabPage _pageSpecials;
         private ITabPage _pageGeo;
         private ITabPage _pageNavigation;
-        private ITabPage _pageTreeChart;
         private ITabPage _pageTreeDesign;
         private ITabPage _pageTreePersons;
         private ITabPage _pageAncCircle;
@@ -1199,6 +1197,12 @@ namespace GKCore.Controllers
             return true;
         }
 
+        private T TryGetControl<T>(string controlName) where T : class, IControl
+        {
+            var ctlObj = fView.GetControl(controlName);
+            return (ctlObj == null) ? null : GetControlHandler<T>(ctlObj);
+        }
+
         public override void SetLocale()
         {
             // in order of execution - called before a similar assignment in the constructor
@@ -1210,7 +1214,10 @@ namespace GKCore.Controllers
             _btnCancel.Text = LangMan.LS(LSID.DlgCancel);
 
             // Common
-            _pageCommon.Text = LangMan.LS(LSID.Common);
+            var pageCommon = TryGetControl<ITabPage>("pageCommon");
+            if (pageCommon != null) {
+                pageCommon.Text = LangMan.LS(LSID.Common);
+            }
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageComOther").Text = LangMan.LS(LSID.Common);
@@ -1290,9 +1297,15 @@ namespace GKCore.Controllers
             _chkHighlightInaccessibleFiles.Text = LangMan.LS(LSID.HighlightInaccessibleFiles);
 
             // Charts
-            _pageCharts.Text = LangMan.LS(LSID.Charts);
+            var pageCharts = TryGetControl<ITabPage>("pageCharts");
+            if (pageCharts != null) {
+                pageCharts.Text = LangMan.LS(LSID.Charts);
+            }
 
-            _pageTreeChart.Text = LangMan.LS(LSID.Trees);
+            var pageTreeChart = TryGetControl<ITabPage>("pageTreeChart");
+            if (pageTreeChart != null) {
+                pageTreeChart.Text = LangMan.LS(LSID.Trees);
+            }
 
             _pageTreePersons.Text = LangMan.LS(LSID.ViewTree);
             _pageTreeDesign.Text = LangMan.LS(LSID.Decor);
@@ -1365,7 +1378,10 @@ namespace GKCore.Controllers
             }
 
             // UIView
-            _pageUIView.Text = LangMan.LS(LSID.Interface);
+            var pageUIView = TryGetControl<ITabPage>("pageUIView");
+            if (pageUIView != null) {
+                pageUIView.Text = LangMan.LS(LSID.Interface);
+            }
 
             _pageViewCommon.Text = LangMan.LS(LSID.ListsAll);
             GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
@@ -1427,7 +1443,7 @@ namespace GKCore.Controllers
 
             // Reports
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
-                GetControl<ITabPage>("pageReports").Text = LangMan.LS(LSID.Reports);
+                GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Reports);
 
                 GetControl<ITabPage>("pageFamilyBook").Text = LangMan.LS(LSID.FamilyBook);
                 GetControl<ICheckBox>("chkFBIncludeEvents").Text = LangMan.LS(LSID.IncludeEvents);

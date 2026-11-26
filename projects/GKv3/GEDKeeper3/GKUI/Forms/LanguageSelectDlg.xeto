@@ -13,8 +13,8 @@
     <TableRow>
       <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True" />
-        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler">Accept</Button>
-        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler">Cancel</Button>
+        <Button x:Name="btnAccept" Style="dlgBtnAccept" Click="AcceptClickHandler">Accept</Button>
+        <Button x:Name="btnCancel" Style="dlgBtnCancel" Click="CancelClickHandler">Cancel</Button>
       </StackLayout>
     </TableRow>
 

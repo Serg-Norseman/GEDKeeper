@@ -30,16 +30,12 @@ namespace GKCore.Controllers
         private ICheckBox _chkExtBackupEnabled;
         private ITextBox _txtExtBackupFolder;
 
-        private ITabPage _pageCommon;
-        private ITabPage _pageUIView;
-        private ITabPage _pageCharts;
         private ITabPage _pageMultimedia;
         private ITabPage _pageEventTypes;
         private ITabPage _pagePedigree;
         private ITabPage _pageSpecials;
         private ITabPage _pageGeo;
         private ITabPage _pageNavigation;
-        private ITabPage _pageTreeChart;
         private ITabPage _pageTreeDesign;
         private ITabPage _pageTreePersons;
         private ITabPage _pageAncCircle;
@@ -452,16 +448,12 @@ namespace GKCore.Controllers
             _fEventTypesList = Substitute.For<ISheetList>();
             view.EventTypesList.Returns(_fEventTypesList);
 
-            _pageCommon = SubstCtl<ITabPage>(view, "pageCommon");
-            _pageUIView = SubstCtl<ITabPage>(view, "pageUIView");
-            _pageCharts = SubstCtl<ITabPage>(view, "pageCharts");
             _pageMultimedia = SubstCtl<ITabPage>(view, "pageMultimedia");
             _pageEventTypes = SubstCtl<ITabPage>(view, "pageEventTypes");
             _pagePedigree = SubstCtl<ITabPage>(view, "pagePedigree");
             _pageSpecials = SubstCtl<ITabPage>(view, "pageSpecials");
             _pageGeo = SubstCtl<ITabPage>(view, "pageGeo");
             _pageNavigation = SubstCtl<ITabPage>(view, "pageNavigation");
-            _pageTreeChart = SubstCtl<ITabPage>(view, "pageTreeChart");
             _pageTreeDesign = SubstCtl<ITabPage>(view, "pageTreeDesign");
             _pageTreePersons = SubstCtl<ITabPage>(view, "pageTreePersons");
             _pageAncCircle = SubstCtl<ITabPage>(view, "pageAncCircle");

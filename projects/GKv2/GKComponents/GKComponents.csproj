@@ -110,6 +110,9 @@
     <Compile Include="GKUI\Components\MediaPlayer.Designer.cs">
       <DependentUpon>MediaPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Components\GKAccordion.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\TreeChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -189,11 +192,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKUI\Components\GKTabControl.resx">
-      <DependentUpon>GKTabControl.cs</DependentUpon>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>GKTabControl.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

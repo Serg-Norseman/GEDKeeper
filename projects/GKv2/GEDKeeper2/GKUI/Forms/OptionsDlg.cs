@@ -17,6 +17,7 @@ using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
+using GKUI.Components;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
@@ -38,6 +39,7 @@ namespace GKUI.Forms
             InitializeComponent();
 
             PageControl1.SelectedIndexChanged += PageControl_SelectedIndexChanged;
+            accCategories.SelectedIndexChanged += AccCategories_SelectedIndexChanged;
 
             lstPersonColumns.CheckBoxes = true;
             numDefaultDepth.Minimum = -1;
@@ -48,7 +50,51 @@ namespace GKUI.Forms
             fController.InitView(null);
             fController.UpdateView();
 
+            BuildAccordion();
+
             chkSeparateDepth_CheckedChanged(null, null);
+        }
+
+        private void BuildAccordion()
+        {
+            // the header texts of the pages are localized by the controller in SetLocale() before this
+
+            accCategories.AddGroup(LangMan.LS(LSID.Common));
+            accCategories.AddItem(pageComOther.Text, pageComOther);
+            accCategories.AddItem(pageComBackup.Text, pageComBackup);
+            accCategories.AddItem(pageGEDCOM.Text, pageGEDCOM);
+            accCategories.AddItem(pageMultimedia.Text, pageMultimedia);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Charts));
+            accCategories.AddItem(pageTreePersons.Text, pageTreePersons);
+            accCategories.AddItem(pageTreeDesign.Text, pageTreeDesign);
+            accCategories.AddItem(pageAncCircle.Text, pageAncCircle);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Interface));
+            accCategories.AddItem(pageViewCommon.Text, pageViewCommon);
+            accCategories.AddItem(pageNames.Text, pageNames);
+            accCategories.AddItem(pageViewPersons.Text, pageViewPersons);
+            accCategories.AddItem(pageNavigation.Text, pageNavigation);
+            accCategories.AddItem(pageGeo.Text, pageGeo);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Reports));
+            accCategories.AddItem(pagePedigree.Text, pagePedigree);
+
+            accCategories.AddGroup(LangMan.LS(LSID.Other));
+            accCategories.AddItem(pageSpecials.Text, pageSpecials);
+            accCategories.AddItem(pageEventTypes.Text, pageEventTypes);
+            accCategories.AddItem(pagePlugins.Text, pagePlugins);
+
+            accCategories.SetItemSelected(0);
+            PageControl1.SelectedTab = pageComOther;
+        }
+
+        private void AccCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var item = accCategories.SelectedItem as AccordionItem;
+            if (item != null && !item.IsGroup && PageControl1.SelectedTab != (TabPage)item.Data) {
+                PageControl1.SelectedTab = (TabPage)item.Data;
+            }
         }
 
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -57,7 +103,7 @@ namespace GKUI.Forms
                 fController.ChangeTab();
             }
 
-            btnResetDefaults.Enabled = PageControl1.SelectedIndex < 6;
+            btnResetDefaults.Enabled = PageControl1.SelectedTab != pageEventTypes && PageControl1.SelectedTab != pagePlugins;
         }
 
         void IOptionsDlg.UpdateCircleChartsOptions()
@@ -116,93 +162,72 @@ namespace GKUI.Forms
 
         private void btnResetDefaults_Click(object sender, EventArgs e)
         {
-            switch (PageControl1.SelectedIndex) {
-                case 0:
-                    // common
-                    fController.ResetCommonOptions();
-                    break;
+            var page = PageControl1.SelectedTab;
 
-                case 1:
-                    // multimedia
-                    fController.ResetMediaOptions();
-                    break;
-
-                case 2:
-                    // charts
-                    switch (tabsCharts.SelectedIndex) {
-                        case 0:
-                            // tree
-                            fController.ResetTreeChartsOptions();
-                            break;
-                        case 1:
-                            // circle
-                            fController.ResetCircleChartsOptions();
-                            break;
-                    }
-                    break;
-
-                case 3:
-                    // interface
-                    switch (PageControl2.SelectedIndex) {
-                        case 0:
-                            // all lists
-                            fController.ResetInterfaceOptions();
-                            break;
-                        case 1:
-                            // individuals
-                            fController.ResetColumnsList();
-                            break;
-                    }
-                    break;
-
-                case 4:
-                    // pedigrees
-                    fController.ResetPedigreesOptions();
-                    break;
-
-                case 5:
-                    // specials
-                    fController.ResetSpecialsOptions();
-                    break;
-
-                case 6:
-                    // event types
-                    break;
-
-                case 7:
-                    // plugins
-                    break;
+            if (page == pageComOther || page == pageComBackup) {
+                // common, backup
+                fController.ResetCommonOptions();
+            } else if (page == pageGEDCOM || page == pageSpecials) {
+                // gedcom, specials
+                fController.ResetSpecialsOptions();
+            } else if (page == pageMultimedia) {
+                // multimedia
+                fController.ResetMediaOptions();
+            } else if (page == pageTreePersons || page == pageTreeDesign) {
+                // tree charts
+                fController.ResetTreeChartsOptions();
+            } else if (page == pageAncCircle) {
+                // circle
+                fController.ResetCircleChartsOptions();
+            } else if (page == pageViewCommon || page == pageNames || page == pageNavigation || page == pageGeo) {
+                // interface
+                fController.ResetInterfaceOptions();
+            } else if (page == pageViewPersons) {
+                // individuals
+                fController.ResetColumnsList();
+            } else if (page == pagePedigree) {
+                // pedigrees
+                fController.ResetPedigreesOptions();
             }
         }
 
         public void SetPage(OptionsPage page)
         {
+            TabPage target;
+
             switch (page) {
                 case OptionsPage.opCommon:
-                    PageControl1.SelectedTab = pageCommon;
+                    target = pageComOther;
                     break;
 
                 case OptionsPage.opTreeChart:
-                    PageControl1.SelectedTab = pageCharts;
-                    tabsCharts.SelectTab(0);
+                    target = pageTreePersons;
                     break;
 
                 case OptionsPage.opCircleChart:
-                    PageControl1.SelectedTab = pageCharts;
-                    tabsCharts.SelectTab(1);
+                    target = pageAncCircle;
                     break;
 
                 case OptionsPage.opInterface:
-                    PageControl1.SelectedTab = pageUIView;
+                    target = pageViewCommon;
                     break;
 
                 case OptionsPage.opPedigree:
-                    PageControl1.SelectedTab = pagePedigree;
+                    target = pagePedigree;
                     break;
 
                 case OptionsPage.opMultimedia:
-                    PageControl1.SelectedTab = pageMultimedia;
+                    target = pageMultimedia;
                     break;
+
+                default:
+                    target = null;
+                    break;
+            }
+
+            if (target != null) {
+                PageControl1.SelectedTab = target;
+                accCategories.SelectItem(target);
             }
         }
 

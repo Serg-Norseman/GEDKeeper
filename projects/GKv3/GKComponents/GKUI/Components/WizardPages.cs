@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace GKUI.Components
 {
     public class WizardPage : Panel
     {
-
+        public string Text { get; set; }
     }
 
     /// <summary>
@@ -33,12 +34,24 @@ namespace GKUI.Components
             {
                 this.control = control;
             }
+
+            protected override void InsertItem(int index, WizardPage item)
+            {
+                base.InsertItem(index, item);
+
+                if (control.fPagePlaceholder.Content == null) {
+                    control.UpdateCurrentPage();
+                }
+            }
         }
 
 
         private int fCurrentPageIndex;
         private WizardPageCollection fPages;
         private Panel fPagePlaceholder;
+
+
+        public event EventHandler SelectedIndexChanged;
 
 
         public override IEnumerable<Control> Controls
@@ -55,7 +68,10 @@ namespace GKUI.Components
         {
             get { return fCurrentPageIndex; }
             set {
-                fCurrentPageIndex = value;
+                if (fCurrentPageIndex != value) {
+                    fCurrentPageIndex = value;
+                    SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+                }
                 UpdateCurrentPage();
             }
         }

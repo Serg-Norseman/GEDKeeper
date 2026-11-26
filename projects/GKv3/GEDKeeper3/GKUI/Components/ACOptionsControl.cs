@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
@@ -43,17 +44,17 @@ namespace GKUI.Components
             //Title = LangMan.LS(LSID.MIOptions);
 
             //SheetAncCircle.Text = LangMan.LS(LSID.AncestorsCircle);
-            acb0.Text = LangMan.LS(LSID.Circle) + @" 0";
-            acb1.Text = LangMan.LS(LSID.Circle) + @" 1";
-            acb2.Text = LangMan.LS(LSID.Circle) + @" 2";
-            acb3.Text = LangMan.LS(LSID.Circle) + @" 3";
-            acb4.Text = LangMan.LS(LSID.Circle) + @" 4";
-            acb5.Text = LangMan.LS(LSID.Circle) + @" 5";
-            acb6.Text = LangMan.LS(LSID.Circle) + @" 6";
-            acb7.Text = LangMan.LS(LSID.Circle) + @" 7";
-            acbText.Text = LangMan.LS(LSID.TextColor);
-            acbBack.Text = LangMan.LS(LSID.BackColor);
-            acbLine.Text = LangMan.LS(LSID.LinesColor);
+            acb0.Label.Text = LangMan.LS(LSID.Circle) + @" 0";
+            acb1.Label.Text = LangMan.LS(LSID.Circle) + @" 1";
+            acb2.Label.Text = LangMan.LS(LSID.Circle) + @" 2";
+            acb3.Label.Text = LangMan.LS(LSID.Circle) + @" 3";
+            acb4.Label.Text = LangMan.LS(LSID.Circle) + @" 4";
+            acb5.Label.Text = LangMan.LS(LSID.Circle) + @" 5";
+            acb6.Label.Text = LangMan.LS(LSID.Circle) + @" 6";
+            acb7.Label.Text = LangMan.LS(LSID.Circle) + @" 7";
+            acbText.Label.Text = LangMan.LS(LSID.TextColor);
+            acbBack.Label.Text = LangMan.LS(LSID.BackColor);
+            acbLine.Label.Text = LangMan.LS(LSID.LinesColor);
             chkHideEmptySegments.Text = LangMan.LS(LSID.HideEmptySegments);
             chkArcText.Text = LangMan.LS(LSID.ArcText);
         }
@@ -62,17 +63,17 @@ namespace GKUI.Components
         {
             if (fOptions == null) return;
 
-            fOptions.BrushColor[ 0] = UIHelper.ConvertColor(acb0.BackgroundColor);
-            fOptions.BrushColor[ 1] = UIHelper.ConvertColor(acb1.BackgroundColor);
-            fOptions.BrushColor[ 2] = UIHelper.ConvertColor(acb2.BackgroundColor);
-            fOptions.BrushColor[ 3] = UIHelper.ConvertColor(acb3.BackgroundColor);
-            fOptions.BrushColor[ 4] = UIHelper.ConvertColor(acb4.BackgroundColor);
-            fOptions.BrushColor[ 5] = UIHelper.ConvertColor(acb5.BackgroundColor);
-            fOptions.BrushColor[ 6] = UIHelper.ConvertColor(acb6.BackgroundColor);
-            fOptions.BrushColor[ 7] = UIHelper.ConvertColor(acb7.BackgroundColor);
-            fOptions.BrushColor[ 8] = UIHelper.ConvertColor(acbText.BackgroundColor);
-            fOptions.BrushColor[ 9] = UIHelper.ConvertColor(acbBack.BackgroundColor);
-            fOptions.BrushColor[10] = UIHelper.ConvertColor(acbLine.BackgroundColor);
+            fOptions.BrushColor[ 0] = UIHelper.ConvertColor(acb0.Label.BackgroundColor);
+            fOptions.BrushColor[ 1] = UIHelper.ConvertColor(acb1.Label.BackgroundColor);
+            fOptions.BrushColor[ 2] = UIHelper.ConvertColor(acb2.Label.BackgroundColor);
+            fOptions.BrushColor[ 3] = UIHelper.ConvertColor(acb3.Label.BackgroundColor);
+            fOptions.BrushColor[ 4] = UIHelper.ConvertColor(acb4.Label.BackgroundColor);
+            fOptions.BrushColor[ 5] = UIHelper.ConvertColor(acb5.Label.BackgroundColor);
+            fOptions.BrushColor[ 6] = UIHelper.ConvertColor(acb6.Label.BackgroundColor);
+            fOptions.BrushColor[ 7] = UIHelper.ConvertColor(acb7.Label.BackgroundColor);
+            fOptions.BrushColor[ 8] = UIHelper.ConvertColor(acbText.Label.BackgroundColor);
+            fOptions.BrushColor[ 9] = UIHelper.ConvertColor(acbBack.Label.BackgroundColor);
+            fOptions.BrushColor[10] = UIHelper.ConvertColor(acbLine.Label.BackgroundColor);
 
             fOptions.HideEmptySegments = chkHideEmptySegments.Checked.GetValueOrDefault();
             fOptions.ArcText = chkArcText.Checked.GetValueOrDefault();
@@ -84,17 +85,17 @@ namespace GKUI.Components
             if (fOptions == null) return;
             //PanDefFont.Text = FOptions.ChartOptions.DefFont_Name + ", " + FOptions.ChartOptions.DefFont_Size.ToString();
 
-            acb0.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[0]);
-            acb1.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[1]);
-            acb2.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[2]);
-            acb3.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[3]);
-            acb4.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[4]);
-            acb5.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[5]);
-            acb6.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[6]);
-            acb7.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[7]);
-            acbText.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[8]);
-            acbBack.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[9]);
-            acbLine.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[10]);
+            acb0.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[0]);
+            acb1.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[1]);
+            acb2.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[2]);
+            acb3.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[3]);
+            acb4.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[4]);
+            acb5.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[5]);
+            acb6.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[6]);
+            acb7.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[7]);
+            acbText.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[8]);
+            acbBack.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[9]);
+            acbLine.Label.BackgroundColor = UIHelper.ConvertColor(fOptions.BrushColor[10]);
 
             chkHideEmptySegments.Checked = fOptions.HideEmptySegments;
             chkArcText.Checked = fOptions.ArcText;
@@ -110,27 +111,27 @@ namespace GKUI.Components
             UpdateControls();
         }*/
 
-        private async void lblColorClick(object sender, MouseEventArgs e)
+        private async void lblColorClick(object sender, EventArgs e)
         {
-            Label lbl = sender as Label;
-            if (lbl == null) return;
+            var swatch = (GKSwatchPanel)sender;
+            Label lbl = swatch.Label;
             lbl.BackgroundColor = UIHelper.ConvertColor(await AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(lbl.BackgroundColor)));
         }
 
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
-        private Label acb0;
-        private Label acb1;
-        private Label acb2;
-        private Label acb3;
-        private Label acb4;
-        private Label acb5;
-        private Label acb6;
-        private Label acb7;
-        private Label acbText;
-        private Label acbBack;
-        private Label acbLine;
+        private GKSwatchPanel acb0;
+        private GKSwatchPanel acb1;
+        private GKSwatchPanel acb2;
+        private GKSwatchPanel acb3;
+        private GKSwatchPanel acb4;
+        private GKSwatchPanel acb5;
+        private GKSwatchPanel acb6;
+        private GKSwatchPanel acb7;
+        private GKSwatchPanel acbText;
+        private GKSwatchPanel acbBack;
+        private GKSwatchPanel acbLine;
         private CheckBox chkHideEmptySegments;
         private CheckBox chkArcText;
 

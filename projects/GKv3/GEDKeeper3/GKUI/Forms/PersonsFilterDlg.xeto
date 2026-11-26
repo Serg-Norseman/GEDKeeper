@@ -86,8 +86,8 @@
       <StackLayout Style="dlgFooter">
         <Button x:Name="btnReset" Style="dlgBtn" Click="btnReset_Click" />
         <StackLayoutItem Expand="True" />
-        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
-        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        <Button x:Name="btnAccept" Style="dlgBtnAccept" Click="btnAccept_Click" />
+        <Button x:Name="btnCancel" Style="dlgBtnCancel" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

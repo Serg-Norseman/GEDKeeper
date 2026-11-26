@@ -53,7 +53,7 @@
     <TableRow>
       <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True" />
-        <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        <Button x:Name="btnClose" Style="dlgBtnCancel" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

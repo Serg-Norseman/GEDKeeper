@@ -567,6 +567,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
             ControlsManager.RegisterHandlerType(typeof(GKTabControl), typeof(TabControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(WizardPage), typeof(WizardPageHandler));
         }
 
         #endregion

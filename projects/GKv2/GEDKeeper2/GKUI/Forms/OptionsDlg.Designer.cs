@@ -2,11 +2,11 @@
 {
     partial class OptionsDlg
     {
-        private GKUI.Components.GKTabControl PageControl1;
-        private System.Windows.Forms.TabPage pageCommon;
+        private System.Windows.Forms.SplitContainer splNav;
+        private GKUI.Components.GKAccordion accCategories;
+        private GKUI.Components.WizardPages PageControl1;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.TabPage pageTreeChart;
         private System.Windows.Forms.Panel panTreePersons;
         private System.Windows.Forms.CheckBox chkSurname;
         private System.Windows.Forms.CheckBox chkName;
@@ -31,8 +31,6 @@
         private System.Windows.Forms.TextBox txtProxyPort;
         private System.Windows.Forms.TextBox txtProxyLogin;
         private System.Windows.Forms.TextBox txtProxyPass;
-        private System.Windows.Forms.TabPage pageUIView;
-        private GKUI.Components.GKTabControl PageControl2;
         private System.Windows.Forms.TabPage pageViewCommon;
         private System.Windows.Forms.TabPage pageViewPersons;
         private GKUI.Components.GKListView lstPersonColumns;
@@ -73,8 +71,6 @@
         private System.Windows.Forms.Label lblChartFontTitle;
         private System.Windows.Forms.Panel panChartFont;
         private System.Windows.Forms.Label lblChartFont;
-        private GKUI.Components.GKTabControl tabsCharts;
-        private System.Windows.Forms.TabPage pageCharts;
         private System.Windows.Forms.Label lblMaleColor;
         private System.Windows.Forms.Label lblFemaleColor;
         private System.Windows.Forms.Label lblUnkSexColor;
@@ -196,7 +192,6 @@
         private System.Windows.Forms.CheckBox chkSimpleSingleSurnames;
         private System.Windows.Forms.CheckBox chkSearchPlacesWithoutCoords;
         private System.Windows.Forms.TabPage pageGeo;
-        private GKUI.Components.GKTabControl tabsTreeCharts;
         private System.Windows.Forms.TabPage pageTreePersons;
         private System.Windows.Forms.TabPage pageTreeDesign;
         private System.Windows.Forms.Label lblTextEffect;
@@ -208,7 +203,6 @@
         private System.Windows.Forms.CheckBox chkDisableNonStdFeatures;
         private System.Windows.Forms.CheckBox chkSourceCitations;
         private System.Windows.Forms.CheckBox chkEnableStdValidation;
-        private GKUI.Components.GKTabControl tabsCommon;
         private System.Windows.Forms.TabPage pageComOther;
         private System.Windows.Forms.TabPage pageComBackup;
         private System.Windows.Forms.CheckBox chkExtBackupEnabled;
@@ -224,8 +218,9 @@
 
         private void InitializeComponent()
         {
-            this.PageControl1 = new GKUI.Components.GKTabControl();
-            this.pageCommon = new System.Windows.Forms.TabPage();
+            this.splNav = new System.Windows.Forms.SplitContainer();
+            this.accCategories = new GKUI.Components.GKAccordion();
+            this.PageControl1 = new GKUI.Components.WizardPages();
             this.lblCertaintyAlgorithm = new System.Windows.Forms.Label();
             this.cmbCertaintyAlgorithm = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -270,9 +265,6 @@
             this.chkAllowMediaDirectRefs = new System.Windows.Forms.CheckBox();
             this.chkEmbeddedMediaPlayer = new System.Windows.Forms.CheckBox();
             this.chkRemovableMediaWarning = new System.Windows.Forms.CheckBox();
-            this.pageCharts = new System.Windows.Forms.TabPage();
-            this.tabsCharts = new GKUI.Components.GKTabControl();
-            this.pageTreeChart = new System.Windows.Forms.TabPage();
             this.chkSeparateDepth = new System.Windows.Forms.CheckBox();
             this.numDefaultDepth = new System.Windows.Forms.NumericUpDown();
             this.lblDefaultDepth = new System.Windows.Forms.Label();
@@ -333,8 +325,6 @@
             this.lblChartFont = new System.Windows.Forms.Label();
             this.pageAncCircle = new System.Windows.Forms.TabPage();
             this.ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
-            this.pageUIView = new System.Windows.Forms.TabPage();
-            this.PageControl2 = new GKUI.Components.GKTabControl();
             this.pageViewCommon = new System.Windows.Forms.TabPage();
             this.chkSurnameFirstInOrder = new System.Windows.Forms.CheckBox();
             this.grpAdvancedNames = new System.Windows.Forms.GroupBox();
@@ -418,7 +408,6 @@
             this.chkSimpleSingleSurnames = new System.Windows.Forms.CheckBox();
             this.chkSearchPlacesWithoutCoords = new System.Windows.Forms.CheckBox();
             this.pageGeo = new System.Windows.Forms.TabPage();
-            this.tabsTreeCharts = new Components.GKTabControl();
             this.pageTreePersons = new System.Windows.Forms.TabPage();
             this.pageTreeDesign = new System.Windows.Forms.TabPage();
             this.lblTextEffect = new System.Windows.Forms.Label();
@@ -430,7 +419,6 @@
             this.chkDisableNonStdFeatures = new System.Windows.Forms.CheckBox();
             this.chkSourceCitations = new System.Windows.Forms.CheckBox();
             this.chkEnableStdValidation = new System.Windows.Forms.CheckBox();
-            this.tabsCommon = new Components.GKTabControl();
             this.pageComOther = new System.Windows.Forms.TabPage();
             this.pageComBackup = new System.Windows.Forms.TabPage();
             this.chkExtBackupEnabled = new System.Windows.Forms.CheckBox();
@@ -443,8 +431,8 @@
             this.panUIFont = new System.Windows.Forms.Panel();
             this.lblUIFont = new System.Windows.Forms.Label();
             this.chkOverrideThemesFont = new System.Windows.Forms.CheckBox();
+            this.splNav.SuspendLayout();
             this.PageControl1.SuspendLayout();
-            this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBackupRevisionsMaxCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numASMin)).BeginInit();
@@ -452,9 +440,6 @@
             this.grpInternet.SuspendLayout();
             this.grpOther.SuspendLayout();
             this.pageMultimedia.SuspendLayout();
-            this.pageCharts.SuspendLayout();
-            this.tabsCharts.SuspendLayout();
-            this.pageTreeChart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthAncestors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthDescendants)).BeginInit();
@@ -472,8 +457,6 @@
             this.panUnWifeColor.SuspendLayout();
             this.panChartFont.SuspendLayout();
             this.pageAncCircle.SuspendLayout();
-            this.pageUIView.SuspendLayout();
-            this.PageControl2.SuspendLayout();
             this.pageViewCommon.SuspendLayout();
             this.grpAdvancedNames.SuspendLayout();
             this.rgFNPFormat.SuspendLayout();
@@ -488,60 +471,65 @@
             this.pageEventTypes.SuspendLayout();
             this.pageNavigation.SuspendLayout();
             this.pageGeo.SuspendLayout();
-            this.tabsTreeCharts.SuspendLayout();
             this.pageTreePersons.SuspendLayout();
             this.pageTreeDesign.SuspendLayout();
-            this.tabsCommon.SuspendLayout();
             this.pageComOther.SuspendLayout();
             this.pageComBackup.SuspendLayout();
             this.pageGEDCOM.SuspendLayout();
             this.pageNames.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // PageControl1
-            // 
-            this.PageControl1.Controls.Add(this.pageCommon);
+            //
+            this.PageControl1.Controls.Add(this.pageComOther);
+            this.PageControl1.Controls.Add(this.pageComBackup);
+            this.PageControl1.Controls.Add(this.pageGEDCOM);
             this.PageControl1.Controls.Add(this.pageMultimedia);
-            this.PageControl1.Controls.Add(this.pageCharts);
-            this.PageControl1.Controls.Add(this.pageUIView);
+            this.PageControl1.Controls.Add(this.pageTreePersons);
+            this.PageControl1.Controls.Add(this.pageTreeDesign);
+            this.PageControl1.Controls.Add(this.pageAncCircle);
+            this.PageControl1.Controls.Add(this.pageViewCommon);
+            this.PageControl1.Controls.Add(this.pageNames);
+            this.PageControl1.Controls.Add(this.pageViewPersons);
+            this.PageControl1.Controls.Add(this.pageNavigation);
+            this.PageControl1.Controls.Add(this.pageGeo);
             this.PageControl1.Controls.Add(this.pagePedigree);
             this.PageControl1.Controls.Add(this.pageSpecials);
             this.PageControl1.Controls.Add(this.pageEventTypes);
             this.PageControl1.Controls.Add(this.pagePlugins);
-            this.PageControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.PageControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PageControl1.Location = new System.Drawing.Point(0, 0);
             this.PageControl1.Margin = new System.Windows.Forms.Padding(2);
             this.PageControl1.Name = "PageControl1";
             this.PageControl1.SelectedIndex = 0;
-            this.PageControl1.Size = new System.Drawing.Size(749, 692);
+            this.PageControl1.Size = new System.Drawing.Size(700, 692);
             this.PageControl1.TabIndex = 0;
-            // 
-            // pageCommon
-            // 
-            this.pageCommon.Controls.Add(this.tabsCommon);
-            this.pageCommon.Location = new System.Drawing.Point(4, 26);
-            this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
-            this.pageCommon.Name = "pageCommon";
-            this.pageCommon.Padding = new System.Windows.Forms.Padding(10);
-            this.pageCommon.Size = new System.Drawing.Size(741, 762);
-            this.pageCommon.TabIndex = 0;
-            this.pageCommon.Text = "pageCommon";
-            // 
-            // tabsCommon
-            // 
-            this.tabsCommon.Controls.Add(this.pageComOther);
-            this.tabsCommon.Controls.Add(this.pageComBackup);
-            this.tabsCommon.Controls.Add(this.pageGEDCOM);
-            this.tabsCommon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabsCommon.Location = new System.Drawing.Point(10, 10);
-            this.tabsCommon.Margin = new System.Windows.Forms.Padding(2);
-            this.tabsCommon.Name = "tabsCommon";
-            this.tabsCommon.SelectedIndex = 0;
-            this.tabsCommon.Size = new System.Drawing.Size(721, 742);
-            this.tabsCommon.TabIndex = 0;
-            // 
+            //
+            // splNav
+            //
+            this.splNav.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splNav.Location = new System.Drawing.Point(0, 0);
+            this.splNav.Name = "splNav";
+            this.splNav.Panel1.Controls.Add(this.accCategories);
+            this.splNav.Panel2.Controls.Add(this.PageControl1);
+            this.splNav.Size = new System.Drawing.Size(920, 688);
+            this.splNav.SplitterDistance = 220;
+            this.splNav.SplitterWidth = 6;
+            this.splNav.TabIndex = 0;
+            //
+            // accCategories
+            //
+            this.accCategories.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.accCategories.FormattingEnabled = true;
+            this.accCategories.ItemHeight = 30;
+            this.accCategories.Location = new System.Drawing.Point(0, 0);
+            this.accCategories.Margin = new System.Windows.Forms.Padding(2);
+            this.accCategories.Name = "accCategories";
+            this.accCategories.Size = new System.Drawing.Size(220, 692);
+            this.accCategories.TabIndex = 0;
+            //
             // pageComOther
-            // 
+            //
             this.pageComOther.Controls.Add(this.lblCertaintyAlgorithm);
             this.pageComOther.Controls.Add(this.cmbCertaintyAlgorithm);
             this.pageComOther.Controls.Add(this.lblLanguage);
@@ -1183,45 +1171,9 @@
             this.chkHighlightInaccessibleFiles.Size = new System.Drawing.Size(206, 21);
             this.chkHighlightInaccessibleFiles.TabIndex = 11;
             this.chkHighlightInaccessibleFiles.Text = "chkHighlightInaccessibleFiles";
-            // 
-            // pageCharts
-            // 
-            this.pageCharts.BackColor = System.Drawing.SystemColors.Control;
-            this.pageCharts.Controls.Add(this.tabsCharts);
-            this.pageCharts.Location = new System.Drawing.Point(4, 26);
-            this.pageCharts.Margin = new System.Windows.Forms.Padding(2);
-            this.pageCharts.Name = "pageCharts";
-            this.pageCharts.Padding = new System.Windows.Forms.Padding(10);
-            this.pageCharts.Size = new System.Drawing.Size(741, 762);
-            this.pageCharts.TabIndex = 4;
-            this.pageCharts.Text = "pageCharts";
-            // 
-            // tabsCharts
-            // 
-            this.tabsCharts.Controls.Add(this.pageTreeChart);
-            this.tabsCharts.Controls.Add(this.pageAncCircle);
-            this.tabsCharts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabsCharts.Location = new System.Drawing.Point(10, 10);
-            this.tabsCharts.Margin = new System.Windows.Forms.Padding(2);
-            this.tabsCharts.Name = "tabsCharts";
-            this.tabsCharts.SelectedIndex = 0;
-            this.tabsCharts.Size = new System.Drawing.Size(721, 702);
-            this.tabsCharts.TabIndex = 0;
-            // 
-            // tabsTreeCharts
-            // 
-            this.tabsTreeCharts.Controls.Add(this.pageTreePersons);
-            this.tabsTreeCharts.Controls.Add(this.pageTreeDesign);
-            this.tabsTreeCharts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabsTreeCharts.Location = new System.Drawing.Point(10, 10);
-            this.tabsTreeCharts.Margin = new System.Windows.Forms.Padding(2);
-            this.tabsTreeCharts.Name = "tabsTreeCharts";
-            this.tabsTreeCharts.SelectedIndex = 0;
-            this.tabsTreeCharts.Size = new System.Drawing.Size(721, 702);
-            this.tabsTreeCharts.TabIndex = 0;
-            // 
+            //
             // pageTreePersons
-            // 
+            //
             this.pageTreePersons.BackColor = System.Drawing.SystemColors.Control;
             this.pageTreePersons.Controls.Add(this.panTreePersons);
             this.pageTreePersons.Location = new System.Drawing.Point(4, 26);
@@ -1254,21 +1206,9 @@
             this.pageTreeDesign.Size = new System.Drawing.Size(713, 712);
             this.pageTreeDesign.TabIndex = 3;
             this.pageTreeDesign.Text = "pageTreeDesign";
-            // 
-            // pageTreeChart
-            // 
-            this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
-            this.pageTreeChart.Controls.Add(this.tabsTreeCharts);
-            this.pageTreeChart.Location = new System.Drawing.Point(4, 26);
-            this.pageTreeChart.Margin = new System.Windows.Forms.Padding(2);
-            this.pageTreeChart.Name = "pageTreeChart";
-            this.pageTreeChart.Padding = new System.Windows.Forms.Padding(10);
-            this.pageTreeChart.Size = new System.Drawing.Size(713, 712);
-            this.pageTreeChart.TabIndex = 3;
-            this.pageTreeChart.Text = "pageTreeChart";
-            // 
+            //
             // chkSeparateDepth
-            // 
+            //
             this.chkSeparateDepth.AutoSize = true;
             this.chkSeparateDepth.Location = new System.Drawing.Point(334, 228);
             this.chkSeparateDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
@@ -2146,35 +2086,9 @@
             this.ancOptionsControl1.Options = null;
             this.ancOptionsControl1.Size = new System.Drawing.Size(713, 712);
             this.ancOptionsControl1.TabIndex = 0;
-            // 
-            // pageUIView
-            // 
-            this.pageUIView.Controls.Add(this.PageControl2);
-            this.pageUIView.Location = new System.Drawing.Point(4, 26);
-            this.pageUIView.Margin = new System.Windows.Forms.Padding(2);
-            this.pageUIView.Name = "pageUIView";
-            this.pageUIView.Padding = new System.Windows.Forms.Padding(10);
-            this.pageUIView.Size = new System.Drawing.Size(741, 762);
-            this.pageUIView.TabIndex = 1;
-            this.pageUIView.Text = "pageUIView";
-            // 
-            // PageControl2
-            // 
-            this.PageControl2.Controls.Add(this.pageViewCommon);
-            this.PageControl2.Controls.Add(this.pageNames);
-            this.PageControl2.Controls.Add(this.pageViewPersons);
-            this.PageControl2.Controls.Add(this.pageNavigation);
-            this.PageControl2.Controls.Add(this.pageGeo);
-            this.PageControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PageControl2.Location = new System.Drawing.Point(10, 10);
-            this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
-            this.PageControl2.Name = "PageControl2";
-            this.PageControl2.SelectedIndex = 0;
-            this.PageControl2.Size = new System.Drawing.Size(721, 742);
-            this.PageControl2.TabIndex = 0;
-            // 
+            //
             // pageNames
-            // 
+            //
             this.pageNames.Controls.Add(this.chkSurnameFirstInOrder);
             this.pageNames.Controls.Add(this.grpAdvancedNames);
             this.pageNames.Controls.Add(this.rgFNPFormat);
@@ -3045,7 +2959,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(491, 702);
+            this.btnAccept.Location = new System.Drawing.Point(658, 702);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
@@ -3058,7 +2972,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(621, 702);
+            this.btnCancel.Location = new System.Drawing.Point(788, 702);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
@@ -3072,8 +2986,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(749, 746);
-            this.Controls.Add(this.PageControl1);
+            this.ClientSize = new System.Drawing.Size(920, 746);
+            this.Controls.Add(this.splNav);
             this.Controls.Add(this.btnResetDefaults);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
@@ -3090,8 +3004,6 @@
             this.pageNames.PerformLayout();
             this.pageGEDCOM.ResumeLayout(false);
             this.pageGEDCOM.PerformLayout();
-            this.tabsCommon.ResumeLayout(false);
-            this.tabsCommon.PerformLayout();
             this.pageComOther.ResumeLayout(false);
             this.pageComOther.PerformLayout();
             this.pageComBackup.ResumeLayout(false);
@@ -3099,8 +3011,6 @@
             this.pageGeo.ResumeLayout(false);
             this.pageGeo.PerformLayout();
             this.PageControl1.ResumeLayout(false);
-            this.pageCommon.ResumeLayout(false);
-            this.pageCommon.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBackupRevisionsMaxCount)).EndInit();
@@ -3112,10 +3022,6 @@
             this.grpOther.PerformLayout();
             this.pageMultimedia.ResumeLayout(false);
             this.pageMultimedia.PerformLayout();
-            this.pageCharts.ResumeLayout(false);
-            this.tabsCharts.ResumeLayout(false);
-            this.pageTreeChart.ResumeLayout(false);
-            this.pageTreeChart.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthAncestors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDefaultDepthDescendants)).EndInit();
@@ -3127,7 +3033,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numMargins)).EndInit();
             this.pageTreePersons.ResumeLayout(false);
             this.pageTreeDesign.ResumeLayout(false);
-            this.tabsTreeCharts.ResumeLayout(false);
             this.panTreePersons.ResumeLayout(false);
             this.grpTreeDecor.ResumeLayout(false);
             this.panMaleColor.ResumeLayout(false);
@@ -3137,8 +3042,6 @@
             this.panUnWifeColor.ResumeLayout(false);
             this.panChartFont.ResumeLayout(false);
             this.pageAncCircle.ResumeLayout(false);
-            this.pageUIView.ResumeLayout(false);
-            this.PageControl2.ResumeLayout(false);
             this.pageViewCommon.ResumeLayout(false);
             this.grpAdvancedNames.ResumeLayout(false);
             this.grpAdvancedNames.PerformLayout();
@@ -3153,6 +3056,7 @@
             this.pageEventTypes.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
             this.pageNavigation.ResumeLayout(false);
+            this.splNav.ResumeLayout(false);
             this.ResumeLayout(false);
         }
     }

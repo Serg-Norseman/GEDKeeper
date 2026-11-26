@@ -8,7 +8,6 @@
 
 #pragma warning disable CA1416
 
-using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKUI.Themes;
@@ -35,6 +34,12 @@ namespace GKUI.Platform
                 stack.Spacing = 4;
             });
 
+            Eto.Style.Add<StackLayout>("chkIndent", stack => {
+                stack.Orientation = Orientation.Horizontal;
+                stack.Padding = new Padding(20, 0, 0, 0);
+                stack.Spacing = 0;
+            });
+
             Eto.Style.Add<StackLayout>("horzListStack", stack => {
                 stack.Orientation = Orientation.Horizontal;
                 stack.Padding = new Padding(8);
@@ -59,6 +64,16 @@ namespace GKUI.Platform
             });
 
             Eto.Style.Add<Button>("dlgBtn", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(120, 26);
+            });
+
+            Eto.Style.Add<Button>("dlgBtnAccept", button => {
+                button.ImagePosition = ButtonImagePosition.Left;
+                button.Size = new Size(120, 26);
+            });
+
+            Eto.Style.Add<Button>("dlgBtnCancel", button => {
                 button.ImagePosition = ButtonImagePosition.Left;
                 button.Size = new Size(120, 26);
             });
