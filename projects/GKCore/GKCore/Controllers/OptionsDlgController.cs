@@ -886,8 +886,10 @@ namespace GKCore.Controllers
             _numASMin.Value = backupOpts.AutosaveInterval;
             _numBackupRevisionsMaxCount.Value = backupOpts.FileBackupEachRevisionMaxCount;
 
-            GetControl<ICheckBox>("chkExtBackupEnabled").Checked = backupOpts.ExtendedBackup;
-            GetControl<ITextBox>("txtExtBackupFolder").Text = backupOpts.ExtendedFolder;
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ICheckBox>("chkExtBackupEnabled").Checked = backupOpts.ExtendedBackup;
+                GetControl<ITextBox>("txtExtBackupFolder").Text = backupOpts.ExtendedFolder;
+            }
         }
 
         public void AcceptBackupOptions()
@@ -906,8 +908,10 @@ namespace GKCore.Controllers
             backupOpts.AutosaveInterval = (int)_numASMin.Value;
             backupOpts.FileBackupEachRevisionMaxCount = (int)_numBackupRevisionsMaxCount.Value;
 
-            backupOpts.ExtendedBackup = GetControl<ICheckBox>("chkExtBackupEnabled").Checked;
-            backupOpts.ExtendedFolder = GetControl<ITextBox>("txtExtBackupFolder").Text;
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                backupOpts.ExtendedBackup = GetControl<ICheckBox>("chkExtBackupEnabled").Checked;
+                backupOpts.ExtendedFolder = GetControl<ITextBox>("txtExtBackupFolder").Text;
+            }
         }
 
         public void CheckExtBackup()
@@ -1384,7 +1388,10 @@ namespace GKCore.Controllers
             }
 
             _pageViewCommon.Text = LangMan.LS(LSID.ListsAll);
-            GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
+            }
 
             _rgFNPFormat.Text = LangMan.LS(LSID.NamesFormat);
             _radSNP.Text = LangMan.LS(LSID.NF1);

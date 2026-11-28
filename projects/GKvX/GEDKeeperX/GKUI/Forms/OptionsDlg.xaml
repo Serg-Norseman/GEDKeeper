@@ -26,7 +26,7 @@
                                 <comcom:CheckBox x:Name="chkAutoCheckUpdates" />
                                 <comcom:CheckBox x:Name="chkDialogClosingWarn" />
 
-                                <Grid ColumnSpacing="4" RowSpacing="4">
+                                <Grid ColumnSpacing="4" RowSpacing="4" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
 
                                     <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="0" />
                                     <comcom:GKComboBox x:Name="cmbLanguages" Grid.Column="1" Grid.Row="0" />

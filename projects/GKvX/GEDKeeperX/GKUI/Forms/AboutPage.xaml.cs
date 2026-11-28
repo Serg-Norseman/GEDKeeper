@@ -6,11 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Views;
-using Microsoft.Maui.Controls;
 
 namespace GKUI.Forms
 {
@@ -26,10 +23,11 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        private async void lblURL_Clicked(object sender, EventArgs e)
+        /*private async void lblURL_Clicked(object sender, EventArgs e)
         {
+            // Clicked="lblURL_Clicked"
             if (sender is Button btn)
                 AppHost.Instance.OpenURL(btn.Text);
-        }
+        }*/
     }
 }

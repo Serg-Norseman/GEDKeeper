@@ -66,6 +66,7 @@ namespace GKCore.Controllers
 
         private readonly List<GDMRecord> fChangedRecords;
         private readonly BaseContext fContext;
+        private readonly bool fOwnsContext;
         private GDMRecord fDelayedTransitionRecord;
         private bool fHasToolbar;
         private readonly NavigationStack<GDMRecord> fNavman;
@@ -88,9 +89,10 @@ namespace GKCore.Controllers
         }
 
 
-        public BaseWinController(IBaseWindowView view, bool hasToolbar) : base(view)
+        public BaseWinController(IBaseWindowView view, bool hasToolbar, BaseContext externalContext = null) : base(view)
         {
-            fContext = new BaseContext(view);
+            fContext = externalContext ?? new BaseContext(view);
+            fOwnsContext = (externalContext == null);
             fChangedRecords = new List<GDMRecord>();
             fNavman = new NavigationStack<GDMRecord>();
             fTabParts = new TabParts[(int)GDMRecordType.rtLast + 1];
@@ -101,7 +103,10 @@ namespace GKCore.Controllers
         {
             if (disposing) {
                 //fNavman.Dispose();
-                fContext.Dispose();
+
+                if (fOwnsContext) {
+                    fContext.Dispose();
+                }
             }
             base.Dispose(disposing);
         }
@@ -150,7 +155,11 @@ namespace GKCore.Controllers
             }
         }
 
-        public async Task LoadFileEx()
+        /// <summary>
+        /// Common file selection dialog for loading a base; available even without
+        /// a work window (used by the controller and the mobile launch page).
+        /// </summary>
+        public static async Task<string> SelectFileToLoad()
         {
             string homePath = AppHost.Instance.GetUserFilesPath("");
             string filters = string.Join("|", new string[] {
@@ -160,7 +169,12 @@ namespace GKCore.Controllers
                 LangMan.LS(LSID.GEDZIPFilter)
             });
 
-            string fileName = await AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
+            return await AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
+        }
+
+        public async Task LoadFileEx()
+        {
+            string fileName = await SelectFileToLoad();
             if (!string.IsNullOrEmpty(fileName)) {
                 await AppHost.Instance.LoadBase(fView, fileName);
             }
@@ -1569,8 +1583,13 @@ namespace GKCore.Controllers
 
         public async Task ShowAbout()
         {
-            using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
-                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+            try {
+                using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                }
+            } catch (Exception ex) {
+                // GKvX exceptions catch pattern
+                //AppHost.StdDialogs.ShowError(ex.Message + "\n" + ex.InnerException?.Message.ToString());
             }
         }
 

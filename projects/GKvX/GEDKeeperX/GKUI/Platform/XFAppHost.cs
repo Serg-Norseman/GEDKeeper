@@ -16,6 +16,7 @@ using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Locales;
 using GKCore.Utilities;
 using GKCore.Validation;
 using GKUI.Components;
@@ -38,7 +39,15 @@ namespace GKUI.Platform
     /// </summary>
     public sealed class XFAppHost : AppHost
     {
-        private IBaseWindow fCurrentBase;
+        private readonly AppWorkspace fWorkspace;
+
+        /// <summary>
+        /// The session workspace: shared base context and the current work window.
+        /// </summary>
+        public static AppWorkspace Workspace
+        {
+            get { return ((XFAppHost)Instance).fWorkspace; }
+        }
 
         static XFAppHost()
         {
@@ -47,20 +56,17 @@ namespace GKUI.Platform
 
         public XFAppHost()
         {
+            fWorkspace = new AppWorkspace(this);
         }
 
         public override async Task<IBaseWindow> CreateBase(string fileName)
         {
-            // FIXME: temp solution
-            IBaseWindow result = await base.CreateBase(fileName);
-            fCurrentBase = result;
-            return result;
+            return await fWorkspace.LoadFileAsync(fileName);
         }
 
         public override IBaseWindow GetCurrentFile(bool extMode = false)
         {
-            // FIXME: temp solution
-            return fCurrentBase;
+            return fWorkspace.CurrentWindow;
         }
 
         public static NavigationPage GetNavPage()
@@ -108,31 +114,35 @@ namespace GKUI.Platform
 
         public override IEnumerable<T> GetRunningForms<T>()
         {
-            var navPage = GetNavPage();
-            if (navPage == null)
-                yield break;
-
-            /*foreach (var page in navPage.Pages) {
-                T form = page as T;
-                if (form != null) {
-                    yield return form;
-                }
-            }*/
+            var match = fWorkspace.CurrentWindow as T;
+            if (match != null) {
+                yield return match;
+            }
         }
+
+        protected override bool AutoCreateBaseAtStartup => false;
 
         protected override void UpdateLang()
         {
             var mainPage = GetMainPage();
-            mainPage.SetLocale();
+            if (mainPage != null) {
+                mainPage.SetLocale();
 
-            var menuPage = (MenuPage)mainPage.Flyout;
-            menuPage.SetLocale();
+                if (mainPage.Flyout is MenuPage menuPage) {
+                    menuPage.SetLocale();
+                }
 
-            var launchPage = (LaunchPage)mainPage.Detail;
-            launchPage.SetLocale();
-
-            var baseWin = GetCurrentFile();
-            baseWin.SetLocale();
+                // Detail is a NavigationPage; all localizable pages (LaunchPage,
+                // the work window) live in its stack
+                var navPage = mainPage.NavigationPage;
+                if (navPage != null) {
+                    foreach (var page in navPage.Navigation.NavigationStack) {
+                        if (page is ILocalizable localizable) {
+                            localizable.SetLocale();
+                        }
+                    }
+                }
+            }
 
             base.UpdateLang();
         }
@@ -145,6 +155,7 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
+            fWorkspace.Shutdown();
             fPlatformSpecifics?.CloseApplication();
         }
 
@@ -320,6 +331,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(Editor), typeof(TextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(Entry), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
+            ControlsManager.RegisterHandlerType(typeof(HyperLabel), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(XFIKRadioButton), typeof(RadioButtonHandler));
@@ -345,6 +357,15 @@ namespace GKUI.Platform
             ConfigureBootstrap();
             Logger.Init(GetLogFilename());
             LogSysInfo();
+        }
+
+        /// <summary>
+        /// Registers the platform specifics after the activity is created
+        /// (App.StartUp passes null, because the activity does not exist yet).
+        /// </summary>
+        public static void SetPlatformSpecifics(IPlatformSpecifics platformSpecifics)
+        {
+            fPlatformSpecifics = platformSpecifics;
         }
     }
 }

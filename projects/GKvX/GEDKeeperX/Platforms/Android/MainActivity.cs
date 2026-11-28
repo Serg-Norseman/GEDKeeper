@@ -10,6 +10,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using GKUI;
+using GKUI.Platform;
 using Microsoft.Maui;
 
 namespace GEDKeeperX.Droid
@@ -23,6 +24,9 @@ namespace GEDKeeperX.Droid
         protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+
+            // App.StartUp passes null: the activity does not exist yet at that moment
+            XFAppHost.SetPlatformSpecifics(this);
 
             //LoadApplication(new GKUI.App(this));
         }

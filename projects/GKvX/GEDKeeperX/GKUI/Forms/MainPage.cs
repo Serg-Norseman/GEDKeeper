@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GKCore;
+using GKCore.Design.Views;
 using GKCore.Locales;
 using GKUI.Platform;
 using Microsoft.Maui.Controls;
@@ -36,15 +37,18 @@ namespace GKUI.Forms
             DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
         }
 
-        public static BaseWinSDI GetBaseWin()
-        {
-            return AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-        }
-
         private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
         {
-            ((IDisplayChangeable)Detail).OnDisplayChanged(e.DisplayInfo);
-            ((IDisplayChangeable)GetBaseWin()).OnDisplayChanged(e.DisplayInfo);
+            // all localizable/display-aware pages (LaunchPage, the work window)
+            // live in the navigation stack; no casts of Detail or the current window
+            var navPage = NavigationPage;
+            if (navPage == null) return;
+
+            foreach (var page in navPage.Navigation.NavigationStack) {
+                if (page is IDisplayChangeable displayChangeable) {
+                    displayChangeable.OnDisplayChanged(e.DisplayInfo);
+                }
+            }
         }
 
         public async Task NavigateAsync(Page page)
@@ -59,7 +63,10 @@ namespace GKUI.Forms
 
         public async Task ShowAbout()
         {
-            await GetBaseWin()?.Controller.ShowAbout();
+            // About does not require a database; show it even without a work window
+            using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
+                await AppHost.Instance.ShowModalAsync(dlg, null, false);
+            }
         }
     }
 }

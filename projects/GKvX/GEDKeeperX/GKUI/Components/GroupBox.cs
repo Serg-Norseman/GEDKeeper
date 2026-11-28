@@ -46,7 +46,7 @@ namespace GKUI.Components
                 Spacing = 0,
                 Children = {
                     fTitle,
-                    new Frame() {
+                    new Border() {
                         Padding = 8,
                         Content = fContentLayout
                     }

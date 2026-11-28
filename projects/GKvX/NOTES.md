@@ -4,6 +4,7 @@
 https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/?view=net-maui-10.0
 
 Disappearing - change to Unloaded!
+catch strange exceptions, which don't showing in VS: AppHost.StdDialogs.ShowError(ex.Message + "\n" + ex.InnerException?.Message.ToString());
 
 ## Disabled and removed features
 
@@ -30,13 +31,6 @@ Disappearing - change to Unloaded!
 
 
 # Experimental
-
-
-## Canceled
-
-
-## Checked packages
-
 
 # Dev Requirements
 
@@ -83,7 +77,3 @@ ASUS Zenfone 8              |  5.9" (1080x2400) | 446 PPI |  xh | Android 12    
 Samsung Galaxy A32          |  6.6" (1080x2340) | 390 PPI |  xh | Android 13    (API 33) | 2022
 Google Pixel 6a             |  6.1" (1080x2400) | 431 PPI |  xh | Android 14    (API 34) | 2022
 Xiaomi 13T                  |  6.7" (2712x1220) | 446 ppi |  xh | Android 14    (API 34) | 2023
-
-# Incomprehensible problems
-
-- DataGrid unused space background color black not turning off.

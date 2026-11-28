@@ -50,7 +50,7 @@ namespace GKUI.Forms
             fMenuItems.Clear();
 
             fMenuItems.Add(new LaunchItem(LangMan.LS(LSID.RM_Records), async (i) => {
-                await XFAppHost.GetMainPage().NavigateAsync(LaunchPage.GetBaseWin());
+                await XFAppHost.Workspace.EnsureBaseWindowAsync();
             }));
 
             fMenuItems.Add(new LaunchItem(LangMan.LS(LSID.MIAbout), async (i) => {

@@ -12,13 +12,13 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+        <Border Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
             <StackLayout Orientation="Horizontal" Spacing="4">
                 <Label x:Name="lblRepository" />
                 <comcom:GKComboBox x:Name="cmbRepository" WidthRequest="400" />
                 <Button x:Name="btnRepositoryAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnRepositoryAdd_Click" />
             </StackLayout>
-        </Frame>
+        </Border>
 
         <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <comcom:GKTabControl.ItemSource>

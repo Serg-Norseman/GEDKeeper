@@ -64,12 +64,14 @@ namespace GKCore
             Assert.IsNotNull(args);
         }
 
+#if !MOBILE && !TERM
         [Test]
         public void Test_LuaScripts()
         {
             var script = new ScriptEngine(null);
             script.lua_run("gk_print(\"Hello\")", null);
         }
+#endif
 
         [Test]
         public void Test_LangMan()

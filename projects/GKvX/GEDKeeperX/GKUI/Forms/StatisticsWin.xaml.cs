@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
@@ -55,9 +54,9 @@ namespace GKUI.Forms
             fController.ApplyTheme();
         }
 
-        private void tbExcelExport_Click(object sender, EventArgs e)
+        private async void tbExcelExport_Click(object sender, EventArgs e)
         {
-            fController.ExportToExcel();
+            await fController.ExportToExcel();
         }
     }
 }

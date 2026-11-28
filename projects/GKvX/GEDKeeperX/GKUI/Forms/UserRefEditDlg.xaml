@@ -13,13 +13,11 @@
     <Grid Style="{StaticResource paddedDlg88}" RowDefinitions="Auto, *, Auto">
 
         <Grid ColumnSpacing="4" RowSpacing="4" RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
-            <Grid.Children>
-                <Label x:Name="lblReference" Grid.Column="0" Grid.Row="0" />
-                <comcom:GKComboBox x:Name="cmbRef" Grid.Column="1" Grid.Row="0" HorizontalOptions="Fill" />
+            <Label x:Name="lblReference" Grid.Column="0" Grid.Row="0" />
+            <comcom:GKComboBox x:Name="cmbRef" Grid.Column="1" Grid.Row="0" HorizontalOptions="Fill" />
 
-                <Label x:Name="lblRefType" Grid.Column="0" Grid.Row="1" />
-                <comcom:GKComboBox x:Name="cmbRefType" Grid.Column="1" Grid.Row="1" HorizontalOptions="Fill" />
-            </Grid.Children>
+            <Label x:Name="lblRefType" Grid.Column="0" Grid.Row="1" />
+            <comcom:GKComboBox x:Name="cmbRefType" Grid.Column="1" Grid.Row="1" HorizontalOptions="Fill" />
         </Grid>
 
         <BoxView Grid.Row="1" VerticalOptions="Fill" />

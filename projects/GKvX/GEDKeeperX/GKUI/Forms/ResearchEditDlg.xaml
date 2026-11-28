@@ -12,7 +12,7 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+        <Border Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
             <Grid ColumnSpacing="4" RowSpacing="4">
                 <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
                 <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" />
@@ -29,7 +29,7 @@
                 <Label x:Name="lblStopDate" Grid.Column="2" Grid.Row="2" />
                 <comcom:GKDateBox x:Name="txtStopDate" Grid.Column="3" Grid.Row="2" />
             </Grid>
-        </Frame>
+        </Border>
 
         <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <comcom:GKTabControl.ItemSource>

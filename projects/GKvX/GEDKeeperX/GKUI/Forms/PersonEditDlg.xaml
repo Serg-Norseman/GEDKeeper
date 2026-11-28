@@ -12,33 +12,30 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Frame Padding="8">
-            <StackLayout Orientation="Horizontal" Spacing="4" Padding="0">
-                <Grid x:Name="personLayout" ColumnSpacing="4" RowSpacing="4" VerticalOptions="Fill" HorizontalOptions="Fill"
-                      RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, *, Auto, *">
+        <Border Padding="8">
+            <Grid x:Name="personLayout" ColumnSpacing="4" RowSpacing="4" VerticalOptions="Fill" HorizontalOptions="Fill"
+                  RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, *, Auto, *">
+                <Label x:Name="lblSurname" Grid.Column="0" Grid.Row="0" />
+                <Entry x:Name="txtSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="0" />
+                <Label x:Name="lblNickname" Grid.Column="2" Grid.Row="0" />
+                <Entry x:Name="txtNickname" WidthRequest="180" Grid.Column="3" Grid.Row="0" />
 
-                    <Label x:Name="lblSurname" Grid.Column="0" Grid.Row="0" />
-                    <Entry x:Name="txtSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="0" />
-                    <Label x:Name="lblNickname" Grid.Column="2" Grid.Row="0" />
-                    <Entry x:Name="txtNickname" WidthRequest="180" Grid.Column="3" Grid.Row="0" />
+                <Label x:Name="lblMarriedSurname" Grid.Column="0" Grid.Row="1" />
+                <Entry x:Name="txtMarriedSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="1" />
+                <Label x:Name="lblSex" Grid.Column="2" Grid.Row="1" />
+                <comcom:GKComboBox x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="3" Grid.Row="1" />
 
-                    <Label x:Name="lblMarriedSurname" Grid.Column="0" Grid.Row="1" />
-                    <Entry x:Name="txtMarriedSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="1" />
-                    <Label x:Name="lblSex" Grid.Column="2" Grid.Row="1" />
-                    <comcom:GKComboBox x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="3" Grid.Row="1" />
+                <Label x:Name="lblName" Grid.Column="0" Grid.Row="2" />
+                <Entry x:Name="txtName" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="2" />
+                <comcom:CheckBox x:Name="chkBookmark" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" />
 
-                    <Label x:Name="lblName" Grid.Column="0" Grid.Row="2" />
-                    <Entry x:Name="txtName" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="2" />
-                    <comcom:CheckBox x:Name="chkBookmark" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" />
+                <Label x:Name="lblPatronymic" Grid.Column="0" Grid.Row="3" />
+                <comcom:GKComboBox x:Name="cmbPatronymic" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="3" />
+                <comcom:CheckBox x:Name="chkPatriarch" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" />
+            </Grid>
+        </Border>
 
-                    <Label x:Name="lblPatronymic" Grid.Column="0" Grid.Row="3" />
-                    <comcom:GKComboBox x:Name="cmbPatronymic" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="3" />
-                    <comcom:CheckBox x:Name="chkPatriarch" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" />
-                </Grid>
-            </StackLayout>
-        </Frame>
-
-        <Frame Padding="8">
+        <Border Padding="8">
             <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4" ColumnDefinitions="Auto, *, *, Auto">
                 <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
                 <Entry x:Name="txtFather" IsEnabled="False" WidthRequest="100" Grid.Column="1" Grid.Row="0" />
@@ -62,7 +59,7 @@
                     <Button x:Name="btnMotherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnMotherSel_Click" />
                 </StackLayout>
             </Grid>
-        </Frame>
+        </Border>
 
         <comcom:GKTabControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <comcom:GKTabControl.ItemSource>

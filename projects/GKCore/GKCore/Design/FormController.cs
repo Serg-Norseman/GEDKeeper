@@ -92,6 +92,11 @@ namespace GKCore.Design
              */
             var fields = GetAllFields(GetType());
 
+            /*
+             * In the mobile version, many components are missing or have been replaced.
+             */
+            bool skipNulls = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+
             foreach (var field in fields) {
                 if (!typeof(IControl).IsAssignableFrom(field.FieldType))
                     continue;
@@ -104,7 +109,7 @@ namespace GKCore.Design
                 var attr = field.GetCustomAttribute<ControlAttribute>();
                 string controlName = attr?.Name ?? fieldName.TrimStart('_');
 
-                var controlInstance = GetControl(controlName, field.FieldType);
+                var controlInstance = GetControl(controlName, field.FieldType, skipNulls);
                 field.SetValue(this, controlInstance);
             }
         }
@@ -173,7 +178,7 @@ namespace GKCore.Design
             return handler;
         }
 
-        public IControl GetControl(string controlName, Type targetType)
+        public IControl GetControl(string controlName, Type targetType, bool skipNulls = false)
         {
             if (targetType == null)
                 throw new ArgumentNullException(nameof(targetType));
@@ -184,8 +189,12 @@ namespace GKCore.Design
 
                 var ctlObj = fView.GetControl(controlName);
 
-                if (ctlObj == null)
+                if (ctlObj == null) {
+                    if (skipNulls)
+                        return null;
+
                     throw new ArgumentException($"Field `{controlName}` not found");
+                }
 
                 control = GetControlHandler(ctlObj, targetType);
                 fStrHandlers.Add(controlName, control);

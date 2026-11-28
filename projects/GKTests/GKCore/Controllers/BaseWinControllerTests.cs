@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System.Reflection;
+using GKCore.Design;
 using GKCore.Design.Views;
 using NSubstitute;
 using NUnit.Framework;
@@ -15,11 +17,58 @@ namespace GKCore.Controllers
     [TestFixture]
     public class BaseWinControllerTests
     {
+        private sealed class DisposalTrackingContext : BaseContext
+        {
+            public bool Disposed;
+
+            public DisposalTrackingContext(IBaseWindow viewer) : base(viewer)
+            {
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                Disposed = true;
+                base.Dispose(disposing);
+            }
+        }
+
         [Test]
         public void Test_BaseWinController()
         {
             var view = Substitute.For<IBaseWindowView>();
             //var controller = new BaseWinController(view);
+        }
+
+        [Test]
+        public void Test_ExternalContext_NotDisposedOnControllerDispose()
+        {
+            var view = Substitute.For<IBaseWindowView>();
+            var extContext = new DisposalTrackingContext(null);
+
+            var controller = new BaseWinController(view, true, extContext);
+            Assert.AreEqual(extContext, controller.Context);
+
+            controller.Dispose();
+            Assert.IsFalse(extContext.Disposed);
+        }
+
+        [Test]
+        public void Test_OwnContext_FlaggedAsOwned()
+        {
+            var view = Substitute.For<IBaseWindowView>();
+
+            var controller = new BaseWinController(view, true);
+            Assert.IsNotNull(controller.Context);
+            Assert.IsNotInstanceOf<DisposalTrackingContext>(controller.Context);
+
+            var ownsContextField = typeof(BaseWinController).GetField("fOwnsContext", BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.IsNotNull(ownsContextField);
+            Assert.IsTrue((bool)ownsContextField.GetValue(controller));
+
+            var externalController = new BaseWinController(view, true, new DisposalTrackingContext(null));
+            Assert.IsFalse((bool)ownsContextField.GetValue(externalController));
+
+            controller.Dispose();
         }
 
         /*

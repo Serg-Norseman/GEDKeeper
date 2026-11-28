@@ -7,14 +7,13 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
-    xmlns:xp="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.TaskEditDlg"
     x:TypeArguments="mvp:ITaskEditDlg, contr:TaskEditDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <Grid ColumnSpacing="4" RowSpacing="4">
+        <Border Style="{StaticResource RoundBorder}" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid ColumnSpacing="4" RowSpacing="4" ColumnDefinitions="Auto, *, Auto, *, Auto, *" RowDefinitions="Auto, Auto">
 
                 <Label x:Name="lblGoal" Grid.Column="0" Grid.Row="0" />
                 <comcom:GKComboBox x:Name="cmbGoalType" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" SelectedIndexChanged="cmbGoalType_SelectedIndexChanged" />
@@ -29,15 +28,15 @@
                 <comcom:GKDateBox x:Name="txtStopDate" MinimumWidthRequest="100" Grid.Column="5" Grid.Row="1" />
 
             </Grid>
-        </Frame>
+        </Border>
 
-        <xp:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <xp:GKTabControl.ItemSource>
-                <xp:TabPage x:Name="pageNotes">
+        <comcom:GKTabControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKTabControl.ItemSource>
+                <comcom:TabPage x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
-                </xp:TabPage>
-            </xp:GKTabControl.ItemSource>
-        </xp:GKTabControl>
+                </comcom:TabPage>
+            </comcom:GKTabControl.ItemSource>
+        </comcom:GKTabControl>
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

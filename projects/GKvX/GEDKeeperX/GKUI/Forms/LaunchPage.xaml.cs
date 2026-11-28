@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GKCore;
@@ -38,39 +39,41 @@ namespace GKUI.Forms
             var launchItems = new List<LaunchItem>
             {
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileNew), UIHelper.LoadResourceImage("Resources.btn_create_new.gif"), async (item) => {
-                    var baseWin = GetBaseWin();
-                    if (baseWin != null) {
-                        await baseWin.Controller.NewFile();
-                        await XFAppHost.GetMainPage().NavigateAsync(baseWin);
-                    }
+                    await XFAppHost.Workspace.NewFileAsync();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileLoad), UIHelper.LoadResourceImage("Resources.btn_load.gif"), async (item) => {
-                    var baseWin = GetBaseWin();
-                    if (baseWin != null) {
-                        await baseWin.Controller.LoadFileEx();
-                        await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    // the file picker is opened before the window is created, so
+                    // a cancelled selection does not leave an empty work window
+                    string fileName = await BaseWinController.SelectFileToLoad();
+                    if (!string.IsNullOrEmpty(fileName)) {
+                        await XFAppHost.Workspace.LoadFileAsync(fileName);
                     }
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSave), UIHelper.LoadResourceImage("Resources.btn_save.gif")),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSaveAs)),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileProperties), UIHelper.LoadResourceImage("Resources.btn_properties.gif"), async (item) => {
-                    await GetBaseWin()?.Controller.ShowFileProperties();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    if (win != null) await win.Controller.ShowFileProperties();
                 }),
 
                 new LaunchItem("Recent", "Sample.ged"), // stub for position hold
 
                 new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.ExportTable), UIHelper.LoadResourceImage("Resources.btn_excel.gif"), async (item) => {
-                    GetBaseWin()?.Controller.ExportTable();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ExportTable();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.FamilyBook), async (item) => {
-                    GetBaseWin()?.Controller.ExportToFamilyBook();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ExportToFamilyBook();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.TreesAlbum), async (item) => {
-                    GetBaseWin()?.Controller.ExportToTreesAlbum();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ExportToTreesAlbum();
                 }),
 
                 new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.LogView), async (item) => {
-                    GetBaseWin()?.Controller.ShowLog();
+                    // the log does not require a database or a work window
+                    GKUtils.LoadExtFile(AppHost.GetLogFilename());
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.TableOfContents), UIHelper.LoadResourceImage("Resources.btn_help.gif"), async (item) => {
                     AppHost.Instance.ShowHelpTopic("");
@@ -84,58 +87,71 @@ namespace GKUI.Forms
             for (int i = 0, num = mruFiles.Count; i < num; i++) {
                 string fn = mruFiles[i].FileName;
 
-                launchItems.Add(new LaunchItem("Recent", fn, async (item) => {
-                    var baseWin = GetBaseWin();
-                    await AppHost.Instance.LoadBase(baseWin, item.Title);
+                // only the file name is shown; the action keeps the full path
+                string title = Path.GetFileName(fn);
+                launchItems.Add(new LaunchItem("Recent", title, async (item) => {
+                    await XFAppHost.Workspace.LoadFileAsync(fn);
                 }));
             }
 
             var servicesItems = new List<LaunchItem>() {
                 new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIMap), async (item) => {
-                    GetBaseWin()?.Controller.ShowMap();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowMap();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.RelationshipCalculator), async (item) => {
-                    GetBaseWin()?.Controller.ShowRelationshipCalculator();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowRelationshipCalculator();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIStats), UIHelper.LoadResourceImage("Resources.btn_chart.gif"), async (item) => {
-                    GetBaseWin()?.Controller.ShowStats();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowStats();
                 }),
 
                 new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOrganizer), UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), async (item) => {
-                    GetBaseWin()?.Controller.ShowOrganizer();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowOrganizer();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.Slideshow), UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), async (item) => {
-                    GetBaseWin()?.Controller.ShowSlideshow();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowSlideshow();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOptions), UIHelper.LoadResourceImage("Resources.btn_tools.gif"), async (item) => {
-                    var baseWin = GetBaseWin();
-                    AppHost.Instance.ShowOptions(baseWin);
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    AppHost.Instance.ShowOptions(win);
                 }),
 
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCompare), async (item) => {
-                    GetBaseWin()?.Controller.ShowTreeCompare();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowTreeCompare();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeMerge), async (item) => {
-                    GetBaseWin()?.Controller.ShowTreeMerge();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowTreeMerge();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeSplit), async (item) => {
-                    GetBaseWin()?.Controller.ShowTreeSplit();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowTreeSplit();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.MergeDuplicates), async (item) => {
-                    var baseWin = GetBaseWin();
-                    if (baseWin != null) BaseController.ShowRecMerge(baseWin, baseWin, null, null);
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    if (win != null) BaseController.ShowRecMerge(win, win, null, null);
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.FragmentSearch), async (item) => {
-                    GetBaseWin()?.Controller.ShowFamilyGroups();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowFamilyGroups();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCheck), async (item) => {
-                    GetBaseWin()?.Controller.ShowTreeCheck();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowTreeCheck();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PatriarchsSearch), async (item) => {
-                    GetBaseWin()?.Controller.ShowPatSearch();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowPatSearch();
                 }),
                 new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PlacesManager), async (item) => {
-                    GetBaseWin()?.Controller.ShowPlacesManager();
+                    var win = await XFAppHost.Workspace.EnsureWindowForContextAsync();
+                    win?.Controller.ShowPlacesManager();
                 }),
             };
 
@@ -189,7 +205,7 @@ namespace GKUI.Forms
 
         internal static BaseWinSDI GetBaseWin()
         {
-            var result = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+            var result = XFAppHost.Workspace.CurrentWindow;
             return result;
         }
 

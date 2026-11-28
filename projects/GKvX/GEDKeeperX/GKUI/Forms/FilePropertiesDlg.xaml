@@ -15,28 +15,19 @@
         <comcom:GKTabControl HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <comcom:GKTabControl.ItemSource>
                 <comcom:TabPage x:Name="pageAuthor">
-                    <StackLayout Orientation="Vertical">
-                        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                    <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" ColumnDefinitions="Auto, *" RowDefinitions="Auto, *, Auto, Auto, *">
+                        <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
+                        <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" />
 
-                            <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
-                            <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" />
+                        <Label x:Name="lblAddress" Grid.Column="0" Grid.Row="1" />
+                        <Editor x:Name="txtAddress" Grid.Column="1" Grid.Row="1" />
 
-                            <Label x:Name="lblAddress" Grid.Column="0" Grid.Row="1" />
-                            <Editor x:Name="txtAddress" Grid.Column="1" Grid.Row="1" />
+                        <Label x:Name="lblTelephone" Grid.Column="0" Grid.Row="2" />
+                        <Entry x:Name="txtTel" Grid.Column="1" Grid.Row="2" />
 
-                            <Label x:Name="lblTelephone" Grid.Column="0" Grid.Row="2" />
-                            <Entry x:Name="txtTel" Grid.Column="1" Grid.Row="2" />
-
-                            <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="3" />
-                            <comcom:GKComboBox x:Name="txtLanguage" Grid.Column="1" Grid.Row="3" />
-                        </Grid>
-
-                        <Label VerticalOptions="FillAndExpand" />
-                    </StackLayout>
+                        <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="3" />
+                        <comcom:GKComboBox x:Name="txtLanguage" Grid.Column="1" Grid.Row="3" />
+                    </Grid>
                 </comcom:TabPage>
 
                 <comcom:TabPage x:Name="pageOther">

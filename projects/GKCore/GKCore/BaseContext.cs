@@ -76,7 +76,7 @@ namespace GKCore
         private readonly List<GDMRecord> fLockedRecords;
         private readonly GDMTree fTree;
         private readonly ValuesCollection fValuesCollection;
-        private readonly IBaseWindow fViewer;
+        private IBaseWindow fViewer;
         private readonly ChangeTracker fUndoman;
 
         #endregion
@@ -177,6 +177,15 @@ namespace GKCore
 
             fLangStats = new FreqCollection<GDMLanguageID>();
             fEventStats = new FreqCollection<string>();
+        }
+
+        /// <summary>
+        /// Attach or detach the base window that displays this context;
+        /// allows the context to outlive its windows (mobile scenario).
+        /// </summary>
+        public void SetViewer(IBaseWindow viewer)
+        {
+            fViewer = viewer;
         }
 
         protected override void Dispose(bool disposing)

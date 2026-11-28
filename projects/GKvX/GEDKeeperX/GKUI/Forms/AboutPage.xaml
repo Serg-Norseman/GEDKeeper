@@ -4,35 +4,21 @@
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:comcom="clr-namespace:GKUI.Components"
     x:Class="GKUI.Forms.AboutPage"
     x:TypeArguments="mvp:IAboutDlg, contr:AboutDlgController">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <!--Page Level Resources: Compatibile with Xamarin Live Player -->
-            <Color x:Key="Primary">#2196F3</Color>
-            <Color x:Key="Accent">#96d1ff</Color>
-            <Color x:Key="LightTextColor">#999999</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+    <Grid RowSpacing="8" Padding="8" RowDefinitions="Auto, Auto, Auto, *, Auto, Auto, Auto, Auto">
 
-    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+        <Image Source="{plat:ImageResourceExt Resources.image_logo.png}" Aspect="AspectFit" Grid.Row="0" />
+        <Label x:Name="lblVersion" FontAttributes="Bold" FontSize="12" Grid.Row="1" />
+        <Label x:Name="lblCopyright" FontAttributes="Bold" FontSize="12" Grid.Row="2" />
 
-        <Image Source="{plat:ImageResourceExt Resources.image_logo.png}" Aspect="AspectFit" />
-        <Label x:Name="lblVersion" FontAttributes="Bold" FontSize="12" />
-        <Label x:Name="lblCopyright" FontAttributes="Bold" FontSize="12" />
+        <comcom:HyperLabel x:Name="lblProjSite" FontAttributes="Bold" Grid.Row="4" Text="https://gedkeeper.net/" />
+        <comcom:HyperLabel x:Name="lblMail" FontAttributes="Bold" Grid.Row="5" Text="mailto:gedkeeper@yandex.ru" />
+        <comcom:HyperLabel x:Name="lblForum" FontAttributes="Bold" Grid.Row="6" />
+        <comcom:HyperLabel x:Name="lblChannel" FontAttributes="Bold" Grid.Row="7" />
 
-        <Label VerticalOptions="FillAndExpand" />
-
-        <Button x:Name="lblProjSite" FontAttributes="Bold" Clicked="lblURL_Clicked"
-                        BackgroundColor="{StaticResource Primary}" TextColor="White" Text="https://gedkeeper.net/" />
-        <Button x:Name="lblMail" FontAttributes="Bold" Clicked="lblURL_Clicked"
-                        BackgroundColor="{StaticResource Primary}" TextColor="White" Text="mailto:gedkeeper@yandex.ru" />
-        <Button x:Name="lblForum" FontAttributes="Bold" Clicked="lblURL_Clicked"
-                        BackgroundColor="{StaticResource Primary}" TextColor="White" />
-        <Button x:Name="lblChannel" FontAttributes="Bold" Clicked="lblURL_Clicked"
-                        BackgroundColor="{StaticResource Primary}" TextColor="White" />
-
-    </StackLayout>
+    </Grid>
 
 </forms:CommonDialog>

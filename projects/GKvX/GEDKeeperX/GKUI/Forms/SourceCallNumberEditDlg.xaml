@@ -13,13 +13,11 @@
     <StackLayout Style="{StaticResource paddedDlg88}">
 
         <Grid ColumnSpacing="4" RowSpacing="4">
-            <Grid.Children>
-                <Label x:Name="lblCallNumber" Grid.Column="0" Grid.Row="0" />
-                <Entry x:Name="txtNumber" WidthRequest="300" Grid.Column="1" Grid.Row="0" />
+            <Label x:Name="lblCallNumber" Grid.Column="0" Grid.Row="0" />
+            <Entry x:Name="txtNumber" WidthRequest="300" Grid.Column="1" Grid.Row="0" />
 
-                <Label x:Name="lblMediaType" Grid.Column="0" Grid.Row="1" />
-                <comcom:GKComboBox x:Name="cmbMediaType" WidthRequest="300" Grid.Column="1" Grid.Row="1" />
-            </Grid.Children>
+            <Label x:Name="lblMediaType" Grid.Column="0" Grid.Row="1" />
+            <comcom:GKComboBox x:Name="cmbMediaType" WidthRequest="300" Grid.Column="1" Grid.Row="1" />
         </Grid>
 
         <Label VerticalOptions="FillAndExpand" />

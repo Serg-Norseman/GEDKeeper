@@ -12,19 +12,8 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand" ColumnDefinitions="Auto, *"
+              RowDefinitions="Auto, Auto, Auto, Auto, Auto">
 
             <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
             <Entry x:Name="txtName" WidthRequest="260" Grid.Column="1" Grid.Row="0" />

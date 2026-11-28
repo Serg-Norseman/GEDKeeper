@@ -17,34 +17,24 @@
 
                 <comcom:TabPage x:Name="pageCommon">
 
-                    <StackLayout Orientation="Vertical">
+                    <Grid ColumnSpacing="4" RowSpacing="4" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, *">
+                        <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
+                        <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" TextChanged="edName_TextChanged" />
 
-                        <Grid ColumnSpacing="4" RowSpacing="4">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <Label x:Name="lblFile" Grid.Column="0" Grid.Row="1" />
+                        <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                            <Entry x:Name="txtFile" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                            <Button x:Name="btnFileSelect" Clicked="btnFileSelect_Click" Text="..." HorizontalOptions="End" />
+                        </StackLayout>
 
-                            <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
-                            <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" TextChanged="edName_TextChanged" />
+                        <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
+                        <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
+                            <comcom:GKComboBox x:Name="cmbMediaType" WidthRequest="200" />
+                            <Label x:Name="lblStoreType" />
+                            <comcom:GKComboBox x:Name="cmbStoreType" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
+                        </StackLayout>
 
-                            <Label x:Name="lblFile" Grid.Column="0" Grid.Row="1" />
-                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                                <Entry x:Name="txtFile" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
-                                <Button x:Name="btnFileSelect" Clicked="btnFileSelect_Click" Text="..." HorizontalOptions="End" />
-                            </StackLayout>
-
-                            <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
-                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
-                                <comcom:GKComboBox x:Name="cmbMediaType" WidthRequest="200" />
-                                <Label x:Name="lblStoreType" />
-                                <comcom:GKComboBox x:Name="cmbStoreType" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
-                            </StackLayout>
-
-                        </Grid>
-
-                        <Label VerticalOptions="FillAndExpand" />
-                    </StackLayout>
+                    </Grid>
 
                 </comcom:TabPage>
 

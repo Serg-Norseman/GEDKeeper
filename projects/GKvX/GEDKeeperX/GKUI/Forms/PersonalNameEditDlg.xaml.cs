@@ -11,6 +11,7 @@ using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
+using GKUI.Components;
 using GKUI.Platform;
 
 namespace GKUI.Forms

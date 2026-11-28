@@ -12,15 +12,8 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <Grid ColumnSpacing="4" RowSpacing="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
+        <Border Style="{StaticResource RoundBorder}" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid ColumnSpacing="4" RowSpacing="4" ColumnDefinitions="Auto, *, *, Auto" RowDefinitions="Auto, Auto, Auto">
                 <Label x:Name="lblHusband" Grid.Column="0" Grid.Row="0" />
                 <Entry x:Name="txtHusband" TextChanged="EditSpouse_TextChanged" IsEnabled="False" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" />
                 <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="0">
@@ -40,7 +33,7 @@
                 <Label x:Name="lblStatus" Grid.Column="0" Grid.Row="2" />
                 <comcom:GKComboBox x:Name="cmbMarriageStatus" Grid.Column="1" Grid.Row="2" />
             </Grid>
-        </Frame>
+        </Border>
 
         <comcom:GKTabControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <comcom:GKTabControl.ItemSource>

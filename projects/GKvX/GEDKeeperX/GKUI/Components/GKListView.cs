@@ -41,6 +41,7 @@ namespace GKUI.Components
     {
         private bool fCheckBoxes;
         private IListSource fListMan;
+        private DataGridColumn fSpacerColumn;
 
 
         public event EventHandler MouseDoubleClick;
@@ -111,8 +112,17 @@ namespace GKUI.Components
             RowsBackgroundColorPalette = new RowBgProvider(this);
             RowHeight = 26;
 
+            // Maui.DataGrid uses BorderColor as the fill of the whole grid (the
+            // "grid lines" are the BorderColor ring of each cell), so any space
+            // not covered by the fixed-width columns shows it. Keep the light
+            // grid color for the lines and cover the free space right of the
+            // columns with the star-width spacer column (see AddSpacerColumn).
+            BorderColor = Colors.LightGray;
+            BackgroundColor = Colors.Transparent;
+
             fCheckBoxes = false;
             fListMan = null;
+            fSpacerColumn = null;
         }
 
         public void Activate()
@@ -194,12 +204,13 @@ namespace GKUI.Components
 
         public void Clear()
         {
-            Columns.Clear();
+            ClearColumns();
         }
 
         public void ClearColumns()
         {
             Columns.Clear();
+            fSpacerColumn = null;
         }
 
         public void AddColumn(string caption, int width, bool autoSize = false)
@@ -215,7 +226,7 @@ namespace GKUI.Components
 
         public void AddColumn(string caption, int width, bool autoSize, GKHorizontalAlignment textAlign)
         {
-            int index = Columns.Count;
+            int index = Columns.Count - ((fSpacerColumn != null) ? 1 : 0);
             var binding = string.Format("Values[{0}]", index);
 
             LayoutOptions hca = LayoutOptions.Start;
@@ -231,12 +242,33 @@ namespace GKUI.Components
                     break;
             }
 
-            Columns.Add(new DataGridColumn() {
+            var column = new DataGridColumn() {
                 Title = caption,
                 Width = width,
                 PropertyName = binding,
                 HorizontalContentAlignment = hca
-            });
+            };
+
+            if (fSpacerColumn == null) {
+                Columns.Add(column);
+                AddSpacerColumn();
+            } else {
+                Columns.Insert(Columns.Count - 1, column);
+            }
+        }
+
+        private void AddSpacerColumn()
+        {
+            // Empty column without data binding at the very end with star width:
+            // it takes all the space not occupied by the data columns and shows
+            // the regular cell background there instead of the BorderColor fill
+            // of the row (which is the only thing Maui.DataGrid draws there).
+            fSpacerColumn = new DataGridColumn() {
+                Width = Microsoft.Maui.GridLength.Star,
+                SortingEnabled = false,
+                FilteringEnabled = false
+            };
+            Columns.Add(fSpacerColumn);
         }
 
         public void SetColumnCaption(int index, string caption)

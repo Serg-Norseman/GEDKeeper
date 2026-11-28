@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -24,7 +25,9 @@ using GKCore.Locales;
 using GKCore.Search;
 using GKUI.Components;
 using GKUI.Platform;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
@@ -38,6 +41,7 @@ namespace GKUI.Forms
         private readonly BaseContext fContext;
         private readonly QuickSearchDlg fQuickSearch;
         private readonly ContentView[] fQSPlaceholders;
+        private bool fDetached;
 
         #endregion
 
@@ -62,16 +66,27 @@ namespace GKUI.Forms
 
         #region Instance control
 
-        public BaseWinSDI()
+        public BaseWinSDI() : this(null)
+        {
+        }
+
+        public BaseWinSDI(BaseContext sharedContext)
         {
             InitializeComponent();
 
+            // mobile UX: new/open are handled from the LaunchPage; save stays for
+            // user control. The buttons are hidden at runtime, not removed from
+            // the markup — the final decision is deferred until user feedback.
+            ToolbarItems.Remove(tbFileNew);
+            ToolbarItems.Remove(tbFileLoad);
+
             tabsRecords.PositionChanged += tabsRecords_SelectedIndexChanged;
 
-            fController = new BaseWinController(this, true);
+            fController = new BaseWinController(this, true, sharedContext);
             fController.InitView(null);
             fContext = fController.Context;
-            ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
+            fContext.SetViewer(this);
+            fContext.ModifiedChanged += BaseContext_ModifiedChanged;
 
             fQSPlaceholders = new ContentView[(int)GDMRecordType.rtLast];
             fQuickSearch = new QuickSearchDlg(this);
@@ -98,7 +113,7 @@ namespace GKUI.Forms
             var summary = new HyperView();
             summary.OnLink += mPersonSummaryLink;
 
-            var summFrame = new Frame() { Content = summary, Padding = 4, CornerRadius = 4, BorderColor = Colors.LightBlue, VerticalOptions = LayoutOptions.FillAndExpand };
+            var summFrame = new Border() { Content = summary, Padding = 4, Stroke = Colors.LightBlue, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(4) }, VerticalOptions = LayoutOptions.FillAndExpand };
 
             var recView = new GKListView();
             recView.AllowMultipleSelection = true;
@@ -107,7 +122,7 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 
-            var listFrame = new Frame() { Content = recView, Padding = 4, CornerRadius = 4, BorderColor = Colors.LightBlue };
+            var listFrame = new Border() { Content = recView, Padding = 4, Stroke = Colors.LightBlue, StrokeThickness = 1, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(4) } };
             FlexLayout.SetBasis(listFrame, new FlexBasis(0.7f, true));
 
             var qsHorizPlaceholder = new ContentView();
@@ -195,6 +210,34 @@ namespace GKUI.Forms
         protected override void OnAppearing()
         {
             base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            // OnDisappearing also fires when the window is just covered (a tool
+            // window, a modal or app minimized); a real pop removes it from the stack.
+            if (!Navigation.NavigationStack.Contains(this)) {
+                DetachWindow();
+            }
+        }
+
+        /// <summary>
+        /// Detaches the window from the shared context and the workspace; safe
+        /// to call repeatedly. Invoked on pop detection (OnDisappearing) and by
+        /// the workspace on discovering a stale window.
+        /// </summary>
+        public void DetachWindow()
+        {
+            if (fDetached) return;
+
+            fDetached = true;
+
+            fContext.ModifiedChanged -= BaseContext_ModifiedChanged;
+            fContext.SetViewer(null);
+            fController.Dispose();
+            XFAppHost.Workspace.OnWindowPopped(this);
         }
 
         void IDisplayChangeable.OnDisplayChanged(DisplayInfo displayInfo)

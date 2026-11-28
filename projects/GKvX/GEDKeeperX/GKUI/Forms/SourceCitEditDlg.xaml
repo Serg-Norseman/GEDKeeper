@@ -16,29 +16,20 @@
             <comcom:GKTabControl.ItemSource>
 
                 <comcom:TabPage x:Name="pageCommon">
-                    <StackLayout Orientation="Vertical">
-                        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                    <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Fill" HorizontalOptions="Fill" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, *">
+                        <Label x:Name="lblSource" Grid.Column="0" Grid.Row="0" />
+                        <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
+                            <comcom:GKComboBox x:Name="cmbSource" WidthRequest="200" />
+                            <Button x:Name="btnSourceAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnSourceAdd_Click" />
+                        </StackLayout>
 
-                            <Label x:Name="lblSource" Grid.Column="0" Grid.Row="0" />
-                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
-                                <comcom:GKComboBox x:Name="cmbSource" WidthRequest="200" />
-                                <Button x:Name="btnSourceAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnSourceAdd_Click" />
-                            </StackLayout>
-
-                            <Label x:Name="lblPage" Grid.Column="0" Grid.Row="1" />
-                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                                <Entry x:Name="txtPage" WidthRequest="200" />
-                                <Label x:Name="lblCertainty" />
-                                <comcom:GKComboBox x:Name="txtCertainty" WidthRequest="200" />
-                            </StackLayout>
-                        </Grid>
-
-                        <Label HorizontalOptions="FillAndExpand" />
-                    </StackLayout>
+                        <Label x:Name="lblPage" Grid.Column="0" Grid.Row="1" />
+                        <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                            <Entry x:Name="txtPage" WidthRequest="200" />
+                            <Label x:Name="lblCertainty" />
+                            <comcom:GKComboBox x:Name="txtCertainty" WidthRequest="200" />
+                        </StackLayout>
+                    </Grid>
                 </comcom:TabPage>
 
                 <comcom:TabPage x:Name="pageOther">

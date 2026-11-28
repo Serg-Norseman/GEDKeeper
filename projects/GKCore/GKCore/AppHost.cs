@@ -147,6 +147,13 @@ namespace GKCore
         }
 
         /// <summary>
+        /// Indicates whether an empty base is auto-created at startup when nothing
+        /// is loaded (desktop default; mobile hosts override to false and create
+        /// bases on demand).
+        /// </summary>
+        protected virtual bool AutoCreateBaseAtStartup => true;
+
+        /// <summary>
         /// Basic actions that must be performed when launching the application.
         /// </summary>
         public virtual async Task Init(string[] args, bool isMDI)
@@ -169,7 +176,7 @@ namespace GKCore
 
                     int result = await LoadArgs(false);
                     result += await ReloadRecentBases();
-                    if (result == 0) {
+                    if (result == 0 && AutoCreateBaseAtStartup) {
                         await CreateBase("");
                     }
 
@@ -1021,7 +1028,7 @@ namespace GKCore
         public async Task<int> ReloadRecentBases()
         {
             int result = 0;
-            if (!GlobalOptions.Instance.LoadRecentFiles) return result;
+            if (!AutoCreateBaseAtStartup || !GlobalOptions.Instance.LoadRecentFiles) return result;
 
             try {
                 BeginLoading();
